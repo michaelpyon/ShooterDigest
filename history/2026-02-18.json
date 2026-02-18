@@ -1,0 +1,1490 @@
+{
+  "date": "2026-02-18",
+  "games": [
+    {
+      "name": "Counter-Strike 2",
+      "app_id": 730,
+      "rank": 1,
+      "peak_24h": 1534181,
+      "peak_all": 1818368,
+      "pct_all": 84.37131537730536,
+      "trend_pct": 0.44,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 1075156.74,
+          "gain": 4713.0,
+          "pct_gain": 0.44,
+          "peak": 1654355
+        },
+        {
+          "month": "January 2026",
+          "avg": 1070443.78,
+          "gain": 79266.89,
+          "pct_gain": 8.0,
+          "peak": 1654355
+        },
+        {
+          "month": "December 2025",
+          "avg": 991176.89,
+          "gain": 9694.44,
+          "pct_gain": 0.99,
+          "peak": 1620137
+        },
+        {
+          "month": "November 2025",
+          "avg": 981482.45,
+          "gain": 33238.24,
+          "pct_gain": 3.51,
+          "peak": 1597285
+        },
+        {
+          "month": "October 2025",
+          "avg": 948244.21,
+          "gain": 22303.9,
+          "pct_gain": 2.41,
+          "peak": 1588091
+        },
+        {
+          "month": "September 2025",
+          "avg": 925940.31,
+          "gain": -2488.93,
+          "pct_gain": -0.27,
+          "peak": 1571060
+        },
+        {
+          "month": "August 2025",
+          "avg": 928429.24,
+          "gain": 8359.26,
+          "pct_gain": 0.91,
+          "peak": 1502245
+        },
+        {
+          "month": "July 2025",
+          "avg": 920069.98,
+          "gain": -90054.01,
+          "pct_gain": -8.92,
+          "peak": 1427300
+        },
+        {
+          "month": "June 2025",
+          "avg": 1010123.99,
+          "gain": -28472.82,
+          "pct_gain": -2.74,
+          "peak": 1725815
+        },
+        {
+          "month": "May 2025",
+          "avg": 1038596.81,
+          "gain": -7104.84,
+          "pct_gain": -0.68,
+          "peak": 1712216
+        },
+        {
+          "month": "April 2025",
+          "avg": 1045701.65,
+          "gain": 6038.84,
+          "pct_gain": 0.58,
+          "peak": 1811827
+        },
+        {
+          "month": "March 2025",
+          "avg": 1039662.81,
+          "gain": 36092.25,
+          "pct_gain": 3.6,
+          "peak": 1818368
+        }
+      ],
+      "news_titles": [
+        "Counter-Strike 2 Update",
+        "Counter-Strike 2 Update",
+        "Counter-Strike 2 Update",
+        "Counter-Strike 2 Update",
+        "Counter-Strike 2 Update"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Counter-Strike 2 is holding steady (+0.4%, averaging 1.1M players over the last 30 days). Currently at 84% of all-time peak \u2014 near historical highs. Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Active press coverage from multiple outlets (5 articles from gaming press in the past week).",
+      "steam_share": 1.0,
+      "est_total_24h": 1534181
+    },
+    {
+      "name": "PUBG: BATTLEGROUNDS",
+      "app_id": 578080,
+      "rank": 2,
+      "peak_24h": 450610,
+      "peak_all": 3236027,
+      "pct_all": 13.924791109592102,
+      "trend_pct": -6.68,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 270999.58,
+          "gain": -19397.1,
+          "pct_gain": -6.68,
+          "peak": 664816
+        },
+        {
+          "month": "January 2026",
+          "avg": 290396.69,
+          "gain": 10990.22,
+          "pct_gain": 3.93,
+          "peak": 712143
+        },
+        {
+          "month": "December 2025",
+          "avg": 279406.47,
+          "gain": 1421.25,
+          "pct_gain": 0.51,
+          "peak": 751295
+        },
+        {
+          "month": "November 2025",
+          "avg": 277985.22,
+          "gain": 11426.23,
+          "pct_gain": 4.29,
+          "peak": 691068
+        },
+        {
+          "month": "October 2025",
+          "avg": 266558.99,
+          "gain": -11536.63,
+          "pct_gain": -4.15,
+          "peak": 750442
+        },
+        {
+          "month": "September 2025",
+          "avg": 278095.62,
+          "gain": -17408.34,
+          "pct_gain": -5.89,
+          "peak": 707773
+        },
+        {
+          "month": "August 2025",
+          "avg": 295503.96,
+          "gain": -7757.35,
+          "pct_gain": -2.56,
+          "peak": 724503
+        },
+        {
+          "month": "July 2025",
+          "avg": 303261.31,
+          "gain": -6630.7,
+          "pct_gain": -2.14,
+          "peak": 944484
+        },
+        {
+          "month": "June 2025",
+          "avg": 309892.01,
+          "gain": 4638.83,
+          "pct_gain": 1.52,
+          "peak": 778327
+        },
+        {
+          "month": "May 2025",
+          "avg": 305253.18,
+          "gain": -12187.85,
+          "pct_gain": -3.84,
+          "peak": 804674
+        },
+        {
+          "month": "April 2025",
+          "avg": 317441.03,
+          "gain": -28086.31,
+          "pct_gain": -8.13,
+          "peak": 861598
+        },
+        {
+          "month": "March 2025",
+          "avg": 345527.34,
+          "gain": 28750.95,
+          "pct_gain": 9.08,
+          "peak": 1329605
+        }
+      ],
+      "news_titles": [
+        "[Dev Letter] Anti-Cheat Action Plan Based on Community Feedback",
+        "PUBG: BATTLEGROUNDS Weekly Bans Notice (02/02~02/08)",
+        "PUBG: BATTLEGROUNDS Weekly Bans Notice (01/26~02/01)",
+        "Spring Fest 2026",
+        "Special Drops - February 2026"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "PUBG: BATTLEGROUNDS is declining (-6.7% MoM, averaging 271K players over the last 30 days). At just 14% of all-time peak \u2014 well below historical levels. Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Continued decline from last period \u2014 watch for content response.",
+      "steam_share": 0.8,
+      "est_total_24h": 563262
+    },
+    {
+      "name": "Arc Raiders",
+      "app_id": 1808500,
+      "rank": 3,
+      "peak_24h": 205644,
+      "peak_all": 465097,
+      "pct_all": 44.2152927238834,
+      "trend_pct": -18.09,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 197555.51,
+          "gain": -43641.2,
+          "pct_gain": -18.09,
+          "peak": 409386
+        },
+        {
+          "month": "January 2026",
+          "avg": 241196.68,
+          "gain": 11823.17,
+          "pct_gain": 5.15,
+          "peak": 465097
+        },
+        {
+          "month": "December 2025",
+          "avg": 229373.5,
+          "gain": -35056.08,
+          "pct_gain": -13.26,
+          "peak": 438427
+        },
+        {
+          "month": "November 2025",
+          "avg": 264429.58,
+          "gain": null,
+          "pct_gain": null,
+          "peak": 459483
+        }
+      ],
+      "news_titles": [
+        "Preparing for your Second Expedition",
+        "Hotfix 1.13.1",
+        "HEADWINDS - Patch Notes 1.13.0",
+        "Patch Notes 1.12.0",
+        "Cold Snap Feedback Survey [Closed]"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Arc Raiders is dropping sharply (-18.1% MoM, averaging 198K players over the last 30 days). Sharp decline from elevated levels \u2014 likely post-launch or post-season normalization as initial hype fades. This is a typical pattern. Dev activity: 31+ bug fixes deployed. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Continued decline from last period \u2014 watch for content response.",
+      "steam_share": 0.5,
+      "est_total_24h": 411288
+    },
+    {
+      "name": "Apex Legends",
+      "app_id": 1172470,
+      "rank": 4,
+      "peak_24h": 149893,
+      "peak_all": 624473,
+      "pct_all": 24.00311943030363,
+      "trend_pct": -0.41,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 86074.6,
+          "gain": -358.1,
+          "pct_gain": -0.41,
+          "peak": 202729
+        },
+        {
+          "month": "January 2026",
+          "avg": 86432.72,
+          "gain": 7651.81,
+          "pct_gain": 9.71,
+          "peak": 206450
+        },
+        {
+          "month": "December 2025",
+          "avg": 78780.9,
+          "gain": -11202.26,
+          "pct_gain": -12.45,
+          "peak": 191112
+        },
+        {
+          "month": "November 2025",
+          "avg": 89983.17,
+          "gain": 16329.05,
+          "pct_gain": 22.17,
+          "peak": 229804
+        },
+        {
+          "month": "October 2025",
+          "avg": 73654.11,
+          "gain": -10118.47,
+          "pct_gain": -12.08,
+          "peak": 181156
+        },
+        {
+          "month": "September 2025",
+          "avg": 83772.59,
+          "gain": -17899.91,
+          "pct_gain": -17.61,
+          "peak": 199203
+        },
+        {
+          "month": "August 2025",
+          "avg": 101672.5,
+          "gain": 11105.38,
+          "pct_gain": 12.26,
+          "peak": 248781
+        },
+        {
+          "month": "July 2025",
+          "avg": 90567.12,
+          "gain": -16366.81,
+          "pct_gain": -15.31,
+          "peak": 209736
+        },
+        {
+          "month": "June 2025",
+          "avg": 106933.93,
+          "gain": -27712.69,
+          "pct_gain": -20.58,
+          "peak": 250796
+        },
+        {
+          "month": "May 2025",
+          "avg": 134646.62,
+          "gain": 27805.82,
+          "pct_gain": 26.03,
+          "peak": 262219
+        },
+        {
+          "month": "April 2025",
+          "avg": 106840.8,
+          "gain": 16564.41,
+          "pct_gain": 18.35,
+          "peak": 199349
+        },
+        {
+          "month": "March 2025",
+          "avg": 90276.4,
+          "gain": -4823.08,
+          "pct_gain": -5.07,
+          "peak": 185193
+        }
+      ],
+      "news_titles": [
+        "Apex Legends: Latest Update 02/18/2026",
+        "Apex Legends: New Ranked System 02/17/2026",
+        "An Update from the Anti Cheat Team",
+        "Apex Legends: Latest Update 02/13/2026",
+        "Developer Update: Wildcard"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Apex Legends is holding steady (-0.4%, averaging 86K players over the last 30 days). Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: The update to Ranked lobbies hybridizing Dropship and Drop Zones is now live.",
+      "steam_share": 0.25,
+      "est_total_24h": 599572
+    },
+    {
+      "name": "Delta Force",
+      "app_id": 2507950,
+      "rank": 5,
+      "peak_24h": 128734,
+      "peak_all": 246418,
+      "pct_all": 52.24212516942755,
+      "trend_pct": 13.69,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 75095.85,
+          "gain": 9042.5,
+          "pct_gain": 13.69,
+          "peak": 162739
+        },
+        {
+          "month": "January 2026",
+          "avg": 66053.38,
+          "gain": -3842.67,
+          "pct_gain": -5.5,
+          "peak": 162739
+        },
+        {
+          "month": "December 2025",
+          "avg": 69896.05,
+          "gain": -20765.66,
+          "pct_gain": -22.9,
+          "peak": 163797
+        },
+        {
+          "month": "November 2025",
+          "avg": 90661.72,
+          "gain": -9854.49,
+          "pct_gain": -9.8,
+          "peak": 193962
+        },
+        {
+          "month": "October 2025",
+          "avg": 100516.2,
+          "gain": -7115.6,
+          "pct_gain": -6.61,
+          "peak": 233784
+        },
+        {
+          "month": "September 2025",
+          "avg": 107631.8,
+          "gain": 4488.03,
+          "pct_gain": 4.35,
+          "peak": 246418
+        },
+        {
+          "month": "August 2025",
+          "avg": 103143.78,
+          "gain": 3923.64,
+          "pct_gain": 3.95,
+          "peak": 210413
+        },
+        {
+          "month": "July 2025",
+          "avg": 99220.14,
+          "gain": 20280.28,
+          "pct_gain": 25.69,
+          "peak": 198619
+        },
+        {
+          "month": "June 2025",
+          "avg": 78939.86,
+          "gain": 4691.13,
+          "pct_gain": 6.32,
+          "peak": 161668
+        },
+        {
+          "month": "May 2025",
+          "avg": 74248.72,
+          "gain": 19384.0,
+          "pct_gain": 35.33,
+          "peak": 154488
+        },
+        {
+          "month": "April 2025",
+          "avg": 54864.73,
+          "gain": 1226.53,
+          "pct_gain": 2.29,
+          "peak": 131129
+        },
+        {
+          "month": "March 2025",
+          "avg": 53638.2,
+          "gain": -12015.87,
+          "pct_gain": -18.3,
+          "peak": 107585
+        }
+      ],
+      "news_titles": [
+        "RED DAY Special Update",
+        "Delta Force | Vyron's Ultimate Appearance \"Cosmic Guardian\" Now Available",
+        "SEASON MORPHOSIS | STREAMER WEEK",
+        "Season Morphosis Community Giveaway | Follow & Comment To Join",
+        "New Season \"Morphosis\" Events & Rewards & Store Updates Overview"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Delta Force is surging (+13.7% MoM, averaging 75K players over the last 30 days). Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity:  launched with appearances. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: The main highlights of this update include:\n\nRED DAY Event\n\u25cf Vyron's New Year Restaurant\n\nEvent Time: 2/13\u20133/5\nDetails: Take a break from the gunfire and chaos of Ahsarah. | Vyron's\u00a0ultimate\u00a0appearance\u00a0Cosmic\u00a0Guardian\u00a0is\u00a0now\u00a0available.Operators,\u00a0it's\u00a0time\u00a0to\u00a0chase\u00a0the\u00a0dreams\u00a0beyond\u00a0the\u00a0stars. Sustained growth trajectory.",
+      "steam_share": 0.7,
+      "est_total_24h": 183905
+    },
+    {
+      "name": "Marvel Rivals",
+      "app_id": 2767030,
+      "rank": 6,
+      "peak_24h": 123703,
+      "peak_all": 642333,
+      "pct_all": 19.258390896933523,
+      "trend_pct": 4.28,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 92589.35,
+          "gain": 3799.3,
+          "pct_gain": 4.28,
+          "peak": 173648
+        },
+        {
+          "month": "January 2026",
+          "avg": 88790.01,
+          "gain": 13298.4,
+          "pct_gain": 17.62,
+          "peak": 199788
+        },
+        {
+          "month": "December 2025",
+          "avg": 75491.61,
+          "gain": 10190.12,
+          "pct_gain": 15.6,
+          "peak": 152267
+        },
+        {
+          "month": "November 2025",
+          "avg": 65301.49,
+          "gain": 1585.8,
+          "pct_gain": 2.49,
+          "peak": 124050
+        },
+        {
+          "month": "October 2025",
+          "avg": 63715.7,
+          "gain": -701.85,
+          "pct_gain": -1.09,
+          "peak": 127557
+        },
+        {
+          "month": "September 2025",
+          "avg": 64417.54,
+          "gain": -13084.68,
+          "pct_gain": -16.88,
+          "peak": 131528
+        },
+        {
+          "month": "August 2025",
+          "avg": 77502.23,
+          "gain": -5322.85,
+          "pct_gain": -6.43,
+          "peak": 149457
+        },
+        {
+          "month": "July 2025",
+          "avg": 82825.08,
+          "gain": 3019.31,
+          "pct_gain": 3.78,
+          "peak": 162931
+        },
+        {
+          "month": "June 2025",
+          "avg": 79805.77,
+          "gain": -22310.71,
+          "pct_gain": -21.85,
+          "peak": 158539
+        },
+        {
+          "month": "May 2025",
+          "avg": 102116.47,
+          "gain": -32001.66,
+          "pct_gain": -23.86,
+          "peak": 189945
+        },
+        {
+          "month": "April 2025",
+          "avg": 134118.13,
+          "gain": -10183.72,
+          "pct_gain": -7.06,
+          "peak": 315153
+        },
+        {
+          "month": "March 2025",
+          "avg": 144301.85,
+          "gain": -83697.73,
+          "pct_gain": -36.71,
+          "peak": 307057
+        }
+      ],
+      "news_titles": [
+        "Marvel Rivals Version 20260213 Patch Notes: Season 6.5 Arrives",
+        "Marvel Rivals: What's new in Season 6.5 // Dev Vision Vol. 14",
+        "Marvel Rivals Version 20260213 Balance Post",
+        "Marvel Rivals Version 20260205 Patch Notes",
+        "Marvel Rivals Version 20260129 Patch Notes"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Marvel Rivals is growing (+4.3% MoM, averaging 93K players over the last 30 days). Growth likely driven by (Season 6.5) season launch bringing returning and new players. Dev activity: Season 6.5 launched with Museum of ContemplationA new battlefield, The Clobberin. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: Marvel Rivals enters its S6.5 season with a fresh face, festive events, and legendary loot!The update begins on February 13th, 2026, at 09 : 00 : 00 (UTC), with estimated mainte... Sustained growth trajectory.",
+      "steam_share": 0.35,
+      "est_total_24h": 353437
+    },
+    {
+      "name": "Overwatch",
+      "app_id": 2357570,
+      "rank": 7,
+      "peak_24h": 112990,
+      "peak_all": 164636,
+      "pct_all": 68.63019023785806,
+      "trend_pct": 72.36,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 48173.92,
+          "gain": 20223.7,
+          "pct_gain": 72.36,
+          "peak": 164636
+        },
+        {
+          "month": "January 2026",
+          "avg": 27950.22,
+          "gain": -1497.88,
+          "pct_gain": -5.09,
+          "peak": 42705
+        },
+        {
+          "month": "December 2025",
+          "avg": 29448.1,
+          "gain": 2201.97,
+          "pct_gain": 8.08,
+          "peak": 51561
+        },
+        {
+          "month": "November 2025",
+          "avg": 27246.12,
+          "gain": -1986.94,
+          "pct_gain": -6.8,
+          "peak": 40465
+        },
+        {
+          "month": "October 2025",
+          "avg": 29233.06,
+          "gain": -1491.83,
+          "pct_gain": -4.86,
+          "peak": 50626
+        },
+        {
+          "month": "September 2025",
+          "avg": 30724.89,
+          "gain": 3436.68,
+          "pct_gain": 12.59,
+          "peak": 46341
+        },
+        {
+          "month": "August 2025",
+          "avg": 27288.21,
+          "gain": 5362.08,
+          "pct_gain": 24.46,
+          "peak": 58060
+        },
+        {
+          "month": "July 2025",
+          "avg": 21926.13,
+          "gain": -1328.22,
+          "pct_gain": -5.71,
+          "peak": 30153
+        },
+        {
+          "month": "June 2025",
+          "avg": 23254.35,
+          "gain": -2591.95,
+          "pct_gain": -10.03,
+          "peak": 37106
+        },
+        {
+          "month": "May 2025",
+          "avg": 25846.3,
+          "gain": 30.76,
+          "pct_gain": 0.12,
+          "peak": 40006
+        },
+        {
+          "month": "April 2025",
+          "avg": 25815.54,
+          "gain": 1032.04,
+          "pct_gain": 4.16,
+          "peak": 59939
+        },
+        {
+          "month": "March 2025",
+          "avg": 24783.49,
+          "gain": 693.64,
+          "pct_gain": 2.88,
+          "peak": 40105
+        }
+      ],
+      "news_titles": [
+        "Roles Refined\u00a0",
+        "Loverwatch",
+        "New Rosters. New Rivalries.",
+        "Choose Your Side",
+        "The Next Big Story Begins"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Overwatch is surging (+72.4% MoM, averaging 48K players over the last 30 days). Growth despite no major content \u2014 bug fixes and quality-of-life patches may be improving player retention. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Sustained growth trajectory.",
+      "steam_share": 0.2,
+      "est_total_24h": 564950
+    },
+    {
+      "name": "Battlefield 6",
+      "app_id": 2807960,
+      "rank": 8,
+      "peak_24h": 78334,
+      "peak_all": 656067,
+      "pct_all": 11.939939061101992,
+      "trend_pct": -22.47,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 43826.89,
+          "gain": -12698.5,
+          "pct_gain": -22.47,
+          "peak": 96481
+        },
+        {
+          "month": "January 2026",
+          "avg": 56525.43,
+          "gain": -33071.84,
+          "pct_gain": -36.91,
+          "peak": 121241
+        },
+        {
+          "month": "December 2025",
+          "avg": 89597.27,
+          "gain": -133810.15,
+          "pct_gain": -59.9,
+          "peak": 184814
+        },
+        {
+          "month": "November 2025",
+          "avg": 223407.41,
+          "gain": -87732.9,
+          "pct_gain": -28.2,
+          "peak": 563989
+        },
+        {
+          "month": "October 2025",
+          "avg": 311140.31,
+          "gain": null,
+          "pct_gain": null,
+          "peak": 656067
+        }
+      ],
+      "news_titles": [
+        "Year of the Horse in Battlefield 6 | REDSEC",
+        "Battlefield 6 | REDSEC Season 2 Live Now",
+        "New Map: Contaminated",
+        "REDSEC - Community Update - Armor, Looting and More",
+        "BATTLEFIELD 6 GAME UPDATE 1.2.1.0"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Battlefield 6 is dropping sharply (-22.5% MoM, averaging 44K players over the last 30 days). At just 12% of all-time peak \u2014 well below historical levels. Declining sharply despite new season content \u2014 may indicate content quality concerns or post-launch player churn exceeding new player acquisition. Dev activity: Season 2 launched with a new map, ContaminatedA large. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: Season 2 begins February 17th with Game Update 1.2.1.0, introducing a new map, limited-time modes, the Little Bird helicopter, weapons, gadgets, and progression to Battlefield 6. Continued decline from last period \u2014 watch for content response.",
+      "steam_share": 0.55,
+      "est_total_24h": 142425
+    },
+    {
+      "name": "Rainbow Six Siege",
+      "app_id": 359550,
+      "rank": 9,
+      "peak_24h": 77331,
+      "peak_all": 200476,
+      "pct_all": 38.57369460683573,
+      "trend_pct": 4.69,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 48925.8,
+          "gain": 2192.5,
+          "pct_gain": 4.69,
+          "peak": 88076
+        },
+        {
+          "month": "January 2026",
+          "avg": 46733.26,
+          "gain": 6758.46,
+          "pct_gain": 16.91,
+          "peak": 88076
+        },
+        {
+          "month": "December 2025",
+          "avg": 39974.8,
+          "gain": 8097.81,
+          "pct_gain": 25.4,
+          "peak": 67233
+        },
+        {
+          "month": "November 2025",
+          "avg": 31876.99,
+          "gain": -3341.79,
+          "pct_gain": -9.49,
+          "peak": 51335
+        },
+        {
+          "month": "October 2025",
+          "avg": 35218.79,
+          "gain": -16119.8,
+          "pct_gain": -31.4,
+          "peak": 63002
+        },
+        {
+          "month": "September 2025",
+          "avg": 51338.59,
+          "gain": -10311.55,
+          "pct_gain": -16.73,
+          "peak": 93669
+        },
+        {
+          "month": "August 2025",
+          "avg": 61650.14,
+          "gain": -12494.95,
+          "pct_gain": -16.85,
+          "peak": 100140
+        },
+        {
+          "month": "July 2025",
+          "avg": 74145.09,
+          "gain": -6302.13,
+          "pct_gain": -7.83,
+          "peak": 111052
+        },
+        {
+          "month": "June 2025",
+          "avg": 80447.23,
+          "gain": 29362.13,
+          "pct_gain": 57.48,
+          "peak": 141309
+        },
+        {
+          "month": "May 2025",
+          "avg": 51085.1,
+          "gain": -10925.1,
+          "pct_gain": -17.62,
+          "peak": 88409
+        },
+        {
+          "month": "April 2025",
+          "avg": 62010.19,
+          "gain": -18484.53,
+          "pct_gain": -22.96,
+          "peak": 105998
+        },
+        {
+          "month": "March 2025",
+          "avg": 80494.73,
+          "gain": 20236.23,
+          "pct_gain": 33.58,
+          "peak": 145490
+        }
+      ],
+      "news_titles": [
+        "Y11S1 DESIGNER'S NOTES",
+        "Solid Snake joins Rainbow!",
+        "PLAYER PROTECTION IN YEAR 11",
+        "The Boys x Rainbow Six Siege",
+        "The Six Invitational 2026 is about to begin"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Rainbow Six Siege is growing (+4.7% MoM, averaging 49K players over the last 30 days). Growth likely driven by season launch bringing returning and new players. Dev activity:  launched with is none other than Solid Snake, rnized maps and more. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Sustained growth trajectory.",
+      "steam_share": 0.35,
+      "est_total_24h": 220945
+    },
+    {
+      "name": "Team Fortress 2",
+      "app_id": 440,
+      "rank": 10,
+      "peak_24h": 48065,
+      "peak_all": 253225,
+      "pct_all": 18.981143252048575,
+      "trend_pct": 2.15,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 49892.28,
+          "gain": 1050.2,
+          "pct_gain": 2.15,
+          "peak": 65782
+        },
+        {
+          "month": "January 2026",
+          "avg": 48842.04,
+          "gain": -3565.99,
+          "pct_gain": -6.8,
+          "peak": 68845
+        },
+        {
+          "month": "December 2025",
+          "avg": 52408.03,
+          "gain": 6990.44,
+          "pct_gain": 15.39,
+          "peak": 92856
+        },
+        {
+          "month": "November 2025",
+          "avg": 45417.59,
+          "gain": 990.68,
+          "pct_gain": 2.23,
+          "peak": 77876
+        },
+        {
+          "month": "October 2025",
+          "avg": 44426.91,
+          "gain": -3245.7,
+          "pct_gain": -6.81,
+          "peak": 82862
+        },
+        {
+          "month": "September 2025",
+          "avg": 47672.62,
+          "gain": 1566.97,
+          "pct_gain": 3.4,
+          "peak": 67138
+        },
+        {
+          "month": "August 2025",
+          "avg": 46105.64,
+          "gain": 1128.3,
+          "pct_gain": 2.51,
+          "peak": 62083
+        },
+        {
+          "month": "July 2025",
+          "avg": 44977.34,
+          "gain": 236.0,
+          "pct_gain": 0.53,
+          "peak": 70613
+        },
+        {
+          "month": "June 2025",
+          "avg": 44741.34,
+          "gain": 3065.97,
+          "pct_gain": 7.36,
+          "peak": 60738
+        },
+        {
+          "month": "May 2025",
+          "avg": 41675.36,
+          "gain": 961.76,
+          "pct_gain": 2.36,
+          "peak": 59650
+        },
+        {
+          "month": "April 2025",
+          "avg": 40713.6,
+          "gain": -3102.8,
+          "pct_gain": -7.08,
+          "peak": 55704
+        },
+        {
+          "month": "March 2025",
+          "avg": 43816.4,
+          "gain": 1611.06,
+          "pct_gain": 3.82,
+          "peak": 58434
+        }
+      ],
+      "news_titles": [
+        "United Dodgeball League Season 1 2026",
+        "Seasonalander Winter 2026",
+        "TF2 Painter's Workshop War Paint Contest",
+        "Fruit Mixes Season 4",
+        "Team Fortress 2 Update Released"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Team Fortress 2 is growing (+2.1% MoM, averaging 50K players over the last 30 days). Growth likely driven by (Season 4) season launch bringing returning and new players. Dev activity: Season 4 launched recently; 7+ bug fixes deployed. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Sustained growth trajectory.",
+      "steam_share": 1.0,
+      "est_total_24h": 48065
+    },
+    {
+      "name": "Call of Duty",
+      "app_id": 1938090,
+      "rank": 11,
+      "peak_24h": 43870,
+      "peak_all": 488897,
+      "pct_all": 8.973260216364592,
+      "trend_pct": -1.22,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 34738.95,
+          "gain": -429.2,
+          "pct_gain": -1.22,
+          "peak": 65904
+        },
+        {
+          "month": "January 2026",
+          "avg": 35168.15,
+          "gain": -9085.73,
+          "pct_gain": -20.53,
+          "peak": 57963
+        },
+        {
+          "month": "December 2025",
+          "avg": 44253.89,
+          "gain": -64.54,
+          "pct_gain": -0.15,
+          "peak": 73143
+        },
+        {
+          "month": "November 2025",
+          "avg": 44318.43,
+          "gain": 3506.82,
+          "pct_gain": 8.59,
+          "peak": 91752
+        },
+        {
+          "month": "October 2025",
+          "avg": 40811.6,
+          "gain": 4924.75,
+          "pct_gain": 13.72,
+          "peak": 99072
+        },
+        {
+          "month": "September 2025",
+          "avg": 35886.86,
+          "gain": -6698.86,
+          "pct_gain": -15.73,
+          "peak": 63073
+        },
+        {
+          "month": "August 2025",
+          "avg": 42585.72,
+          "gain": -8578.21,
+          "pct_gain": -16.77,
+          "peak": 70483
+        },
+        {
+          "month": "July 2025",
+          "avg": 51163.93,
+          "gain": -3871.72,
+          "pct_gain": -7.03,
+          "peak": 90230
+        },
+        {
+          "month": "June 2025",
+          "avg": 55035.65,
+          "gain": -4953.41,
+          "pct_gain": -8.26,
+          "peak": 104112
+        },
+        {
+          "month": "May 2025",
+          "avg": 59989.06,
+          "gain": -9442.32,
+          "pct_gain": -13.6,
+          "peak": 111680
+        },
+        {
+          "month": "April 2025",
+          "avg": 69431.38,
+          "gain": 24818.13,
+          "pct_gain": 55.63,
+          "peak": 138335
+        },
+        {
+          "month": "March 2025",
+          "avg": 44613.25,
+          "gain": -9962.03,
+          "pct_gain": -18.25,
+          "peak": 76258
+        }
+      ],
+      "news_titles": [
+        "Power Unleashed \u2014 Fighting with Wei Lin!",
+        "Call of Duty: Black Ops 7 and Warzone - Season 2 - Live Now",
+        "Introducing the Season 02 Battle Pass, BlackCell, and New Store Bundles",
+        "RICOCHET Anti-Cheat\u2122 Update \u2013 Season 02",
+        "Black Ops 7 and Call of Duty: Warzone Season 02 - Part 2"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Call of Duty is holding steady (-1.2%, averaging 35K players over the last 30 days). At just 9% of all-time peak \u2014 well below historical levels. Stable player base despite new season \u2014 suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 02 - Part launched with a new suite of RICOCHET Anti. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: These modes accelerate pacing, increase player counts, or introduce high-stakes competitive rulesets designed to test skill, decision-making, and adaptability.Perks, Killstreaks...",
+      "steam_share": 0.15,
+      "est_total_24h": 292466
+    },
+    {
+      "name": "The Finals",
+      "app_id": 2073850,
+      "rank": 12,
+      "peak_24h": 15800,
+      "peak_all": 242399,
+      "pct_all": 6.518178705357696,
+      "trend_pct": 0.88,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 12073.86,
+          "gain": 105.3,
+          "pct_gain": 0.88,
+          "peak": 21315
+        },
+        {
+          "month": "January 2026",
+          "avg": 11968.56,
+          "gain": 320.36,
+          "pct_gain": 2.75,
+          "peak": 21315
+        },
+        {
+          "month": "December 2025",
+          "avg": 11648.2,
+          "gain": 1815.14,
+          "pct_gain": 18.46,
+          "peak": 21400
+        },
+        {
+          "month": "November 2025",
+          "avg": 9833.05,
+          "gain": -3570.16,
+          "pct_gain": -26.64,
+          "peak": 16742
+        },
+        {
+          "month": "October 2025",
+          "avg": 13403.22,
+          "gain": -2832.51,
+          "pct_gain": -17.45,
+          "peak": 24326
+        },
+        {
+          "month": "September 2025",
+          "avg": 16235.73,
+          "gain": 1609.32,
+          "pct_gain": 11.0,
+          "peak": 32758
+        },
+        {
+          "month": "August 2025",
+          "avg": 14626.41,
+          "gain": 2227.34,
+          "pct_gain": 17.96,
+          "peak": 25801
+        },
+        {
+          "month": "July 2025",
+          "avg": 12399.08,
+          "gain": -2077.28,
+          "pct_gain": -14.35,
+          "peak": 19426
+        },
+        {
+          "month": "June 2025",
+          "avg": 14476.36,
+          "gain": 1975.5,
+          "pct_gain": 15.8,
+          "peak": 28835
+        },
+        {
+          "month": "May 2025",
+          "avg": 12500.85,
+          "gain": 17.82,
+          "pct_gain": 0.14,
+          "peak": 19849
+        },
+        {
+          "month": "April 2025",
+          "avg": 12483.03,
+          "gain": -118.7,
+          "pct_gain": -0.94,
+          "peak": 20271
+        },
+        {
+          "month": "March 2025",
+          "avg": 12601.74,
+          "gain": 840.99,
+          "pct_gain": 7.15,
+          "peak": 27295
+        }
+      ],
+      "news_titles": [
+        "Hotfix 9.9.1",
+        "Update 9.9.0",
+        "Update 9.8.0",
+        "Update 9.7.0",
+        "Store Update 9.6.0"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "The Finals is holding steady (+0.9%, averaging 12K players over the last 30 days). At just 7% of all-time peak \u2014 well below historical levels. Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Dev activity: 10+ bug fixes deployed. Active press coverage from multiple outlets (4 articles from gaming press in the past week). Looking ahead: If you\u2019ve been keeping an eye on the World Tour Screen, you know that Super Cashball Weekend is coming in 9.8, so locate your cleats and get ready to go for the goal, along with...",
+      "steam_share": 0.5,
+      "est_total_24h": 31600
+    },
+    {
+      "name": "Destiny 2",
+      "app_id": 1085660,
+      "rank": 13,
+      "peak_24h": 13837,
+      "peak_all": 316651,
+      "pct_all": 4.369795137233106,
+      "trend_pct": -23.31,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 12394.27,
+          "gain": -3766.5,
+          "pct_gain": -23.31,
+          "peak": 23624
+        },
+        {
+          "month": "January 2026",
+          "avg": 16160.82,
+          "gain": -13672.93,
+          "pct_gain": -45.83,
+          "peak": 29014
+        },
+        {
+          "month": "December 2025",
+          "avg": 29833.75,
+          "gain": 17255.38,
+          "pct_gain": 137.18,
+          "peak": 70905
+        },
+        {
+          "month": "November 2025",
+          "avg": 12578.36,
+          "gain": -1768.41,
+          "pct_gain": -12.33,
+          "peak": 22903
+        },
+        {
+          "month": "October 2025",
+          "avg": 14346.77,
+          "gain": -4960.61,
+          "pct_gain": -25.69,
+          "peak": 32553
+        },
+        {
+          "month": "September 2025",
+          "avg": 19307.38,
+          "gain": -15267.35,
+          "pct_gain": -44.16,
+          "peak": 54297
+        },
+        {
+          "month": "August 2025",
+          "avg": 34574.73,
+          "gain": -6645.55,
+          "pct_gain": -16.12,
+          "peak": 74961
+        },
+        {
+          "month": "July 2025",
+          "avg": 41220.28,
+          "gain": 20192.39,
+          "pct_gain": 96.03,
+          "peak": 108362
+        },
+        {
+          "month": "June 2025",
+          "avg": 21027.89,
+          "gain": -6343.81,
+          "pct_gain": -23.18,
+          "peak": 38074
+        },
+        {
+          "month": "May 2025",
+          "avg": 27371.7,
+          "gain": 4525.8,
+          "pct_gain": 19.81,
+          "peak": 59826
+        },
+        {
+          "month": "April 2025",
+          "avg": 22845.9,
+          "gain": -8121.94,
+          "pct_gain": -26.23,
+          "peak": 49891
+        },
+        {
+          "month": "March 2025",
+          "avg": 30967.84,
+          "gain": -9194.65,
+          "pct_gain": -22.89,
+          "peak": 67473
+        }
+      ],
+      "news_titles": [
+        "This Week In Destiny - 02/12/2026",
+        "This Week\u00a0in\u00a0Destiny \u2013 02/05/2026",
+        "This Week in Destiny \u2013 01/29/2026",
+        "This Week in Destiny - 01/22/2026",
+        "This Week in Destiny \u2013 01/15/2026"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Destiny 2 is dropping sharply (-23.3% MoM, averaging 12K players over the last 30 days). At just 4% of all-time peak \u2014 well below historical levels. Declining despite new content additions \u2014 the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: This week in Destiny, we\u2019ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlord's Ruin. | This Week in Destiny, we are getting ready for Arms Week and a very special Game2Give livestream. Continued decline from last period \u2014 watch for content response.",
+      "steam_share": 0.35,
+      "est_total_24h": 39534
+    },
+    {
+      "name": "Halo: MCC",
+      "app_id": 976730,
+      "rank": 14,
+      "peak_24h": 5543,
+      "peak_all": 93305,
+      "pct_all": 5.940732007930979,
+      "trend_pct": -20.78,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 4005.18,
+          "gain": -1050.9,
+          "pct_gain": -20.78,
+          "peak": 9597
+        },
+        {
+          "month": "January 2026",
+          "avg": 5056.06,
+          "gain": -86.67,
+          "pct_gain": -1.69,
+          "peak": 10864
+        },
+        {
+          "month": "December 2025",
+          "avg": 5142.74,
+          "gain": -261.66,
+          "pct_gain": -4.84,
+          "peak": 11338
+        },
+        {
+          "month": "November 2025",
+          "avg": 5404.4,
+          "gain": 962.05,
+          "pct_gain": 21.66,
+          "peak": 12154
+        },
+        {
+          "month": "October 2025",
+          "avg": 4442.35,
+          "gain": 577.55,
+          "pct_gain": 14.94,
+          "peak": 9909
+        },
+        {
+          "month": "September 2025",
+          "avg": 3864.8,
+          "gain": 151.61,
+          "pct_gain": 4.08,
+          "peak": 8957
+        },
+        {
+          "month": "August 2025",
+          "avg": 3713.19,
+          "gain": -39.55,
+          "pct_gain": -1.05,
+          "peak": 8237
+        },
+        {
+          "month": "July 2025",
+          "avg": 3752.73,
+          "gain": 624.97,
+          "pct_gain": 19.98,
+          "peak": 7245
+        },
+        {
+          "month": "June 2025",
+          "avg": 3127.77,
+          "gain": -539.88,
+          "pct_gain": -14.72,
+          "peak": 6452
+        },
+        {
+          "month": "May 2025",
+          "avg": 3667.65,
+          "gain": 206.0,
+          "pct_gain": 5.95,
+          "peak": 7910
+        },
+        {
+          "month": "April 2025",
+          "avg": 3461.64,
+          "gain": -270.29,
+          "pct_gain": -7.24,
+          "peak": 7873
+        },
+        {
+          "month": "March 2025",
+          "avg": 3731.94,
+          "gain": -361.66,
+          "pct_gain": -8.83,
+          "peak": 7795
+        }
+      ],
+      "news_titles": [
+        "Mod Minute: Warthog Rally",
+        "February 2025 Update Patch Notes",
+        "Digsite Demos: Halo 2",
+        "Halo 2 | Twentieth Anniversary",
+        "Purple Heart Day"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Halo: MCC is dropping sharply (-20.8% MoM, averaging 4K players over the last 30 days). At just 6% of all-time peak \u2014 well below historical levels. Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: In celebration of Halo 2\u2019s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Continued decline from last period \u2014 watch for content response.",
+      "steam_share": 0.3,
+      "est_total_24h": 18476
+    },
+    {
+      "name": "Halo Infinite",
+      "app_id": 1240440,
+      "rank": 15,
+      "peak_24h": 2648,
+      "peak_all": 256619,
+      "pct_all": 1.0318799465355255,
+      "trend_pct": -9.12,
+      "months": [
+        {
+          "month": "Last 30 Days",
+          "avg": 1579.34,
+          "gain": -158.6,
+          "pct_gain": -9.12,
+          "peak": 3463
+        },
+        {
+          "month": "January 2026",
+          "avg": 1737.9,
+          "gain": 106.43,
+          "pct_gain": 6.52,
+          "peak": 3574
+        },
+        {
+          "month": "December 2025",
+          "avg": 1631.47,
+          "gain": -314.16,
+          "pct_gain": -16.15,
+          "peak": 3338
+        },
+        {
+          "month": "November 2025",
+          "avg": 1945.64,
+          "gain": 97.8,
+          "pct_gain": 5.29,
+          "peak": 3893
+        },
+        {
+          "month": "October 2025",
+          "avg": 1847.83,
+          "gain": -26.06,
+          "pct_gain": -1.39,
+          "peak": 3790
+        },
+        {
+          "month": "September 2025",
+          "avg": 1873.89,
+          "gain": -125.11,
+          "pct_gain": -6.26,
+          "peak": 3832
+        },
+        {
+          "month": "August 2025",
+          "avg": 1999.01,
+          "gain": 214.66,
+          "pct_gain": 12.03,
+          "peak": 5012
+        },
+        {
+          "month": "July 2025",
+          "avg": 1784.35,
+          "gain": -279.55,
+          "pct_gain": -13.54,
+          "peak": 3676
+        },
+        {
+          "month": "June 2025",
+          "avg": 2063.9,
+          "gain": 46.35,
+          "pct_gain": 2.3,
+          "peak": 4702
+        },
+        {
+          "month": "May 2025",
+          "avg": 2017.55,
+          "gain": 161.19,
+          "pct_gain": 8.68,
+          "peak": 4453
+        },
+        {
+          "month": "April 2025",
+          "avg": 1856.36,
+          "gain": -304.37,
+          "pct_gain": -14.09,
+          "peak": 4002
+        },
+        {
+          "month": "March 2025",
+          "avg": 2160.73,
+          "gain": -280.94,
+          "pct_gain": -11.51,
+          "peak": 4826
+        }
+      ],
+      "news_titles": [
+        "Forge Features",
+        "Operation: Infinite Out Now",
+        "Operation: Infinite Out Now",
+        "Operation: Infinite Update Preview",
+        "Thank You | Halo World Championship 2025"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Halo Infinite is declining (-9.1% MoM, averaging 2K players over the last 30 days). At just 1% of all-time peak \u2014 well below historical levels. Declining despite new content additions \u2014 the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: The future is Infinite.OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we\u2019d like to thank our community for your steadfast support. Continued decline from last period \u2014 watch for content response.",
+      "steam_share": 0.12,
+      "est_total_24h": 22066
+    }
+  ]
+}

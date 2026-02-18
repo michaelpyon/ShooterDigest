@@ -1873,21 +1873,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         bar_w = min(r["pct_all"], 100)
 
         est_total = _fmt(r.get('est_total_24h', r['peak_24h']))
-        # Consistent bold styling for all games; blue for multi-platform, note platform context
-        if r.get('is_steam_only'):
-            est_style = ' style="font-weight:600"'
-            platform_note = ' <small style="color:#556b7d">(100% Steam)</small>'
-        else:
-            est_style = ' style="color:#60a5fa;font-weight:600"'
-            platform_note = f' <small style="color:#556b7d">({r["steam_share"]*100:.0f}% Steam)</small>'
-
         est_all_time = _fmt(r.get('est_total_all', r['peak_all']))
-        if r.get('is_steam_only'):
-            est_all_style = ' style="font-weight:600"'
-            all_time_note = ' <small style="color:#556b7d">(100% Steam)</small>'
-        else:
-            est_all_style = ' style="color:#fbbf24;font-weight:600"'
-            all_time_note = f' <small style="color:#556b7d">(est. all platforms)</small>'
 
         genre = r.get('genre', 'Other')
         table_rows += f"""        <tr data-genre="{genre}">
@@ -1895,9 +1881,9 @@ def generate_html(results: list[dict], failed_names: list[str],
           <td class="game">{_esc(r['name'])}</td>
           <td>{_genre_badge_html(genre)}</td>
           <td class="num">{_fmt(r['peak_24h'])}</td>
-          <td class="num"{est_style}>{est_total}{platform_note}</td>
+          <td class="num" style="color:#60a5fa;font-weight:600">{est_total}</td>
           <td class="trend {r['trend_css']}">{r['trend_arrow']} {trend_str}</td>
-          <td class="num"{est_all_style}>{est_all_time}{all_time_note}</td>
+          <td class="num" style="color:#fbbf24;font-weight:600">{est_all_time}</td>
           <td class="pct-cell">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%"></div></div>
             <span>{r['pct_all']:.1f}%</span>

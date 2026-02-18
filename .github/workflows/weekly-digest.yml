@@ -1,0 +1,47 @@
+name: Weekly Shooter Digest
+
+on:
+  schedule:
+    # Every Monday at 10:00 UTC (5am ET / 2am PT)
+    - cron: '0 10 * * 1'
+  workflow_dispatch: # Allow manual triggers from GitHub UI
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Shooter Digest
+        run: python main.py
+
+      - name: Copy latest digest to index.html
+        run: |
+          # Find the most recent digest HTML
+          LATEST=$(ls -t output/digest_*.html | head -1)
+          cp "$LATEST" output/index.html
+          echo "Copied $LATEST -> output/index.html"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          publish_branch: gh-pages
+          commit_message: "Digest update: $(date -u +%Y-%m-%d)"

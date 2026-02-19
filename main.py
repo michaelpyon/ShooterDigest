@@ -708,9 +708,9 @@ def _analyze_dev_comms(news: list[dict]) -> dict:
         # New map — extract map name if possible
         if re.search(r"\bnew map|introducing.*map|map rework|new arena", combined):
             result["has_new_map"] = True
-            map_match = re.search(r'(?:new map|map)\s*[:\-–]?\s*([A-Z][A-Za-z\s]+)', contents_orig[:500])
+            map_match = re.search(r'(?:new map|map)\s*[:\-–]?\s*([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,2})', contents_orig[:500])
             if map_match:
-                content_parts.append(f"new map {map_match.group(1).strip()[:30]}")
+                content_parts.append(f"new map {map_match.group(1).strip()}")
             else:
                 content_parts.append("new map")
 
@@ -734,15 +734,16 @@ def _analyze_dev_comms(news: list[dict]) -> dict:
         )
         if content_match or re.search(r'\bintroducing\b', combined):
             result["has_new_content"] = True
-            # Extract what was introduced
+            # Extract what was introduced — capture proper-noun-style names only
+            # (up to 4 capitalized words), not full sentences
             new_items = re.findall(
                 r'(?:introducing|new (?:hero|operator|weapon|map|mode|character|legend|agent))'
-                r'\s*[:\-–]?\s*([A-Z][A-Za-z\s]+)',
-                contents_orig[:1500], re.I
+                r'\s*[:\-–]?\s*([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,3})',
+                contents_orig[:1500]
             )
             if new_items:
                 result["new_content_details"] = ", ".join(
-                    item.strip()[:40] for item in new_items[:3]
+                    item.strip() for item in new_items[:3]
                 )
 
         # Bug fixes — count for scope

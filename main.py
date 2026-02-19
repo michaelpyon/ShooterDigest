@@ -2468,76 +2468,102 @@ def generate_html(results: list[dict], failed_names: list[str],
         flex-shrink: 0; font-size: 0.72rem; padding: 0.3rem 0.6rem;
       }}
 
-      /* Summary table → card layout on mobile */
+      /* Summary table → labeled card layout on mobile */
       table thead {{ display: none; }}
       table tbody tr {{
         display: grid;
-        grid-template-columns: auto 1fr auto;
-        grid-template-rows: auto auto;
-        gap: 0.15rem 0.5rem;
-        padding: 0.7rem 0;
-        border-bottom: 1px solid #1b2838;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.2rem 0.6rem;
+        padding: 0.8rem 0.6rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid #1b2838;
+        border-radius: 8px;
+        background: rgba(27, 40, 56, 0.4);
       }}
-      table tbody tr:hover {{ background: none; }}
+      table tbody tr:hover {{ background: rgba(27, 40, 56, 0.4); }}
       table tbody td {{
         padding: 0; border: none; text-align: left !important;
       }}
-      /* Rank: top-left */
+      /* Row 1: Rank + Game — full width */
       table tbody td.rank {{
-        grid-column: 1; grid-row: 1;
-        font-size: 0.8rem;
+        grid-column: 1 / -1; grid-row: 1;
+        font-size: 0.75rem; color: #8f98a0;
+        display: flex; align-items: center; gap: 0.4rem;
       }}
-      /* Game name: top-center */
       table tbody td.game {{
-        grid-column: 2; grid-row: 1;
-        white-space: normal; font-size: 0.95rem;
+        grid-column: 1 / -1; grid-row: 2;
+        white-space: normal; font-size: 1.05rem; font-weight: 600;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        margin-bottom: 0.2rem;
       }}
-      /* Genre badge: next to game */
+      /* Genre badge — next to rank */
       table tbody tr > td:nth-child(3) {{
-        grid-column: 3; grid-row: 1;
-        display: flex; align-items: center;
+        grid-column: 1 / -1; grid-row: 1;
+        display: flex; justify-content: flex-end; align-items: center;
       }}
-      /* Stats row: spans full width */
-      table tbody td.num {{
-        font-size: 0.8rem;
-      }}
-      /* 24h Peak (col 4) — hide on mobile, Est. Total is more useful */
+      /* Stats: 2-column grid with labels */
+      table tbody td.num {{ font-size: 0.85rem; }}
+      /* 24h Peak (col 4) */
       table tbody tr > td:nth-child(4) {{
-        display: none;
+        grid-column: 1; grid-row: 3;
+      }}
+      table tbody tr > td:nth-child(4)::before {{
+        content: "24h Peak  "; display: block;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* Est. Total (col 5) */
       table tbody tr > td:nth-child(5) {{
-        grid-column: 1 / 2; grid-row: 2;
-        font-size: 0.85rem;
+        grid-column: 2; grid-row: 3;
       }}
-      /* Add label before Est. Total */
       table tbody tr > td:nth-child(5)::before {{
-        content: "Est. "; font-size: 0.65rem; color: #8f98a0;
-        font-weight: 400;
+        content: "Est. Total  "; display: block;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* Trend (col 6) */
       table tbody td.trend {{
-        grid-column: 2; grid-row: 2;
-        text-align: left !important; font-size: 0.82rem;
-        width: auto;
+        grid-column: 1; grid-row: 4;
+        text-align: left !important; font-size: 0.85rem;
+        width: auto; padding-top: 0.15rem;
       }}
-      /* All-Time Peak (col 7) — hide on mobile */
+      table tbody td.trend::before {{
+        content: "Trend (MoM)  "; display: block;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
+      }}
+      /* All-Time Peak (col 7) */
       table tbody tr > td:nth-child(7) {{
-        display: none;
+        grid-column: 2; grid-row: 4;
+        padding-top: 0.15rem;
+      }}
+      table tbody tr > td:nth-child(7)::before {{
+        content: "All-Time Peak  "; display: block;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* % of Peak (col 8) */
       table tbody td.pct-cell {{
-        grid-column: 3; grid-row: 2;
-        width: auto; display: flex; align-items: center; gap: 0.3rem;
+        grid-column: 1 / -1; grid-row: 5;
+        width: auto; display: flex; align-items: center; gap: 0.4rem;
+        padding-top: 0.3rem;
+        border-top: 1px solid rgba(255,255,255,0.06);
+        margin-top: 0.2rem;
+      }}
+      table tbody td.pct-cell::before {{
+        content: "% of Peak"; flex-shrink: 0;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
       }}
       .pct-cell .bar-bg {{
-        width: 40px; flex-shrink: 0;
+        width: 50px; flex-shrink: 0;
       }}
-      .pct-cell span {{ font-size: 0.75rem; }}
+      .pct-cell span {{ font-size: 0.8rem; }}
 
       /* Failed rows */
       table tbody tr.failed {{
-        display: flex; gap: 0.5rem; padding: 0.5rem 0;
+        display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.6rem;
       }}
 
       /* Detail cards */

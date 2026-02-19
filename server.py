@@ -5,7 +5,9 @@ import glob
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 PORT = int(os.environ.get("PORT", 8080))
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(BASE_DIR, "output")
+NEIGHBORHOODS_FILE = os.path.join(BASE_DIR, "nyc-neighborhoods.html")
 
 
 class DigestHandler(SimpleHTTPRequestHandler):
@@ -18,6 +20,15 @@ class DigestHandler(SimpleHTTPRequestHandler):
         super().end_headers()
 
     def do_GET(self):
+        # Serve the NYC neighborhood ranker
+        if self.path in ("/neighborhoods", "/neighborhoods/"):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            with open(NEIGHBORHOODS_FILE, "rb") as f:
+                self.wfile.write(f.read())
+            return
+
         # Serve the latest digest HTML at /
         if self.path == "/" or self.path == "/index.html":
             files = sorted(glob.glob(os.path.join(OUTPUT_DIR, "digest_*.html")))
@@ -29,4 +40,6 @@ class DigestHandler(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     server = HTTPServer(("0.0.0.0", PORT), DigestHandler)
     print(f"Serving Shooter Digest on port {PORT}")
+    print(f"  /              → latest digest")
+    print(f"  /neighborhoods → NYC neighborhood ranker")
     server.serve_forever()

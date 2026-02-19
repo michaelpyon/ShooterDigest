@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NYC Neighborhood Ranker</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+  h1 { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+  .subtitle { color: #666; font-size: 0.85rem; margin-bottom: 2rem; }
+  .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+  @media (max-width: 768px) { .layout { grid-template-columns: 1fr; } }
+
+  /* Sliders */
+  .sliders { display: flex; flex-direction: column; gap: 0.75rem; }
+  .slider-row { display: grid; grid-template-columns: 160px 1fr 28px; align-items: center; gap: 0.75rem; }
+  .slider-label { font-size: 0.8rem; color: #999; }
+  .slider-val { font-size: 0.75rem; color: #555; text-align: right; font-variant-numeric: tabular-nums; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; background: #222; border-radius: 2px; outline: none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; }
+  input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #fff; cursor: pointer; border: none; }
+
+  /* Rankings */
+  .rankings { margin-top: 2.5rem; }
+  .rankings h2 { font-size: 1rem; font-weight: 500; margin-bottom: 1rem; color: #888; }
+  .rank-item { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid #161616; }
+  .rank-item:first-child { border-top: 1px solid #161616; }
+  .rank-num { font-size: 0.75rem; color: #444; text-align: right; font-variant-numeric: tabular-nums; }
+  .rank-name { font-size: 0.85rem; font-weight: 500; }
+  .rank-borough { font-size: 0.7rem; color: #555; font-weight: 400; }
+  .rank-score { font-size: 0.8rem; color: #666; font-variant-numeric: tabular-nums; }
+  .rank-bar-wrap { grid-column: 1 / -1; height: 3px; background: #161616; border-radius: 1.5px; margin-top: 2px; }
+  .rank-bar { height: 100%; border-radius: 1.5px; background: #fff; transition: width 0.3s ease; }
+  .rank-item.top .rank-name { color: #fff; }
+  .rank-item.top .rank-bar { background: #e8e8e8; }
+  .rank-item.top .rank-num { color: #999; }
+
+  /* Radar */
+  .radar-section { margin-top: 2.5rem; }
+  .radar-section h2 { font-size: 1rem; font-weight: 500; margin-bottom: 0.75rem; color: #888; }
+  .radar-winner { font-size: 0.85rem; color: #ccc; margin-bottom: 1rem; }
+  canvas { width: 100%; max-width: 440px; display: block; cursor: default; }
+  canvas.dragging { cursor: grabbing; }
+  .radar-hint { font-size: 0.7rem; color: #444; margin-top: 0.5rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>NYC Neighborhood Ranker</h1>
+  <p class="subtitle">Weight what matters to you. 37 neighborhoods scored and ranked.</p>
+  <div class="layout">
+    <div>
+      <div class="sliders" id="sliders"></div>
+      <div class="rankings" id="rankings"></div>
+    </div>
+    <div>
+      <div class="radar-section">
+        <h2>Winner Profile</h2>
+        <p class="radar-winner" id="radar-winner"></p>
+        <canvas id="radar" width="440" height="440"></canvas>
+        <p class="radar-hint">Drag the white dots to set your ideal profile</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const CRITERIA = [
+  { key: 'food',       label: 'Food Density',       default: 5 },
+  { key: 'walk',       label: 'Walkability',         default: 5 },
+  { key: 'arch',       label: 'Architecture',        default: 5 },
+  { key: 'quiet',      label: 'Quietness',           default: 5 },
+  { key: 'parks',      label: 'Park Access',         default: 5 },
+  { key: 'nightlife',  label: 'Nightlife',           default: 5 },
+  { key: 'commute',    label: 'Commute to Midtown',  default: 5 },
+  { key: 'shopping',   label: 'Shopping',             default: 5 },
+  { key: 'museums',    label: 'Museums',              default: 5 },
+  { key: 'liveent',    label: 'Live Entertainment',   default: 5 },
+  { key: 'italian',    label: 'Italian Food',          default: 0 },
+  { key: 'japanese',   label: 'Japanese Food',         default: 0 },
+  { key: 'mexican',    label: 'Mexican Food',          default: 0 },
+  { key: 'chinese',    label: 'Chinese Food',          default: 0 },
+  { key: 'indian',     label: 'Indian Food',           default: 0 },
+  { key: 'thai',       label: 'Thai Food',             default: 0 },
+  { key: 'korean',     label: 'Korean Food',           default: 0 },
+  { key: 'middleeast', label: 'Middle Eastern',        default: 0 },
+];
+
+// Scores 1-10. Rebalanced so no single neighborhood dominates all dimensions.
+// food: restaurant density. walk: walkability. arch: architectural character.
+// quiet: inverse noise/bustle. parks: green space access. nightlife: bars/clubs/late-night.
+// commute: speed to midtown (10=<15min, 1=>45min). shopping: retail quality/density.
+// museums: museums/galleries nearby. liveent: live music/theater/comedy.
+// Cuisine scores: density & quality of that specific cuisine in the neighborhood.
+const NEIGHBORHOODS = [
+  // ── Manhattan ──
+  { name: 'West Village',       borough: 'Manhattan', food: 8, walk: 9, arch: 10, quiet: 4, parks: 5, nightlife: 7, commute: 7, shopping: 7, museums: 4, liveent: 6, italian: 9, japanese: 7, mexican: 5, chinese: 4, indian: 3, thai: 5, korean: 3, middleeast: 4 },
+  { name: 'East Village',       borough: 'Manhattan', food: 9, walk: 9, arch: 6,  quiet: 3, parks: 4, nightlife: 9, commute: 7, shopping: 5, museums: 3, liveent: 9, italian: 6, japanese: 9, mexican: 7, chinese: 5, indian: 7, thai: 7, korean: 6, middleeast: 6 },
+  { name: 'SoHo',               borough: 'Manhattan', food: 7, walk: 9, arch: 9,  quiet: 2, parks: 3, nightlife: 6, commute: 7, shopping: 10, museums: 5, liveent: 4, italian: 7, japanese: 6, mexican: 4, chinese: 4, indian: 3, thai: 4, korean: 3, middleeast: 3 },
+  { name: 'Nolita',             borough: 'Manhattan', food: 8, walk: 9, arch: 8,  quiet: 3, parks: 3, nightlife: 5, commute: 7, shopping: 8, museums: 4, liveent: 3, italian: 8, japanese: 6, mexican: 5, chinese: 4, indian: 3, thai: 5, korean: 3, middleeast: 4 },
+  { name: 'NoMad',              borough: 'Manhattan', food: 8, walk: 9, arch: 7,  quiet: 3, parks: 4, nightlife: 6, commute: 10, shopping: 6, museums: 4, liveent: 5, italian: 7, japanese: 7, mexican: 5, chinese: 5, indian: 7, thai: 5, korean: 8, middleeast: 5 },
+  { name: 'Koreatown',          borough: 'Manhattan', food: 9, walk: 9, arch: 5,  quiet: 1, parks: 3, nightlife: 7, commute: 10, shopping: 5, museums: 3, liveent: 5, italian: 4, japanese: 7, mexican: 4, chinese: 6, indian: 4, thai: 4, korean: 10, middleeast: 4 },
+  { name: 'Upper West Side',    borough: 'Manhattan', food: 7, walk: 8, arch: 8,  quiet: 6, parks: 10, nightlife: 3, commute: 7, shopping: 5, museums: 9, liveent: 5, italian: 7, japanese: 6, mexican: 5, chinese: 6, indian: 5, thai: 4, korean: 3, middleeast: 4 },
+  { name: 'Upper East Side',    borough: 'Manhattan', food: 6, walk: 8, arch: 9,  quiet: 7, parks: 8, nightlife: 3, commute: 7, shopping: 8, museums: 10, liveent: 3, italian: 7, japanese: 6, mexican: 3, chinese: 4, indian: 3, thai: 3, korean: 2, middleeast: 3 },
+  { name: 'Chelsea',            borough: 'Manhattan', food: 7, walk: 9, arch: 6,  quiet: 4, parks: 7, nightlife: 6, commute: 9, shopping: 7, museums: 7, liveent: 6, italian: 6, japanese: 6, mexican: 6, chinese: 5, indian: 5, thai: 7, korean: 5, middleeast: 5 },
+  { name: 'Hell\'s Kitchen',    borough: 'Manhattan', food: 8, walk: 9, arch: 5,  quiet: 2, parks: 4, nightlife: 7, commute: 10, shopping: 4, museums: 3, liveent: 8, italian: 6, japanese: 6, mexican: 7, chinese: 5, indian: 5, thai: 8, korean: 5, middleeast: 5 },
+  { name: 'Harlem',             borough: 'Manhattan', food: 6, walk: 7, arch: 8,  quiet: 5, parks: 7, nightlife: 5, commute: 5, shopping: 4, museums: 5, liveent: 7, italian: 4, japanese: 3, mexican: 6, chinese: 4, indian: 4, thai: 3, korean: 2, middleeast: 4 },
+  { name: 'Lower East Side',    borough: 'Manhattan', food: 8, walk: 9, arch: 5,  quiet: 2, parks: 3, nightlife: 9, commute: 7, shopping: 4, museums: 4, liveent: 8, italian: 5, japanese: 7, mexican: 7, chinese: 8, indian: 5, thai: 5, korean: 4, middleeast: 6 },
+  { name: 'Chinatown',          borough: 'Manhattan', food: 9, walk: 9, arch: 6,  quiet: 2, parks: 3, nightlife: 4, commute: 7, shopping: 5, museums: 3, liveent: 2, italian: 3, japanese: 4, mexican: 3, chinese: 10, indian: 3, thai: 6, korean: 3, middleeast: 3 },
+  { name: 'Tribeca',            borough: 'Manhattan', food: 7, walk: 8, arch: 8,  quiet: 6, parks: 7, nightlife: 4, commute: 7, shopping: 5, museums: 4, liveent: 4, italian: 8, japanese: 7, mexican: 4, chinese: 4, indian: 3, thai: 4, korean: 3, middleeast: 3 },
+  { name: 'Financial District', borough: 'Manhattan', food: 5, walk: 8, arch: 7,  quiet: 5, parks: 6, nightlife: 3, commute: 8, shopping: 4, museums: 4, liveent: 2, italian: 5, japanese: 5, mexican: 4, chinese: 4, indian: 4, thai: 3, korean: 3, middleeast: 3 },
+  { name: 'Gramercy',           borough: 'Manhattan', food: 6, walk: 8, arch: 8,  quiet: 7, parks: 7, nightlife: 4, commute: 9, shopping: 4, museums: 3, liveent: 3, italian: 6, japanese: 6, mexican: 5, chinese: 4, indian: 5, thai: 4, korean: 4, middleeast: 4 },
+  { name: 'Midtown East',       borough: 'Manhattan', food: 7, walk: 9, arch: 7,  quiet: 2, parks: 3, nightlife: 5, commute: 10, shopping: 7, museums: 5, liveent: 4, italian: 6, japanese: 8, mexican: 4, chinese: 5, indian: 5, thai: 5, korean: 7, middleeast: 5 },
+  { name: 'East Harlem',        borough: 'Manhattan', food: 6, walk: 7, arch: 5,  quiet: 4, parks: 5, nightlife: 3, commute: 5, shopping: 3, museums: 4, liveent: 3, italian: 5, japanese: 2, mexican: 8, chinese: 4, indian: 3, thai: 3, korean: 2, middleeast: 4 },
+  // ── Brooklyn ──
+  { name: 'Williamsburg',       borough: 'Brooklyn',  food: 9, walk: 8, arch: 5,  quiet: 3, parks: 5, nightlife: 9, commute: 6, shopping: 7, museums: 3, liveent: 8, italian: 7, japanese: 7, mexican: 7, chinese: 4, indian: 4, thai: 6, korean: 4, middleeast: 5 },
+  { name: 'East Williamsburg',  borough: 'Brooklyn',  food: 7, walk: 6, arch: 3,  quiet: 4, parks: 3, nightlife: 8, commute: 5, shopping: 4, museums: 3, liveent: 7, italian: 5, japanese: 4, mexican: 7, chinese: 4, indian: 3, thai: 5, korean: 3, middleeast: 4 },
+  { name: 'Park Slope',         borough: 'Brooklyn',  food: 7, walk: 8, arch: 9,  quiet: 7, parks: 9, nightlife: 3, commute: 5, shopping: 6, museums: 4, liveent: 3, italian: 7, japanese: 5, mexican: 6, chinese: 4, indian: 4, thai: 5, korean: 3, middleeast: 4 },
+  { name: 'DUMBO',              borough: 'Brooklyn',  food: 5, walk: 7, arch: 8,  quiet: 5, parks: 8, nightlife: 3, commute: 6, shopping: 4, museums: 5, liveent: 3, italian: 5, japanese: 4, mexican: 3, chinese: 3, indian: 2, thai: 3, korean: 2, middleeast: 2 },
+  { name: 'Brooklyn Heights',   borough: 'Brooklyn',  food: 5, walk: 8, arch: 10, quiet: 8, parks: 8, nightlife: 2, commute: 6, shopping: 4, museums: 3, liveent: 2, italian: 5, japanese: 4, mexican: 3, chinese: 3, indian: 2, thai: 3, korean: 2, middleeast: 3 },
+  { name: 'Bushwick',           borough: 'Brooklyn',  food: 7, walk: 6, arch: 3,  quiet: 4, parks: 3, nightlife: 8, commute: 4, shopping: 3, museums: 3, liveent: 7, italian: 4, japanese: 3, mexican: 8, chinese: 4, indian: 3, thai: 4, korean: 3, middleeast: 3 },
+  { name: 'Fort Greene',        borough: 'Brooklyn',  food: 7, walk: 8, arch: 8,  quiet: 6, parks: 8, nightlife: 5, commute: 5, shopping: 5, museums: 4, liveent: 7, italian: 5, japanese: 5, mexican: 5, chinese: 4, indian: 4, thai: 4, korean: 3, middleeast: 4 },
+  { name: 'Greenpoint',         borough: 'Brooklyn',  food: 7, walk: 7, arch: 6,  quiet: 6, parks: 5, nightlife: 6, commute: 5, shopping: 4, museums: 2, liveent: 4, italian: 5, japanese: 5, mexican: 5, chinese: 3, indian: 3, thai: 4, korean: 4, middleeast: 3 },
+  { name: 'Cobble Hill',        borough: 'Brooklyn',  food: 6, walk: 8, arch: 9,  quiet: 7, parks: 5, nightlife: 3, commute: 5, shopping: 6, museums: 3, liveent: 2, italian: 7, japanese: 5, mexican: 5, chinese: 3, indian: 3, thai: 4, korean: 3, middleeast: 4 },
+  { name: 'Prospect Heights',   borough: 'Brooklyn',  food: 7, walk: 8, arch: 7,  quiet: 6, parks: 9, nightlife: 4, commute: 5, shopping: 5, museums: 7, liveent: 5, italian: 5, japanese: 5, mexican: 6, chinese: 4, indian: 4, thai: 5, korean: 3, middleeast: 4 },
+  { name: 'Bed-Stuy',           borough: 'Brooklyn',  food: 6, walk: 7, arch: 8,  quiet: 5, parks: 5, nightlife: 5, commute: 4, shopping: 3, museums: 2, liveent: 4, italian: 4, japanese: 3, mexican: 5, chinese: 3, indian: 3, thai: 3, korean: 2, middleeast: 3 },
+  { name: 'Carroll Gardens',    borough: 'Brooklyn',  food: 7, walk: 8, arch: 8,  quiet: 7, parks: 5, nightlife: 3, commute: 5, shopping: 5, museums: 2, liveent: 2, italian: 9, japanese: 4, mexican: 5, chinese: 3, indian: 3, thai: 4, korean: 2, middleeast: 4 },
+  { name: 'Red Hook',           borough: 'Brooklyn',  food: 5, walk: 4, arch: 6,  quiet: 7, parks: 6, nightlife: 3, commute: 3, shopping: 3, museums: 2, liveent: 3, italian: 5, japanese: 3, mexican: 6, chinese: 3, indian: 2, thai: 3, korean: 2, middleeast: 3 },
+  { name: 'Crown Heights',      borough: 'Brooklyn',  food: 6, walk: 7, arch: 7,  quiet: 5, parks: 7, nightlife: 5, commute: 4, shopping: 4, museums: 5, liveent: 5, italian: 4, japanese: 4, mexican: 5, chinese: 4, indian: 5, thai: 4, korean: 3, middleeast: 4 },
+  // ── Queens ──
+  { name: 'Astoria',            borough: 'Queens',    food: 8, walk: 7, arch: 5,  quiet: 5, parks: 6, nightlife: 5, commute: 6, shopping: 5, museums: 4, liveent: 4, italian: 6, japanese: 4, mexican: 6, chinese: 4, indian: 5, thai: 5, korean: 4, middleeast: 9 },
+  { name: 'Long Island City',   borough: 'Queens',    food: 5, walk: 7, arch: 5,  quiet: 5, parks: 7, nightlife: 4, commute: 8, shopping: 3, museums: 6, liveent: 3, italian: 4, japanese: 5, mexican: 4, chinese: 4, indian: 3, thai: 4, korean: 5, middleeast: 3 },
+  { name: 'Jackson Heights',    borough: 'Queens',    food: 9, walk: 7, arch: 5,  quiet: 4, parks: 5, nightlife: 3, commute: 5, shopping: 6, museums: 2, liveent: 2, italian: 3, japanese: 2, mexican: 9, chinese: 4, indian: 10, thai: 7, korean: 3, middleeast: 6 },
+  { name: 'Flushing',           borough: 'Queens',    food: 9, walk: 7, arch: 3,  quiet: 3, parks: 5, nightlife: 4, commute: 4, shopping: 7, museums: 2, liveent: 2, italian: 2, japanese: 5, mexican: 3, chinese: 10, indian: 4, thai: 4, korean: 8, middleeast: 3 },
+  { name: 'Sunnyside',          borough: 'Queens',    food: 6, walk: 7, arch: 5,  quiet: 6, parks: 5, nightlife: 3, commute: 6, shopping: 4, museums: 2, liveent: 2, italian: 4, japanese: 3, mexican: 5, chinese: 4, indian: 4, thai: 4, korean: 5, middleeast: 5 },
+];
+
+let weights = {};
+CRITERIA.forEach(c => weights[c.key] = c.default);
+
+// Split criteria: first 10 = main (shown on radar), rest = cuisine (sliders only)
+const MAIN_CRITERIA = CRITERIA.slice(0, 10);
+const CUISINE_CRITERIA = CRITERIA.slice(10);
+
+// ── Radar geometry (shared) — only main criteria ──
+const CANVAS_CSS = 440;
+const CX = 220, CY = 220, R = 150;
+const N = MAIN_CRITERIA.length;
+const ANGLE_STEP = (Math.PI * 2) / N;
+const START_ANGLE = -Math.PI / 2;
+
+function axisAngle(i) { return START_ANGLE + i * ANGLE_STEP; }
+function axisPt(i, val01) {
+  const a = axisAngle(i);
+  return { x: CX + val01 * R * Math.cos(a), y: CY + val01 * R * Math.sin(a) };
+}
+
+// ── Build sliders ──
+const slidersEl = document.getElementById('sliders');
+
+function buildSliderGroup(label, criteria) {
+  const heading = document.createElement('div');
+  heading.style.cssText = 'font-size:0.75rem;color:#444;text-transform:uppercase;letter-spacing:0.06em;margin:1rem 0 0.25rem;';
+  heading.textContent = label;
+  slidersEl.appendChild(heading);
+  criteria.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'slider-row';
+    row.innerHTML = `
+      <span class="slider-label">${c.label}</span>
+      <input type="range" min="0" max="10" value="${c.default}" data-key="${c.key}">
+      <span class="slider-val" id="val-${c.key}">${c.default}</span>
+    `;
+    slidersEl.appendChild(row);
+    row.querySelector('input').addEventListener('input', e => {
+      weights[c.key] = +e.target.value;
+      document.getElementById(`val-${c.key}`).textContent = e.target.value;
+      update();
+    });
+  });
+}
+buildSliderGroup('Neighborhood', MAIN_CRITERIA);
+buildSliderGroup('Cuisine', CUISINE_CRITERIA);
+
+function setWeight(key, val) {
+  val = Math.round(Math.max(0, Math.min(10, val)));
+  weights[key] = val;
+  const slider = document.querySelector(`input[data-key="${key}"]`);
+  if (slider) slider.value = val;
+  document.getElementById(`val-${key}`).textContent = val;
+}
+
+function score(n) {
+  let total = 0, wSum = 0;
+  CRITERIA.forEach(c => {
+    total += weights[c.key] * n[c.key];
+    wSum += weights[c.key];
+  });
+  return wSum === 0 ? 0 : total / wSum;
+}
+
+// ── Ranking ──
+let currentWinner = null;
+
+function update() {
+  const ranked = NEIGHBORHOODS.map(n => ({ ...n, score: score(n) }))
+    .sort((a, b) => b.score - a.score);
+
+  const el = document.getElementById('rankings');
+  el.innerHTML = '<h2>Ranked</h2>';
+  ranked.forEach((n, i) => {
+    const pct = (n.score / 10 * 100).toFixed(0);
+    const div = document.createElement('div');
+    div.className = 'rank-item' + (i === 0 ? ' top' : '');
+    div.innerHTML = `
+      <span class="rank-num">${i + 1}</span>
+      <span class="rank-name">${n.name} <span class="rank-borough">${n.borough}</span></span>
+      <span class="rank-score">${n.score.toFixed(1)}</span>
+      <div class="rank-bar-wrap"><div class="rank-bar" style="width:${pct}%"></div></div>
+    `;
+    el.appendChild(div);
+  });
+
+  currentWinner = ranked[0];
+  drawRadar();
+}
+
+// ── Radar drawing ──
+function drawRadar() {
+  const winner = currentWinner;
+  document.getElementById('radar-winner').textContent = winner.name + ', ' + winner.borough;
+
+  const canvas = document.getElementById('radar');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = CANVAS_CSS * dpr;
+  canvas.height = CANVAS_CSS * dpr;
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, CANVAS_CSS, CANVAS_CSS);
+
+  // Grid rings
+  for (let ring = 2; ring <= 10; ring += 2) {
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const p = axisPt(i % N, ring / 10);
+      i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+    }
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Axes
+  for (let i = 0; i < N; i++) {
+    const p = axisPt(i, 1);
+    ctx.beginPath();
+    ctx.moveTo(CX, CY);
+    ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Winner polygon (ghost, behind)
+  ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const idx = i % N;
+    const p = axisPt(idx, winner[MAIN_CRITERIA[idx].key] / 10);
+    i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+  }
+  ctx.fillStyle = 'rgba(120,180,255,0.06)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(120,180,255,0.25)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // User weights polygon (interactive)
+  ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const idx = i % N;
+    const p = axisPt(idx, weights[MAIN_CRITERIA[idx].key] / 10);
+    i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+  }
+  ctx.fillStyle = 'rgba(255,255,255,0.05)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Draggable dots (weights) + labels
+  ctx.font = '11px -apple-system, system-ui, sans-serif';
+  for (let i = 0; i < N; i++) {
+    const a = axisAngle(i);
+    const wVal = weights[MAIN_CRITERIA[i].key] / 10;
+    const p = axisPt(i, wVal);
+
+    // Dot
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = dragIdx === i ? '#fff' : 'rgba(255,255,255,0.9)';
+    ctx.fill();
+    if (dragIdx === i) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+
+    // Winner dot (small, blue)
+    const wp = axisPt(i, winner[MAIN_CRITERIA[i].key] / 10);
+    ctx.beginPath();
+    ctx.arc(wp.x, wp.y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(120,180,255,0.5)';
+    ctx.fill();
+
+    // Label
+    const lx = CX + (R + 22) * Math.cos(a);
+    const ly = CY + (R + 22) * Math.sin(a);
+    ctx.fillStyle = '#666';
+    ctx.textAlign = Math.cos(a) < -0.1 ? 'right' : Math.cos(a) > 0.1 ? 'left' : 'center';
+    ctx.textBaseline = Math.sin(a) < -0.1 ? 'bottom' : Math.sin(a) > 0.1 ? 'top' : 'middle';
+    ctx.fillText(MAIN_CRITERIA[i].label + '  ' + weights[MAIN_CRITERIA[i].key], lx, ly);
+  }
+}
+
+// ── Drag interaction ──
+let dragIdx = -1;
+const canvas = document.getElementById('radar');
+
+function canvasXY(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = CANVAS_CSS / rect.width;
+  const scaleY = CANVAS_CSS / rect.height;
+  const touch = e.touches ? e.touches[0] : e;
+  return {
+    x: (touch.clientX - rect.left) * scaleX,
+    y: (touch.clientY - rect.top) * scaleY,
+  };
+}
+
+function hitTest(mx, my) {
+  const HIT_R = 16;
+  for (let i = 0; i < N; i++) {
+    const p = axisPt(i, weights[MAIN_CRITERIA[i].key] / 10);
+    const dx = mx - p.x, dy = my - p.y;
+    if (dx * dx + dy * dy < HIT_R * HIT_R) return i;
+  }
+  return -1;
+}
+
+function projectOnAxis(i, mx, my) {
+  const a = axisAngle(i);
+  const dx = mx - CX, dy = my - CY;
+  // project (dx, dy) onto the unit axis vector
+  const dot = dx * Math.cos(a) + dy * Math.sin(a);
+  const val = Math.max(0, Math.min(10, Math.round(dot / R * 10)));
+  return val;
+}
+
+function onDown(e) {
+  const { x, y } = canvasXY(e);
+  const idx = hitTest(x, y);
+  if (idx >= 0) {
+    dragIdx = idx;
+    canvas.classList.add('dragging');
+    e.preventDefault();
+  }
+}
+
+function onMove(e) {
+  if (dragIdx < 0) {
+    // hover cursor
+    const { x, y } = canvasXY(e);
+    canvas.style.cursor = hitTest(x, y) >= 0 ? 'grab' : 'default';
+    return;
+  }
+  e.preventDefault();
+  const { x, y } = canvasXY(e);
+  const val = projectOnAxis(dragIdx, x, y);
+  setWeight(MAIN_CRITERIA[dragIdx].key, val);
+  update();
+}
+
+function onUp() {
+  if (dragIdx >= 0) {
+    dragIdx = -1;
+    canvas.classList.remove('dragging');
+  }
+}
+
+canvas.addEventListener('mousedown', onDown);
+canvas.addEventListener('mousemove', onMove);
+window.addEventListener('mouseup', onUp);
+canvas.addEventListener('touchstart', onDown, { passive: false });
+canvas.addEventListener('touchmove', onMove, { passive: false });
+window.addEventListener('touchend', onUp);
+
+update();
+</script>
+</body>
+</html>

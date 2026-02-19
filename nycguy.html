@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Jawnz Diagnostic — A Clinical Assessment</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --card: #141414;
+    --card-hover: #1a1a1a;
+    --accent: #e8ff47;
+    --accent2: #ff6b35;
+    --accent3: #47b8ff;
+    --text: #f0f0f0;
+    --muted: #888;
+    --border: #2a2a2a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .mono { font-family: 'Space Mono', monospace; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(232,255,71,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(255,107,53,0.04) 0%, transparent 50%);
+    animation: drift 20s ease-in-out infinite;
+  }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-2%, 2%); }
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 .accent { color: var(--accent); }
+  .hero h1 .accent2 { color: var(--accent2); }
+
+  .hero .subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    animation: bob 2s ease-in-out infinite;
+    cursor: pointer;
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem;
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  /* SECTIONS */
+  section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* BINGO */
+  .bingo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .bingo-cell {
+    aspect-ratio: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    line-height: 1.3;
+  }
+
+  .bingo-cell:hover {
+    background: var(--card-hover);
+    border-color: var(--accent);
+  }
+
+  .bingo-cell.stamped {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+
+  .bingo-cell.free {
+    background: var(--accent2);
+    color: var(--bg);
+    font-weight: 700;
+    border-color: var(--accent2);
+  }
+
+  .bingo-status {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    min-height: 2rem;
+  }
+
+  .bingo-status.winner {
+    color: var(--accent);
+    font-size: 1.2rem;
+    font-weight: 700;
+    animation: pulse 0.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+  }
+
+  /* QUIZ */
+  .quiz-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .quiz-question {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-question h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .quiz-question .q-num {
+    color: var(--accent);
+    font-size: 0.75rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-options {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .quiz-option {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+  }
+
+  .quiz-option:hover {
+    border-color: var(--accent);
+    background: rgba(232,255,71,0.05);
+  }
+
+  .quiz-option.selected {
+    border-color: var(--accent);
+    background: rgba(232,255,71,0.1);
+    color: var(--accent);
+  }
+
+  .quiz-submit {
+    display: block;
+    margin: 2rem auto 0;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 1rem 3rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+
+  .quiz-submit:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(232,255,71,0.3);
+  }
+
+  .quiz-submit:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* QUIZ RESULT */
+  .quiz-result {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--card);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .quiz-result.visible { display: block; }
+
+  .quiz-result .archetype {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-result .archetype-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-result .description {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .starter-pack {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .starter-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 0.75rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .starter-item .item-emoji {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .starter-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* HOROSCOPE */
+  .horoscope-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .horoscope-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .horoscope-card:hover {
+    border-color: var(--accent2);
+    transform: translateY(-2px);
+  }
+
+  .horoscope-card .sign {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .horoscope-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .horoscope-card .dates {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .horoscope-card .reading {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    display: none;
+  }
+
+  .horoscope-card.expanded .reading { display: block; }
+
+  .horoscope-card.expanded {
+    border-color: var(--accent2);
+    background: linear-gradient(135deg, var(--card), rgba(255,107,53,0.05));
+  }
+
+  /* ROAST GENERATOR */
+  .roast-machine {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .roast-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .roast-inputs select, .roast-inputs input {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .roast-inputs select { cursor: pointer; }
+  .roast-inputs select:focus, .roast-inputs input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .roast-output {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-top: 1rem;
+  }
+
+  .roast-output .waiting {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .generate-btn {
+    background: var(--accent2);
+    color: var(--bg);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .generate-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255,107,53,0.3);
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    overflow: hidden;
+    background: var(--accent);
+    padding: 0.5rem 0;
+    white-space: nowrap;
+  }
+
+  .ticker {
+    display: inline-block;
+    animation: ticker 40s linear infinite;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--bg);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* PRICE CHECK */
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .price-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    transition: all 0.3s;
+  }
+
+  .price-card:hover {
+    border-color: var(--accent3);
+    transform: translateY(-2px);
+  }
+
+  .price-card .item-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .price-card .item-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .price-card .price-bar {
+    background: var(--bg);
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .price-card .price-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--accent3);
+    transition: width 1s ease;
+  }
+
+  .price-card .price-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+  }
+
+  .price-card .price-label .actual { color: var(--accent3); }
+  .price-card .price-label .vibes { color: var(--muted); }
+
+  /* NEIGHBORHOOD COMPASS */
+  .compass-container {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .compass-result {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin-top: 1.5rem;
+    display: none;
+  }
+
+  .compass-result.visible { display: block; }
+
+  .compass-result .hood {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent3);
+    margin-bottom: 0.5rem;
+  }
+
+  .compass-result .hood-desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .compass-result .hood-starter {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* ESPRESSO INDEX */
+  .espresso-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .espresso-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s;
+  }
+
+  .espresso-card:hover {
+    border-color: var(--accent2);
+  }
+
+  .espresso-card .drink-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .espresso-card .drink-verdict {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+
+  .espresso-card .pretension-meter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .pretension-dots {
+    display: flex;
+    gap: 3px;
+  }
+
+  .pretension-dots .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .pretension-dots .dot.filled { background: var(--accent2); }
+
+  .pretension-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  /* BOY BATHROOM */
+  .bathroom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .bathroom-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bathroom-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .bathroom-card .product-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .bathroom-card .product-name {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .bathroom-card .product-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .bathroom-card .product-roast {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .bathroom-card .necessity-tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .necessity-tag.essential { background: var(--accent); color: var(--bg); }
+  .necessity-tag.performative { background: var(--accent2); color: var(--bg); }
+  .necessity-tag.delusional { background: #ff4444; color: var(--bg); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* SEPARATOR */
+  .sep {
+    height: 1px;
+    background: var(--border);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .bingo-grid { grid-template-columns: repeat(5, 1fr); gap: 2px; }
+    .bingo-cell { font-size: 0.5rem; padding: 0.3rem; }
+    .roast-inputs { grid-template-columns: 1fr; }
+    nav { gap: 1rem; padding: 0.75rem 1rem; }
+    section { padding: 3rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>THE<br><span class="accent">JAWNZ</span><br>DIAGNOSTIC<span class="accent2">.</span></h1>
+    <p class="subtitle mono">a clinical assessment of the 25-35 year old male nyc experience. your Aesop hand soap told us you'd be here.</p>
+  </div>
+  <div class="scroll-indicator" onclick="document.querySelector('nav').scrollIntoView({behavior:'smooth'})">scroll down, king ↓</div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#bingo">Bingo</a>
+  <a href="#quiz">Quiz</a>
+  <a href="#bathroom">Boy Bathroom</a>
+  <a href="#horoscope">Horoscopes</a>
+  <a href="#roast">Fit Roast</a>
+  <a href="#prices">Price Per Use</a>
+  <a href="#espresso">Drink Index</a>
+  <a href="#compass">Hood Compass</a>
+</nav>
+
+<!-- BINGO -->
+<section id="bingo">
+  <div class="section-header">
+    <h2>NYC Guy Bingo</h2>
+    <p>Click the squares that apply to you. Be honest. Your Diptyque candle is watching.</p>
+  </div>
+  <div class="bingo-grid" id="bingoGrid"></div>
+  <div class="bingo-status" id="bingoStatus">0/25 stamped — you're barely a person</div>
+  <div style="text-align:center;margin-top:1rem">
+    <button class="generate-btn" onclick="resetBingo()" style="font-size:0.75rem;padding:0.5rem 1.5rem">Shuffle Board</button>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-header">
+    <h2>What Kind of NYC Guy Are You?</h2>
+    <p>8 questions. No wrong answers. Just wrong lifestyles.</p>
+  </div>
+  <div class="quiz-container" id="quizContainer"></div>
+  <div class="quiz-result" id="quizResult"></div>
+</section>
+
+<div class="sep"></div>
+
+<!-- BOY BATHROOM AUDIT -->
+<section id="bathroom">
+  <div class="section-header">
+    <h2>The Boy Bathroom Audit</h2>
+    <p>A forensic analysis of the amber bottles in your medicine cabinet.</p>
+  </div>
+  <div class="bathroom-grid" id="bathroomGrid"></div>
+</section>
+
+<div class="sep"></div>
+
+<!-- HOROSCOPE -->
+<section id="horoscope">
+  <div class="section-header">
+    <h2>NYC Guy Horoscopes</h2>
+    <p>Mercury is in retrograde and so is your taste level. Click to reveal.</p>
+  </div>
+  <div class="horoscope-grid" id="horoscopeGrid"></div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ROAST -->
+<section id="roast">
+  <div class="section-header">
+    <h2>The Fit Roast Machine</h2>
+    <p>Tell us what jawnz you're wearing and we'll tell you who you really are.</p>
+  </div>
+  <div class="roast-machine">
+    <div class="roast-inputs">
+      <select id="roastTop">
+        <option value="">Top...</option>
+        <option value="vintage-tee">Vintage band tee (from Procell)</option>
+        <option value="rugby">Ralph Lauren rugby shirt</option>
+        <option value="hoodie-ald">ALD hoodie</option>
+        <option value="oxford">Wrinkled oxford shirt</option>
+        <option value="overshirt">Our Legacy overshirt</option>
+        <option value="tank">Black ribbed tank top</option>
+        <option value="cardigan">Mohair cardigan</option>
+        <option value="quarter-zip">Cable-knit quarter-zip</option>
+        <option value="crochet">Crochet polo</option>
+      </select>
+      <select id="roastBottom">
+        <option value="">Bottom...</option>
+        <option value="double-knee">Carhartt double-knees</option>
+        <option value="baggy-jean">Baggy washed denim</option>
+        <option value="dickies">Dickies 874</option>
+        <option value="stan-ray">Stan Ray painters</option>
+        <option value="our-legacy">Our Legacy wide trousers</option>
+        <option value="shorts">Mesh shorts (5" inseam)</option>
+        <option value="cargos">Vintage military cargos</option>
+        <option value="wrangler">Wrangler 13MWZ cowboy cut</option>
+      </select>
+      <select id="roastShoes">
+        <option value="">Shoes...</option>
+        <option value="sambas">Adidas Sambas (white)</option>
+        <option value="nb550">New Balance 550</option>
+        <option value="nb990">New Balance 990v5</option>
+        <option value="asics">Asics Gel-Kayano 14</option>
+        <option value="birks">Birkenstocks (Boston)</option>
+        <option value="loafers">Belgian loafers</option>
+        <option value="mfpen">MFPen Event Derbys</option>
+        <option value="salomon">Salomon XT-6</option>
+        <option value="paraboot">Paraboot Michaels</option>
+      </select>
+      <select id="roastAccessory">
+        <option value="">Accessory...</option>
+        <option value="trucker">Trucker hat</option>
+        <option value="tote">Canvas tote bag</option>
+        <option value="chain">Silver chain</option>
+        <option value="mustache">The mustache</option>
+        <option value="signet">Signet ring</option>
+        <option value="beanie">Cuffed beanie</option>
+        <option value="arcteryx">Arc'teryx bag</option>
+        <option value="filson">Filson briefcase</option>
+        <option value="speed-shades">Speed shades</option>
+      </select>
+    </div>
+    <button class="generate-btn" onclick="generateRoast()">ROAST MY FIT</button>
+    <div class="roast-output" id="roastOutput">
+      <span class="waiting">select your jawnz above and prepare for emotional damage</span>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- VIBE CHECK PRICING -->
+<section id="prices">
+  <div class="section-header">
+    <h2>The Price-Per-Use Delusion Index</h2>
+    <p>How you justify every purchase to yourself. "If I wear it 100 times it's basically free."</p>
+  </div>
+  <div class="price-grid" id="priceGrid"></div>
+</section>
+
+<div class="sep"></div>
+
+<!-- DRINK INDEX -->
+<section id="espresso">
+  <div class="section-header">
+    <h2>The Drink Order Pretension Index</h2>
+    <p>A rigorous, peer-reviewed analysis of your order.</p>
+  </div>
+  <div class="espresso-grid" id="espressoGrid"></div>
+</section>
+
+<div class="sep"></div>
+
+<!-- NEIGHBORHOOD COMPASS -->
+<section id="compass">
+  <div class="section-header">
+    <h2>The Neighborhood Compass</h2>
+    <p>Answer honestly and we'll tell you where you actually belong. Not where you tell people at the bar.</p>
+  </div>
+  <div class="compass-container">
+    <div id="compassQuiz"></div>
+    <div class="compass-result" id="compassResult"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>made with studied nonchalance in brooklyn (actually queens)</p>
+  <p style="margin-top:0.5rem">the only diagnostic tool that matters</p>
+  <p style="margin-top:0.5rem">if you screenshot this for your close friends story, that's on you</p>
+</footer>
+
+<script>
+// ==========================================
+// TICKER
+// ==========================================
+const tickerItems = [
+  "BREAKING: Man on Mulberry St insists his Sambas are 'beat to perfection' after 3 weeks of wear",
+  "ALERT: Espresso martini reserves running dangerously low south of Houston",
+  "UPDATE: Aesop Resurrection hand wash now accounts for 40% of bathroom budgets in Williamsburg",
+  "DEVELOPING: Guy in Greenpoint spotted wearing exact same Our Legacy overshirt as 6 other guys at the bar",
+  "URGENT: Le Labo Santal 33 detected from 4 blocks away in NoHo; authorities investigating",
+  "WEATHER: Partly cloudy with a chance of unsolicited fit pics on the Close Friends",
+  "MARKET: Diptyque candle prices surge as every apartment south of 14th requires one for entry",
+  "TRAFFIC: Bedford Ave gridlocked by men in quarter-zips walking to get matcha",
+  "SPORTS: Local man's New Balance 990v5 declared 'dad shoe' by friend; friendship ended",
+  "DINING: Man who 'knows a spot' has taken you to the fourth natural wine bar this month",
+  "SCIENCE: Researchers confirm Marvis toothpaste does not actually whiten teeth better, just costs 4x more",
+  "TECH: Resy algorithm achieves sentience, immediately books itself a table at Lucien",
+  "REAL ESTATE: Studio in Nolita with no natural light listed for $3,400; 47 applicants within the hour",
+  "LIFESTYLE: Tekla towels spotted in 94% of recently renovated bathrooms in Cobble Hill",
+  "FASHION: Post-sneaker world declared as Belgian loafer sales spike 300% in Carroll Gardens",
+];
+
+const tickerEl = document.getElementById('ticker');
+const tickerText = tickerItems.map(t => `   ★  ${t}  `).join('');
+tickerEl.textContent = tickerText + tickerText;
+
+// ==========================================
+// BINGO
+// ==========================================
+const allBingoItems = [
+  "Owns 3+ pairs of New Balance",
+  "Has strong opinions about pizza",
+  "Stood outside ALD 'just browsing'",
+  "Said 'jawnz' this week",
+  "Espresso martini is the go-to",
+  "Aesop hand soap in bathroom",
+  "Diptyque candle on display",
+  "Carhartt double-knees in rotation",
+  "Has a 'vintage' anything from Procell",
+  "Close Friends story is 90% food",
+  "Owns Sambas (the white ones)",
+  "Le Labo Santal 33 wearer",
+  "Has a canvas tote collection",
+  "Silver chain era",
+  "Marvis toothpaste in the cabinet",
+  "Knows a barista by name",
+  "Natural wine enjoyer",
+  "Has described pants as 'wide'",
+  "Arc'teryx jacket phase",
+  "Uses Resy religiously",
+  "Tekla towels in bathroom",
+  "Has a mustache (or mustache-adjacent)",
+  "Salomon XT-6 owner",
+  "Shoyeido incense on the shelf",
+  "Goes to the Comedy Cellar",
+  "Subscribes to 3+ Substacks",
+  "Regular at a coffee shop in the neighborhood",
+  "Has taken a fit pic in a mirror",
+  "Grailed purchase history over $500",
+  "Owns something from Our Legacy",
+  "Has a 'spot' in every neighborhood",
+  "Birkenstock Bostons in summer",
+  "Hay furniture piece in apartment",
+  "Takes the G train unironically",
+  "Vintage North Face fleece",
+  "Has opinions about apartment lighting",
+  "Weekend farmers market regular",
+  "Said 'post-sneaker world' out loud",
+  "Can name 5+ Japanese denim brands",
+  "Moved to NYC 'for the energy'",
+  "Ordered an Aperol spritz at Lucien",
+  "Has a 'grail' that costs $400+",
+  "Said 'downtown' meaning below 14th",
+  "Quarter-zip collection growing",
+  "Watches A24 films exclusively",
+  "Has explained selvedge denim",
+  "Rugby shirt collection",
+  "Signet ring wearer",
+  "Belgian loafer convert",
+  "DS & Durga candle backup",
+  "Muji household items throughout",
+  "Called a neighborhood 'up and coming'",
+  "Crochet polo in the rotation",
+  "Has a strong Nepenthes opinion",
+];
+
+let bingoStamped = new Set();
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function initBingo() {
+  bingoStamped = new Set();
+  const grid = document.getElementById('bingoGrid');
+  grid.innerHTML = '';
+  const shuffled = shuffleArray(allBingoItems).slice(0, 24);
+  shuffled.splice(12, 0, 'FREE SPACE (you pay NYC rent)');
+
+  shuffled.forEach((item, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'bingo-cell' + (i === 12 ? ' free' : '');
+    cell.textContent = item;
+    cell.dataset.index = i;
+    if (i === 12) {
+      bingoStamped.add(12);
+      cell.classList.add('stamped');
+    }
+    cell.addEventListener('click', () => toggleBingo(cell, i));
+    grid.appendChild(cell);
+  });
+  updateBingoStatus();
+}
+
+function toggleBingo(cell, index) {
+  if (index === 12) return;
+  if (bingoStamped.has(index)) {
+    bingoStamped.delete(index);
+    cell.classList.remove('stamped');
+  } else {
+    bingoStamped.add(index);
+    cell.classList.add('stamped');
+  }
+  updateBingoStatus();
+}
+
+function updateBingoStatus() {
+  const count = bingoStamped.size;
+  const statusEl = document.getElementById('bingoStatus');
+  const hasBingo = checkBingo();
+
+  if (hasBingo) {
+    statusEl.className = 'bingo-status winner';
+    statusEl.textContent = 'BINGO! You are clinically NYC. There is no cure.';
+    return;
+  }
+
+  const roasts = [
+    [0, 3, "you just moved here didn't you"],
+    [4, 8, "tourist behavior but make it fashion"],
+    [9, 14, "the jawnz are starting to take hold"],
+    [15, 19, "certified downtown. your Aesop budget exceeds your grocery budget."],
+    [20, 25, "you ARE the meme. touch grass (in prospect park, obviously)."],
+  ];
+
+  let msg = '';
+  for (const [lo, hi, txt] of roasts) {
+    if (count >= lo && count <= hi) { msg = txt; break; }
+  }
+
+  statusEl.className = 'bingo-status';
+  statusEl.textContent = `${count}/25 stamped — ${msg}`;
+}
+
+function checkBingo() {
+  const lines = [
+    [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],[15,16,17,18,19],[20,21,22,23,24],
+    [0,5,10,15,20],[1,6,11,16,21],[2,7,12,17,22],[3,8,13,18,23],[4,9,14,19,24],
+    [0,6,12,18,24],[4,8,12,16,20]
+  ];
+  return lines.some(line => line.every(i => bingoStamped.has(i)));
+}
+
+function resetBingo() { initBingo(); }
+
+// ==========================================
+// QUIZ
+// ==========================================
+const quizQuestions = [
+  {
+    q: "It's Saturday morning. You're...",
+    opts: [
+      { text: "At the Grand Army Plaza farmers market pretending to know what kohlrabi is", scores: { mulberry: 2, brooklyn: 3 } },
+      { text: "Getting a $7 cortado at Devocion while reading Substack on your phone", scores: { mulberry: 3, pseudo: 2 } },
+      { text: "Recovering from last night somewhere south of Houston that you'll never admit to", scores: { mulberry: 3, downtown: 2 } },
+      { text: "Watching Premier League at a pub in Murray Hill that's 'actually authentic'", scores: { finance: 2, brooklyn: 1 } },
+    ]
+  },
+  {
+    q: "Your ideal footwear situation:",
+    opts: [
+      { text: "New Balance 990v5. Dad shoe energy is the whole point.", scores: { mulberry: 3, brooklyn: 1 } },
+      { text: "Belgian loafers. We're in the post-sneaker world now.", scores: { pseudo: 3, mulberry: 1 } },
+      { text: "Sambas. I know. But they just work.", scores: { mulberry: 2, downtown: 2 } },
+      { text: "Whatever Kith had on sale last weekend", scores: { finance: 2, mulberry: 1 } },
+    ]
+  },
+  {
+    q: "You see someone wearing the exact same outfit as you on the L train. You:",
+    opts: [
+      { text: "Nod respectfully. This is the uniform.", scores: { mulberry: 3, brooklyn: 1 } },
+      { text: "Have a small existential crisis about individuality", scores: { pseudo: 3, downtown: 1 } },
+      { text: "Take a stealth pic for the group chat", scores: { downtown: 2, mulberry: 2 } },
+      { text: "Don't notice because you're on StreetEasy looking at apartments you can't afford", scores: { finance: 2, brooklyn: 1 } },
+    ]
+  },
+  {
+    q: "Your bathroom situation is:",
+    opts: [
+      { text: "Aesop everything. The amber bottles ARE the decor.", scores: { mulberry: 3, pseudo: 1 } },
+      { text: "Le Labo Santal 33 and a Diptyque candle you light for 'ambiance'", scores: { pseudo: 3, downtown: 1 } },
+      { text: "Marvis toothpaste, Tekla towels, and incense you can't pronounce", scores: { mulberry: 2, brooklyn: 2 } },
+      { text: "Dove body wash and a bar of Irish Spring. I'm not doing all that.", scores: { finance: 3 } },
+    ]
+  },
+  {
+    q: "Your apartment decor can be described as:",
+    opts: [
+      { text: "Vintage furniture from FB Marketplace that 'has character' plus Hay accessories", scores: { brooklyn: 3, mulberry: 1 } },
+      { text: "Two posters, a dying monstera, Muji containers, and vibes", scores: { mulberry: 2, downtown: 2 } },
+      { text: "Every object has a story. The DS & Durga candle is from their Bowery popup. The rug is vintage Moroccan.", scores: { pseudo: 3, mulberry: 1 } },
+      { text: "West Elm. I know. I know.", scores: { finance: 3 } },
+    ]
+  },
+  {
+    q: "Your relationship with food content:",
+    opts: [
+      { text: "Every meal is a Close Friends story. The chopped cheese. The $1 pizza. The omakase.", scores: { mulberry: 3, downtown: 1 } },
+      { text: "I have a Resy alerts for every new opening south of 23rd St", scores: { pseudo: 2, downtown: 2 } },
+      { text: "I cook. Japanese knives. Cast iron. The Muji apron.", scores: { brooklyn: 3, pseudo: 1 } },
+      { text: "I eat Sweetgreen 4x a week and I've made peace with it", scores: { finance: 2, brooklyn: 1 } },
+    ]
+  },
+  {
+    q: "Your Instagram Close Friends story is mostly:",
+    opts: [
+      { text: "Fit pics. In the mirror. With the Aesop bottles visible in the background.", scores: { mulberry: 3, brooklyn: 1 } },
+      { text: "Screenshots of tweets with 'lmaooo' written over them", scores: { downtown: 2, mulberry: 2 } },
+      { text: "Photos of things you saw on the street. A chair. A door. You called it 'beautiful.'", scores: { pseudo: 3, brooklyn: 1 } },
+      { text: "I don't post. My aura is private.", scores: { pseudo: 2, finance: 2 } },
+    ]
+  },
+  {
+    q: "Someone asks where you live. You say:",
+    opts: [
+      { text: "'Downtown.' (This means nothing and everything simultaneously.)", scores: { mulberry: 3, downtown: 2 } },
+      { text: "The specific cross streets because neighborhoods are a social construct", scores: { pseudo: 3, brooklyn: 1 } },
+      { text: "'East Williamsburg' (it's Bushwick but you've committed to the bit)", scores: { brooklyn: 3, mulberry: 1 } },
+      { text: "'Murray Hill... but it's actually not that bad' (it is that bad)", scores: { finance: 3 } },
+    ]
+  },
+];
+
+const archetypes = {
+  mulberry: {
+    name: "The Mulberry St. Regular",
+    subtitle: "Chief Loitering Officer, downtown division",
+    desc: "You've perfected the art of looking like you didn't try while spending $400 on an outfit. Your Carhartt double-knees have strategic paint splatters even though you've never painted anything. Your bathroom has more amber bottles than a pharmacy. You know every barista in a 6-block radius by name and you've got strong opinions about which bodega has the best chopped cheese.",
+    starterPack: [
+      { emoji: "👖", name: "Carhartt WIP Double Knees" },
+      { emoji: "🧴", name: "Aesop Resurrection Wash" },
+      { emoji: "🧢", name: "Trucker hat (ironic)" },
+      { emoji: "👟", name: "Beat-up Sambas" },
+      { emoji: "🕯️", name: "Diptyque Baies candle" },
+      { emoji: "🍕", name: "Strong pizza opinions" },
+    ]
+  },
+  brooklyn: {
+    name: "The Brooklyn Creative",
+    subtitle: "Works in 'content.' Owns Hay furniture. Cooks with Japanese knives.",
+    desc: "You moved to Brooklyn 'for the space' and ended up in a 400sqft apartment you describe as 'cozy.' You've got Tekla towels in the bathroom, a Muji organizer in every drawer, and a dying monstera you water with the dedication of someone who refuses to fail at one more thing. You go to the farmers market every Saturday and buy exactly one $9 loaf of sourdough.",
+    starterPack: [
+      { emoji: "🌿", name: "Dying monstera" },
+      { emoji: "🔪", name: "Japanese chef's knife" },
+      { emoji: "🛁", name: "Tekla striped towels" },
+      { emoji: "🚲", name: "Single-speed bike" },
+      { emoji: "📦", name: "Muji everything" },
+      { emoji: "🍞", name: "$9 sourdough" },
+    ]
+  },
+  pseudo: {
+    name: "The Pseudo-Intellectual",
+    subtitle: "Has read the first 40 pages of 7 Murakami novels. Bathroom smells incredible.",
+    desc: "You subscribe to more Substacks than you read and your bookshelf is organized for aesthetics, not utility. You've described a building as 'Brutalist' at a party. Your Le Labo Santal 33 announces your arrival 10 minutes before you do. You own at least one item from a brand that requires a 3-minute explanation. Your group chat thinks you're exhausting but they keep you around because you always know a spot.",
+    starterPack: [
+      { emoji: "📚", name: "Unfinished Murakami" },
+      { emoji: "🧪", name: "Le Labo Santal 33" },
+      { emoji: "🍷", name: "Orange wine knowledge" },
+      { emoji: "🏛️", name: "'Brutalist' vocabulary" },
+      { emoji: "👞", name: "Belgian loafers" },
+      { emoji: "🎬", name: "A24 completionist" },
+    ]
+  },
+  downtown: {
+    name: "The Downtown Operator",
+    subtitle: "Knows a guy who knows a guy. Bathroom has nothing in it. Always on the list.",
+    desc: "You exist primarily between Houston and Canal after 10pm. Your phone dies every night because you're 'connecting' (taking photos for your Close Friends). You've been to three gallery openings this month and remember nothing about the art. Your apartment is somehow always out of toilet paper but never out of Shoyeido incense. You call everyone 'brother' regardless of anything.",
+    starterPack: [
+      { emoji: "🌙", name: "Never home before 2am" },
+      { emoji: "🔋", name: "Perpetually dead phone" },
+      { emoji: "🖼️", name: "Gallery openings (for vibes)" },
+      { emoji: "🍸", name: "Espresso martini tab" },
+      { emoji: "⛓️", name: "Silver chain" },
+      { emoji: "🪔", name: "Shoyeido incense" },
+    ]
+  },
+  finance: {
+    name: "The Midtown Crossover",
+    subtitle: "Finance by day, 'I appreciate good design' by weekend. We see you.",
+    desc: "You work in finance but desperately want people to know you have taste. Your weekday wardrobe is Bonobos but your weekends are Kith. You just bought Aesop hand soap for the first time last month and now you 'get it.' Your apartment is in Murray Hill but you tell people 'Gramercy-adjacent.' You discovered quarter-zips this year and bought four. We respect the hustle. Barely.",
+    starterPack: [
+      { emoji: "💼", name: "Finance job (it's fine)" },
+      { emoji: "🏠", name: "'Gramercy-adjacent'" },
+      { emoji: "🧴", name: "First Aesop purchase" },
+      { emoji: "🛍️", name: "Kith weekend" },
+      { emoji: "🫕", name: "Quarter-zip collection" },
+      { emoji: "📈", name: "Resy discovery phase" },
+    ]
+  },
+};
+
+let quizAnswers = {};
+
+function initQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  quizAnswers = {};
+
+  quizQuestions.forEach((q, qi) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'quiz-question';
+    qDiv.innerHTML = `
+      <span class="q-num mono">Q${qi + 1} / ${quizQuestions.length}</span>
+      <h3>${q.q}</h3>
+      <div class="quiz-options">
+        ${q.opts.map((o, oi) => `
+          <div class="quiz-option" data-q="${qi}" data-o="${oi}" onclick="selectQuizOption(this, ${qi}, ${oi})">
+            ${o.text}
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(qDiv);
+  });
+
+  const btn = document.createElement('button');
+  btn.className = 'quiz-submit';
+  btn.textContent = 'DIAGNOSE ME';
+  btn.disabled = true;
+  btn.onclick = submitQuiz;
+  btn.id = 'quizSubmitBtn';
+  container.appendChild(btn);
+}
+
+function selectQuizOption(el, qi, oi) {
+  document.querySelectorAll(`.quiz-option[data-q="${qi}"]`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  quizAnswers[qi] = oi;
+
+  const btn = document.getElementById('quizSubmitBtn');
+  btn.disabled = Object.keys(quizAnswers).length < quizQuestions.length;
+}
+
+function submitQuiz() {
+  const scores = { mulberry: 0, brooklyn: 0, pseudo: 0, downtown: 0, finance: 0 };
+
+  Object.entries(quizAnswers).forEach(([qi, oi]) => {
+    const optScores = quizQuestions[qi].opts[oi].scores;
+    Object.entries(optScores).forEach(([k, v]) => {
+      scores[k] = (scores[k] || 0) + v;
+    });
+  });
+
+  const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const arch = archetypes[winner];
+
+  const resultEl = document.getElementById('quizResult');
+  resultEl.innerHTML = `
+    <div class="archetype">${arch.name}</div>
+    <div class="archetype-sub mono">${arch.subtitle}</div>
+    <div class="description">${arch.desc}</div>
+    <h4 style="font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--muted);margin-bottom:1rem">YOUR STARTER PACK</h4>
+    <div class="starter-pack">
+      ${arch.starterPack.map(item => `
+        <div class="starter-item">
+          <span class="item-emoji">${item.emoji}</span>
+          ${item.name}
+        </div>
+      `).join('')}
+    </div>
+    <button class="generate-btn" style="margin-top:2rem;font-size:0.75rem;padding:0.5rem 1.5rem" onclick="retakeQuiz()">RETAKE (you won't get a different result)</button>
+  `;
+  resultEl.classList.add('visible');
+  document.getElementById('quizContainer').style.display = 'none';
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function retakeQuiz() {
+  document.getElementById('quizResult').classList.remove('visible');
+  document.getElementById('quizContainer').style.display = 'block';
+  initQuiz();
+}
+
+// ==========================================
+// BOY BATHROOM AUDIT
+// ==========================================
+const bathroomItems = [
+  { icon: "🧴", name: "Aesop Resurrection Hand Wash", brand: "AESOP — $41", roast: "The $41 hand soap that turned your bathroom into a personality. Guests now wash their hands longer than necessary just to read the label. You've considered buying the matching lotion but even you have limits. (You bought it.)", tag: "essential" },
+  { icon: "🧪", name: "Le Labo Santal 33", brand: "LE LABO — $310", roast: "You can be identified by scent from the L train platform. Every first date starts with 'what cologne is that?' and you act surprised every time. You are a walking sensory event. Half of Williamsburg smells like you.", tag: "essential" },
+  { icon: "🕯️", name: "Diptyque Baies Candle", brand: "DIPTYQUE — $76", roast: "The $76 candle you light when anyone comes over and blow out exactly 12 minutes later to 'preserve the wax pool.' You've said the words 'even burn' to another human being. You keep the empty jar as decor.", tag: "performative" },
+  { icon: "🪥", name: "Marvis Toothpaste", brand: "MARVIS — $13", roast: "Italian toothpaste in an Art Deco tube that sits on the counter instead of in the drawer because it's too beautiful to hide. Your dentist has no idea what Marvis is. Your teeth are the same shade of off-white as everyone else's.", tag: "performative" },
+  { icon: "🛁", name: "Tekla Striped Towels", brand: "TEKLA — $85/EACH", roast: "You spent $85 per towel and they're gorgeous and you know they're gorgeous because you refolded them before your friend came over. They're organic cotton from Copenhagen. You've mentioned Copenhagen to describe towels.", tag: "delusional" },
+  { icon: "🪔", name: "Shoyeido Moss Garden Incense", brand: "SHOYEIDO — $12/250 STICKS", roast: "The one affordable thing in your entire apartment. You burn these after cooking to 'cleanse the space.' Your apartment smells like a Kyoto temple if that temple also had a slightly broken radiator and a bodega downstairs.", tag: "essential" },
+  { icon: "🧴", name: "Aesop Mouthwash", brand: "AESOP — $25", roast: "Because regular Listerine in a plastic bottle would ruin the amber bottle ecosystem you've built on your bathroom shelf. Your oral hygiene is now an aesthetic commitment. Your mouth tastes like a design studio.", tag: "delusional" },
+  { icon: "🫧", name: "DS & Durga Candle", brand: "DS & DURGA — $65", roast: "The backup candle for when the Diptyque feels too expected. You've described this scent as 'more complex' to someone who did not ask. You own two because one is for the bedroom and one is 'for when I have people over.'", tag: "performative" },
+  { icon: "🧽", name: "Muji Bathroom Organizer", brand: "MUJI — $8-25", roast: "The clear acrylic containers that turned your counter into a minimalist pharmacy. Everything has a designated slot. Your Q-tips are in a container. Your cotton pads are in a container. Your anxiety is not in a container.", tag: "essential" },
+  { icon: "🧴", name: "Byredo Hand Lotion", brand: "BYREDO — $52", roast: "Your hands are softer than anyone's hands need to be. You moisturize after every hand wash because the Aesop soap 'can be a bit drying.' You have a routine for your hands. You are 29 years old.", tag: "delusional" },
+  { icon: "🫗", name: "Hay Bathroom Accessories", brand: "HAY — $15-80", roast: "A Danish soap dispenser for $45 when a pump bottle from Duane Reade is $3. But the Hay one is the right shade of terracotta and sits at the right angle and you spent 20 minutes on their website choosing it.", tag: "performative" },
+  { icon: "🪞", name: "The Shelf Display", brand: "THE WHOLE SETUP", roast: "Step back and look at it: $600+ in products arranged by height, brand cohesion, and amber-to-clear ratio. This is not a bathroom. This is a showroom. When guests use the bathroom they take longer than expected. You know why.", tag: "delusional" },
+];
+
+function initBathroom() {
+  const grid = document.getElementById('bathroomGrid');
+  grid.innerHTML = '';
+  bathroomItems.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'bathroom-card';
+    card.innerHTML = `
+      <span class="necessity-tag ${item.tag}">${item.tag}</span>
+      <div class="product-icon">${item.icon}</div>
+      <div class="product-name">${item.name}</div>
+      <div class="product-brand">${item.brand}</div>
+      <div class="product-roast">${item.roast}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ==========================================
+// HOROSCOPES
+// ==========================================
+const horoscopes = [
+  { sign: "♈", name: "Aries", dates: "Mar 21 – Apr 19",
+    reading: "You will impulsively buy a $280 Our Legacy overshirt today. You will wear it once, post a fit pic with the Aesop bottles visible in the mirror, then hang it in your closet where it will develop sentience and judge your other jawnz. Mercury says chill." },
+  { sign: "♉", name: "Taurus", dates: "Apr 20 – May 20",
+    reading: "Your stubbornness about which pizza place is 'the best' will end a friendship this week. You'll die on the hill that Prince Street is overrated while standing in line at Prince Street. Also your Resy reservation at that new spot on Orchard will be worth it." },
+  { sign: "♊", name: "Gemini", dates: "May 21 – Jun 20",
+    reading: "You will attend two conflicting events this Saturday — a gallery opening in Tribeca and a house party in Bushwick — and tell both groups you 'stayed the whole time.' Your weekday quarter-zip and weekend Carhartt jacket have never been in the same room. Venus suggests integration." },
+  { sign: "♋", name: "Cancer", dates: "Jun 21 – Jul 22",
+    reading: "You will get emotionally attached to a coffee shop on Smith Street that will close in 3 months to become a CBD dispensary. Process this grief by burning through an entire box of Shoyeido incense in one evening. The moon is in your Aesop house." },
+  { sign: "♌", name: "Leo", dates: "Jul 23 – Aug 22",
+    reading: "Your Close Friends story will reach peak engagement this week. 47 people will see the matcha latte you got in Greenpoint. Your main grid energy, however, remains dormant. The sun says post the fit pic on main. You won't. You're scared of public jawnz commitment." },
+  { sign: "♍", name: "Virgo", dates: "Aug 23 – Sep 22",
+    reading: "You will reorganize your bathroom products by brand, then by bottle height, then by amber-to-clear ratio. You will describe this process to someone at a bar on Ludlow Street. They will not text you back. Mars says less Marvis, more personality." },
+  { sign: "♎", name: "Libra", dates: "Sep 23 – Oct 22",
+    reading: "You cannot decide between the Sambas and the Belgian loafers today. This is not a fashion choice, this is an identity crisis. Are you post-sneaker or not? The balance you seek is an illusion, like 'affordable' rent in Carroll Gardens." },
+  { sign: "♏", name: "Scorpio", dates: "Oct 23 – Nov 21",
+    reading: "Someone will ask where your jacket is from and you'll say 'vintage' when it was $180 on Grailed last Tuesday. Your intensity about Japanese denim weight will alarm a date at Lucien. Pluto advises: the selvedge explanation can wait until date three." },
+  { sign: "♐", name: "Sagittarius", dates: "Nov 22 – Dec 21",
+    reading: "You will plan a weekend trip to Hudson that costs more than a week in Portugal. You'll bring three outfit options for one night. You will Instagram the farmstand wearing your Birkenstock Bostons. Jupiter says you're an algorithm at this point." },
+  { sign: "♑", name: "Capricorn", dates: "Dec 22 – Jan 19",
+    reading: "Your ambition to have 'a spot' in every neighborhood from Cobble Hill to Greenpoint is admirable but financially devastating. Saturn says stick to a 3-neighborhood radius. Your barista on Court Street does not remember your name as well as you think." },
+  { sign: "♒", name: "Aquarius", dates: "Jan 20 – Feb 18",
+    reading: "You will tell someone at a Dover Street Market popup that you 'don't really follow trends' while wearing a crochet polo and Wrangler 13MWZs. Your rebellion is curated down to the Diptyque scent in your bedroom. Uranus says lean into it." },
+  { sign: "♓", name: "Pisces", dates: "Feb 19 – Mar 20",
+    reading: "You will cry at a gallery opening in Tribeca and tell people it was 'the art.' It was the third espresso martini and the Le Labo wearing off. Neptune clouds your judgment but sharpens your aesthetic sense. Buy the Nepenthes bag. You deserve it." },
+];
+
+function initHoroscopes() {
+  const grid = document.getElementById('horoscopeGrid');
+  grid.innerHTML = '';
+  horoscopes.forEach((h, i) => {
+    const card = document.createElement('div');
+    card.className = 'horoscope-card';
+    card.innerHTML = `
+      <div class="sign">${h.sign}</div>
+      <h3>${h.name}</h3>
+      <div class="dates mono">${h.dates}</div>
+      <div class="reading">${h.reading}</div>
+    `;
+    card.addEventListener('click', () => {
+      card.classList.toggle('expanded');
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ==========================================
+// FIT ROAST
+// ==========================================
+const roasts = {
+  top: {
+    "vintage-tee": { label: "vintage tee", roast: "You paid $85 for a shirt that someone's uncle threw away in 1997. The Procell tag is still on it because removing it feels like destroying provenance." },
+    "rugby": { label: "RL rugby shirt", roast: "The quarter-zip's older brother. You've never played rugby and that's okay but the Ralph Lauren logo is doing a lot of narrative work here." },
+    "hoodie-ald": { label: "ALD hoodie", roast: "Congratulations on your $180 hoodie that looks like every other hoodie but with a better logo. You waited in line on Mulberry for this. On a Tuesday." },
+    "oxford": { label: "wrinkled oxford", roast: "The wrinkles are 'intentional' the same way your rent being late is 'a lifestyle choice.' Drake's would be proud. Drake's doesn't know you exist." },
+    "overshirt": { label: "Our Legacy overshirt", roast: "You have explained what Our Legacy is to at least 4 people who did not ask. One of them was your mom. She said 'that's nice, honey.'" },
+    "tank": { label: "black tank top", roast: "Very 'I just got off my shift at the restaurant I definitely don't work at.' Your silver chain is visible and that was the whole point." },
+    "cardigan": { label: "mohair cardigan", roast: "You're 28 years old in a fuzzy grandpa cardigan that costs more than his pension. The Nepenthes influence is strong in this one." },
+    "quarter-zip": { label: "cable-knit quarter-zip", roast: "You saw two guys in the Bronx drinking matcha in these and decided this was your personality now. The Ralph Lauren cable-knit. The official uniform of 'I'm not trying but I'm absolutely trying.'" },
+    "crochet": { label: "crochet polo", roast: "This is either the coolest thing in the room or the worst and the line between them is thinner than the yarn it's made of. Rec Center energy." },
+  },
+  bottom: {
+    "double-knee": { label: "Carhartt double-knees", roast: "Your pants were designed for manual labor. You work in Figma. The paint splatters are aspirational at best." },
+    "baggy-jean": { label: "baggy denim", roast: "You went from skinny jeans to these in 2022 and pretended you always dressed this way. The denim is Japanese because of course it is." },
+    "dickies": { label: "Dickies 874", roast: "Congratulations on finding the one pair of $30 pants that the jawnz community respects. Your wallet thanks you. Everything else costs $200+." },
+    "stan-ray": { label: "Stan Ray painters", roast: "You've never painted but you chose the paint splatter ones anyway. 'Workwear' for a man whose heaviest lifting is a Filson briefcase." },
+    "our-legacy": { label: "Our Legacy trousers", roast: "These cost $300 and your mom thinks they're pajamas. She's not entirely wrong. They're incredible pajamas." },
+    "shorts": { label: "mesh shorts", roast: "5-inch inseam mesh shorts in February because you saw them in a Rec Center drop. Your thighs are OUT and honestly? Committed." },
+    "cargos": { label: "vintage cargos", roast: "Every pocket is empty except the one with your phone and the one with the vape you 'quit.' Military surplus for a man who has never been near a base." },
+    "wrangler": { label: "Wrangler 13MWZ", roast: "Cowboy cut jeans on a man who has never been west of the Hudson River. But they fit perfectly and cost $28 and you feel like a post-sneaker world cowboy." },
+  },
+  shoes: {
+    "sambas": { label: "Sambas", roast: "You and literally every other person on the L train right now. You've accepted that individuality died somewhere around 2023. At least you're comfortable." },
+    "nb550": { label: "NB 550s", roast: "You saw the ALD collab, couldn't cop, bought the GR, and told everyone they were 'basically the same.' They are not the same. You know this." },
+    "nb990": { label: "NB 990v5", roast: "You unironically call these 'dad shoes' as a compliment. Your actual dad wears New Balance from Costco and doesn't understand why yours cost $185." },
+    "asics": { label: "Asics Gel-Kayano 14", roast: "You're either 6 months ahead of the curve or 6 months behind it and honestly it's impossible to tell anymore. Gorpcore adjacent." },
+    "birks": { label: "Birkenstock Bostons", roast: "You're giving 'art teacher who knows about natural wine' and you're not even a teacher. These with Tekla socks is your whole summer personality." },
+    "loafers": { label: "Belgian loafers", roast: "Welcome to the post-sneaker world. You found a pair at a vintage spot in the West Village and now you're a loafer guy. There's no going back. Your sneakers weep." },
+    "mfpen": { label: "MFPen Event Derbys", roast: "You had to explain what MFPen is to everyone including the person who sold them to you. 'It's Danish.' Cool, nobody asked." },
+    "salomon": { label: "Salomon XT-6", roast: "Trail running shoes for a man whose most strenuous outdoor activity is walking from the Bedford Ave stop to the coffee shop 4 blocks away." },
+    "paraboot": { label: "Paraboot Michaels", roast: "French shoes that say 'I've evolved past sneakers but I'm not ready for Italian shoes.' The chunky sole does a lot of the talking. It says 'I read about these online.'" },
+  },
+  accessory: {
+    "trucker": { label: "trucker hat", roast: "You've never been near a truck. The hat knows. It whispers about you to other hats. You got it from a brand collab, not a truck stop." },
+    "tote": { label: "canvas tote", roast: "Your tote bag advertises a publication you skimmed once and a bookstore where you only bought the tote bag. It carries your Muji lunch container." },
+    "chain": { label: "silver chain", roast: "The chain says 'I'm edgy' but your Resy app says 'I need a reservation 3 weeks out for brunch at Sunday in Brooklyn.'" },
+    "mustache": { label: "the mustache", roast: "Your mustache is doing a lot of heavy lifting for a face that otherwise says 'I work in product management.' The Le Labo clings to it." },
+    "signet": { label: "signet ring", roast: "You are not British royalty but your ring finger doesn't know that. You found this at James Veloria and the backstory is 4 minutes long." },
+    "beanie": { label: "cuffed beanie", roast: "It's 58 degrees out. The beanie is a choice. An aesthetic, temperature-inappropriate choice. Your Aesop-moisturized forehead is sweating under there." },
+    "arcteryx": { label: "Arc'teryx bag", roast: "You spent $300 on a bag designed for Everest base camp to carry your laptop to a coffee shop on Atlantic Ave. The gorpcore is strong." },
+    "filson": { label: "Filson briefcase", roast: "A bag designed for Pacific Northwest loggers carried by a man who works remotely from a co-working space in Dumbo. The leather patina is 'developing.'" },
+    "speed-shades": { label: "speed shades", roast: "Wraparound sunglasses that say 'I'm either extremely cool or extremely lost.' You saw them in a Rec Center rec and now they're your whole summer." },
+  }
+};
+
+function generateRoast() {
+  const top = document.getElementById('roastTop').value;
+  const bottom = document.getElementById('roastBottom').value;
+  const shoes = document.getElementById('roastShoes').value;
+  const acc = document.getElementById('roastAccessory').value;
+
+  const output = document.getElementById('roastOutput');
+
+  if (!top && !bottom && !shoes && !acc) {
+    output.innerHTML = '<span class="waiting">you have to actually select something. we can\'t roast air.</span>';
+    return;
+  }
+
+  let parts = [];
+  if (top) parts.push(roasts.top[top].roast);
+  if (bottom) parts.push(roasts.bottom[bottom].roast);
+  if (shoes) parts.push(roasts.shoes[shoes].roast);
+  if (acc) parts.push(roasts.accessory[acc].roast);
+
+  const labels = [];
+  if (top) labels.push(roasts.top[top].label);
+  if (bottom) labels.push(roasts.bottom[bottom].label);
+  if (shoes) labels.push(roasts.shoes[shoes].label);
+  if (acc) labels.push(roasts.accessory[acc].label);
+
+  const verdicts = [
+    "You are the median NYC guy. Statistically unremarkable. Aesthetically adequate. Your bathroom is immaculate though.",
+    "This fit is a cry for help disguised as studied nonchalance. Your Aesop hand soap is proud of you anyway.",
+    "You looked in the mirror (next to the amber bottles) and said 'yeah, this is it.' It was close enough.",
+    "This outfit costs more than your great-grandfather's first car and looks like his work clothes. Full circle. Post-sneaker world energy.",
+    "You are one crochet polo away from ascending to a higher plane of jawnz consciousness.",
+    "This is the outfit of a man who reads recommendations threads and then does the exact opposite. Respect.",
+    "Your fit is giving 'I have opinions about Japanese denim weight.' You do. We know.",
+    "This outfit has been algorithmically optimized for maximum perceived effortlessness. The Grailed receipts tell a different story.",
+  ];
+
+  const verdict = verdicts[Math.floor(Math.random() * verdicts.length)];
+
+  output.innerHTML = `
+    <div>
+      <div style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--accent);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.1em">
+        THE JAWNZ: ${labels.join(' + ')}
+      </div>
+      ${parts.map(p => `<p style="margin-bottom:0.75rem">${p}</p>`).join('')}
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--accent2)">
+        VERDICT: ${verdict}
+      </div>
+    </div>
+  `;
+}
+
+// ==========================================
+// PRICE-PER-USE DELUSION INDEX
+// ==========================================
+const priceItems = [
+  { name: "Aesop Resurrection Hand Wash", price: 41, uses: "~200 washes", ppu: "$0.21", normal: "$0.02 (Dial)", justification: "But guests compliment my bathroom now", delusion: 4 },
+  { name: "Le Labo Santal 33", price: 310, uses: "~150 sprays", ppu: "$2.07", normal: "$0.12 (Old Spice)", justification: "People can smell me from 4 blocks away. That's range.", delusion: 5 },
+  { name: "Carhartt WIP Double Knees", price: 178, uses: "Worn 3x/week, 2 years", ppu: "$0.57", normal: "$0.08 (Wrangler)", justification: "Actually reasonable. The one purchase that checks out.", delusion: 1 },
+  { name: "Diptyque Baies Candle", price: 76, uses: "~60 hours", ppu: "$1.27/hr", normal: "$0.10/hr (Yankee)", justification: "It's the entry fee for having people over", delusion: 4 },
+  { name: "Tekla Towel (one)", price: 85, uses: "Daily for 3 years", ppu: "$0.08", normal: "$0.01 (Target)", justification: "Organic cotton from Copenhagen. I've said 'Copenhagen' to describe a towel.", delusion: 3 },
+  { name: "Vintage Band Tee", price: 85, uses: "12x before it 'rotates out'", ppu: "$7.08", normal: "$1.50 (Hanes)", justification: "It's from Procell so it has provenance", delusion: 5 },
+  { name: "Marvis Toothpaste", price: 13, uses: "~90 brushes", ppu: "$0.14", normal: "$0.03 (Colgate)", justification: "The tube sits on the counter. It's decorative dental care.", delusion: 2 },
+  { name: "Espresso Martini", price: 18, uses: "1 drink, 1 night", ppu: "$18.00", normal: "$7.00 (at home)", justification: "It's a social necessity south of Houston", delusion: 3 },
+  { name: "Belgian Loafers (vintage)", price: 120, uses: "Post-sneaker era daily", ppu: "$0.33", normal: "$0.05 (Bass)", justification: "I found these at a vintage spot in the West Village and now I'm a loafer guy", delusion: 2 },
+  { name: "Shoyeido Incense (250 sticks)", price: 12, uses: "250 burns", ppu: "$0.05", normal: "$0.02 (generic)", justification: "The one thing in my apartment that costs a normal amount", delusion: 0 },
+  { name: "Our Legacy Overshirt", price: 280, uses: "15x before the next one drops", ppu: "$18.67", normal: "$2.00 (flannel)", justification: "It's an investment in how I explain Swedish fashion to strangers", delusion: 5 },
+  { name: "Resy Reservation", price: 0, uses: "1 dinner", ppu: "$0 (+ $140 meal)", normal: "Walking in somewhere", justification: "You can't just walk in somewhere. That's chaos.", delusion: 4 },
+];
+
+function initPriceGrid() {
+  const grid = document.getElementById('priceGrid');
+  grid.innerHTML = '';
+  priceItems.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'price-card';
+    const delusionPct = (item.delusion / 5) * 100;
+    card.innerHTML = `
+      <div class="item-name">${item.name}</div>
+      <div class="item-brand" style="margin-bottom:0.5rem">$${item.price} — ${item.uses}</div>
+      <div style="display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:0.7rem;margin-bottom:0.25rem">
+        <span style="color:var(--accent3)">PRICE/USE: ${item.ppu}</span>
+      </div>
+      <div style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:0.75rem">
+        NORMAL ALTERNATIVE: ${item.normal}
+      </div>
+      <div style="font-size:0.8rem;line-height:1.5;color:var(--muted);font-style:italic;margin-bottom:0.75rem">"${item.justification}"</div>
+      <div style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:0.3rem">DELUSION LEVEL</div>
+      <div class="price-bar"><div class="price-fill" style="width:0%;background:${item.delusion >= 4 ? '#ff4444' : item.delusion >= 2 ? 'var(--accent2)' : 'var(--accent)'}" data-target="${delusionPct}"></div></div>
+    `;
+    grid.appendChild(card);
+  });
+
+  setTimeout(() => {
+    document.querySelectorAll('.price-fill').forEach(bar => {
+      bar.style.width = bar.dataset.target + '%';
+    });
+  }, 500);
+}
+
+// ==========================================
+// DRINK INDEX
+// ==========================================
+const drinks = [
+  { name: "Espresso Martini", verdict: "The official drink of 'I'm fun but also tired'", pretension: 3 },
+  { name: "Natural Orange Wine", verdict: "You will explain terroir to everyone at the table", pretension: 5 },
+  { name: "Negroni", verdict: "You think this makes you interesting. It does. A little.", pretension: 4 },
+  { name: "Oat Cortado", verdict: "Basic but elevated. An oxymoron in a cup. From Devocion.", pretension: 3 },
+  { name: "Aperol Spritz", verdict: "You went to Italy once and now it's a whole personality", pretension: 3 },
+  { name: "Draft Beer", verdict: "Aggressively normal. Suspiciously humble. Murray Hill energy.", pretension: 1 },
+  { name: "Matcha Latte", verdict: "Quarter-zip guys in Greenpoint swear by this. You are one of them.", pretension: 3 },
+  { name: "Mezcal Negroni", verdict: "A Negroni but smokier because regular pretension wasn't enough", pretension: 5 },
+  { name: "Cold Brew (Black)", verdict: "You're either a psychopath or a morning person. Same thing.", pretension: 2 },
+  { name: "Dirty Martini", verdict: "You've been watching too many movies set in Manhattan in the 90s", pretension: 4 },
+  { name: "Sake Bomb", verdict: "You peaked at the wrong restaurant in the East Village", pretension: 0 },
+  { name: "Pour Over Coffee", verdict: "You watched the barista pour for 4 min and called it 'meditative'", pretension: 5 },
+];
+
+function initEspressoIndex() {
+  const grid = document.getElementById('espressoGrid');
+  grid.innerHTML = '';
+  drinks.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'espresso-card';
+    card.innerHTML = `
+      <div>
+        <div class="drink-name">${d.name}</div>
+        <div class="drink-verdict">${d.verdict}</div>
+      </div>
+      <div class="pretension-meter">
+        <div class="pretension-dots">
+          ${Array.from({length: 5}, (_, i) => `<div class="dot ${i < d.pretension ? 'filled' : ''}"></div>`).join('')}
+        </div>
+        <div class="pretension-label">pretension</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ==========================================
+// NEIGHBORHOOD COMPASS
+// ==========================================
+const compassQuestions = [
+  {
+    q: "Your ideal Friday night involves:",
+    opts: [
+      { text: "A 45-minute wait at a restaurant you saw on someone's Close Friends story", scores: { nolita: 3, les: 2 } },
+      { text: "A house party in a loft that's 'technically' in East Williamsburg", scores: { bushwick: 3, williamsburg: 1 } },
+      { text: "A bar on Ludlow St where you know the bartender (you've been twice)", scores: { les: 3, williamsburg: 1 } },
+      { text: "Dinner at home then reading until 10pm because you're actually 35 inside. DS & Durga candle lit.", scores: { parkslope: 3, cobblehill: 2 } },
+    ]
+  },
+  {
+    q: "Your grocery situation is:",
+    opts: [
+      { text: "I eat out for every meal and my bank account is in hospice. Resy is my meal planner.", scores: { nolita: 3, les: 2 } },
+      { text: "The bodega downstairs for emergencies, Trader Joe's on Court St for morale", scores: { les: 2, cobblehill: 2 } },
+      { text: "Grand Army Plaza farmers market hauls I photograph with the Hay tote bag", scores: { parkslope: 3, cobblehill: 1 } },
+      { text: "Whole Foods delivery. I'm assembling mise en place in my Muji-organized kitchen.", scores: { williamsburg: 2, bushwick: 2 } },
+    ]
+  },
+  {
+    q: "Your bathroom vibe is:",
+    opts: [
+      { text: "Full Aesop. Amber bottles lined up by height. Diptyque on the shelf. It's a museum.", scores: { nolita: 3, williamsburg: 1 } },
+      { text: "Le Labo Santal 33, Tekla towels, Shoyeido incense. Curated but I'd never say 'curated.'", scores: { williamsburg: 2, parkslope: 2 } },
+      { text: "Whatever's in there. I shower and leave. The real energy is in the fit.", scores: { les: 3, bushwick: 1 } },
+      { text: "Dr. Bronner's and a towel from my parents' house. I'm spending my money on rent.", scores: { bushwick: 3, les: 1 } },
+    ]
+  },
+  {
+    q: "Your relationship with public transit:",
+    opts: [
+      { text: "I take the L and complain about it. This IS my personality.", scores: { williamsburg: 3, bushwick: 2 } },
+      { text: "I walk everywhere south of 14th because 'the city is my gym.'", scores: { nolita: 2, les: 2 } },
+      { text: "I Citi Bike across the Williamsburg Bridge and act like it's not terrifying.", scores: { bushwick: 2, williamsburg: 1, parkslope: 1 } },
+      { text: "F/G train. No drama. I read on the commute. I'm at peace.", scores: { parkslope: 2, cobblehill: 3 } },
+    ]
+  },
+];
+
+const neighborhoods = {
+  nolita: {
+    name: "Nolita / SoHo",
+    desc: "You belong on Mulberry Street, standing outside the ALD flagship judging everyone else also standing outside the ALD flagship. Your coffee costs $7 at Cafe Integral, your apartment has no natural light, your bathroom costs more than your furniture, and you wouldn't have it any other way. You are geographically and spiritually downtown.",
+    starter: "ALD flagship • Prince Street Pizza (overrated, you go anyway) • Cafe Integral • The Bowery Hotel lobby (just for the vibes) • Procell • McNally Jackson"
+  },
+  les: {
+    name: "Lower East Side",
+    desc: "You're nocturnal. Your neighborhood comes alive at 10pm and so do you. You have opinions about every bar south of Houston and can navigate Ludlow Street blindfolded. Your bathroom is an afterthought because you're never home before 2am. You've been to Cervo's 14 times and Dimes 'when it was still good.'",
+    starter: "Cervo's • Dimes (OG era) • Essex Market • 12 St Marks • Home Sweet Home • Scarr's Pizza • Katz's (once, for the content)"
+  },
+  williamsburg: {
+    name: "Williamsburg",
+    desc: "You moved here because Bushwick felt 'too far' and Manhattan felt 'too corporate.' You have access to exactly 47 coffee shops and Devocion is your main. Your bathroom has Tekla towels and your kitchen has the Muji dish rack. The Bedford Ave stop is your Mecca. Your quarter-zip game is immaculate.",
+    starter: "Devocion • Misi • Sunday in Brooklyn • Berlin (the bar) • Domino Park sunset • Rough Trade • Marlow & Sons"
+  },
+  bushwick: {
+    name: "Bushwick / East Williamsburg",
+    desc: "You live in a converted loft that was definitely not zoned for residential use and you call it 'East Williamsburg' on dates. Your bathroom has Dr. Bronner's and exactly one candle. You describe your neighborhood as 'up and coming' (it's been 'up and coming' since 2012). Your nearest good coffee is a 12-minute walk but you call it 'charming.'",
+    starter: "Roberta's • Ops • House of Yes • Archie's Bar • The loft party circuit • Bodega cats • That one good taco truck"
+  },
+  parkslope: {
+    name: "Park Slope / Prospect Heights",
+    desc: "You have evolved past the downtown energy and into the 'Prospect Park on Sundays' phase. You own a plant that's actually alive. You cook with a Japanese knife on a wooden cutting board from Hay. Your bathroom has the full Aesop set AND the Tekla towels. You're still cool but in a way that involves a 9pm bedtime and strong opinions about sourdough.",
+    starter: "Prospect Park loop • Grand Army Plaza market • Olmsted • The Vanderbilt • Winner • Bar Chord"
+  },
+  cobblehill: {
+    name: "Cobble Hill / Carroll Gardens",
+    desc: "You are the final evolution of the NYC guy. You have a neighborhood Italian restaurant on Court Street where they know your order. You walk slowly now. Your Belgian loafers click on the brownstone stoops. Your apartment has the DS & Durga candle in every room. You've made peace with Smith Street. You might even have a backyard. This is it. You made it.",
+    starter: "Lucali • Court Street Grocers • Clover Club • Long Island Bar • Brooklyn Farmacy • Smith St bookshop • The backyard (if blessed)"
+  },
+};
+
+let compassAnswers = {};
+
+function initCompass() {
+  const container = document.getElementById('compassQuiz');
+  container.innerHTML = '';
+  compassAnswers = {};
+
+  compassQuestions.forEach((q, qi) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'quiz-question';
+    qDiv.innerHTML = `
+      <span class="q-num mono">Q${qi + 1} / ${compassQuestions.length}</span>
+      <h3>${q.q}</h3>
+      <div class="quiz-options">
+        ${q.opts.map((o, oi) => `
+          <div class="quiz-option" data-cq="${qi}" data-co="${oi}" onclick="selectCompassOption(this, ${qi}, ${oi})">
+            ${o.text}
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(qDiv);
+  });
+
+  const btn = document.createElement('button');
+  btn.className = 'quiz-submit';
+  btn.textContent = 'FIND MY HOOD';
+  btn.disabled = true;
+  btn.onclick = submitCompass;
+  btn.id = 'compassSubmitBtn';
+  container.appendChild(btn);
+}
+
+function selectCompassOption(el, qi, oi) {
+  document.querySelectorAll(`.quiz-option[data-cq="${qi}"]`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  compassAnswers[qi] = oi;
+
+  const btn = document.getElementById('compassSubmitBtn');
+  btn.disabled = Object.keys(compassAnswers).length < compassQuestions.length;
+}
+
+function submitCompass() {
+  const scores = { nolita: 0, les: 0, williamsburg: 0, bushwick: 0, parkslope: 0, cobblehill: 0 };
+
+  Object.entries(compassAnswers).forEach(([qi, oi]) => {
+    const optScores = compassQuestions[qi].opts[oi].scores;
+    Object.entries(optScores).forEach(([k, v]) => {
+      scores[k] = (scores[k] || 0) + v;
+    });
+  });
+
+  const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const hood = neighborhoods[winner];
+
+  const resultEl = document.getElementById('compassResult');
+  resultEl.innerHTML = `
+    <div class="hood">${hood.name}</div>
+    <div class="hood-desc">${hood.desc}</div>
+    <div class="hood-starter">YOUR SPOTS: ${hood.starter}</div>
+    <button class="generate-btn" style="margin-top:1.5rem;font-size:0.75rem;padding:0.5rem 1.5rem" onclick="retakeCompass()">TRY AGAIN</button>
+  `;
+  resultEl.classList.add('visible');
+  document.getElementById('compassQuiz').style.display = 'none';
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function retakeCompass() {
+  document.getElementById('compassResult').classList.remove('visible');
+  document.getElementById('compassQuiz').style.display = 'block';
+  initCompass();
+}
+
+// ==========================================
+// INIT
+// ==========================================
+initBingo();
+initQuiz();
+initBathroom();
+initHoroscopes();
+initPriceGrid();
+initEspressoIndex();
+initCompass();
+
+// Intersection observer for price bar animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.price-fill').forEach(bar => {
+        bar.style.width = bar.dataset.target + '%';
+      });
+    }
+  });
+}, { threshold: 0.2 });
+
+const priceSection = document.getElementById('prices');
+if (priceSection) observer.observe(priceSection);
+</script>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ PORT = int(os.environ.get("PORT", 8080))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 NEIGHBORHOODS_FILE = os.path.join(BASE_DIR, "nyc-neighborhoods.html")
+NYCGUY_FILE = os.path.join(BASE_DIR, "nycguy.html")
 
 
 class DigestHandler(SimpleHTTPRequestHandler):
@@ -20,6 +21,15 @@ class DigestHandler(SimpleHTTPRequestHandler):
         super().end_headers()
 
     def do_GET(self):
+        # Serve the NYC guy diagnostic
+        if self.path in ("/nyc", "/nyc/"):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            with open(NYCGUY_FILE, "rb") as f:
+                self.wfile.write(f.read())
+            return
+
         # Serve the NYC neighborhood ranker
         if self.path in ("/neighborhoods", "/neighborhoods/"):
             self.send_response(200)
@@ -42,4 +52,5 @@ if __name__ == "__main__":
     print(f"Serving Shooter Digest on port {PORT}")
     print(f"  /              → latest digest")
     print(f"  /neighborhoods → NYC neighborhood ranker")
+    print(f"  /nyc           → The Jawnz Diagnostic")
     server.serve_forever()

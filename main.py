@@ -1876,15 +1876,16 @@ def generate_html(results: list[dict], failed_names: list[str],
         est_all_time = _fmt(r.get('est_total_all', r['peak_all']))
 
         genre = r.get('genre', 'Other')
+        trend_val = trend_pct if trend_pct is not None else 0
         table_rows += f"""        <tr data-genre="{genre}">
-          <td class="rank">#{r['rank']}</td>
+          <td class="rank" data-value="{r['rank']}">#{r['rank']}</td>
           <td class="game">{_esc(r['name'])}</td>
           <td>{_genre_badge_html(genre)}</td>
-          <td class="num">{_fmt(r['peak_24h'])}</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">{est_total}</td>
-          <td class="trend {r['trend_css']}">{r['trend_arrow']} {trend_str}</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">{est_all_time}</td>
-          <td class="pct-cell">
+          <td class="num" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
+          <td class="num" data-value="{r.get('est_total_24h', r['peak_24h'])}" style="color:#60a5fa;font-weight:600">{est_total}</td>
+          <td class="trend {r['trend_css']}" data-value="{trend_val}">{r['trend_arrow']} {trend_str}</td>
+          <td class="num" data-value="{r.get('est_total_all', r['peak_all'])}" style="color:#fbbf24;font-weight:600">{est_all_time}</td>
+          <td class="pct-cell" data-value="{r['pct_all']:.2f}">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%"></div></div>
             <span>{r['pct_all']:.1f}%</span>
           </td>
@@ -2129,6 +2130,15 @@ def generate_html(results: list[dict], failed_names: list[str],
       border-bottom: 2px solid #2a475e; color: #66c0f4;
       font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
     }}
+    th[data-sort] {{
+      cursor: pointer; user-select: none; position: relative;
+    }}
+    th[data-sort]:hover {{ color: #e5e5e5; }}
+    th[data-sort]::after {{
+      content: '⇅'; opacity: 0.3; margin-left: 4px; font-size: 0.7rem;
+    }}
+    th[data-sort].asc::after {{ content: '▲'; opacity: 0.8; }}
+    th[data-sort].desc::after {{ content: '▼'; opacity: 0.8; }}
     td {{ padding: 0.5rem 0.7rem; border-bottom: 1px solid #1b2838; }}
     tr:hover {{ background: #1b2838; }}
     .rank {{ color: #8f98a0; font-weight: 600; width: 40px; }}
@@ -2448,14 +2458,14 @@ def generate_html(results: list[dict], failed_names: list[str],
   <table>
     <thead>
       <tr>
-        <th>Rank</th>
-        <th>Game</th>
-        <th>Genre</th>
-        <th style="text-align:right">24h Peak<br><small>(Steam)</small></th>
-        <th style="text-align:right">Est. Total<br><small>(All Platforms)</small></th>
-        <th>Trend<br><small>(MoM)</small></th>
-        <th style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
-        <th>% of Peak</th>
+        <th data-sort="num" data-col="0">Rank</th>
+        <th data-sort="str" data-col="1">Game</th>
+        <th data-sort="str" data-col="2">Genre</th>
+        <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Platforms)</small></th>
+        <th data-sort="num" data-col="5">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
+        <th data-sort="num" data-col="7">% of Peak</th>
       </tr>
     </thead>
     <tbody>
@@ -2501,6 +2511,42 @@ def generate_html(results: list[dict], failed_names: list[str],
       document.querySelectorAll('.card[data-genre]').forEach(card => {{
         card.style.display = (genre === 'All' || card.dataset.genre === genre) ? '' : 'none';
       }});
+    }});
+  }});
+
+  // Sortable table columns
+  document.querySelectorAll('th[data-sort]').forEach(th => {{
+    th.addEventListener('click', () => {{
+      const table = th.closest('table');
+      const tbody = table.querySelector('tbody');
+      const col = parseInt(th.dataset.col);
+      const type = th.dataset.sort;
+      const isAsc = th.classList.contains('asc');
+      const dir = isAsc ? -1 : 1;
+
+      // Update header classes
+      table.querySelectorAll('th[data-sort]').forEach(h => h.classList.remove('asc', 'desc'));
+      th.classList.add(isAsc ? 'desc' : 'asc');
+
+      // Get sortable rows (skip failed rows)
+      const rows = Array.from(tbody.querySelectorAll('tr[data-genre]'));
+
+      rows.sort((a, b) => {{
+        const cellA = a.children[col];
+        const cellB = b.children[col];
+
+        if (type === 'num') {{
+          const vA = parseFloat(cellA.dataset.value || '0');
+          const vB = parseFloat(cellB.dataset.value || '0');
+          return (vA - vB) * dir;
+        }} else {{
+          const vA = cellA.textContent.trim().toLowerCase();
+          const vB = cellB.textContent.trim().toLowerCase();
+          return vA.localeCompare(vB) * dir;
+        }}
+      }});
+
+      rows.forEach(row => tbody.appendChild(row));
     }});
   }});
   </script>

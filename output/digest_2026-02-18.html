@@ -50,6 +50,15 @@
       border-bottom: 2px solid #2a475e; color: #66c0f4;
       font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
     }
+    th[data-sort] {
+      cursor: pointer; user-select: none; position: relative;
+    }
+    th[data-sort]:hover { color: #e5e5e5; }
+    th[data-sort]::after {
+      content: '⇅'; opacity: 0.3; margin-left: 4px; font-size: 0.7rem;
+    }
+    th[data-sort].asc::after { content: '▲'; opacity: 0.8; }
+    th[data-sort].desc::after { content: '▼'; opacity: 0.8; }
     td { padding: 0.5rem 0.7rem; border-bottom: 1px solid #1b2838; }
     tr:hover { background: #1b2838; }
     .rank { color: #8f98a0; font-weight: 600; width: 40px; }
@@ -419,208 +428,208 @@
   <table>
     <thead>
       <tr>
-        <th>Rank</th>
-        <th>Game</th>
-        <th>Genre</th>
-        <th style="text-align:right">24h Peak<br><small>(Steam)</small></th>
-        <th style="text-align:right">Est. Total<br><small>(All Platforms)</small></th>
-        <th>Trend<br><small>(MoM)</small></th>
-        <th style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
-        <th>% of Peak</th>
+        <th data-sort="num" data-col="0">Rank</th>
+        <th data-sort="str" data-col="1">Game</th>
+        <th data-sort="str" data-col="2">Genre</th>
+        <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Platforms)</small></th>
+        <th data-sort="num" data-col="5">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
+        <th data-sort="num" data-col="7">% of Peak</th>
       </tr>
     </thead>
     <tbody>
         <tr data-genre="Tactical">
-          <td class="rank">#1</td>
+          <td class="rank" data-value="1">#1</td>
           <td class="game">Counter-Strike 2</td>
           <td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td>
-          <td class="num">1,534,181</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">1,534,181</td>
-          <td class="trend flat">▶ +0.4%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">1,818,368</td>
-          <td class="pct-cell">
+          <td class="num" data-value="1534181">1,534,181</td>
+          <td class="num" data-value="1534181" style="color:#60a5fa;font-weight:600">1,534,181</td>
+          <td class="trend flat" data-value="+0.4">▶ +0.4%</td>
+          <td class="num" data-value="1818368" style="color:#fbbf24;font-weight:600">1,818,368</td>
+          <td class="pct-cell" data-value="84.4">
             <div class="bar-bg"><div class="bar" style="width:84.37131537730536%"></div></div>
             <span>84.4%</span>
           </td>
         </tr>
         <tr data-genre="Battle Royale">
-          <td class="rank">#2</td>
+          <td class="rank" data-value="2">#2</td>
           <td class="game">PUBG: BATTLEGROUNDS</td>
           <td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td>
-          <td class="num">450,610</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">563,262</td>
-          <td class="trend down">▼ -6.7%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">4,045,033</td>
-          <td class="pct-cell">
+          <td class="num" data-value="450610">450,610</td>
+          <td class="num" data-value="563262" style="color:#60a5fa;font-weight:600">563,262</td>
+          <td class="trend down" data-value="-6.7">▼ -6.7%</td>
+          <td class="num" data-value="4045033" style="color:#fbbf24;font-weight:600">4,045,033</td>
+          <td class="pct-cell" data-value="13.9">
             <div class="bar-bg"><div class="bar" style="width:13.924791109592102%"></div></div>
             <span>13.9%</span>
           </td>
         </tr>
         <tr data-genre="Extraction">
-          <td class="rank">#3</td>
+          <td class="rank" data-value="3">#3</td>
           <td class="game">Arc Raiders</td>
           <td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td>
-          <td class="num">205,644</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">411,288</td>
-          <td class="trend down">▼ -18.1%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">930,194</td>
-          <td class="pct-cell">
+          <td class="num" data-value="205644">205,644</td>
+          <td class="num" data-value="411288" style="color:#60a5fa;font-weight:600">411,288</td>
+          <td class="trend down" data-value="-18.1">▼ -18.1%</td>
+          <td class="num" data-value="930194" style="color:#fbbf24;font-weight:600">930,194</td>
+          <td class="pct-cell" data-value="44.2">
             <div class="bar-bg"><div class="bar" style="width:44.2152927238834%"></div></div>
             <span>44.2%</span>
           </td>
         </tr>
         <tr data-genre="Battle Royale">
-          <td class="rank">#4</td>
+          <td class="rank" data-value="4">#4</td>
           <td class="game">Apex Legends</td>
           <td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td>
-          <td class="num">149,893</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">599,572</td>
-          <td class="trend flat">▶ -0.4%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">2,497,892</td>
-          <td class="pct-cell">
+          <td class="num" data-value="149893">149,893</td>
+          <td class="num" data-value="599572" style="color:#60a5fa;font-weight:600">599,572</td>
+          <td class="trend flat" data-value="-0.4">▶ -0.4%</td>
+          <td class="num" data-value="2497892" style="color:#fbbf24;font-weight:600">2,497,892</td>
+          <td class="pct-cell" data-value="24.0">
             <div class="bar-bg"><div class="bar" style="width:24.00311943030363%"></div></div>
             <span>24.0%</span>
           </td>
         </tr>
         <tr data-genre="Extraction">
-          <td class="rank">#5</td>
+          <td class="rank" data-value="5">#5</td>
           <td class="game">Delta Force</td>
           <td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td>
-          <td class="num">128,734</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">183,905</td>
-          <td class="trend up">▲ +13.7%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">352,025</td>
-          <td class="pct-cell">
+          <td class="num" data-value="128734">128,734</td>
+          <td class="num" data-value="183905" style="color:#60a5fa;font-weight:600">183,905</td>
+          <td class="trend up" data-value="+13.7">▲ +13.7%</td>
+          <td class="num" data-value="352025" style="color:#fbbf24;font-weight:600">352,025</td>
+          <td class="pct-cell" data-value="52.2">
             <div class="bar-bg"><div class="bar" style="width:52.24212516942755%"></div></div>
             <span>52.2%</span>
           </td>
         </tr>
         <tr data-genre="Hero Shooter">
-          <td class="rank">#6</td>
+          <td class="rank" data-value="6">#6</td>
           <td class="game">Marvel Rivals</td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="num">123,703</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">353,437</td>
-          <td class="trend up">▲ +4.3%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">1,835,237</td>
-          <td class="pct-cell">
+          <td class="num" data-value="123703">123,703</td>
+          <td class="num" data-value="353437" style="color:#60a5fa;font-weight:600">353,437</td>
+          <td class="trend up" data-value="+4.3">▲ +4.3%</td>
+          <td class="num" data-value="1835237" style="color:#fbbf24;font-weight:600">1,835,237</td>
+          <td class="pct-cell" data-value="19.3">
             <div class="bar-bg"><div class="bar" style="width:19.258390896933523%"></div></div>
             <span>19.3%</span>
           </td>
         </tr>
         <tr data-genre="Hero Shooter">
-          <td class="rank">#7</td>
+          <td class="rank" data-value="7">#7</td>
           <td class="game">Overwatch</td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="num">112,990</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">564,950</td>
-          <td class="trend up">▲ +72.4%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">823,180</td>
-          <td class="pct-cell">
+          <td class="num" data-value="112990">112,990</td>
+          <td class="num" data-value="564950" style="color:#60a5fa;font-weight:600">564,950</td>
+          <td class="trend up" data-value="+72.4">▲ +72.4%</td>
+          <td class="num" data-value="823180" style="color:#fbbf24;font-weight:600">823,180</td>
+          <td class="pct-cell" data-value="68.6">
             <div class="bar-bg"><div class="bar" style="width:68.63019023785806%"></div></div>
             <span>68.6%</span>
           </td>
         </tr>
         <tr data-genre="Large-Scale">
-          <td class="rank">#8</td>
+          <td class="rank" data-value="8">#8</td>
           <td class="game">Battlefield 6</td>
           <td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td>
-          <td class="num">78,334</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">142,425</td>
-          <td class="trend down">▼ -22.5%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">1,192,849</td>
-          <td class="pct-cell">
+          <td class="num" data-value="78334">78,334</td>
+          <td class="num" data-value="142425" style="color:#60a5fa;font-weight:600">142,425</td>
+          <td class="trend down" data-value="-22.5">▼ -22.5%</td>
+          <td class="num" data-value="1192849" style="color:#fbbf24;font-weight:600">1,192,849</td>
+          <td class="pct-cell" data-value="11.9">
             <div class="bar-bg"><div class="bar" style="width:11.939939061101992%"></div></div>
             <span>11.9%</span>
           </td>
         </tr>
         <tr data-genre="Tactical">
-          <td class="rank">#9</td>
+          <td class="rank" data-value="9">#9</td>
           <td class="game">Rainbow Six Siege</td>
           <td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td>
-          <td class="num">77,331</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">220,945</td>
-          <td class="trend up">▲ +4.7%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">572,788</td>
-          <td class="pct-cell">
+          <td class="num" data-value="77331">77,331</td>
+          <td class="num" data-value="220945" style="color:#60a5fa;font-weight:600">220,945</td>
+          <td class="trend up" data-value="+4.7">▲ +4.7%</td>
+          <td class="num" data-value="572788" style="color:#fbbf24;font-weight:600">572,788</td>
+          <td class="pct-cell" data-value="38.6">
             <div class="bar-bg"><div class="bar" style="width:38.57369460683573%"></div></div>
             <span>38.6%</span>
           </td>
         </tr>
         <tr data-genre="Hero Shooter">
-          <td class="rank">#10</td>
+          <td class="rank" data-value="10">#10</td>
           <td class="game">Team Fortress 2</td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="num">48,065</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">48,065</td>
-          <td class="trend up">▲ +2.1%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">253,225</td>
-          <td class="pct-cell">
+          <td class="num" data-value="48065">48,065</td>
+          <td class="num" data-value="48065" style="color:#60a5fa;font-weight:600">48,065</td>
+          <td class="trend up" data-value="+2.1">▲ +2.1%</td>
+          <td class="num" data-value="253225" style="color:#fbbf24;font-weight:600">253,225</td>
+          <td class="pct-cell" data-value="19.0">
             <div class="bar-bg"><div class="bar" style="width:18.981143252048575%"></div></div>
             <span>19.0%</span>
           </td>
         </tr>
         <tr data-genre="Large-Scale">
-          <td class="rank">#11</td>
+          <td class="rank" data-value="11">#11</td>
           <td class="game">Call of Duty</td>
           <td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td>
-          <td class="num">43,870</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">292,466</td>
-          <td class="trend flat">▶ -1.2%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">3,259,313</td>
-          <td class="pct-cell">
+          <td class="num" data-value="43870">43,870</td>
+          <td class="num" data-value="292466" style="color:#60a5fa;font-weight:600">292,466</td>
+          <td class="trend flat" data-value="-1.2">▶ -1.2%</td>
+          <td class="num" data-value="3259313" style="color:#fbbf24;font-weight:600">3,259,313</td>
+          <td class="pct-cell" data-value="9.0">
             <div class="bar-bg"><div class="bar" style="width:8.973260216364592%"></div></div>
             <span>9.0%</span>
           </td>
         </tr>
         <tr data-genre="Arena">
-          <td class="rank">#12</td>
+          <td class="rank" data-value="12">#12</td>
           <td class="game">The Finals</td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="num">15,800</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">31,600</td>
-          <td class="trend flat">▶ +0.9%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">484,798</td>
-          <td class="pct-cell">
+          <td class="num" data-value="15800">15,800</td>
+          <td class="num" data-value="31600" style="color:#60a5fa;font-weight:600">31,600</td>
+          <td class="trend flat" data-value="+0.9">▶ +0.9%</td>
+          <td class="num" data-value="484798" style="color:#fbbf24;font-weight:600">484,798</td>
+          <td class="pct-cell" data-value="6.5">
             <div class="bar-bg"><div class="bar" style="width:6.518178705357696%"></div></div>
             <span>6.5%</span>
           </td>
         </tr>
         <tr data-genre="Looter Shooter">
-          <td class="rank">#13</td>
+          <td class="rank" data-value="13">#13</td>
           <td class="game">Destiny 2</td>
           <td><span class="genre-badge" style="color:#f472b6;background:#3b0a2e">Looter</span></td>
-          <td class="num">13,646</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">38,988</td>
-          <td class="trend down">▼ -23.3%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">904,717</td>
-          <td class="pct-cell">
+          <td class="num" data-value="13646">13,646</td>
+          <td class="num" data-value="38988" style="color:#60a5fa;font-weight:600">38,988</td>
+          <td class="trend down" data-value="-23.3">▼ -23.3%</td>
+          <td class="num" data-value="904717" style="color:#fbbf24;font-weight:600">904,717</td>
+          <td class="pct-cell" data-value="4.3">
             <div class="bar-bg"><div class="bar" style="width:4.309476363567461%"></div></div>
             <span>4.3%</span>
           </td>
         </tr>
         <tr data-genre="Arena">
-          <td class="rank">#14</td>
+          <td class="rank" data-value="14">#14</td>
           <td class="game">Halo: MCC</td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="num">5,543</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">18,476</td>
-          <td class="trend down">▼ -20.8%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">311,016</td>
-          <td class="pct-cell">
+          <td class="num" data-value="5543">5,543</td>
+          <td class="num" data-value="18476" style="color:#60a5fa;font-weight:600">18,476</td>
+          <td class="trend down" data-value="-20.8">▼ -20.8%</td>
+          <td class="num" data-value="311016" style="color:#fbbf24;font-weight:600">311,016</td>
+          <td class="pct-cell" data-value="5.9">
             <div class="bar-bg"><div class="bar" style="width:5.940732007930979%"></div></div>
             <span>5.9%</span>
           </td>
         </tr>
         <tr data-genre="Arena">
-          <td class="rank">#15</td>
+          <td class="rank" data-value="15">#15</td>
           <td class="game">Halo Infinite</td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="num">2,648</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">22,066</td>
-          <td class="trend down">▼ -9.1%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">2,138,491</td>
-          <td class="pct-cell">
+          <td class="num" data-value="2648">2,648</td>
+          <td class="num" data-value="22066" style="color:#60a5fa;font-weight:600">22,066</td>
+          <td class="trend down" data-value="-9.1">▼ -9.1%</td>
+          <td class="num" data-value="2138491" style="color:#fbbf24;font-weight:600">2,138,491</td>
+          <td class="pct-cell" data-value="1.0">
             <div class="bar-bg"><div class="bar" style="width:1.0318799465355255%"></div></div>
             <span>1.0%</span>
           </td>
@@ -2103,6 +2112,42 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
       document.querySelectorAll('.card[data-genre]').forEach(card => {
         card.style.display = (genre === 'All' || card.dataset.genre === genre) ? '' : 'none';
       });
+    });
+  });
+
+  // Sortable table columns
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const table = th.closest('table');
+      const tbody = table.querySelector('tbody');
+      const col = parseInt(th.dataset.col);
+      const type = th.dataset.sort;
+      const isAsc = th.classList.contains('asc');
+      const dir = isAsc ? -1 : 1;
+
+      // Update header classes
+      table.querySelectorAll('th[data-sort]').forEach(h => h.classList.remove('asc', 'desc'));
+      th.classList.add(isAsc ? 'desc' : 'asc');
+
+      // Get sortable rows (skip failed rows)
+      const rows = Array.from(tbody.querySelectorAll('tr[data-genre]'));
+
+      rows.sort((a, b) => {
+        const cellA = a.children[col];
+        const cellB = b.children[col];
+
+        if (type === 'num') {
+          const vA = parseFloat(cellA.dataset.value || '0');
+          const vB = parseFloat(cellB.dataset.value || '0');
+          return (vA - vB) * dir;
+        } else {
+          const vA = cellA.textContent.trim().toLowerCase();
+          const vB = cellB.textContent.trim().toLowerCase();
+          return vA.localeCompare(vB) * dir;
+        }
+      });
+
+      rows.forEach(row => tbody.appendChild(row));
     });
   });
   </script>

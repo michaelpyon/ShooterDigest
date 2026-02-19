@@ -12,6 +12,11 @@ class DigestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=OUTPUT_DIR, **kwargs)
 
+    def end_headers(self):
+        # Prevent aggressive caching so new deploys are seen immediately
+        self.send_header("Cache-Control", "no-cache, max-age=0")
+        super().end_headers()
+
     def do_GET(self):
         # Serve the latest digest HTML at /
         if self.path == "/" or self.path == "/index.html":

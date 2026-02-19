@@ -2445,6 +2445,120 @@ def generate_html(results: list[dict], failed_names: list[str],
       .card-section {{ border-right: none; border-bottom: 1px solid #2a475e; }}
       .card-section:last-child {{ border-bottom: none; }}
     }}
+
+    /* ── Mobile-first responsive ── */
+    @media (max-width: 600px) {{
+      body {{ padding: 0.8rem; }}
+      h1 {{ font-size: 1.4rem; }}
+      .subtitle {{ font-size: 0.82rem; margin-bottom: 1rem; }}
+
+      /* Executive Summary */
+      .exec-summary {{ padding: 0.8rem; }}
+      .exec-summary li {{ font-size: 0.82rem; }}
+      .wnl-table {{ grid-template-columns: 1fr; gap: 0.5rem; }}
+
+      /* Genre filter pills — horizontal scroll */
+      .genre-filters {{
+        flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+        gap: 0.35rem; padding-bottom: 0.8rem;
+        scrollbar-width: none;
+      }}
+      .genre-filters::-webkit-scrollbar {{ display: none; }}
+      .genre-filter-btn {{
+        flex-shrink: 0; font-size: 0.72rem; padding: 0.3rem 0.6rem;
+      }}
+
+      /* Summary table → card layout on mobile */
+      table thead {{ display: none; }}
+      table tbody tr {{
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 0.15rem 0.5rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid #1b2838;
+      }}
+      table tbody tr:hover {{ background: none; }}
+      table tbody td {{
+        padding: 0; border: none; text-align: left !important;
+      }}
+      /* Rank: top-left */
+      table tbody td.rank {{
+        grid-column: 1; grid-row: 1;
+        font-size: 0.8rem;
+      }}
+      /* Game name: top-center */
+      table tbody td.game {{
+        grid-column: 2; grid-row: 1;
+        white-space: normal; font-size: 0.95rem;
+      }}
+      /* Genre badge: next to game */
+      table tbody tr > td:nth-child(3) {{
+        grid-column: 3; grid-row: 1;
+        display: flex; align-items: center;
+      }}
+      /* Stats row: spans full width */
+      table tbody td.num {{
+        font-size: 0.8rem;
+      }}
+      /* 24h Peak (col 4) — hide on mobile, Est. Total is more useful */
+      table tbody tr > td:nth-child(4) {{
+        display: none;
+      }}
+      /* Est. Total (col 5) */
+      table tbody tr > td:nth-child(5) {{
+        grid-column: 1 / 2; grid-row: 2;
+        font-size: 0.85rem;
+      }}
+      /* Add label before Est. Total */
+      table tbody tr > td:nth-child(5)::before {{
+        content: "Est. "; font-size: 0.65rem; color: #8f98a0;
+        font-weight: 400;
+      }}
+      /* Trend (col 6) */
+      table tbody td.trend {{
+        grid-column: 2; grid-row: 2;
+        text-align: left !important; font-size: 0.82rem;
+        width: auto;
+      }}
+      /* All-Time Peak (col 7) — hide on mobile */
+      table tbody tr > td:nth-child(7) {{
+        display: none;
+      }}
+      /* % of Peak (col 8) */
+      table tbody td.pct-cell {{
+        grid-column: 3; grid-row: 2;
+        width: auto; display: flex; align-items: center; gap: 0.3rem;
+      }}
+      .pct-cell .bar-bg {{
+        width: 40px; flex-shrink: 0;
+      }}
+      .pct-cell span {{ font-size: 0.75rem; }}
+
+      /* Failed rows */
+      table tbody tr.failed {{
+        display: flex; gap: 0.5rem; padding: 0.5rem 0;
+      }}
+
+      /* Detail cards */
+      .card {{ margin-bottom: 1rem; }}
+      .card-header {{ padding: 0.6rem 0.8rem; }}
+      .card-header-left h3 {{ font-size: 0.95rem; }}
+      .card-section {{ padding: 0.6rem 0.8rem; }}
+
+      /* Calendar */
+      .cal-entry {{
+        flex-wrap: wrap; gap: 0.3rem; padding: 0.4rem 0.5rem;
+      }}
+      .cal-game {{ min-width: 0; max-width: none; font-size: 0.75rem; }}
+      .cal-desc {{ font-size: 0.72rem; width: 100%; }}
+
+      /* Footer */
+      .footer {{ font-size: 0.7rem; }}
+
+      /* Insights */
+      .insights li {{ font-size: 0.82rem; }}
+    }}
   </style>
 </head>
 <body>

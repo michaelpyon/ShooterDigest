@@ -50,6 +50,15 @@
       border-bottom: 2px solid #2a475e; color: #66c0f4;
       font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
     }
+    th[data-sort] {
+      cursor: pointer; user-select: none; position: relative;
+    }
+    th[data-sort]:hover { color: #e5e5e5; }
+    th[data-sort]::after {
+      content: '⇅'; opacity: 0.3; margin-left: 4px; font-size: 0.7rem;
+    }
+    th[data-sort].asc::after { content: '▲'; opacity: 0.8; }
+    th[data-sort].desc::after { content: '▼'; opacity: 0.8; }
     td { padding: 0.5rem 0.7rem; border-bottom: 1px solid #1b2838; }
     tr:hover { background: #1b2838; }
     .rank { color: #8f98a0; font-weight: 600; width: 40px; }
@@ -419,208 +428,208 @@
   <table>
     <thead>
       <tr>
-        <th>Rank</th>
-        <th>Game</th>
-        <th>Genre</th>
-        <th style="text-align:right">24h Peak<br><small>(Steam)</small></th>
-        <th style="text-align:right">Est. Total<br><small>(All Platforms)</small></th>
-        <th>Trend<br><small>(MoM)</small></th>
-        <th style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
-        <th>% of Peak</th>
+        <th data-sort="num" data-col="0">Rank</th>
+        <th data-sort="str" data-col="1">Game</th>
+        <th data-sort="str" data-col="2">Genre</th>
+        <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Platforms)</small></th>
+        <th data-sort="num" data-col="5">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
+        <th data-sort="num" data-col="7">% of Peak</th>
       </tr>
     </thead>
     <tbody>
         <tr data-genre="Tactical">
-          <td class="rank">#1</td>
+          <td class="rank" data-value="1">#1</td>
           <td class="game">Counter-Strike 2</td>
           <td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td>
-          <td class="num">1,534,181</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">1,534,181</td>
-          <td class="trend flat">▶ +0.4%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">1,818,368</td>
-          <td class="pct-cell">
+          <td class="num" data-value="1534181">1,534,181</td>
+          <td class="num" data-value="1534181" style="color:#60a5fa;font-weight:600">1,534,181</td>
+          <td class="trend flat" data-value="+0.4">▶ +0.4%</td>
+          <td class="num" data-value="1818368" style="color:#fbbf24;font-weight:600">1,818,368</td>
+          <td class="pct-cell" data-value="84.4">
             <div class="bar-bg"><div class="bar" style="width:84.37131537730536%"></div></div>
             <span>84.4%</span>
           </td>
         </tr>
         <tr data-genre="Battle Royale">
-          <td class="rank">#2</td>
+          <td class="rank" data-value="2">#2</td>
           <td class="game">PUBG: BATTLEGROUNDS</td>
           <td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td>
-          <td class="num">450,610</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">563,262</td>
-          <td class="trend down">▼ -6.7%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">4,045,033</td>
-          <td class="pct-cell">
+          <td class="num" data-value="450610">450,610</td>
+          <td class="num" data-value="563262" style="color:#60a5fa;font-weight:600">563,262</td>
+          <td class="trend down" data-value="-6.7">▼ -6.7%</td>
+          <td class="num" data-value="4045033" style="color:#fbbf24;font-weight:600">4,045,033</td>
+          <td class="pct-cell" data-value="13.9">
             <div class="bar-bg"><div class="bar" style="width:13.924791109592102%"></div></div>
             <span>13.9%</span>
           </td>
         </tr>
         <tr data-genre="Extraction">
-          <td class="rank">#3</td>
+          <td class="rank" data-value="3">#3</td>
           <td class="game">Arc Raiders</td>
           <td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td>
-          <td class="num">205,644</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">411,288</td>
-          <td class="trend down">▼ -18.1%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">930,194</td>
-          <td class="pct-cell">
+          <td class="num" data-value="205644">205,644</td>
+          <td class="num" data-value="411288" style="color:#60a5fa;font-weight:600">411,288</td>
+          <td class="trend down" data-value="-18.1">▼ -18.1%</td>
+          <td class="num" data-value="930194" style="color:#fbbf24;font-weight:600">930,194</td>
+          <td class="pct-cell" data-value="44.2">
             <div class="bar-bg"><div class="bar" style="width:44.2152927238834%"></div></div>
             <span>44.2%</span>
           </td>
         </tr>
         <tr data-genre="Battle Royale">
-          <td class="rank">#4</td>
+          <td class="rank" data-value="4">#4</td>
           <td class="game">Apex Legends</td>
           <td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td>
-          <td class="num">149,893</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">599,572</td>
-          <td class="trend flat">▶ -0.4%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">2,497,892</td>
-          <td class="pct-cell">
+          <td class="num" data-value="149893">149,893</td>
+          <td class="num" data-value="599572" style="color:#60a5fa;font-weight:600">599,572</td>
+          <td class="trend flat" data-value="-0.4">▶ -0.4%</td>
+          <td class="num" data-value="2497892" style="color:#fbbf24;font-weight:600">2,497,892</td>
+          <td class="pct-cell" data-value="24.0">
             <div class="bar-bg"><div class="bar" style="width:24.00311943030363%"></div></div>
             <span>24.0%</span>
           </td>
         </tr>
         <tr data-genre="Extraction">
-          <td class="rank">#5</td>
+          <td class="rank" data-value="5">#5</td>
           <td class="game">Delta Force</td>
           <td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td>
-          <td class="num">128,734</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">183,905</td>
-          <td class="trend up">▲ +13.7%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">352,025</td>
-          <td class="pct-cell">
+          <td class="num" data-value="128734">128,734</td>
+          <td class="num" data-value="183905" style="color:#60a5fa;font-weight:600">183,905</td>
+          <td class="trend up" data-value="+13.7">▲ +13.7%</td>
+          <td class="num" data-value="352025" style="color:#fbbf24;font-weight:600">352,025</td>
+          <td class="pct-cell" data-value="52.2">
             <div class="bar-bg"><div class="bar" style="width:52.24212516942755%"></div></div>
             <span>52.2%</span>
           </td>
         </tr>
         <tr data-genre="Hero Shooter">
-          <td class="rank">#6</td>
+          <td class="rank" data-value="6">#6</td>
           <td class="game">Marvel Rivals</td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="num">123,703</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">353,437</td>
-          <td class="trend up">▲ +4.3%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">1,835,237</td>
-          <td class="pct-cell">
+          <td class="num" data-value="123703">123,703</td>
+          <td class="num" data-value="353437" style="color:#60a5fa;font-weight:600">353,437</td>
+          <td class="trend up" data-value="+4.3">▲ +4.3%</td>
+          <td class="num" data-value="1835237" style="color:#fbbf24;font-weight:600">1,835,237</td>
+          <td class="pct-cell" data-value="19.3">
             <div class="bar-bg"><div class="bar" style="width:19.258390896933523%"></div></div>
             <span>19.3%</span>
           </td>
         </tr>
         <tr data-genre="Hero Shooter">
-          <td class="rank">#7</td>
+          <td class="rank" data-value="7">#7</td>
           <td class="game">Overwatch</td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="num">112,990</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">564,950</td>
-          <td class="trend up">▲ +72.4%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">823,180</td>
-          <td class="pct-cell">
+          <td class="num" data-value="112990">112,990</td>
+          <td class="num" data-value="564950" style="color:#60a5fa;font-weight:600">564,950</td>
+          <td class="trend up" data-value="+72.4">▲ +72.4%</td>
+          <td class="num" data-value="823180" style="color:#fbbf24;font-weight:600">823,180</td>
+          <td class="pct-cell" data-value="68.6">
             <div class="bar-bg"><div class="bar" style="width:68.63019023785806%"></div></div>
             <span>68.6%</span>
           </td>
         </tr>
         <tr data-genre="Large-Scale">
-          <td class="rank">#8</td>
+          <td class="rank" data-value="8">#8</td>
           <td class="game">Battlefield 6</td>
           <td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td>
-          <td class="num">78,334</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">142,425</td>
-          <td class="trend down">▼ -22.5%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">1,192,849</td>
-          <td class="pct-cell">
+          <td class="num" data-value="78334">78,334</td>
+          <td class="num" data-value="142425" style="color:#60a5fa;font-weight:600">142,425</td>
+          <td class="trend down" data-value="-22.5">▼ -22.5%</td>
+          <td class="num" data-value="1192849" style="color:#fbbf24;font-weight:600">1,192,849</td>
+          <td class="pct-cell" data-value="11.9">
             <div class="bar-bg"><div class="bar" style="width:11.939939061101992%"></div></div>
             <span>11.9%</span>
           </td>
         </tr>
         <tr data-genre="Tactical">
-          <td class="rank">#9</td>
+          <td class="rank" data-value="9">#9</td>
           <td class="game">Rainbow Six Siege</td>
           <td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td>
-          <td class="num">77,331</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">220,945</td>
-          <td class="trend up">▲ +4.7%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">572,788</td>
-          <td class="pct-cell">
+          <td class="num" data-value="77331">77,331</td>
+          <td class="num" data-value="220945" style="color:#60a5fa;font-weight:600">220,945</td>
+          <td class="trend up" data-value="+4.7">▲ +4.7%</td>
+          <td class="num" data-value="572788" style="color:#fbbf24;font-weight:600">572,788</td>
+          <td class="pct-cell" data-value="38.6">
             <div class="bar-bg"><div class="bar" style="width:38.57369460683573%"></div></div>
             <span>38.6%</span>
           </td>
         </tr>
         <tr data-genre="Hero Shooter">
-          <td class="rank">#10</td>
+          <td class="rank" data-value="10">#10</td>
           <td class="game">Team Fortress 2</td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="num">48,065</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">48,065</td>
-          <td class="trend up">▲ +2.1%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">253,225</td>
-          <td class="pct-cell">
+          <td class="num" data-value="48065">48,065</td>
+          <td class="num" data-value="48065" style="color:#60a5fa;font-weight:600">48,065</td>
+          <td class="trend up" data-value="+2.1">▲ +2.1%</td>
+          <td class="num" data-value="253225" style="color:#fbbf24;font-weight:600">253,225</td>
+          <td class="pct-cell" data-value="19.0">
             <div class="bar-bg"><div class="bar" style="width:18.981143252048575%"></div></div>
             <span>19.0%</span>
           </td>
         </tr>
         <tr data-genre="Large-Scale">
-          <td class="rank">#11</td>
+          <td class="rank" data-value="11">#11</td>
           <td class="game">Call of Duty</td>
           <td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td>
-          <td class="num">43,870</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">292,466</td>
-          <td class="trend flat">▶ -1.2%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">3,259,313</td>
-          <td class="pct-cell">
+          <td class="num" data-value="43870">43,870</td>
+          <td class="num" data-value="292466" style="color:#60a5fa;font-weight:600">292,466</td>
+          <td class="trend flat" data-value="-1.2">▶ -1.2%</td>
+          <td class="num" data-value="3259313" style="color:#fbbf24;font-weight:600">3,259,313</td>
+          <td class="pct-cell" data-value="9.0">
             <div class="bar-bg"><div class="bar" style="width:8.973260216364592%"></div></div>
             <span>9.0%</span>
           </td>
         </tr>
         <tr data-genre="Arena">
-          <td class="rank">#12</td>
+          <td class="rank" data-value="12">#12</td>
           <td class="game">The Finals</td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="num">15,800</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">31,600</td>
-          <td class="trend flat">▶ +0.9%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">484,798</td>
-          <td class="pct-cell">
+          <td class="num" data-value="15800">15,800</td>
+          <td class="num" data-value="31600" style="color:#60a5fa;font-weight:600">31,600</td>
+          <td class="trend flat" data-value="+0.9">▶ +0.9%</td>
+          <td class="num" data-value="484798" style="color:#fbbf24;font-weight:600">484,798</td>
+          <td class="pct-cell" data-value="6.5">
             <div class="bar-bg"><div class="bar" style="width:6.518178705357696%"></div></div>
             <span>6.5%</span>
           </td>
         </tr>
         <tr data-genre="Looter Shooter">
-          <td class="rank">#13</td>
+          <td class="rank" data-value="13">#13</td>
           <td class="game">Destiny 2</td>
           <td><span class="genre-badge" style="color:#f472b6;background:#3b0a2e">Looter</span></td>
-          <td class="num">13,646</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">38,988</td>
-          <td class="trend down">▼ -23.3%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">904,717</td>
-          <td class="pct-cell">
+          <td class="num" data-value="13646">13,646</td>
+          <td class="num" data-value="38988" style="color:#60a5fa;font-weight:600">38,988</td>
+          <td class="trend down" data-value="-23.3">▼ -23.3%</td>
+          <td class="num" data-value="904717" style="color:#fbbf24;font-weight:600">904,717</td>
+          <td class="pct-cell" data-value="4.3">
             <div class="bar-bg"><div class="bar" style="width:4.309476363567461%"></div></div>
             <span>4.3%</span>
           </td>
         </tr>
         <tr data-genre="Arena">
-          <td class="rank">#14</td>
+          <td class="rank" data-value="14">#14</td>
           <td class="game">Halo: MCC</td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="num">5,543</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">18,476</td>
-          <td class="trend down">▼ -20.8%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">311,016</td>
-          <td class="pct-cell">
+          <td class="num" data-value="5543">5,543</td>
+          <td class="num" data-value="18476" style="color:#60a5fa;font-weight:600">18,476</td>
+          <td class="trend down" data-value="-20.8">▼ -20.8%</td>
+          <td class="num" data-value="311016" style="color:#fbbf24;font-weight:600">311,016</td>
+          <td class="pct-cell" data-value="5.9">
             <div class="bar-bg"><div class="bar" style="width:5.940732007930979%"></div></div>
             <span>5.9%</span>
           </td>
         </tr>
         <tr data-genre="Arena">
-          <td class="rank">#15</td>
+          <td class="rank" data-value="15">#15</td>
           <td class="game">Halo Infinite</td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="num">2,648</td>
-          <td class="num" style="color:#60a5fa;font-weight:600">22,066</td>
-          <td class="trend down">▼ -9.1%</td>
-          <td class="num" style="color:#fbbf24;font-weight:600">2,138,491</td>
-          <td class="pct-cell">
+          <td class="num" data-value="2648">2,648</td>
+          <td class="num" data-value="22066" style="color:#60a5fa;font-weight:600">22,066</td>
+          <td class="trend down" data-value="-9.1">▼ -9.1%</td>
+          <td class="num" data-value="2138491" style="color:#fbbf24;font-weight:600">2,138,491</td>
+          <td class="pct-cell" data-value="1.0">
             <div class="bar-bg"><div class="bar" style="width:1.0318799465355255%"></div></div>
             <span>1.0%</span>
           </td>
@@ -668,7 +677,7 @@
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Counter-Strike 2 is holding steady (+0.4%, averaging 1.1M players over the last 30 days). Currently at 84% of all-time peak — near historical highs.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Counter-Strike 2 is holding steady (+0.4%, averaging 1.1M players over the last 30 days). Currently at 84% of all-time peak — near historical highs.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 5 of 6 posts this period. Active press coverage from Kotaku, Esports Insider, Mashable (5 articles from gaming press in the past week).</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Counter-Strike 2 is holding steady (+0.4%, averaging 1.1M players over the last 30 days). Currently at 78% of all-time peak — near historical highs. Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Community is actively engaged in gameplay discussion and strategy — 5 of 6 posts this period. Active press coverage from GamingTrend, Polymarket, 80 Level (5 articles from gaming press in the past week).</div>
       </div>
       <div class="card-body-2col">
@@ -686,14 +695,30 @@
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBhRm1DUktINlpjTG1fVm84RS1ZdnllTm9QZ3hnTGpNN2tUYUxRY2J0QTRwOVI5MjVzSVl0RHluT0lTSWdJWkhuV0VfR2V0TGYyTmVpbDM2eDJYdzdfaFVv?oc=5" target="_blank" class="item-link">Counter-Strike 2 Trading Odds &amp; Predictions - Polymarket</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxQNlVmdWJhYzBXQzJqbkM2SGM4V2RwU0QtWkxvZlU4b25jeGpUZl8tSmQxNmhRbXdfYXZyaGIweHdFYmlLOENOSGp1UXBOUVpNS1RqU1pqNEo4ek9TZmpoRks3LWJFeURxMWlfdTI2Z0MzdnVxVFRsQndOUXVfd2JMdnRsaFdKR1o2d3lJ?oc=5" target="_blank" class="item-link">X2 Superstrike Shaves A Blink Of An Eye Off Your Gaming Delay - Kotaku</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxPa3BPamp2eEl3WGFWS0ZWTkRRUDVxWF93c1d3WGFrLUptUWNyZncyWG1vclZlek9QbVlaMy0wa2ExVUFZYnlpcGhQQ21FXzJhbm00TTYxYUduLWtZdFNDTGlFaDMtdFpTTktjLW12Y001Wm9OVmVkbUN2N080c1lPMkF0aW5nNl9BZ3F4dVBWejFwT2JEZEc2Vm5MRnBoQ2lTMmlUXzlEdWxEMmZqdzRRQg?oc=5" target="_blank" class="item-link">Razer Huntsman V3 Pro TKL – Counter-Strike 2 Edition review — Breath of fre</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 21</span></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBXTTNkT2Q0U1Zna1FvYUJuZDltc2VDSDF5MlVMWW1tNkE2dkd6QnNnUWs5MWJfQW1haXNyRmd3N2d2OFBJZ3hCN2hkYWVWMERTM2lhRXRNWWxjbzhwYVdqNjI0dTUtQkU?oc=5" target="_blank" class="item-link">Best GPU for Counter-Strike 2 in 2026: Top graphics cards for in-game perfo</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 15</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxQNlVmdWJhYzBXQzJqbkM2SGM4V2RwU0QtWkxvZlU4b25jeGpUZl8tSmQxNmhRbXdfYXZyaGIweHdFYmlLOENOSGp1UXBOUVpNS1RqU1pqNEo4ek9TZmpoRks3LWJFeURxMWlfdTI2Z0MzdnVxVFRsQndOUXVfd2JMdnRsaFdKR1o2d3lJ?oc=5" target="_blank" class="item-link">X2 Superstrike Shaves A Blink Of An Eye Off Your Gaming Delay - Kotaku</a> <span class="source-tag" style="color:#f87171;background:#5f1e1e">Kotaku</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBXTTNkT2Q0U1Zna1FvYUJuZDltc2VDSDF5MlVMWW1tNkE2dkd6QnNnUWs5MWJfQW1haXNyRmd3N2d2OFBJZ3hCN2hkYWVWMERTM2lhRXRNWWxjbzhwYVdqNjI0dTUtQkU?oc=5" target="_blank" class="item-link">Best GPU for Counter-Strike 2 in 2026: Top graphics cards for in-game perfo</a> <span class="source-tag" style="color:#4ade80;background:#1e5f2e">Esports Insider</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxQT0dVRDF0SjhSSFhfWDZKV1NZcVB5MUtobk9RWDNsZlJ2WEpJczZSQk9sbjFVSjY4UGkyUVJzdEo2b3ZSSGUtUXRuVW5WdktTemRndjNPTVFqZWU3WG01NFJkajFYNV9KTnZPNm53Q2lzZlRyb2RSaHNpdWdCaXBKOElQVXdjSEpU?oc=5" target="_blank" class="item-link">&#x27;Counter-Strike 2&#x27; update wipes $2 billion in real money from game&#x27;s econom</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Mashable</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQWjB2M3FqQ05jWWRSY0JOQ0Q5WFZYYUxIX3d3bWJFSnYwVU5ERV9PUWYtSkNveTNZZGZzQ3oyYTdmUUtKQ0xlVTNvcmpfOWh5akhpUDdEakpPRGNxZVZ6ZC11MDQ1ZlgyNUNPdEtJdlVIZkFYS280RDQ2VmxwT3Ayc09pWnBuWUxhQ2dCR29LMA?oc=5" target="_blank" class="item-link">$2 Billion USD Wiped From ‘Counter-Strike 2’ Market Due to Game Update - hy</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">hypebeast.com</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/cs2</span> — 6 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1r2rk87/how_not_to_censor_a_drink/" target="_blank" class="item-link">How not to censor a drink</a> (3,845 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Fuzzy_Design_5340</span> (65 pts): cmon guys thats genuinely funny and absolutely belongs here</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1r4ounv/how_vac_works/" target="_blank" class="item-link">How Vac Works</a> (2,403 upvotes)</li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1qmzj0t/why_you_are_like_this/" target="_blank" class="item-link">Why you are like this?</a> (4,462 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1qrjula/does_he_reply_to_everyone/" target="_blank" class="item-link">Does he reply to everyone?</a> (4,267 upvotes)</li>
+<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1quaadz/not_on_my_2026_bingo_card/" target="_blank" class="item-link">Not on my 2026 bingo card</a> (4,043 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1r2rk87/how_not_to_censor_a_drink/" target="_blank" class="item-link">How not to censor a drink</a> (3,839 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Battle Royale">
@@ -723,7 +748,7 @@
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> PUBG: BATTLEGROUNDS is declining (-6.7% MoM, averaging 271K players over the last 30 days). At just 14% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> PUBG: BATTLEGROUNDS is declining (-6.7% MoM, averaging 271K players over the last 30 days). At just 14% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Limited community activity — one substantive post about game updates and announcements. Active press coverage from The Esports Advocate, PUBG: BATTLEGROUNDS, GamesBeat (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> PUBG: BATTLEGROUNDS is declining (-6.5% MoM, averaging 271K players over the last 30 days). At just 14% of all-time peak — well below historical levels. Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend. Limited community activity — one substantive post about game updates and announcements. Active press coverage from The Esports Advocate, PUBG: BATTLEGROUNDS (5 articles from gaming press in the past week). Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -741,14 +766,24 @@
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxOVXF0R21NZkJ2Vkh1b0I0X3JUWHpKU2MwbmdDd28tM182TnFiWDJ5b0RRbHFsOU4ySGZvVU16MzVkR2pWV3JJVXh4Q3dTUEdfb21wWE01eFo0MkNOVVI4XzlpaUtQVTlqbzU1OXZKVXhzMkpUcE9ldlRxMVlWQ3FnTnFkMGNWb1dybElGYlptQUFVSm53?oc=5" target="_blank" class="item-link">PUBG: Battlegrounds Joins the Esports Nations Cup 2026 - The Esports Advoca</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 16</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTE51dEppUFpEQmxmYU9DWENiWGRVcXpKaDQ1X1ZkNlo5TlhyQTB6RUNjNVNlNGlwazlzNnNtbk0zX2VQb2s?oc=5" target="_blank" class="item-link">Patch Notes - Update 40.1 - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTE4zYmhCSTZvR3JWendpU29ZMmx5NkZnTExCNnF0MVRBMWhKQklVOGh4eTl0NDhoN01XVHNIZ1FsdHN2MGM?oc=5" target="_blank" class="item-link">PUBG: BATTLEGROUNDS Weekly Bans Notice (02/02~02/08) - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 11</span></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTE9hZGpUaXhxVkRIblB5U1czU1dmY2kteXNKazFwejJvdnBvYnpfYng5cFp0UEdDR29XWUwzZU1TZkxGc28?oc=5" target="_blank" class="item-link">[Dev Letter] Anti-Cheat Action Plan Based on Community Feedback - PUBG: BAT</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 10</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxOVXF0R21NZkJ2Vkh1b0I0X3JUWHpKU2MwbmdDd28tM182TnFiWDJ5b0RRbHFsOU4ySGZvVU16MzVkR2pWV3JJVXh4Q3dTUEdfb21wWE01eFo0MkNOVVI4XzlpaUtQVTlqbzU1OXZKVXhzMkpUcE9ldlRxMVlWQ3FnTnFkMGNWb1dybElGYlptQUFVSm53?oc=5" target="_blank" class="item-link">PUBG: Battlegrounds Joins the Esports Nations Cup 2026 - The Esports Advoca</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">The Esports Advocate</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTE51dEppUFpEQmxmYU9DWENiWGRVcXpKaDQ1X1ZkNlo5TlhyQTB6RUNjNVNlNGlwazlzNnNtbk0zX2VQb2s?oc=5" target="_blank" class="item-link">Patch Notes - Update 40.1 - PUBG: BATTLEGROUNDS</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">PUBG: BATTLEGROUNDS</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxONEhzdnJoVFAwOUxFUzdpSTBRY0MxUVc2WG9oWTktT190UWhXX01ZUWlIS2hUWkVyYTFBLTZzekJxV2pSQTM2MUJpenlBanZjX0MxbkphdUNQUzBtTVdlS3J3Q0J0cUJQSmRDUGhMTDhWYWl5Ykt5T0tOamNobWJ6ZUhQU1QyZw?oc=5" target="_blank" class="item-link">Esports Nations Cup adds PUBG: Battlegrounds to 2026 lineup - GamesBeat</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamesBeat</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE5ZaDRlTV9vbmNxVkNYQ3F4QUMzYXMzdENEWmFSWXdXY21IcUQ3N1BVaG0xMW9UYmhYLTlSc2l1UU1XcThxb0k0M3NQTUxUc3FDcjE4and0TS1pWWUwR1BoLXNsUmMxY3FTb0Z4N2JzUl8?oc=5" target="_blank" class="item-link">‘Battlegrounds’ game maker extends frontline with Indian expansion - Financ</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Financial Times</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/PUBATTLEGROUNDS</span> — 1 substantive posts</summary>
+          <div class="community-inner">
+            
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/PUBATTLEGROUNDS/comments/1qvkjvw/the_last_erangel_subzero_map_update_with_the/" target="_blank" class="item-link">The last Erangel SubZero map update (with the transition to full snow) was very</a> (342 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Extraction">
@@ -778,7 +813,7 @@
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Arc Raiders is dropping sharply (-18.1% MoM, averaging 198K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Sharp decline from elevated levels — likely post-launch or post-season normalization as initial hype fades. This is a typical pattern. Dev activity: 31+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Arc Raiders is dropping sharply (-18.1% MoM, averaging 198K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Sharp decline from elevated levels — likely post-launch or post-season normalization as initial hype fades. This is a typical pattern. Dev activity: 31+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 2 of 3 posts this period. Active press coverage from ARC Raiders, GamesRadar+, MP1st (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Arc Raiders is dropping sharply (-17.4% MoM, averaging 199K players over the last 30 days). Sharp decline from elevated levels — likely post-launch or post-season normalization as initial hype fades. This is a typical pattern. Dev activity: 31+ bug fixes deployed. Community is actively engaged in gameplay discussion and strategy — 3 of 4 posts this period. Active press coverage from ARC Raiders, VICE, Forbes (5 articles from gaming press in the past week). Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -796,14 +831,37 @@
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxPTlAtNHFDSGZ2Y1FOdW5wb3drWHFNclVDdjJfMGZ2RmNHeUVkNjVmTUNRbUFVMlllZWlHc0k3cVMxWE1JVEJMTUN0MU1KejZpeXRCRzNKSjN6UFZvbndMNWY2U0I2RjNCQ09rWHFyUngxWjBUc3d6anNrclZ1bktrTDZrNUdlUQ?oc=5" target="_blank" class="item-link">An Update on Recent Exploits and Corrective Actions - ARC Raiders</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 17</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiowJBVV95cUxQWlI4aWpGZDZPTURSeDExclBtU1lEZkRHa3Vra2lDakVycWxqOEVXZllTb05IWjc0NzlyZTI3c19HN2pLdFpZVWZ1eXdNMEllRlFzWnluNjJjblhTV19RQWRoTHBrRDItUXlpZVpaTjIxYTZKcHlOSVJJLURJclIxV1dhZ01WdDduUEtvMmpVUWpIajJyVHNKaGgzYW5oczZDRmdMLTlGT3dZWE9YODRJdlh0Snp6SUtDUjRueVZKQUx6eUkyNk1vQWgtYTFBZnJTSlRaZmxtQ2FXdDEwMXVsc0lhMXBJbFY4aVRVUk8wRTZmeXdWN1VTc1V3THNHUER6T2prZmRZSVF5cUlXeGhiYXdlM0l6Q2N3aW5oRVJwRjZzNTg?oc=5" target="_blank" class="item-link">Arc Raiders&#x27; Shrouded Sky update arrives next week, Embark confirms, but th</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 17</span></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxOcHE3LTNlblQtQUNjbnhaSERoZ2NrVjZJQ05CVURkZUkxWDNWNmxEb2VwX1hHM3R5Y1kxbUlnSUdFOV8zRU1WTkduYXhOdHhkVWQ4amNVNU5nWEZna0dWVFlYZzBQdmVoV19RbXNkdmFkUThsMEVkQ2NEUWlVYm9sSTZyeWs3X01sUDl5djJFOHpSZ0JKMlh5T3JzQWQ2XzdQVnBzYVR1VHZ1X3FSRVpoTnNTOUlUTWRsVFhKbQ?oc=5" target="_blank" class="item-link">ARC Raiders Update 1.000.023 Released on February 17 Issues Enforcement Act</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 17</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPTzNWRFhnbXp1TDEyRkN6MUhBUkw4eTllWXhBdTRUU2pDZjhFcHJwT0s5aVVfcGd6R0ZmX0RpWnR5UDNkdG5vY1o3dzNvOVBNZmFyNU1MSDl0cUlrazlaSjl3ZzkxWmU4M3ZfRVVRVVh6cGtTSjdrVFNqTFhKeUxYdHFNbFdEbndLRzlETjhNcGFDSnhycFlwUVJrSW5QOEQ2NVZMY1k4RjVEcFNQeUE?oc=5" target="_blank" class="item-link">A 30% ‘ARC Raiders’ Playercount Drop Is A Window For ‘Marathon’ - Forbes</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxPTlAtNHFDSGZ2Y1FOdW5wb3drWHFNclVDdjJfMGZ2RmNHeUVkNjVmTUNRbUFVMlllZWlHc0k3cVMxWE1JVEJMTUN0MU1KejZpeXRCRzNKSjN6UFZvbndMNWY2U0I2RjNCQ09rWHFyUngxWjBUc3d6anNrclZ1bktrTDZrNUdlUQ?oc=5" target="_blank" class="item-link">An Update on Recent Exploits and Corrective Actions - ARC Raiders</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">ARC Raiders</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiowJBVV95cUxQWlI4aWpGZDZPTURSeDExclBtU1lEZkRHa3Vra2lDakVycWxqOEVXZllTb05IWjc0NzlyZTI3c19HN2pLdFpZVWZ1eXdNMEllRlFzWnluNjJjblhTV19RQWRoTHBrRDItUXlpZVpaTjIxYTZKcHlOSVJJLURJclIxV1dhZ01WdDduUEtvMmpVUWpIajJyVHNKaGgzYW5oczZDRmdMLTlGT3dZWE9YODRJdlh0Snp6SUtDUjRueVZKQUx6eUkyNk1vQWgtYTFBZnJTSlRaZmxtQ2FXdDEwMXVsc0lhMXBJbFY4aVRVUk8wRTZmeXdWN1VTc1V3THNHUER6T2prZmRZSVF5cUlXeGhiYXdlM0l6Q2N3aW5oRVJwRjZzNTg?oc=5" target="_blank" class="item-link">Arc Raiders&#x27; Shrouded Sky update arrives next week, Embark confirms, but th</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamesRadar+</span></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxOcHE3LTNlblQtQUNjbnhaSERoZ2NrVjZJQ05CVURkZUkxWDNWNmxEb2VwX1hHM3R5Y1kxbUlnSUdFOV8zRU1WTkduYXhOdHhkVWQ4amNVNU5nWEZna0dWVFlYZzBQdmVoV19RbXNkdmFkUThsMEVkQ2NEUWlVYm9sSTZyeWs3X01sUDl5djJFOHpSZ0JKMlh5T3JzQWQ2XzdQVnBzYVR1VHZ1X3FSRVpoTnNTOUlUTWRsVFhKbQ?oc=5" target="_blank" class="item-link">ARC Raiders Update 1.000.023 Released on February 17 Issues Enforcement Act</a> <span class="source-tag" style="color:#f87171;background:#5f1e1e">MP1st</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPTzNWRFhnbXp1TDEyRkN6MUhBUkw4eTllWXhBdTRUU2pDZjhFcHJwT0s5aVVfcGd6R0ZmX0RpWnR5UDNkdG5vY1o3dzNvOVBNZmFyNU1MSDl0cUlrazlaSjl3ZzkxWmU4M3ZfRVVRVVh6cGtTSjdrVFNqTFhKeUxYdHFNbFdEbndLRzlETjhNcGFDSnhycFlwUVJrSW5QOEQ2NVZMY1k4RjVEcFNQeUE?oc=5" target="_blank" class="item-link">A 30% ‘ARC Raiders’ Playercount Drop Is A Window For ‘Marathon’ - Forbes</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Forbes</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/ArcRaiders</span> — 3 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1r5dnvm/permanent_bans_for_racists/" target="_blank" class="item-link">Permanent bans for racists?</a> (11,917 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/LongJonSiIver</span> (1 pts): Racist language happens in ARC Raiders but it can&#x27;t happen in r/ArcRaiders fuck around and find out.
+
+**Reddit Rule 1**
+
+Remember the human. Reddit is</li>
+<li class="comment"><span class="comment-author">u/PantherActual</span> (1,680 pts): I say clanker all the time
+
+Edit: From my understanding the term originated from Star Wars and is now being used in the context of AI. Apparently some</li>
+<li class="comment"><span class="comment-author">u/Sock989</span> (741 pts): Every online shooter has had this since I started playing 20+ years a go.
+
+It&#x27;s not right but it&#x27;s not a new issue.</li>
+</ul></li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1qwzk34/embark_fix_your_lighting/" target="_blank" class="item-link">Embark, fix your lighting...</a> (16,000 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1qxd6w7/thoughts/" target="_blank" class="item-link">???? Thoughts ????</a> (15,609 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Battle Royale">
@@ -833,7 +891,7 @@
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Apex Legends is holding steady (-0.4%, averaging 86K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: The update to Ranked lobbies hybridizing Dropship and Drop Zones is now live.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Apex Legends is holding steady (-0.4%, averaging 86K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 4 of 6 posts this period. Active press coverage from Electronic Arts Home Page, MP1st, KitGuru (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: The update to Ranked lobbies hybridizing Dropship and Drop Zones is now live.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Apex Legends is holding steady (-0.4%, averaging 86K players over the last 30 days). Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Community is actively engaged in gameplay discussion and strategy — 5 of 6 posts this period. Active press coverage from Electronic Arts Home Page, KitGuru, PCGamesN (5 articles from gaming press in the past week). Looking ahead: After consolidating community sentiment and match data, we will move forth with implementing a new system that utilizes both Dropships and Drop Zones.</div>
       </div>
       <div class="card-body-2col">
@@ -851,14 +909,50 @@
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMid0FVX3lxTE95T2NoNFA1NWNaU1pJM2xTRGNJVktzWFA2YkpOS3A5X2dzX3g4UXdZbGhFQUZLWWtZamh5b0p2REpXODlxcmJHS1JpQnkyUkxrVDctWHI2NnR3Q25XQldrazcxb1hNZmlCNmZqSDg3NXB1NzJ5emNN?oc=5" target="_blank" class="item-link">Apex Legends: The Road Ahead - Electronic Arts Home Page</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 12</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxNZFV5ZlZ4S00xTzNBSk4tSmNRamdIOUFyN2lST2s4RlFKWkNwYmtrN1JxazFEb2NiMGh2TWZWT3FvejFJM2VrMTBIYmJpT0tfZ1JtMzY3aW40WjhYT0VjMWtDaWF2Rmk0Vk8tZFQzN1lyY0R5bjVDM0xabFktMW42SzJwMGp3N21haXhKdG40WEJ4V0NrWlFBRnpiUFBYTlk?oc=5" target="_blank" class="item-link">Apex Legends February 18 Update Delivers Version 3.04/1.000.118 Fixes - MP1</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQdXplZGotMkl6QUxMbWt6YTZWdUhETXZMd3Fua0dPUGV5YTZBV3BuVDFqN3dEQUFfYkVCWTgyd0NiVXFDOW5zTlllRGIxVElGMFZjSmI0Tlh4eVRsWGFWcjVuSGQyVXpNenBydGViYXRDYjhwRXo2TUtwcDFCdUdqd19pN1JqVWFlUE82Z3NxT2JIOUg0UDFCZmZWdmFrZ3lG?oc=5" target="_blank" class="item-link">Apex Legends gets year-long 2026 content roadmap - KitGuru</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 17</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi2AFBVV95cUxOTHVTWDJsNU1Xd0ppckFVT1JuNUZkZDJCeUpKTzZvQ0dkSC1ycXZ1UFpYX3A3SG04Mzk4Z2NmcndFMHhEUVBGbzNLdGJEb2o4ejRNQ3RHLVFrYnBQbDhKRDhmY1BVRjNlcHdKc2hybnNqc1BwYjZ2UE9HVVdWWkNKeGpER1UyZzZudkd3ME1yWWN2c2NMZTJEN3lBWE5IaS1YQW1TVmJLTFRIQzNMRE5wRDhXZ3k5dVFUWVgtT0VWV0t1RmI2aU50RkhyR0N0b2lERlNNa2pudEE?oc=5" target="_blank" class="item-link">Apex Legends devs explain they still “respect” the legacy of Respawn, but “</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 16</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMid0FVX3lxTE95T2NoNFA1NWNaU1pJM2xTRGNJVktzWFA2YkpOS3A5X2dzX3g4UXdZbGhFQUZLWWtZamh5b0p2REpXODlxcmJHS1JpQnkyUkxrVDctWHI2NnR3Q25XQldrazcxb1hNZmlCNmZqSDg3NXB1NzJ5emNN?oc=5" target="_blank" class="item-link">Apex Legends: The Road Ahead - Electronic Arts Home Page</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Electronic Arts Home Page</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxNZFV5ZlZ4S00xTzNBSk4tSmNRamdIOUFyN2lST2s4RlFKWkNwYmtrN1JxazFEb2NiMGh2TWZWT3FvejFJM2VrMTBIYmJpT0tfZ1JtMzY3aW40WjhYT0VjMWtDaWF2Rmk0Vk8tZFQzN1lyY0R5bjVDM0xabFktMW42SzJwMGp3N21haXhKdG40WEJ4V0NrWlFBRnpiUFBYTlk?oc=5" target="_blank" class="item-link">Apex Legends February 18 Update Delivers Version 3.04/1.000.118 Fixes - MP1</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">MP1st</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQdXplZGotMkl6QUxMbWt6YTZWdUhETXZMd3Fua0dPUGV5YTZBV3BuVDFqN3dEQUFfYkVCWTgyd0NiVXFDOW5zTlllRGIxVElGMFZjSmI0Tlh4eVRsWGFWcjVuSGQyVXpNenBydGViYXRDYjhwRXo2TUtwcDFCdUdqd19pN1JqVWFlUE82Z3NxT2JIOUg0UDFCZmZWdmFrZ3lG?oc=5" target="_blank" class="item-link">Apex Legends gets year-long 2026 content roadmap - KitGuru</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">KitGuru</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi2AFBVV95cUxOTHVTWDJsNU1Xd0ppckFVT1JuNUZkZDJCeUpKTzZvQ0dkSC1ycXZ1UFpYX3A3SG04Mzk4Z2NmcndFMHhEUVBGbzNLdGJEb2o4ejRNQ3RHLVFrYnBQbDhKRDhmY1BVRjNlcHdKc2hybnNqc1BwYjZ2UE9HVVdWWkNKeGpER1UyZzZudkd3ME1yWWN2c2NMZTJEN3lBWE5IaS1YQW1TVmJLTFRIQzNMRE5wRDhXZ3k5dVFUWVgtT0VWV0t1RmI2aU50RkhyR0N0b2lERlNNa2pudEE?oc=5" target="_blank" class="item-link">Apex Legends devs explain they still “respect” the legacy of Respawn, but “</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">FRVR</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/apexlegends</span> — 6 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r4c5yq/loba_and_her_massive_ass/" target="_blank" class="item-link">Loba and her massive ass</a> (2,261 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Loctrocute</span> (2,874 pts): Apex players: we want dropship update reverted!
+
+Apex devs: here is our plan for the next season.
+
+Apex players: are we getting any new legends?
+
+OP:</li>
+<li class="comment"><span class="comment-author">u/Shughost7</span> (1,488 pts): Haven&#x27;t play this game in years but Loba&#x27;s massive ass is printed in my memory</li>
+<li class="comment"><span class="comment-author">u/UrMad_ItzOk</span> (361 pts): No other character gets destroyed faster than Gibby or Newcastle. Good luck trying to hit me, i&#x27;m Lifeline.</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r2l5vy/dear_respawn_not_a_single_player_in_your/" target="_blank" class="item-link">Dear Respawn, Not a single player in your community wants stickers.</a> (2,030 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/BebeFanMasterJ</span> (687 pts): It&#x27;s so funny seeing Overwatch win back its community with stuff people actually want while Apex is doing...whatever this is.</li>
+<li class="comment"><span class="comment-author">u/Independent_Row_4009</span> (225 pts): What do you mean???
+
+I heard so many people last week saying “please respawn, ruin rank, ruin wildcard idc just give me stickers!!!”
+
+Crazy you haven’</li>
+<li class="comment"><span class="comment-author">u/SpiritedDust6480</span> (191 pts): Seriously. Obvious attempt to dilute loot pool</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r3rgho/they_really_going_on_a_streak_of_fing_up/" target="_blank" class="item-link">They really going on a streak of f’ing up.</a> (1,778 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Apex_Bot</span> (1 pts): This is a list of links to comments made by Respawn developers in this thread:
+
+* [Comment by RSPN_Jax](/r/apexlegends/comments/1r3rgho/they_really_go</li>
+<li class="comment"><span class="comment-author">u/TeaProfessional7051</span> (793 pts): So if you use that mouse, you’re banned?.. that mouse is good, but I don’t think it’s considered cheats.</li>
+<li class="comment"><span class="comment-author">u/artikiller</span> (328 pts): so the source here is a single guy tweeting that he got banned for using this mouse which i highly doubt. either something else triggered anti cheat o</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r6ias7/i_will_be_the_reason_bangalore_gets_nerfed/" target="_blank" class="item-link">I will be the reason Bangalore gets nerfed</a> (1,167 upvotes)</li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r05rfq/to_this_day_i_still_do_not_understand_why_they/" target="_blank" class="item-link">To this day i still do not understand why they switched the spitfire from heavy</a> (3,510 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r4c5yq/loba_and_her_massive_ass/" target="_blank" class="item-link">Loba and her massive ass</a> (2,254 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Extraction">
@@ -888,7 +982,7 @@
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Delta Force is surging (+13.7% MoM, averaging 75K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity: launched with appearances.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: The main highlights of this update include:
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Delta Force is surging (+13.7% MoM, averaging 75K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity: launched with appearances.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community sentiment is strongly negative this week — 3 of 3 substantive posts focus on player frustrations and complaints. Active press coverage from IXBT.games, IGN, Xbox Era (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: The main highlights of this update include:
 
 RED DAY Event
  Vyron&#x27;s New Year Restaurant
@@ -918,14 +1012,26 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxQQkhldjdVQ1pYbE50azdBYWhpdkZXd1BRSmREeUxJa2p3ZC00NG5NSm01dXJha29BOHh1bVR2bl9QY2VDc0ZRX0RmUG9IenM5b1Z6Y1VfZGxobXJKb2xjRy11STZmRnFaLTd2NXdFb256ZUNXcnVsR0xiaEQ5cmhNQ1k5cU5tSmJjOGdSc2trdE1iVnY3djBISE1hakdKMGdkUXc1aUxrT0lXWVU5ck5sWjZ4T01GRUhsQnI5VTdxODNPOVpZaGE4eWpfOXFlUFAzcGhFUll4MFFuTHhNeEZn0gHkAUFVX3lxTE42d2w4cHhYZ1FXMnZnRHBoSFdrbGV3b1BjQmw3cnMzYjRUS1hxOHZHbXJLTWZfc0dIcGNRZHo0VlR2a0JxdXB3bnF5LWREVVUtSWgxd0dubHpLYW5pTV93MHQ3bWh1ZEY3eGtGM3JGZXJiZ083ZjItU0hwYUUzZkxwWEdQNHNkYVFLcjFMOW1INjFXeG1vREJWWHJZWHA4UHg5ZVRtOVplSjNyWUloa05aZ1dxZ1NnY0gzWGlERmdWRDVwbmg3R3o0RDFpcDU4M0tyS1VWbmx2WkNsTjlxZWJueF9aTw?oc=5" target="_blank" class="item-link">Delta Force Returns to the Top: Battlefield 6 Competitor Gathers Over 100,0</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNVGt4d3lDSllHcFdBbWdGcjNOZjBGMGdYQU5kYTN4MURyeF9UVGNpWEx6Z080QUh6SU1GTlFKaWJuUUZpWlFMY2xmVkFCbHRaUHUzQ3NsMnZjQ0xvdzZNd2JqQU05SU1RQXdVRXlaVmEtT3M5WWZFYVlaZGxaRUc1N1lIc2RzRl9W?oc=5" target="_blank" class="item-link">Delta Force - Official ‘What Is Red Day’ Cinematic Trailer - IGN</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxOMWZKSjJfVEo0STJCaDB4S0FhRTNKYm1FZG9CWHNNcmVzQnE5MTYzRzRJVU5BLVR4TGFCS3VKblNNWk1IRW9ha3NVc2c3U3VhdkJMMVFoTGMwLUpydkNCZGs0T25JcXFLM2tfbTRGLTgtN0RLaWdadFVfWmpTUDc5dHQxcFQ5VDh0c0o4?oc=5" target="_blank" class="item-link">Delta Force (PC, Mobile, Console) | Impressions &amp; Interview - Xbox Era</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxPSnFJT2Q5YlJZUG11OEkycHJ6SUV1YWFGVXBrN2NqMWNBYmVUbllLOTZtZ2VBVUxUMDFYbjRja21nZzRmNkc4a25uX0NlNzZzdmRaQ053TExLMEFfQkRtNVpyRjl6cVFXanJmcUlJTElYREdpWi1MQV9NY250WVhxVUZObXVVdjl1N2tvT255NFRNbjFuTEFuTlZTUWNYYjlGVTh3ZklWZVVKaUdsbmtIMnJRSm9pRVU?oc=5" target="_blank" class="item-link">Opinion: Delta Force Is Solid On Xbox, But Another Upcoming FPS Runs Rings</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 22</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxQQkhldjdVQ1pYbE50azdBYWhpdkZXd1BRSmREeUxJa2p3ZC00NG5NSm01dXJha29BOHh1bVR2bl9QY2VDc0ZRX0RmUG9IenM5b1Z6Y1VfZGxobXJKb2xjRy11STZmRnFaLTd2NXdFb256ZUNXcnVsR0xiaEQ5cmhNQ1k5cU5tSmJjOGdSc2trdE1iVnY3djBISE1hakdKMGdkUXc1aUxrT0lXWVU5ck5sWjZ4T01GRUhsQnI5VTdxODNPOVpZaGE4eWpfOXFlUFAzcGhFUll4MFFuTHhNeEZn0gHkAUFVX3lxTE42d2w4cHhYZ1FXMnZnRHBoSFdrbGV3b1BjQmw3cnMzYjRUS1hxOHZHbXJLTWZfc0dIcGNRZHo0VlR2a0JxdXB3bnF5LWREVVUtSWgxd0dubHpLYW5pTV93MHQ3bWh1ZEY3eGtGM3JGZXJiZ083ZjItU0hwYUUzZkxwWEdQNHNkYVFLcjFMOW1INjFXeG1vREJWWHJZWHA4UHg5ZVRtOVplSjNyWUloa05aZ1dxZ1NnY0gzWGlERmdWRDVwbmg3R3o0RDFpcDU4M0tyS1VWbmx2WkNsTjlxZWJueF9aTw?oc=5" target="_blank" class="item-link">Delta Force Returns to the Top: Battlefield 6 Competitor Gathers Over 100,0</a> <span class="source-tag" style="color:#4ade80;background:#1e5f2e">IXBT.games</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNVGt4d3lDSllHcFdBbWdGcjNOZjBGMGdYQU5kYTN4MURyeF9UVGNpWEx6Z080QUh6SU1GTlFKaWJuUUZpWlFMY2xmVkFCbHRaUHUzQ3NsMnZjQ0xvdzZNd2JqQU05SU1RQXdVRXlaVmEtT3M5WWZFYVlaZGxaRUc1N1lIc2RzRl9W?oc=5" target="_blank" class="item-link">Delta Force - Official ‘What Is Red Day’ Cinematic Trailer - IGN</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">IGN</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxOMWZKSjJfVEo0STJCaDB4S0FhRTNKYm1FZG9CWHNNcmVzQnE5MTYzRzRJVU5BLVR4TGFCS3VKblNNWk1IRW9ha3NVc2c3U3VhdkJMMVFoTGMwLUpydkNCZGs0T25JcXFLM2tfbTRGLTgtN0RLaWdadFVfWmpTUDc5dHQxcFQ5VDh0c0o4?oc=5" target="_blank" class="item-link">Delta Force (PC, Mobile, Console) | Impressions &amp; Interview - Xbox Era</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Xbox Era</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxPSnFJT2Q5YlJZUG11OEkycHJ6SUV1YWFGVXBrN2NqMWNBYmVUbllLOTZtZ2VBVUxUMDFYbjRja21nZzRmNkc4a25uX0NlNzZzdmRaQ053TExLMEFfQkRtNVpyRjl6cVFXanJmcUlJTElYREdpWi1MQV9NY250WVhxVUZObXVVdjl1N2tvT255NFRNbjFuTEFuTlZTUWNYYjlGVTh3ZklWZVVKaUdsbmtIMnJRSm9pRVU?oc=5" target="_blank" class="item-link">Opinion: Delta Force Is Solid On Xbox, But Another Upcoming FPS Runs Rings</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Pure Xbox</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/DeltaForce</span> — 3 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/deltaforce/comments/1r7iv84/vyrons_new_year_restaurant_what_to_serve_nox_and/" target="_blank" class="item-link">Vyron&#x27;s New Year Restaurant: what to serve Nox and with who.</a> (1 upvotes)</li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/deltaforce/comments/1qmyzea/dx12_issues/" target="_blank" class="item-link">DX12 Issues</a> (3 upvotes)</li>
+<li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/deltaforce/comments/1r7iv84/vyrons_new_year_restaurant_what_to_serve_nox_and/" target="_blank" class="item-link">Vyron&#x27;s New Year Restaurant: what to serve Nox and with who.</a> (1 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Hero Shooter">
@@ -955,7 +1061,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Marvel Rivals is growing (+4.3% MoM, averaging 93K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by (Season 6.5) season launch bringing returning and new players. Dev activity: Season 6.5 launched with Museum of ContemplationA new battlefield, The Clobberin.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: Marvel Rivals enters its S6.5 season with a fresh face, festive events, and legendary loot! The update begins on February 13th, 2026, at 09 : 00 : 00 (UTC), with estimated mainte... Sustained growth trajectory.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Marvel Rivals is growing (+4.3% MoM, averaging 93K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by (Season 6.5) season launch bringing returning and new players. Dev activity: Season 6.5 launched with Museum of ContemplationA new battlefield, The Clobberin.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 2 of 3 posts this period. Active press coverage from VICE, Marvel Rivals, GamingTrend (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: Marvel Rivals enters its S6.5 season with a fresh face, festive events, and legendary loot! The update begins on February 13th, 2026, at 09 : 00 : 00 (UTC), with estimated mainte... Sustained growth trajectory.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Marvel Rivals is growing (+4.9% MoM, averaging 93K players over the last 30 days). Growth likely driven by (Season 6.5) season launch bringing returning and new players. Dev activity: Season 6.5 launched with Museum of ContemplationA new battlefield, The Clobberin. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from GamingTrend, Marvel Rivals, GameSpot (5 articles from gaming press in the past week). Looking ahead: Marvel Rivals enters its S6.5 season with a fresh face, festive events, and legendary loot!The update begins on February 13th, 2026, at 09 : 00 : 00 (UTC), with estimated mainte... Sustained growth trajectory.</div>
       </div>
       <div class="card-body-2col">
@@ -973,14 +1079,35 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMivgFBVV95cUxPN210OGdoSmdTZjMxSnBvRXhKYXFnMmNQSExMb2xOSU1fSE5udDB5ZlozQzE2VG9WWGcyZzVJUEZ3ZlRhdG5Ia3lTdWE4cl9xSkNPdlVXSHRHWmh4NHZmYndVV0RqZGh0U29nY3k2aktvd191T2w1ZWpxdDVHZHBwRXFfcWREdFlxWElsUS1DZ1VhT0VPaVhpdUlteGxHdl9fVzJvOWxWeFBFV0xnM18teHMzSzg1aDBlUjlrc2Z3?oc=5" target="_blank" class="item-link">Marvel Rivals and Overwatch Aren&#x27;t Stealing From One Another, Despite What</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiekFVX3lxTFBEbm5hMHljNGhQVFF4bUEyaVZkc0RaVThrNGRub090NDZXVmxfSVhhUnVLRm9VUDJMNTBLbWhJUEFvUF9Wc1JuTDgyUVRpbGstbjJlMDlLQklzNDA2Tnp3Z1RPVzZweTRlakM4aDRvTE1fVFMzVXl1dTZB?oc=5" target="_blank" class="item-link">The Super Hero Team-based PVP Shooter - Marvel Rivals</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 15</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiogFBVV95cUxNX1g3YVhGOFZzaUtQTWF6eG5qdGNEdncxZHZnTDBNWGl6WUFFY0VQRE1Ib3FwNFkwd3REbUhnN2tTN1AtZi1KY0JXeEhYMkNMdTNDZkNtbDM3MWF5THNUUzMxWWFuTFRHdmlEd01jcnJFWVhvN2RlYkhLWkhGc2xINGl2U2ZEYkoxMU1jYlVLanFxZmtjVDROeHZDcllneEJpTWc?oc=5" target="_blank" class="item-link">Marvel Rivals Assemble Fan Celebration to be Held March 3 in Hollywood - Ga</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxPOG1lZ25vSWhqazFad01uS3ZndktrRzBabUNST1VleE9VTlgxNnVrZ19nNV8zbVVIUXVOQ294YmhHSTI5d1pJOXhldERzaEU2d242X0FkeDJRcU1obk9YTV9LcWdZN0wxUllZQmlTcnVlejJiNzhKRTRfQlZpRk9ZRlMwVDM1b1ZWbDNtdld1SnJKUjZhOWYyYm5tVVk?oc=5" target="_blank" class="item-link">Marvel Rivals Balance Patch Adjusts Elsa Bloodstone, More Heroes - Restart.</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMivgFBVV95cUxPN210OGdoSmdTZjMxSnBvRXhKYXFnMmNQSExMb2xOSU1fSE5udDB5ZlozQzE2VG9WWGcyZzVJUEZ3ZlRhdG5Ia3lTdWE4cl9xSkNPdlVXSHRHWmh4NHZmYndVV0RqZGh0U29nY3k2aktvd191T2w1ZWpxdDVHZHBwRXFfcWREdFlxWElsUS1DZ1VhT0VPaVhpdUlteGxHdl9fVzJvOWxWeFBFV0xnM18teHMzSzg1aDBlUjlrc2Z3?oc=5" target="_blank" class="item-link">Marvel Rivals and Overwatch Aren&#x27;t Stealing From One Another, Despite What</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">VICE</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiekFVX3lxTFBEbm5hMHljNGhQVFF4bUEyaVZkc0RaVThrNGRub090NDZXVmxfSVhhUnVLRm9VUDJMNTBLbWhJUEFvUF9Wc1JuTDgyUVRpbGstbjJlMDlLQklzNDA2Tnp3Z1RPVzZweTRlakM4aDRvTE1fVFMzVXl1dTZB?oc=5" target="_blank" class="item-link">The Super Hero Team-based PVP Shooter - Marvel Rivals</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Marvel Rivals</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiogFBVV95cUxNX1g3YVhGOFZzaUtQTWF6eG5qdGNEdncxZHZnTDBNWGl6WUFFY0VQRE1Ib3FwNFkwd3REbUhnN2tTN1AtZi1KY0JXeEhYMkNMdTNDZkNtbDM3MWF5THNUUzMxWWFuTFRHdmlEd01jcnJFWVhvN2RlYkhLWkhGc2xINGl2U2ZEYkoxMU1jYlVLanFxZmtjVDROeHZDcllneEJpTWc?oc=5" target="_blank" class="item-link">Marvel Rivals Assemble Fan Celebration to be Held March 3 in Hollywood - Ga</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamingTrend</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxPOG1lZ25vSWhqazFad01uS3ZndktrRzBabUNST1VleE9VTlgxNnVrZ19nNV8zbVVIUXVOQ294YmhHSTI5d1pJOXhldERzaEU2d242X0FkeDJRcU1obk9YTV9LcWdZN0wxUllZQmlTcnVlejJiNzhKRTRfQlZpRk9ZRlMwVDM1b1ZWbDNtdld1SnJKUjZhOWYyYm5tVVk?oc=5" target="_blank" class="item-link">Marvel Rivals Balance Patch Adjusts Elsa Bloodstone, More Heroes - Restart.</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Restart.run</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/marvelrivals</span> — 3 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/marvelrivals/comments/1r6p3aj/marvel_rivals_devs_care_about_the_community/" target="_blank" class="item-link">Marvel Rivals Devs Care About The Community</a> (11,006 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/nemesisdelta24</span> (3,200 pts): That’s such a sweet gesture and condolences</li>
+<li class="comment"><span class="comment-author">u/Zokstone</span> (1,544 pts): I hear the town halls are extra cheap in heaven. 
+
+💜</li>
+<li class="comment"><span class="comment-author">u/WindyGogo</span> (1,538 pts): That’s pretty. Nice of a company to listen to such request still despite their size.</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/marvelrivals/comments/1r2hvj5/there_are_now_more_redhaired_women_than_blondes/" target="_blank" class="item-link">There are now more red-haired women than blondes in the game.</a> (10,694 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Flottrooster</span> (1,334 pts): Yeah...*women* BUT, there are more Blondes in the game as a whole. Come to think of it, there are quite a few Blonde Men in there: Cap, Thor, Adam, ju</li>
+<li class="comment"><span class="comment-author">u/VergilVDante</span> (942 pts): Can we get more villains 
+
+I feel there are less villains than there are hair types in this game</li>
+</ul></li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/marvelrivals/comments/1qjbc5i/widow_players_this_season_after_being_the_most/" target="_blank" class="item-link">Widow players this season after being the most chill people for over a year (art</a> (13,555 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Hero Shooter">
@@ -1010,7 +1137,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Overwatch is surging (+72.4% MoM, averaging 48K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth despite no major content — bug fixes and quality-of-life patches may be improving player retention.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Overwatch is surging (+72.4% MoM, averaging 48K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth despite no major content — bug fixes and quality-of-life patches may be improving player retention.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community discussion this week centers on game updates and announcements — 3 of 3 posts are news-focused. Active press coverage from Kotaku, PC Gamer, Eurogamer (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Overwatch is surging (+68.5% MoM, averaging 47K players over the last 30 days), accelerating vs. last run. Growth despite no major content — bug fixes and quality-of-life patches may be improving player retention. Community discussion this week centers on game updates and announcements — 4 of 4 posts are news-focused. Active press coverage from PC Gamer, Eurogamer, TrueAchievements (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
       </div>
       <div class="card-body-2col">
@@ -1028,14 +1155,36 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxQbjVmVkdJcFNmT3hjTFhVeFU3Q3pUV1JpOFJxNVNBUWUzbmw4UHZiYkl6VGwtTlVuWTdfTDg4UTRVbmpCNExjalFSTzZjNDJTMjZ0a2JNY0pId1dPM0k5ZzR2N2FHR3lMTmRNLWVSc1VVRFBfRDdlcjFDMUNSdlMyVmxpWTdZcFBORE1ENk5R?oc=5" target="_blank" class="item-link">Overwatch Fans Prove Fickle As Their Loyalty Is Bought By Cat Cosmetics - K</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi_gFBVV95cUxOMDBNeTlSUno0SlZGNFZOaW1yTkpSNERDNFdtUUVBZ2ZUZnRjZWdSaktXUVJ6WmFHeDlOZUl4dUdkR1JUVEItNmtOOFp2bzdFa0tDekFwMEdtcUR6bFVuVk1VYW0xaklOMjBNbnljeHZmNlRLdG5tcDhjS1d0NEItWGp1bDNMR0FvYjVwakRTOW5CLVlJMlFhdlNrOGNDaVZ6dkdNV1ZyWDk0M25rQXpCV1NNdG10SHF3Qm9PMUhVQUpWbHA3RVREYW55aEtOeUVsTVRVT1hkVG1GaG9rTVdneXczdC1yQ29EVHF2SVJBUjczMnhLOU83czcyNExwdw?oc=5" target="_blank" class="item-link">After a glitch botched Overwatch&#x27;s first big post-reboot event, it&#x27;s sendin</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxPY2FGeTIzWTBuTDUwUnFMc3k2NnNadmVDME8tODMxQXp6QU9DRlFBT3FDZFNpcHRMdVdqdE9GY3Q2VFQ4UE1xSlFKU0J4U0d5RHFCdnV5T2FNRF90ajBkX1p5TGo2RTgwYnl0Qk9zOFR2d2hTbk1GeXMwaXV2RXhYNjVaYjdXN2M?oc=5" target="_blank" class="item-link">I haven&#x27;t been this excited about Overwatch in 10 years - Eurogamer</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 17</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiugJBVV95cUxNVy1MdHlYVzAyaFltUmR2SWJsSDhhUGNzOTYxYlZoNjRBVUE0RDhMa1p1Ykx3a3hWVDc2SjNNOHVfeEFFUUtPaTVtM1Vsb003TGNUMnB4b2ItRWZfZnlvYVdvUGdOQWdTV2djSDgzZTBoZ0NMWmJDazhNaE9RS2YwN0x2TjZoZUVvSmd6TXR0QTF4dlVUc0ZRdVdqZUpOMjlxY1hzU0hzLUgyQ2ZvTWJ4cEpnSndIVTM1SlUwVHBZb3JKYlloSFJiWlRwaXBrSU53YWVLa0NNb200M2pXOTREc2R4ZjJ0TmlPLW5LSjdfT1ZhTHoxendmRHVFVzhMRGhjbDVoZVdJQ0JZVnJhUVhsZjZmNFVDTlN4Vl9QNnBQYzRueHRyMlQ4eTJtajBaWEVrSzBqTjdKTG9jQQ?oc=5" target="_blank" class="item-link">Blizzard drops Overwatch Jetpack Cat lore and everyone agrees there&#x27;s somet</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxQbjVmVkdJcFNmT3hjTFhVeFU3Q3pUV1JpOFJxNVNBUWUzbmw4UHZiYkl6VGwtTlVuWTdfTDg4UTRVbmpCNExjalFSTzZjNDJTMjZ0a2JNY0pId1dPM0k5ZzR2N2FHR3lMTmRNLWVSc1VVRFBfRDdlcjFDMUNSdlMyVmxpWTdZcFBORE1ENk5R?oc=5" target="_blank" class="item-link">Overwatch Fans Prove Fickle As Their Loyalty Is Bought By Cat Cosmetics - K</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Kotaku</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi_gFBVV95cUxOMDBNeTlSUno0SlZGNFZOaW1yTkpSNERDNFdtUUVBZ2ZUZnRjZWdSaktXUVJ6WmFHeDlOZUl4dUdkR1JUVEItNmtOOFp2bzdFa0tDekFwMEdtcUR6bFVuVk1VYW0xaklOMjBNbnljeHZmNlRLdG5tcDhjS1d0NEItWGp1bDNMR0FvYjVwakRTOW5CLVlJMlFhdlNrOGNDaVZ6dkdNV1ZyWDk0M25rQXpCV1NNdG10SHF3Qm9PMUhVQUpWbHA3RVREYW55aEtOeUVsTVRVT1hkVG1GaG9rTVdneXczdC1yQ29EVHF2SVJBUjczMnhLOU83czcyNExwdw?oc=5" target="_blank" class="item-link">After a glitch botched Overwatch&#x27;s first big post-reboot event, it&#x27;s sendin</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">PC Gamer</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxPY2FGeTIzWTBuTDUwUnFMc3k2NnNadmVDME8tODMxQXp6QU9DRlFBT3FDZFNpcHRMdVdqdE9GY3Q2VFQ4UE1xSlFKU0J4U0d5RHFCdnV5T2FNRF90ajBkX1p5TGo2RTgwYnl0Qk9zOFR2d2hTbk1GeXMwaXV2RXhYNjVaYjdXN2M?oc=5" target="_blank" class="item-link">I haven&#x27;t been this excited about Overwatch in 10 years - Eurogamer</a> <span class="source-tag" style="color:#4ade80;background:#1e5f2e">Eurogamer</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiugJBVV95cUxNVy1MdHlYVzAyaFltUmR2SWJsSDhhUGNzOTYxYlZoNjRBVUE0RDhMa1p1Ykx3a3hWVDc2SjNNOHVfeEFFUUtPaTVtM1Vsb003TGNUMnB4b2ItRWZfZnlvYVdvUGdOQWdTV2djSDgzZTBoZ0NMWmJDazhNaE9RS2YwN0x2TjZoZUVvSmd6TXR0QTF4dlVUc0ZRdVdqZUpOMjlxY1hzU0hzLUgyQ2ZvTWJ4cEpnSndIVTM1SlUwVHBZb3JKYlloSFJiWlRwaXBrSU53YWVLa0NNb200M2pXOTREc2R4ZjJ0TmlPLW5LSjdfT1ZhTHoxendmRHVFVzhMRGhjbDVoZVdJQ0JZVnJhUVhsZjZmNFVDTlN4Vl9QNnBQYzRueHRyMlQ4eTJtajBaWEVrSzBqTjdKTG9jQQ?oc=5" target="_blank" class="item-link">Blizzard drops Overwatch Jetpack Cat lore and everyone agrees there&#x27;s somet</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamesRadar+</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/Overwatch</span> — 3 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Overwatch/comments/1r3tkwq/my_60_year_old_dad_has_been_playing_overwatch/" target="_blank" class="item-link">My 60 year old dad has been playing overwatch everyday since mid 2017</a> (13,884 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/j_c_d_1</span> (3,163 pts): Your dad is a legend
+By day he is saving lives
+By night he is taking them
+
+Well the other comment did say he is an Ana main so I guess he is always sa</li>
+<li class="comment"><span class="comment-author">u/One-Suggestion6203</span> (1,503 pts): I wanted to mention that he has said in his own words that overwatch is his “unwind and de-stressor after a long day at work”</li>
+<li class="comment"><span class="comment-author">u/Stunning_Librarian59</span> (454 pts): Who does he main</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Overwatch/comments/1r5vngg/overwatch_servers_rn/" target="_blank" class="item-link">Overwatch servers rn:</a> (12,679 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Big-Cycle-1933</span> (2,131 pts): I was mid game when I was kicked out and placed behind 30 people in queue😭</li>
+<li class="comment"><span class="comment-author">u/GodHelpMe_New</span> (1,872 pts): They may as well start the maintenance rn lol</li>
+<li class="comment"><span class="comment-author">u/azulur</span> (895 pts): This is what happens when Talon is winning by a landslide 😔</li>
+</ul></li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Overwatch/comments/1r3tkwq/my_60_year_old_dad_has_been_playing_overwatch/" target="_blank" class="item-link">My 60 year old dad has been playing overwatch everyday since mid 2017</a> (13,881 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Large-Scale">
@@ -1065,7 +1214,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Battlefield 6 is dropping sharply (-22.5% MoM, averaging 44K players over the last 30 days). At just 12% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Declining sharply despite new season content — may indicate content quality concerns or post-launch player churn exceeding new player acquisition. Dev activity: Season 2 launched with a new map, ContaminatedA large.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: Season 2 begins February 17th with Game Update 1.2.1.0, introducing a new map, limited-time modes, the Little Bird helicopter, weapons, gadgets, and progression to Battlefield 6. Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Battlefield 6 is dropping sharply (-22.5% MoM, averaging 44K players over the last 30 days). At just 12% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Declining sharply despite new season content — may indicate content quality concerns or post-launch player churn exceeding new player acquisition. Dev activity: Season 2 launched with a new map, ContaminatedA large.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 3 of 3 posts this period. Active press coverage from TechRadar, Shacknews, AllOutdoor.com (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: Season 2 begins February 17th with Game Update 1.2.1.0, introducing a new map, limited-time modes, the Little Bird helicopter, weapons, gadgets, and progression to Battlefield 6. Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Battlefield 6 is dropping sharply (-23.1% MoM, averaging 43K players over the last 30 days). At just 14% of all-time peak — well below historical levels. Declining sharply despite new season content — may indicate content quality concerns or post-launch player churn exceeding new player acquisition. Dev activity: Season 2 launched with VL. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from GameSpot, Eurogamer, ComicBook.com (5 articles from gaming press in the past week). Looking ahead: Season 2 begins February 17th with Game Update 1.2.1.0, introducing a new map, limited-time modes, the Little Bird helicopter, weapons, gadgets, and progression to Battlefield 6. Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -1087,14 +1236,29 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi2gJBVV95cUxOaXFOM2lRaXRwVXkyaTQ3MVJkU1ZKbkN4bHJIWkttck4xYTZNRWhjblI2dXdSaXR3bktzd1R2Tm1YUlVxLWRyZFJoTThoRHBJSUYwV3lodDZtVDFPMGdNVFJLcXBDb1cyZDZWQWtxUjUwWmhxZ25BS1JTZ1NESTlYR0ZsV0NWTkk5UThRUXVaSTRVeEpna25BMjExR2ljM2MxMmY4ZUhuOENwcldHVmZIWldWUmNBcWVaLUJWTzY1Z004TEVXLVZqVFE3YXJhRGl2MWZhcXdLb1dralpUNWZqTG9EaWdiZ3c2TndSVHhpTFNPZ0tJeTFYUnhhR0xCOEEzYXlrQWhpZUdSd1RTQ0l2NlV2WWRCUEk5RXZZbzkxVlJCY2lhaEVmWDVhUWVHa19RN0ZrMlVPOUt5YVlqeW5xMVpSTm1jUVJGdHptcFJkYVpneEtsdDF4UThn?oc=5" target="_blank" class="item-link">&#x27;I think this is going to be the strongest season&#x27; — Battlefield 6 producer</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 17</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMibkFVX3lxTE5LbDNLVHBaMTBtM2JxVml6ZHo3Y1VlOTYwLVdWVTM0TlFjTFkyVXdvT2djMUlBdGdYOWhRUFRuUjhIQzNjeGRrZjhESmY3aVRDU2NhZk51ODgzbmlKRXpnalZ2bjkzWkZQV0pncFRB0gF6QVVfeXFMUHQ0RVo2Wkg3ZXNkZEdfbFkyR3dFcUZVRFQwU2NaczlrNlNrdTdZdUYzc1o1WDlJRHpLRUh4TklSUXdWanp0OEJEbTMxcDQ3QkVTZk80UDE4YTcxWG5fbng2UDdLOGxfZkpEdjFZakM2RXpYNTdkY1NtNFE?oc=5" target="_blank" class="item-link">What is BF Pro &amp; what do you get with it in Battlefield 6? - Shacknews</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiaEFVX3lxTE9paE5BZzQxU2hPbk9pRHM2UTlyNGRWb0loT2Uwc1pBQ1pFN0wzNGpWWGh6a284X05IUmd3QVVpLVAtTVp2N3Y4VkJ6T1h6NC10N3Q4ejVuUzFOcmY4MGhfQlBzb0hIMnJa?oc=5" target="_blank" class="item-link">5.11 x Battlefield 6 Collab Expands w/ Exclusive In-Game Skins &amp; Products -</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi7wFBVV95cUxOWDFmbE5vRk1BQTctM2pvNDdYRnJmblRsRVlMS3F6OElBNG1aN3E2eFRJZTBKRzBqSWJ2NDE1aDUtbDZDVG16cGxqWm5pWmJuQmdFRU50Y2V0d2NrZWlLa3VRWW5hOFBFc282YXR6Vk1QSms2ZnZ6U3lfdlJHQ2VwN2ptd05oNVRUOW4xWlpPSEZSRHpUXzNZVENOUVpkMDExOXlpcWxvZ2ltQjlMcW5yeXhFeGI2RU1QWEV0cXNaV24wSF96UHIwSk81OEd5UzlUMlZMV25HWkRuOWFyVUFjZVZ0LW9XcVktV2k3OGhHWQ?oc=5" target="_blank" class="item-link">Battlefield 6 devs promise bigger maps are coming but they’ll “need some mo</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi2gJBVV95cUxOaXFOM2lRaXRwVXkyaTQ3MVJkU1ZKbkN4bHJIWkttck4xYTZNRWhjblI2dXdSaXR3bktzd1R2Tm1YUlVxLWRyZFJoTThoRHBJSUYwV3lodDZtVDFPMGdNVFJLcXBDb1cyZDZWQWtxUjUwWmhxZ25BS1JTZ1NESTlYR0ZsV0NWTkk5UThRUXVaSTRVeEpna25BMjExR2ljM2MxMmY4ZUhuOENwcldHVmZIWldWUmNBcWVaLUJWTzY1Z004TEVXLVZqVFE3YXJhRGl2MWZhcXdLb1dralpUNWZqTG9EaWdiZ3c2TndSVHhpTFNPZ0tJeTFYUnhhR0xCOEEzYXlrQWhpZUdSd1RTQ0l2NlV2WWRCUEk5RXZZbzkxVlJCY2lhaEVmWDVhUWVHa19RN0ZrMlVPOUt5YVlqeW5xMVpSTm1jUVJGdHptcFJkYVpneEtsdDF4UThn?oc=5" target="_blank" class="item-link">&#x27;I think this is going to be the strongest season&#x27; — Battlefield 6 producer</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">TechRadar</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMibkFVX3lxTE5LbDNLVHBaMTBtM2JxVml6ZHo3Y1VlOTYwLVdWVTM0TlFjTFkyVXdvT2djMUlBdGdYOWhRUFRuUjhIQzNjeGRrZjhESmY3aVRDU2NhZk51ODgzbmlKRXpnalZ2bjkzWkZQV0pncFRB0gF6QVVfeXFMUHQ0RVo2Wkg3ZXNkZEdfbFkyR3dFcUZVRFQwU2NaczlrNlNrdTdZdUYzc1o1WDlJRHpLRUh4TklSUXdWanp0OEJEbTMxcDQ3QkVTZk80UDE4YTcxWG5fbng2UDdLOGxfZkpEdjFZakM2RXpYNTdkY1NtNFE?oc=5" target="_blank" class="item-link">What is BF Pro &amp; what do you get with it in Battlefield 6? - Shacknews</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Shacknews</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiaEFVX3lxTE9paE5BZzQxU2hPbk9pRHM2UTlyNGRWb0loT2Uwc1pBQ1pFN0wzNGpWWGh6a284X05IUmd3QVVpLVAtTVp2N3Y4VkJ6T1h6NC10N3Q4ejVuUzFOcmY4MGhfQlBzb0hIMnJa?oc=5" target="_blank" class="item-link">5.11 x Battlefield 6 Collab Expands w/ Exclusive In-Game Skins &amp; Products -</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">AllOutdoor.com</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi7wFBVV95cUxOWDFmbE5vRk1BQTctM2pvNDdYRnJmblRsRVlMS3F6OElBNG1aN3E2eFRJZTBKRzBqSWJ2NDE1aDUtbDZDVG16cGxqWm5pWmJuQmdFRU50Y2V0d2NrZWlLa3VRWW5hOFBFc282YXR6Vk1QSms2ZnZ6U3lfdlJHQ2VwN2ptd05oNVRUOW4xWlpPSEZSRHpUXzNZVENOUVpkMDExOXlpcWxvZ2ltQjlMcW5yeXhFeGI2RU1QWEV0cXNaV24wSF96UHIwSk81OEd5UzlUMlZMV25HWkRuOWFyVUFjZVZ0LW9XcVktV2k3OGhHWQ?oc=5" target="_blank" class="item-link">Battlefield 6 devs promise bigger maps are coming but they’ll “need some mo</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">FRVR</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/battlefield</span> — 3 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Battlefield/comments/1r6n58s/so_dice_is_starting_to_listen/" target="_blank" class="item-link">So Dice IS starting to listen?</a> (6,355 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/KiNGTiGER1423</span> (1,904 pts): Now if only we can get them to listen about Maps and Real Persistent Servers…🤔</li>
+<li class="comment"><span class="comment-author">u/KarevX</span> (560 pts): No, don&#x27;t fall for that, skins are the least of it, there&#x27;s a lot more in the game that needs fixing.</li>
+<li class="comment"><span class="comment-author">u/merkmerc</span> (294 pts): I mean that shit looks 10x better</li>
+</ul></li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Battlefield/comments/1r6n58s/so_dice_is_starting_to_listen/" target="_blank" class="item-link">So Dice IS starting to listen?</a> (6,352 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Battlefield/comments/1quoyf3/what_a_detail_they_even_did_it_with_the_buttons/" target="_blank" class="item-link">What a detail - they even did it with the buttons</a> (6,191 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Tactical">
@@ -1124,7 +1288,7 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Rainbow Six Siege is growing (+4.7% MoM, averaging 49K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by season launch bringing returning and new players. Dev activity: launched with is none other than Solid Snake, rnized maps and more.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Rainbow Six Siege is growing (+4.7% MoM, averaging 49K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by season launch bringing returning and new players. Dev activity: launched with is none other than Solid Snake, rnized maps and more.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from PCGamesN, Shacknews, Express.co.uk (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Rainbow Six Siege is growing (+4.4% MoM, averaging 49K players over the last 30 days). Growth likely driven by season launch bringing returning and new players. Dev activity:  launched with is none other than Solid Snake, rnized maps and more. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from GameSpot, Shacknews, PC Gamer (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
       </div>
       <div class="card-body-2col">
@@ -1142,14 +1306,28 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE00S2w0YVZUOEJsX1RwUDlWVlVoWVQ3bU4tREF4WnBLbjBmaUFubFJmSmltamV6Rzg1NWprQVZ2bmstcGJkMGVuU1FmbFlOQTF6MjVSM1VXZmNrSXZUcWJYcG9CZkRVYXE3UlE?oc=5" target="_blank" class="item-link">Rainbow Six Siege unveils its Year 11 roadmap, featuring Solid Snake, and a</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 15</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxOeVloNmVhTzUzeXc1ZWlYVkhSTkFKNjAxUDFPLVpoOVBQS20wVkExX0s5WUh6WUphZHIxaHpXdll0NHZWOGNYRndSd3NSTGZvS3lfZmZOWXlLUmZPeDhhc2lJSUI2TGNPX3JNWUV1TzlVMWphMXNQaTZYaUg4R0lSN2pn0gGPAUFVX3lxTE9MNEF6ZW04Y2pSckd5NTNtRFE1RGdaY2tSM19mQ3NIRldMbzRZWE5VZVR0cjdLNzZHN2VOLUhVeWMxcERzLTIyV3d4b0x6VWRSdkpnOVNKVkI5R084am9jMVAwakhpUkNLRHZoVDVQbmdUQVJQcjVSRGI1SDFLbF80R0JvcG4zRVVFU1dmYzA0?oc=5" target="_blank" class="item-link">Rainbow Six Siege&#x27;s removal of Dual Front is a mercy killing - Shacknews</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 17</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdlpSS3JTdDE0TXZOaFZ5UW1vbURFRDQzOFlrcm5PXzZBV3NIVGFDQXhMWHJ6RGs0bV9KME94OXh0ZVM3MVRfMFZwYjZJVHhnbFBBTGFGSVZBUlRBWkItNXVjcnh1OEloMkpBQ0ZWc0dMUUgweVBTOWM5ZzlQdkNybjRaNFhCU0ViSEwwS05rU05BbHNuN3VOSVNNWHN5SG1faFAwVElKMEFpQ3lSZmx5WDJ2SUd5NlVC0gG-AUFVX3lxTFBZeGltRm9WMzA1WXMtZTlFaDdxeEVOTkhxVlYxNTY5Y0ktT0tfWGZVdUg0UmdwUjIxQ1d6RC1YbER6MW9YRXZJNmM4TUt0WndpRzd4Qlk4cmVMV2FuLUFpMjdSU0lWUWJyT3J3d3YyNHRXMVdiZXBVQUxNZ210ZEVudFBBSzFYZUxGaGIyVTZVMjBvZXNfNHJlM3NTMjJ6QmFBbUozNGQyMVBSSlBLdEUySWVmeDRGX1ZMeGtyYUE?oc=5" target="_blank" class="item-link">6,500-hour Rainbow Six Siege veteran shares 5 tips every new player needs -</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxNY1ZnMDRuc3FXcU9PNDZ3R2MwTVA3d0lEcUNrX2pTbHJEWUJueXhmRWt3aHZ2U09sa1c0MkYxUjFySk56em5rSG9pMEQwWmhTdVVCR0lCN0Zzb0MtRWxzMjE5LUktNFhZV1JRamRzRFU0VlFrQ200dnVhWFJSRTEyYk05TTdscFlPc2RqMjViN0Iya3FOaGhzNWpFR2lNNF91X1lGY1FPRQ?oc=5" target="_blank" class="item-link">Metal Gear&#x27;s Solid Snake joins the roster of Rainbow Six Siege, finally mak</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 16</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE00S2w0YVZUOEJsX1RwUDlWVlVoWVQ3bU4tREF4WnBLbjBmaUFubFJmSmltamV6Rzg1NWprQVZ2bmstcGJkMGVuU1FmbFlOQTF6MjVSM1VXZmNrSXZUcWJYcG9CZkRVYXE3UlE?oc=5" target="_blank" class="item-link">Rainbow Six Siege unveils its Year 11 roadmap, featuring Solid Snake, and a</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">PCGamesN</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxOeVloNmVhTzUzeXc1ZWlYVkhSTkFKNjAxUDFPLVpoOVBQS20wVkExX0s5WUh6WUphZHIxaHpXdll0NHZWOGNYRndSd3NSTGZvS3lfZmZOWXlLUmZPeDhhc2lJSUI2TGNPX3JNWUV1TzlVMWphMXNQaTZYaUg4R0lSN2pn0gGPAUFVX3lxTE9MNEF6ZW04Y2pSckd5NTNtRFE1RGdaY2tSM19mQ3NIRldMbzRZWE5VZVR0cjdLNzZHN2VOLUhVeWMxcERzLTIyV3d4b0x6VWRSdkpnOVNKVkI5R084am9jMVAwakhpUkNLRHZoVDVQbmdUQVJQcjVSRGI1SDFLbF80R0JvcG4zRVVFU1dmYzA0?oc=5" target="_blank" class="item-link">Rainbow Six Siege&#x27;s removal of Dual Front is a mercy killing - Shacknews</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Shacknews</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxQdlpSS3JTdDE0TXZOaFZ5UW1vbURFRDQzOFlrcm5PXzZBV3NIVGFDQXhMWHJ6RGs0bV9KME94OXh0ZVM3MVRfMFZwYjZJVHhnbFBBTGFGSVZBUlRBWkItNXVjcnh1OEloMkpBQ0ZWc0dMUUgweVBTOWM5ZzlQdkNybjRaNFhCU0ViSEwwS05rU05BbHNuN3VOSVNNWHN5SG1faFAwVElKMEFpQ3lSZmx5WDJ2SUd5NlVC0gG-AUFVX3lxTFBZeGltRm9WMzA1WXMtZTlFaDdxeEVOTkhxVlYxNTY5Y0ktT0tfWGZVdUg0UmdwUjIxQ1d6RC1YbER6MW9YRXZJNmM4TUt0WndpRzd4Qlk4cmVMV2FuLUFpMjdSU0lWUWJyT3J3d3YyNHRXMVdiZXBVQUxNZ210ZEVudFBBSzFYZUxGaGIyVTZVMjBvZXNfNHJlM3NTMjJ6QmFBbUozNGQyMVBSSlBLdEUySWVmeDRGX1ZMeGtyYUE?oc=5" target="_blank" class="item-link">6,500-hour Rainbow Six Siege veteran shares 5 tips every new player needs -</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Express.co.uk</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxNY1ZnMDRuc3FXcU9PNDZ3R2MwTVA3d0lEcUNrX2pTbHJEWUJueXhmRWt3aHZ2U09sa1c0MkYxUjFySk56em5rSG9pMEQwWmhTdVVCR0lCN0Zzb0MtRWxzMjE5LUktNFhZV1JRamRzRFU0VlFrQ200dnVhWFJSRTEyYk05TTdscFlPc2RqMjViN0Iya3FOaGhzNWpFR2lNNF91X1lGY1FPRQ?oc=5" target="_blank" class="item-link">Metal Gear&#x27;s Solid Snake joins the roster of Rainbow Six Siege, finally mak</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Eurogamer</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/Rainbow6</span> — 2 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Rainbow6/comments/1r4dscx/visual_of_the_flores_thing/" target="_blank" class="item-link">Visual of the Flores thing</a> (3,121 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/DonkeySlayerDooDoo</span> (1,134 pts): I never doubted you</li>
+<li class="comment"><span class="comment-author">u/Pale_Membership_3904</span> (554 pts): Holy shit. I see it now that you outlined it. Goddamn.</li>
+<li class="comment"><span class="comment-author">u/GameGuy11037</span> (291 pts): For the R it&#x27;s probably just the left piece, see how it curves in?</li>
+</ul></li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Rainbow6/comments/1qou45c/23000_credits_gone/" target="_blank" class="item-link">23000 credits gone</a> (4,418 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Hero Shooter">
@@ -1179,7 +1357,7 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Team Fortress 2 is growing (+2.1% MoM, averaging 50K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by (Season 4) season launch bringing returning and new players. Dev activity: Season 4 launched recently; 7+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Team Fortress 2 is growing (+2.1% MoM, averaging 50K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by (Season 4) season launch bringing returning and new players. Dev activity: Season 4 launched recently; 7+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 3 of 3 posts this period. Active press coverage from Rock Paper Shotgun, PC Gamer, Screen Rant (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Team Fortress 2 is growing (+2.6% MoM, averaging 50K players over the last 30 days). Growth likely driven by (Season 4) season launch bringing returning and new players. Dev activity: Season 4 launched recently; 7+ bug fixes deployed. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from Rock Paper Shotgun, PC Gamer, Screen Rant (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
       </div>
       <div class="card-body-2col">
@@ -1201,14 +1379,29 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPLTBWUnQxekUtakpIX2VqaFdCcVhQUGFybnJaOGZHcmd1Vl9raUx4QnlOTDV1M01nVExqNjB3d19uTmVIelZ1MTVtdFZreTgzTEpPSDBvd2o2dk1HNUNDR1g5Y3ZCNVg5N0FuTGhEZEdpOEJfNS1ZQ2paamowT0Z0MUg5SGpFNkxQMkZxczdPT1NTOTVmOUtwLUdRTkNLNWk5ekN4dHlqaGo0Nk5pN2tMWENNamo?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified is good, clean, hatless fun, despite its cruel H</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxNR3NQVEtHbTAxVzBFaUgyb1ZZOVNmQmY4b0JrelUtaXl2TnUyN25Ecm5kWmd4WjlEdS1BZGNSa3VETXJBbkp0dHp4SklXeWxhMXo0Y1J1M3NqWExfM1lnMzZBdmFZNU11SmxYb3hoYkMxTGZjalRLbmtSYVUxYzZjVDFkNDVrRzRQRU81S3NrOE4tOTZCVTU5dG5RN0YtUzFwUmtZWHRLVG41cWwwUHJRb2xKM0FXS21nd3c3RlZJQkVuTVd5VXJwNkpjSC14UDMyMGw2MnhTSVpYbTJsMmhj?oc=5" target="_blank" class="item-link">Thousands of players flood into Team Fortress 2 Classified, the free &#x27;TF2 C</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 30</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxPdDZIWEFlZFFLQTVhQ2dVUDBnZ0FSTm5mb0ZxRHZQbGlLbEozcEdCOW8yaEMtUlNxdXVGNFdmU3A0Z2VlOGxwVC1YRFg0MHp6OVBsX3RsZHJ5aXVoNDdhbFRvYW5oeHZzbU1yWEhSU0tGREptTlc0cDNySVFxaHg1cGpBZ2VHVWtncEVRdEFNcEhwMThoYmY5RjRtZm1fV3gwM3pPNXRucXZ1RkhrZTF5X1hqY0hqQ2dwci1EWjAyMHZYVUc4MUZrbTRoYWhBanQ0cEVKcjYzWS1Ddw?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified Mod Gets Official Steam Page and Hits 10,000 Con</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 01</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxPSWpKMVlpNHVqa0NsZ2ZtS0Nuc1JjWU9PNzZuNldGTTFNWFRqWWl3MmR6TWZqWUFlX0xGMWxraEZXWG1ydGpWZzM1VUVscDBuVFZmMk5tZjAxVmdvY25RXzgzREhoV0hRcUZpQlNTMGdSbXpENExlUmJTYlZuRXhMbFppc2ZmRUNsLUhOS0JnNExNRE13blBEYXFrM2dqc0k0QVlOTWF6MHV2WjBCdGN0S2g2NjVQTGpvZWpJaA?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified (formerly Team Fortress 2 Classic) has launched</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPLTBWUnQxekUtakpIX2VqaFdCcVhQUGFybnJaOGZHcmd1Vl9raUx4QnlOTDV1M01nVExqNjB3d19uTmVIelZ1MTVtdFZreTgzTEpPSDBvd2o2dk1HNUNDR1g5Y3ZCNVg5N0FuTGhEZEdpOEJfNS1ZQ2paamowT0Z0MUg5SGpFNkxQMkZxczdPT1NTOTVmOUtwLUdRTkNLNWk5ekN4dHlqaGo0Nk5pN2tMWENNamo?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified is good, clean, hatless fun, despite its cruel H</a> <span class="source-tag" style="color:#f87171;background:#5f1e1e">Rock Paper Shotgun</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxNR3NQVEtHbTAxVzBFaUgyb1ZZOVNmQmY4b0JrelUtaXl2TnUyN25Ecm5kWmd4WjlEdS1BZGNSa3VETXJBbkp0dHp4SklXeWxhMXo0Y1J1M3NqWExfM1lnMzZBdmFZNU11SmxYb3hoYkMxTGZjalRLbmtSYVUxYzZjVDFkNDVrRzRQRU81S3NrOE4tOTZCVTU5dG5RN0YtUzFwUmtZWHRLVG41cWwwUHJRb2xKM0FXS21nd3c3RlZJQkVuTVd5VXJwNkpjSC14UDMyMGw2MnhTSVpYbTJsMmhj?oc=5" target="_blank" class="item-link">Thousands of players flood into Team Fortress 2 Classified, the free &#x27;TF2 C</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">PC Gamer</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMia0FVX3lxTFBlb3JwdU1MZGpkcVhCTllSQVpIRk9xRkJQRHNZcDF2ZndIbFJ4aE5NTC1Ydkc3WTUtVG9nQzBHVmlCZUtTY2U2VDQwaDNyc0pVdjZwNkhhQ2czMktyNWFGTmM3eVlSR2pWeUw0?oc=5" target="_blank" class="item-link">Team Fortress Returns With New Release On Steam That’s 100% Free - Screen R</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Screen Rant</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMiywFBVV95cUxOR2ZLT19ob2dPaHp0MlZHQ3A3SW5maWhTa1dSd3dBTGZWdEFZVUtRNjl2SGpfejdld3lhTXJXZlZ2SllQN3NkZmFkemMzaWd1dHJFa3FHc25wbGN0RVdVY3BMSnlGLXU3eVFXLURjV0VMUTlnVVhDVW90OU5VUnh5VHZrbFRSeXZITEVFXzk3OVpNUFB0dy1vYk55YWlLdVQ1VHdpWGNlaFl6LUZ0ai00TThueEtEMXI0bVZtbEVsemJKSmZFeEJIN2RLTQ?oc=5" target="_blank" class="item-link">Steam Charts: Free multiplayer shooter surpasses 9,000 concurrent players o</a> <span class="source-tag" style="color:#4ade80;background:#1e5f2e">Notebookcheck</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/tf2</span> — 3 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1r35nzj/yall_know_that_pyro_took_his_mask_off_right/" target="_blank" class="item-link">Yall know that pyro took his mask off right?</a> (6,279 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/The_DDK7070</span> (4,635 pts): The low resolution really adds to the authenticity of this</li>
+<li class="comment"><span class="comment-author">u/Robin_kmen</span> (2,336 pts): Damn, can we talk about how well made that is tho, legit got me doubting my own sanity for a bit. Good job op</li>
+<li class="comment"><span class="comment-author">u/bebop_cola_good</span> (1,965 pts): Holy shit, it&#x27;s John Pyro</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1r71ju0/my_concept_for_poker_night_3/" target="_blank" class="item-link">My concept for Poker Night 3</a> (5,613 upvotes)</li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1qxt0yi/poker_night_coming_to_nintendo_switch_means_that/" target="_blank" class="item-link">Poker Night coming to Nintendo Switch means that Heavy now fits the criteria nee</a> (12,627 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Large-Scale">
@@ -1238,7 +1431,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Call of Duty is holding steady (-1.2%, averaging 35K players over the last 30 days). At just 9% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 02 - Part launched with a new suite of RICOCHET Anti.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: These modes accelerate pacing, increase player counts, or introduce high-stakes competitive rulesets designed to test skill, decision-making, and adaptability. Perks, Killstreaks...</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Call of Duty is holding steady (-1.2%, averaging 35K players over the last 30 days). At just 9% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 02 - Part launched with a new suite of RICOCHET Anti.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 3 of 3 posts this period. Active press coverage from BBC, Game Developer, Wccftech (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: These modes accelerate pacing, increase player counts, or introduce high-stakes competitive rulesets designed to test skill, decision-making, and adaptability. Perks, Killstreaks...</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Call of Duty is holding steady (-0.9%, averaging 35K players over the last 30 days). At just 9% of all-time peak — well below historical levels. Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 02 - Part launched with a new suite of RICOCHET Anti. Community is actively engaged in gameplay discussion and strategy — 3 of 3 posts this period. Active press coverage from GamesIndustry.biz, Game Developer, Engadget (5 articles from gaming press in the past week). Looking ahead: These modes accelerate pacing, increase player counts, or introduce high-stakes competitive rulesets designed to test skill, decision-making, and adaptability.Perks, Killstreaks...</div>
       </div>
       <div class="card-body-2col">
@@ -1256,14 +1449,29 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFB1M3VSOXpjTDV2ZmZqeEF3bmtYMlR6ZUNLR0VNS1VDV3BzbnlkZWFDYW9zRXZ4aGlnbElqUkhiRXpnb3B1SjZXeUpNRWZYcV9mV21zVTM5dGVidw?oc=5" target="_blank" class="item-link">Call of Duty Black Ops 7 ad banned for trivialising sexual violence - BBC</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxPYlYteXJyS1lzMlo4b09CeHJjYlJxcnJlb1NjNkVEVlZmRWVKTnczNFFFZmx6bEFEMWIxWjZvNHFiLVlxemdHOUlHSXBiQWY5eDd1UmhuSGVsN1R3anRRQmdpY2xnLTRCTWJ0RWhvRVRGSjczSHhKTG5KQWg0ZTFSdE14VUtFaURIWmt2Z0VEMzdaLWFrN1VMZE1mUWp5YmVjU0lfMVZvRzBPQ0I2NGtv?oc=5" target="_blank" class="item-link">Call of Duty ad banned in the UK for trivializing sexual violence - Game De</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxPZTNYUTlfU1lTMmlNZ09xSDl1cUM0UUVZT094YkViVkNtdk1ha3NuS2Q3QktSeWU2cENxVEFLYXItRElNSlpCNmkyeWtHR0NWbEhWNVJzUmVnY3FZU3hTMG5mcXNUVjBjb1pwSXQwVmhtb2tuM21fdU1WUmltYk9Da1BNckFCcEMzd3FYNXFqOTFFT2RQcmtYWnhtYjdwSXF4TmQxbnFUT0hxNjVFSXhaZ09RbV85Q05JVnU4NGRod1DSAcYBQVVfeXFMUHlidVYxVTFnXzNEQXFndFV0eTJ5ZWdaUHJYeDZwRDJiNjNidk5tMXdHRk1VaC1xMzV5RXh6SkFzLVZvWUFFV0xFT0Z1LVppTjlnSkY2S1lsRUxtaDBOZk5uSkdkUzVCUVRDa2JucmNkMXZVNkh3Mm5XNGpmTnZBbnZacW1PR0xZOTVBWVdMbm1WUWZ3eG94SkhBV3dyVHlJOENRdUFUOXlmQzRPdG1ReW9TNTkycWtzSXpqbWUtemFRZ283b1Rn?oc=5" target="_blank" class="item-link">“Irresponsible and Offensive” Call of Duty: Black Ops 7 Ad Banned in UK for</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxPQmlJUTVRcmRQWHBHdXVZVG84YjcxQUdnMG90T3lfenNraHVkMEhFT2J0VjViN1VwcXNjaUVwcGdqVnN5enV6SGtWcjlkUHZNSWNTQ2lFczhDUUFwNnYzWVYzeWl3TE1MenFXemg0NUFvbVFJZTZTVVBtZlhZdF9NNldkUHNZSXA5VVlLWGM3dGhQVmZtZ3Fn?oc=5" target="_blank" class="item-link">Call of Duty: Warzone Mobile servers to shut down in April 2026 - GamesIndu</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 17</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFB1M3VSOXpjTDV2ZmZqeEF3bmtYMlR6ZUNLR0VNS1VDV3BzbnlkZWFDYW9zRXZ4aGlnbElqUkhiRXpnb3B1SjZXeUpNRWZYcV9mV21zVTM5dGVidw?oc=5" target="_blank" class="item-link">Call of Duty Black Ops 7 ad banned for trivialising sexual violence - BBC</a> <span class="source-tag" style="color:#f87171;background:#5f1e1e">BBC</span></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxPYlYteXJyS1lzMlo4b09CeHJjYlJxcnJlb1NjNkVEVlZmRWVKTnczNFFFZmx6bEFEMWIxWjZvNHFiLVlxemdHOUlHSXBiQWY5eDd1UmhuSGVsN1R3anRRQmdpY2xnLTRCTWJ0RWhvRVRGSjczSHhKTG5KQWg0ZTFSdE14VUtFaURIWmt2Z0VEMzdaLWFrN1VMZE1mUWp5YmVjU0lfMVZvRzBPQ0I2NGtv?oc=5" target="_blank" class="item-link">Call of Duty ad banned in the UK for trivializing sexual violence - Game De</a> <span class="source-tag" style="color:#f87171;background:#5f1e1e">Game Developer</span></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxPZTNYUTlfU1lTMmlNZ09xSDl1cUM0UUVZT094YkViVkNtdk1ha3NuS2Q3QktSeWU2cENxVEFLYXItRElNSlpCNmkyeWtHR0NWbEhWNVJzUmVnY3FZU3hTMG5mcXNUVjBjb1pwSXQwVmhtb2tuM21fdU1WUmltYk9Da1BNckFCcEMzd3FYNXFqOTFFT2RQcmtYWnhtYjdwSXF4TmQxbnFUT0hxNjVFSXhaZ09RbV85Q05JVnU4NGRod1DSAcYBQVVfeXFMUHlidVYxVTFnXzNEQXFndFV0eTJ5ZWdaUHJYeDZwRDJiNjNidk5tMXdHRk1VaC1xMzV5RXh6SkFzLVZvWUFFV0xFT0Z1LVppTjlnSkY2S1lsRUxtaDBOZk5uSkdkUzVCUVRDa2JucmNkMXZVNkh3Mm5XNGpmTnZBbnZacW1PR0xZOTVBWVdMbm1WUWZ3eG94SkhBV3dyVHlJOENRdUFUOXlmQzRPdG1ReW9TNTkycWtzSXpqbWUtemFRZ283b1Rn?oc=5" target="_blank" class="item-link">“Irresponsible and Offensive” Call of Duty: Black Ops 7 Ad Banned in UK for</a> <span class="source-tag" style="color:#f87171;background:#5f1e1e">Wccftech</span></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxPQmlJUTVRcmRQWHBHdXVZVG84YjcxQUdnMG90T3lfenNraHVkMEhFT2J0VjViN1VwcXNjaUVwcGdqVnN5enV6SGtWcjlkUHZNSWNTQ2lFczhDUUFwNnYzWVYzeWl3TE1MenFXemg0NUFvbVFJZTZTVVBtZlhZdF9NNldkUHNZSXA5VVlLWGM3dGhQVmZtZ3Fn?oc=5" target="_blank" class="item-link">Call of Duty: Warzone Mobile servers to shut down in April 2026 - GamesIndu</a> <span class="source-tag" style="color:#f87171;background:#5f1e1e">GamesIndustry.biz</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/CallOfDuty</span> — 3 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1r415hm/who_remembers_the_emblem_creator_from_cod_black/" target="_blank" class="item-link">Who remembers the emblem creator from [COD]: Black Ops 2?</a> (8,002 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/loading-_-__-</span> (1,333 pts): I remember seeing four things. Nazi propaganda, cannabis related imagery, slurs, and nudity.</li>
+<li class="comment"><span class="comment-author">u/Dbouakhob</span> (608 pts): Without a doubt the most dopest and funniest things that was made on it</li>
+<li class="comment"><span class="comment-author">u/EagleRaptorLeaf</span> (215 pts): I kind of wish they brought it back in the current CODs ngl</li>
+</ul></li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1r415hm/who_remembers_the_emblem_creator_from_cod_black/" target="_blank" class="item-link">Who remembers the emblem creator from [COD]: Black Ops 2?</a> (8,007 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1qt8cnb/cod_do_you_agree_with_this_take/" target="_blank" class="item-link">[COD] Do you agree with this take?</a> (7,927 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Arena">
@@ -1293,7 +1501,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> The Finals is holding steady (+0.9%, averaging 12K players over the last 30 days). At just 7% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Dev activity: 10+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (4 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: If you’ve been keeping an eye on the World Tour Screen, you know that Super Cashball Weekend is coming in 9.8, so locate your cleats and get ready to go for the goal, along with...</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> The Finals is holding steady (+0.9%, averaging 12K players over the last 30 days). At just 7% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Dev activity: 10+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Limited community activity — one substantive post about game updates and announcements. Active press coverage from PCGamesN, GamesRadar+, GamingTrend (4 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: If you’ve been keeping an eye on the World Tour Screen, you know that Super Cashball Weekend is coming in 9.8, so locate your cleats and get ready to go for the goal, along with...</div>
         <div class="prev-takeaway"><strong>Previous:</strong> The Finals is holding steady (+1.1%, averaging 12K players over the last 30 days). At just 6% of all-time peak — well below historical levels. Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Dev activity: 10+ bug fixes deployed. Limited community activity — one substantive post about game updates and announcements. Active press coverage from PCGamesN, GamesRadar+, GAMINGbible (5 articles from gaming press in the past week). Looking ahead: If you’ve been keeping an eye on the World Tour Screen, you know that Super Cashball Weekend is coming in 9.8, so locate your cleats and get ready to go for the goal, along with...</div>
       </div>
       <div class="card-body-2col">
@@ -1311,14 +1519,24 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE1aMFdGRWg3TjBvWUJpanRwb2tMWFdZWGRZQ1VXN3pTMTJYVGIzRVctWE1ibmhzRE5oZnJQWHd0NEFtSTFLWUhqcDY2VDFGSlA0d1F5M29UcWE3bjdKaVBPakczWGJvbzk4U2d2S1dIVUFQeXl0NHZOaE1wcE5mU0E?oc=5" target="_blank" class="item-link">As cheats improve, Arc Raiders dev Embark is fighting back in its squad FPS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 15</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi5gJBVV95cUxOclZEOGliV1l1cl9sX1AwUG45SXQtWWxzbk15Q1pCY0hJRnoxRVVMSDhnaFZIT0JyU2ZOa0dqdnZkdkZXYm90S0pKbDctbzZHbTBPdk5TSU1iWTRrRmFOQ3U2UmRLRWNmdFp4VjNzaVZEU21wTzVZbGxZNEJVTDZOYWFhanpkWFZmV3pqZDVtRkVRTEhsOHBWQjdhYUx6d1JPc3NvYTZPa2kzdzRrSGJMdHMxc1FaeWd1alhsckl5enNMaTBDSUhTSk9QYVUtZDluSFQyeUhmeXJrb2dZTUtscXJSMVZzMksxOE92dm1XRVgtRW9kUThNLW5uMVFhSFlqeWRhTEFYa0dHR0tmTVc4QlJyZTB3VGpPRVlReGZLaXR4S0sza2QzQURoaWw1NGJseGlfTndWdktFNHFRNzVsaTVYT0lKN1dnemRONTBkYk54WGNJMGhnc1E3a19DTUJiZVpJRnRB?oc=5" target="_blank" class="item-link">The Finals is still going strong and Arc Raiders is about to release, but E</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 29</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE9QXy1JMTRDTzR6UzdSTGFLQnFtNzU0Y2lqQmwwT2p6WGFXV1dPUmdzWWRoeEFfbDZVeHdnZndMajF4TU11MkVoWmgwWVZLcVNoZ2s3TGxFeDBwNlhSR0lLWkx0T21uVFJSWTBtRmJPaW40ZWdw?oc=5" target="_blank" class="item-link">Embark unleashes The Finals Season 8 - GamingTrend</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 11</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxPV3dGV3NqbTZjbjdFRGFobXltTlJrWmdaYzlqUnVyTVF3R0VCSEkxSTNMZ25rTGwzZWNQaFlNQlBpVTJKSWhKbG90eXgyb2lIWUVaYi15VFFHckljdjZoeGsxc2EzNm81OEo4OWdXRWFHY2RRVVBrM3BvdXU5aG5BQzlnWGM2aVRQZHNB?oc=5" target="_blank" class="item-link">Arc Raiders and The Finals Are Connected, Players Finally Have Proof - GAMI</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 28</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE1aMFdGRWg3TjBvWUJpanRwb2tMWFdZWGRZQ1VXN3pTMTJYVGIzRVctWE1ibmhzRE5oZnJQWHd0NEFtSTFLWUhqcDY2VDFGSlA0d1F5M29UcWE3bjdKaVBPakczWGJvbzk4U2d2S1dIVUFQeXl0NHZOaE1wcE5mU0E?oc=5" target="_blank" class="item-link">As cheats improve, Arc Raiders dev Embark is fighting back in its squad FPS</a> <span class="source-tag" style="color:#4ade80;background:#1e5f2e">PCGamesN</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi5gJBVV95cUxOclZEOGliV1l1cl9sX1AwUG45SXQtWWxzbk15Q1pCY0hJRnoxRVVMSDhnaFZIT0JyU2ZOa0dqdnZkdkZXYm90S0pKbDctbzZHbTBPdk5TSU1iWTRrRmFOQ3U2UmRLRWNmdFp4VjNzaVZEU21wTzVZbGxZNEJVTDZOYWFhanpkWFZmV3pqZDVtRkVRTEhsOHBWQjdhYUx6d1JPc3NvYTZPa2kzdzRrSGJMdHMxc1FaeWd1alhsckl5enNMaTBDSUhTSk9QYVUtZDluSFQyeUhmeXJrb2dZTUtscXJSMVZzMksxOE92dm1XRVgtRW9kUThNLW5uMVFhSFlqeWRhTEFYa0dHR0tmTVc4QlJyZTB3VGpPRVlReGZLaXR4S0sza2QzQURoaWw1NGJseGlfTndWdktFNHFRNzVsaTVYT0lKN1dnemRONTBkYk54WGNJMGhnc1E3a19DTUJiZVpJRnRB?oc=5" target="_blank" class="item-link">The Finals is still going strong and Arc Raiders is about to release, but E</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamesRadar+</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE9QXy1JMTRDTzR6UzdSTGFLQnFtNzU0Y2lqQmwwT2p6WGFXV1dPUmdzWWRoeEFfbDZVeHdnZndMajF4TU11MkVoWmgwWVZLcVNoZ2s3TGxFeDBwNlhSR0lLWkx0T21uVFJSWTBtRmJPaW40ZWdw?oc=5" target="_blank" class="item-link">Embark unleashes The Finals Season 8 - GamingTrend</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamingTrend</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxPV3dGV3NqbTZjbjdFRGFobXltTlJrWmdaYzlqUnVyTVF3R0VCSEkxSTNMZ25rTGwzZWNQaFlNQlBpVTJKSWhKbG90eXgyb2lIWUVaYi15VFFHckljdjZoeGsxc2EzNm81OEo4OWdXRWFHY2RRVVBrM3BvdXU5aG5BQzlnWGM2aVRQZHNB?oc=5" target="_blank" class="item-link">Arc Raiders and The Finals Are Connected, Players Finally Have Proof - GAMI</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GAMINGbible</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/thefinals</span> — 1 substantive posts</summary>
+          <div class="community-inner">
+            
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/thefinals/comments/1qlv5gp/posted_by_the_official_finals_tiktok_no_way_were/" target="_blank" class="item-link">Posted by the official finals TikTok, no way we’re finally getting it???</a> (2,629 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Looter Shooter">
@@ -1348,7 +1566,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Destiny 2 is dropping sharply (-23.3% MoM, averaging 12K players over the last 30 days). At just 4% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: This week in Destiny, we’ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlord&#x27;s Ruin. | This Week in Destiny, we are getting ready for Arms Week and a very special Game2Give livestream. Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Destiny 2 is dropping sharply (-23.3% MoM, averaging 12K players over the last 30 days). At just 4% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (5 posts) and game updates and announcements (2 posts). Active press coverage from Forbes, Game Informer, PC Gamer (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: This week in Destiny, we’ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlord&#x27;s Ruin. | This Week in Destiny, we are getting ready for Arms Week and a very special Game2Give livestream. Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Destiny 2 is dropping sharply (-22.8% MoM, averaging 12K players over the last 30 days). At just 4% of all-time peak — well below historical levels. Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle. Mixed community sentiment — discussion split between gameplay discussion and strategy (5 posts) and game updates and announcements (2 posts). Active press coverage from Game Informer, Forbes, PC Gamer (5 articles from gaming press in the past week). Looking ahead: This week in Destiny, we’ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlord&#x27;s Ruin. | This Week in Destiny, we are getting ready for Arms Week and a very special Game2Give livestream. Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -1366,14 +1584,45 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxPcHF4MFMweUtMRVl2Q3VtNm1DS20yRzNWa2ltMzYyanJEMHlINUpUcndDakN1ZXVibHd4al9UM21QUVVUVTZhNERSY2tEX1RFTm5wN1EtWnFWTlBmUWFzMl9LWnNFYU1FZ3JMTTV5X3ZzSmVySTJuR0JZdE5wVUJvWGdFc0h1R0ZBb19yd1ZrWWtseklYTFc2WkxfVlpsUjRmd0pVeW1wOHdjZw?oc=5" target="_blank" class="item-link">Destiny 2’s Missing Roadmap Says Something Big Is Coming - Forbes</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxNbDc2WGxpUG1lVDBLY0RpSHlZTTR1MTFfLVlNaUlwQTl5bXN0QUVGN0ktOFl6SFZGMnRvNXkxOXNITUs0dGdYSU1JRXFtOE16WUxrNHl6dEgzVjczSXlLaFdIbFplLURhMmI5RWx0S1FYaUdfN2Z4VG1IRnVNTVlISWxn?oc=5" target="_blank" class="item-link">Destiny 2: Renegades Review - More Than An Inspiration - Game Informer</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 16</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi7wFBVV95cUxNTS1vYUNXX2ZPdGNJckxFR3U3ZmczMnNNYWQ1aDdYS3dQYjhrQzU3ZUs2SG8wbVNnSkJxQ3hnVHIyNlZkcmpnckIwY0ExYno5UEEtSi13elEyeGJ4amRpMVUzb1J0S3lTdW1MSVBXXzl2VE05X3k4c1MwYlVOOVFNNnlabW5ZRHhEUlJ0WklTLVRUWUZmTzhvak1tZ2YzRUpNNUUybnJCeV9WY1JXR3ZKcjg3cTg5MUFuSDQ4b3VnYjVkS2NhbXBsU0Z5Wk5CU1NTV1I3MjAwOGU3eTZvMFh2dzVrb1hYTWVocVZFS19hMA?oc=5" target="_blank" class="item-link">I have never known a Destiny 2 expansion with as many problems as Edge of F</a> <span style="color:#8f98a0;font-size:0.7rem">Jul 31</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxQMVRCUEZkWXdCR0VWeW9DaTRjR2lwalJmdTdmcGZSZVJQeFpHSXl3WHZVb2JjZldRTUN0c1BvNGl2aEk1ajMtNDBxMzlaZWFLUGc3N1ZvUnRIRlZhc3ZuVXdzUkhTZjlLSVFnZXlEOVNRTF80elpOdzdYZW5FNzdkd0JGa1BQQ0JQWW1RTEVtSE8?oc=5" target="_blank" class="item-link">Destiny 2: Renegades - Review - IGN Southeast Asia</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 16</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxPcHF4MFMweUtMRVl2Q3VtNm1DS20yRzNWa2ltMzYyanJEMHlINUpUcndDakN1ZXVibHd4al9UM21QUVVUVTZhNERSY2tEX1RFTm5wN1EtWnFWTlBmUWFzMl9LWnNFYU1FZ3JMTTV5X3ZzSmVySTJuR0JZdE5wVUJvWGdFc0h1R0ZBb19yd1ZrWWtseklYTFc2WkxfVlpsUjRmd0pVeW1wOHdjZw?oc=5" target="_blank" class="item-link">Destiny 2’s Missing Roadmap Says Something Big Is Coming - Forbes</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Forbes</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxNbDc2WGxpUG1lVDBLY0RpSHlZTTR1MTFfLVlNaUlwQTl5bXN0QUVGN0ktOFl6SFZGMnRvNXkxOXNITUs0dGdYSU1JRXFtOE16WUxrNHl6dEgzVjczSXlLaFdIbFplLURhMmI5RWx0S1FYaUdfN2Z4VG1IRnVNTVlISWxn?oc=5" target="_blank" class="item-link">Destiny 2: Renegades Review - More Than An Inspiration - Game Informer</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Game Informer</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi7wFBVV95cUxNTS1vYUNXX2ZPdGNJckxFR3U3ZmczMnNNYWQ1aDdYS3dQYjhrQzU3ZUs2SG8wbVNnSkJxQ3hnVHIyNlZkcmpnckIwY0ExYno5UEEtSi13elEyeGJ4amRpMVUzb1J0S3lTdW1MSVBXXzl2VE05X3k4c1MwYlVOOVFNNnlabW5ZRHhEUlJ0WklTLVRUWUZmTzhvak1tZ2YzRUpNNUUybnJCeV9WY1JXR3ZKcjg3cTg5MUFuSDQ4b3VnYjVkS2NhbXBsU0Z5Wk5CU1NTV1I3MjAwOGU3eTZvMFh2dzVrb1hYTWVocVZFS19hMA?oc=5" target="_blank" class="item-link">I have never known a Destiny 2 expansion with as many problems as Edge of F</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">PC Gamer</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxQMVRCUEZkWXdCR0VWeW9DaTRjR2lwalJmdTdmcGZSZVJQeFpHSXl3WHZVb2JjZldRTUN0c1BvNGl2aEk1ajMtNDBxMzlaZWFLUGc3N1ZvUnRIRlZhc3ZuVXdzUkhTZjlLSVFnZXlEOVNRTF80elpOdzdYZW5FNzdkd0JGa1BQQ0JQWW1RTEVtSE8?oc=5" target="_blank" class="item-link">Destiny 2: Renegades - Review - IGN Southeast Asia</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">IGN Southeast Asia</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/DestinyTheGame</span> — 9 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r4hzme/they_have_no_roadmap_because_they_dont_know_what/" target="_blank" class="item-link">They have no roadmap because they don’t know what to do</a> (2,451 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/OhLookItsJake</span> (1,528 pts): I think they are genuinely waiting on financial projections for Marathon so Sony can decide how to allocate resources going forward as a two game stud</li>
+<li class="comment"><span class="comment-author">u/BusFriendly995</span> (661 pts): For veterans, the game went from being a source of entertainment to becoming hours and hours of grinding.
+
+For new players, the plot makes no sense. I</li>
+<li class="comment"><span class="comment-author">u/Bloody_Sunday</span> (121 pts): My own belief is that they already have a roadmap in place (a conservative one as they need to show it&#x27;s still profitable and not semi-rotting as it i</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7j6gu/time_off_has_been_granted_shadow_and_order_here/" target="_blank" class="item-link">Time off has been granted, Shadow and Order here we come!!</a> (2,310 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/sjb81</span> (991 pts): &gt;“I’m afraid I’ve got some bad news”
+
+- Bad News Barrett</li>
+<li class="comment"><span class="comment-author">u/Furiosa27</span> (629 pts): Hey it’s your wife’s boyfriend here, you need to move on and I really would appreciate it if you’d move that funko pop collection out of the living ro</li>
+<li class="comment"><span class="comment-author">u/AbsurdBee</span> (346 pts): Outjerked in the main sub?? Man this one hurts.</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7er6h/we_are_two_weeks_away_from_shadow_and_order_and/" target="_blank" class="item-link">We are two weeks away from Shadow and Order, and Bungie remains silent to deafen</a> (958 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/ChaseObserves</span> (569 pts): The most frustrating part of this is that I’ve been playing Destiny long enough to remember when they first announced that they were starting to explo</li>
+<li class="comment"><span class="comment-author">u/basura1979</span> (260 pts): If you think its coming in two weeks, i got some bad news cousin</li>
+<li class="comment"><span class="comment-author">u/NightmareCV</span> (162 pts): I just want a reason to care...</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r3s845/bungie_just_confirm_if_theres_a_delay_of_not/" target="_blank" class="item-link">Bungie, just confirm if there&#x27;s a delay of not</a> (835 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r2bfjo/pale_heart_again/" target="_blank" class="item-link">Pale Heart Again</a> (723 upvotes)</li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r4hzme/they_have_no_roadmap_because_they_dont_know_what/" target="_blank" class="item-link">They have no roadmap because they don’t know what to do</a> (2,448 upvotes)</li>
+<li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7j6gu/time_off_has_been_granted_shadow_and_order_here/" target="_blank" class="item-link">Time off has been granted, Shadow and Order here we come!!</a> (2,316 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1qvghfp/theres_not_enough_players_for_lfg_anymore/" target="_blank" class="item-link">There’s Not Enough Players for LFG Anymore</a> (1,383 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1qwpq3c/the_silence_immediately_following_the_shadow_and/" target="_blank" class="item-link">The silence immediately following the &quot;Shadow and Order&quot; delay rumors is doing m</a> (1,133 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Arena">
@@ -1403,7 +1652,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Halo: MCC is dropping sharply (-20.8% MoM, averaging 4K players over the last 30 days). At just 6% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Halo: MCC is dropping sharply (-20.8% MoM, averaging 4K players over the last 30 days). At just 6% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts) and positive reception and appreciation (1 posts). Active press coverage from Pure Xbox, GamesRadar+, Halo Waypoint (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Halo: MCC is dropping sharply (-20.2% MoM, averaging 4K players over the last 30 days). At just 6% of all-time peak — well below historical levels. Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts) and positive reception and appreciation (1 posts). Active press coverage from GamesRadar+, Halo Waypoint, Pure Xbox (5 articles from gaming press in the past week). Looking ahead: In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -1423,14 +1672,33 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQQzZxa1owTFl6YV96OVVvUGh3ZVJ1MlBVVzdoeGp6VmFicFV2SXBNNE5wVkVQaXJEN3lFZVlwMnc2Sk1sLXE5REJjMU5aN2w4ZnRCc2ZTSHdFSHdsNElObnZiZnVITkpOTUJlQ0dsVU9GZXdkd3dzRk9YbjZrRE51aE91MW5aZlh3ek1WQ0pzd3NhWmlIZHN6a2JUSl9DZFJ6N3BtWnljNXY4c1l2Z3c?oc=5" target="_blank" class="item-link">Halo: MCC Hit Its Highest Steam Player Count Since 2021 Over The Weekend -</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 01</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiigJBVV95cUxOcVJ6ZzNGbEZhOUFYTV9kamxZN3hvUUdEelBkNUZsQWJma1RJNWtRUG9FcFVCZDBZX3pTUHM3Vko1dzlfYWR3VktlYWk0ekVtVzFHX0lmUnBITHJVOVZTQXFadm1wMVpxTWJLNG5IWHdfeEdKdENpbUtRN0M5aWl0VzdaOTZpam5TV0ZtSGRfUFhRN2FSTVVrLVFWaFd3Qkk4Yzc1T0FPZ2ZLSFhieHFraDdVS3NvQmZHZXNLdThEVmdCV1VGUUVrQUZ3eGl0ZlBWRFA3TjRwM2pfWUljUWFKZFNJYlpSRzZ5eVRRM3UtZ0pQYzU1VWItYkl2aENPc2QtNUZBT1dnX2stUQ?oc=5" target="_blank" class="item-link">Replaying Halo: The Master Chief Collection has become my annual tradition,</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 13</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE1YeWlyOS0zdjBDbTFmRGdwTVB2cm83NFZJSnhDWDliU180VGRFWW1FSGhicnRvYWJFbmMwc2p2TkNVWVYxQk5YbFFwRllDR1VoazNFSDQ0MngxX1FTcnhIdUZjazlfT29FalY1Wm94UHdQLW1kU0E?oc=5" target="_blank" class="item-link">Introducing Halo: Campaign Evolved | Halo - Official Site (en) - Halo Waypo</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 24</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMif0FVX3lxTFBoYS1DN2RXM0twWkRVdHRiRTJucTR5WmFta2ZtTGhtMVBfVDhKUjEtcEdQWHNyaUhsODhYVU1ic3VjUkM1bTdYcUNKQkFEcnYzcFd4RHZJSU5tc0dzQlhTblJLZmd5Y0JPcFZIamR6LXRTWkJzQUtnY3dVX3NkMGM?oc=5" target="_blank" class="item-link">Every Halo Game, Ranked From Worst To Best - Page 12 of 12 - Kotaku</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 04</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQQzZxa1owTFl6YV96OVVvUGh3ZVJ1MlBVVzdoeGp6VmFicFV2SXBNNE5wVkVQaXJEN3lFZVlwMnc2Sk1sLXE5REJjMU5aN2w4ZnRCc2ZTSHdFSHdsNElObnZiZnVITkpOTUJlQ0dsVU9GZXdkd3dzRk9YbjZrRE51aE91MW5aZlh3ek1WQ0pzd3NhWmlIZHN6a2JUSl9DZFJ6N3BtWnljNXY4c1l2Z3c?oc=5" target="_blank" class="item-link">Halo: MCC Hit Its Highest Steam Player Count Since 2021 Over The Weekend -</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Pure Xbox</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiigJBVV95cUxOcVJ6ZzNGbEZhOUFYTV9kamxZN3hvUUdEelBkNUZsQWJma1RJNWtRUG9FcFVCZDBZX3pTUHM3Vko1dzlfYWR3VktlYWk0ekVtVzFHX0lmUnBITHJVOVZTQXFadm1wMVpxTWJLNG5IWHdfeEdKdENpbUtRN0M5aWl0VzdaOTZpam5TV0ZtSGRfUFhRN2FSTVVrLVFWaFd3Qkk4Yzc1T0FPZ2ZLSFhieHFraDdVS3NvQmZHZXNLdThEVmdCV1VGUUVrQUZ3eGl0ZlBWRFA3TjRwM2pfWUljUWFKZFNJYlpSRzZ5eVRRM3UtZ0pQYzU1VWItYkl2aENPc2QtNUZBT1dnX2stUQ?oc=5" target="_blank" class="item-link">Replaying Halo: The Master Chief Collection has become my annual tradition,</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamesRadar+</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE1YeWlyOS0zdjBDbTFmRGdwTVB2cm83NFZJSnhDWDliU180VGRFWW1FSGhicnRvYWJFbmMwc2p2TkNVWVYxQk5YbFFwRllDR1VoazNFSDQ0MngxX1FTcnhIdUZjazlfT29FalY1Wm94UHdQLW1kU0E?oc=5" target="_blank" class="item-link">Introducing Halo: Campaign Evolved | Halo - Official Site (en) - Halo Waypo</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Halo Waypoint</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMifkFVX3lxTE5fYk9TdGZtT05PcnRCQWRyZVY3SmJUZzlNREFpYUN4TEdRcHRNbG1CZ1BicnljWE9XMGJHMjZiajRBVWRVVUozbGgwMmtsVlNVWGh2Q0I1WnRCQWV5WWx6cjNsSVZOV0t0d2hmbFZId2lMZVlzYW53cEI0RHA0dw?oc=5" target="_blank" class="item-link">[SOLVED] Halo 4 UE4 Fatal Error Crash - Driver Easy</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Driver Easy</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/halo</span> — 4 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2hr8y/4_years_of_constant_resentment_for_no/" target="_blank" class="item-link">4+ Years Of Constant Resentment For No Assassinations In Infinite :(</a> (5,327 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/geckoecho93</span> (1,471 pts): It&#x27;s just absurd how something that cool like that or dual wielding gets thrown out.</li>
+<li class="comment"><span class="comment-author">u/RonnocKcaj</span> (367 pts): god halo 5&#x27;s assassins were so fucking cool, I loved using the sticky grenade one</li>
+<li class="comment"><span class="comment-author">u/OmeletteDuFromage95</span> (209 pts): I hate the dumb excuse they gave about how a couple of pro league guys thought it put them in too vulnerable of a position... A move you have to INTEN</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#4ade80;background:#1e5f2e">PRAISE</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/halo/comments/1r4q5ds/halo_music_plays_at_the_perfect_time_i_get_jumped/" target="_blank" class="item-link">halo music plays at the perfect time I get jumped by the covenant</a> (2,377 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/DaPandaMan117</span> (425 pts): How did you get that?</li>
+<li class="comment"><span class="comment-author">u/Raging_Rigatoni</span> (369 pts): We got Halo in Minecraft before GTA 6</li>
+<li class="comment"><span class="comment-author">u/abfgern_</span> (170 pts): &quot;It&#x27;s got sprint, literally unplayable!!!&quot; - people who played Halo3 when they were 10 and think removing sprint will make them 10 again</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2wvbi/halo_2_pc_is_unplayable_due_to_extreme_lag/" target="_blank" class="item-link">Halo 2 PC is unplayable due to extreme lag</a> (1,710 upvotes)</li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2hr8y/4_years_of_constant_resentment_for_no/" target="_blank" class="item-link">4+ Years Of Constant Resentment For No Assassinations In Infinite :(</a> (5,321 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card" data-genre="Arena">
@@ -1460,7 +1728,7 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Halo Infinite is declining (-9.1% MoM, averaging 2K players over the last 30 days). At just 1% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: The future is Infinite. OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we’d like to thank our community for your steadfast support. Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Halo Infinite is declining (-9.1% MoM, averaging 2K players over the last 30 days). At just 1% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts) and positive reception and appreciation (1 posts). Active press coverage from Halo Waypoint, Forbes, Xbox Era (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: The future is Infinite. OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we’d like to thank our community for your steadfast support. Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Halo Infinite is declining (-8.7% MoM, averaging 2K players over the last 30 days). At just 1% of all-time peak — well below historical levels. Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts) and positive reception and appreciation (1 posts). Active press coverage from Halo Waypoint, Forbes, Xbox Era (5 articles from gaming press in the past week). Looking ahead: The future is Infinite.OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we’d like to thank our community for your steadfast support. Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -1478,14 +1746,33 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
             <span><span style="color:#f87171">●</span> Negative</span>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE42SGhnUjFmMk1sa0VvRERoQnp6Q1lCZnFBMkFzT3VtelBwTzlmWjF6cEtXbmtBX2tibVRCZHJfRjgyeDRKRTFiRGV1aUNiNFl3eTBmYzNlOGxHRkdULUdQWWhqcFktaEt2blFmdA?oc=5" target="_blank" class="item-link">Operation: Infinite Update Preview - Halo Waypoint</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 18</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxOeEVSRkRmTUF2TEJkYzdvWWpmQjA4RjJUdVU2VExlV0xJXzBrTDNTcjJKOS1WQXRPTW1sMzV5eXQ3N0ZSdjZXNHFHTjJZV0Z5OVZvVGVDeEdhREYwdkdRYUQ3d2ZPZXhCenBOY3BmTy1DYVliWFBNclhtRFpsUUNZakFEcVh5RFM0SlFFYTEzM3N1TDIxZ0hhbXJB?oc=5" target="_blank" class="item-link">But Where Is The Next, Actual ‘Halo’ Game, Xbox? - Forbes</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 25</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBFRE1fWGVQZGhlaG9HcWV4SmdpQ196WWdVZWxhQk11VVlWejdULWJLMkE2ZXNuSzB1dkxZeEtKcThPWGdGSWRSRDJFY2lNVzRZaEdXMlRod0gtZDdXMm1QQXdYck1IYlk?oc=5" target="_blank" class="item-link">Halo: Edge of Dawn | Review - Xbox Era</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 23</span></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMiigFBVV95cUxPQWNmZGNjWk95bS03VzRkZ0ZZWlNFUEpTUDlnYlJ2NUJMeGtWRFdZNURWWU5kYzRNeTZFSVhxLUZ2UlRFdmVpZVRCZmRGYzBsczdzSTNUS1lMeG5FVkUzV201S0E3OWhCSktkcFZwYXlFU1BITHV5Vl9RdXQ4a0xEdjQzMTNXU3QxSVE?oc=5" target="_blank" class="item-link">Halo: Campaign Evolved Preview: A Modern Great Journey - GAMINGbible</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 24</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE42SGhnUjFmMk1sa0VvRERoQnp6Q1lCZnFBMkFzT3VtelBwTzlmWjF6cEtXbmtBX2tibVRCZHJfRjgyeDRKRTFiRGV1aUNiNFl3eTBmYzNlOGxHRkdULUdQWWhqcFktaEt2blFmdA?oc=5" target="_blank" class="item-link">Operation: Infinite Update Preview - Halo Waypoint</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Halo Waypoint</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxOeEVSRkRmTUF2TEJkYzdvWWpmQjA4RjJUdVU2VExlV0xJXzBrTDNTcjJKOS1WQXRPTW1sMzV5eXQ3N0ZSdjZXNHFHTjJZV0Z5OVZvVGVDeEdhREYwdkdRYUQ3d2ZPZXhCenBOY3BmTy1DYVliWFBNclhtRFpsUUNZakFEcVh5RFM0SlFFYTEzM3N1TDIxZ0hhbXJB?oc=5" target="_blank" class="item-link">But Where Is The Next, Actual ‘Halo’ Game, Xbox? - Forbes</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Forbes</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBFRE1fWGVQZGhlaG9HcWV4SmdpQ196WWdVZWxhQk11VVlWejdULWJLMkE2ZXNuSzB1dkxZeEtKcThPWGdGSWRSRDJFY2lNVzRZaEdXMlRod0gtZDdXMm1QQXdYck1IYlk?oc=5" target="_blank" class="item-link">Halo: Edge of Dawn | Review - Xbox Era</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Xbox Era</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMiigFBVV95cUxPQWNmZGNjWk95bS03VzRkZ0ZZWlNFUEpTUDlnYlJ2NUJMeGtWRFdZNURWWU5kYzRNeTZFSVhxLUZ2UlRFdmVpZVRCZmRGYzBsczdzSTNUS1lMeG5FVkUzV201S0E3OWhCSktkcFZwYXlFU1BITHV5Vl9RdXQ4a0xEdjQzMTNXU3QxSVE?oc=5" target="_blank" class="item-link">Halo: Campaign Evolved Preview: A Modern Great Journey - GAMINGbible</a> <span class="source-tag" style="color:#4ade80;background:#1e5f2e">GAMINGbible</span></li>
 </ul>
         </div>
       </div>
       
+      <div class="card-community">
+        <details>
+          <summary>Community Pulse <span class="sub">r/halo</span> — 4 substantive posts</summary>
+          <div class="community-inner">
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2hr8y/4_years_of_constant_resentment_for_no/" target="_blank" class="item-link">4+ Years Of Constant Resentment For No Assassinations In Infinite :(</a> (5,324 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/geckoecho93</span> (1,473 pts): It&#x27;s just absurd how something that cool like that or dual wielding gets thrown out.</li>
+<li class="comment"><span class="comment-author">u/RonnocKcaj</span> (367 pts): god halo 5&#x27;s assassins were so fucking cool, I loved using the sticky grenade one</li>
+<li class="comment"><span class="comment-author">u/OmeletteDuFromage95</span> (206 pts): I hate the dumb excuse they gave about how a couple of pro league guys thought it put them in too vulnerable of a position... A move you have to INTEN</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#4ade80;background:#1e5f2e">PRAISE</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/halo/comments/1r4q5ds/halo_music_plays_at_the_perfect_time_i_get_jumped/" target="_blank" class="item-link">halo music plays at the perfect time I get jumped by the covenant</a> (2,377 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/DaPandaMan117</span> (423 pts): How did you get that?</li>
+<li class="comment"><span class="comment-author">u/Raging_Rigatoni</span> (362 pts): We got Halo in Minecraft before GTA 6</li>
+<li class="comment"><span class="comment-author">u/abfgern_</span> (165 pts): &quot;It&#x27;s got sprint, literally unplayable!!!&quot; - people who played Halo3 when they were 10 and think removing sprint will make them 10 again</li>
+</ul></li>
+<li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2wvbi/halo_2_pc_is_unplayable_due_to_extreme_lag/" target="_blank" class="item-link">Halo 2 PC is unplayable due to extreme lag</a> (1,715 upvotes)</li>
+</ul>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2hr8y/4_years_of_constant_resentment_for_no/" target="_blank" class="item-link">4+ Years Of Constant Resentment For No Assassinations In Infinite :(</a> (5,326 upvotes)</li>
+</ul>
+          </div>
+        </details>
+      </div>
     </div>
 
 
@@ -1794,7 +2081,7 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
   </div>
 
   <div class="footer">
-    Generated: 2026-02-18 22:04:18<br>
+    Generated: 2026-02-18 17:01:30<br>
     Data: SteamCharts, Steam News API, Reddit, Google News<br>
     <small>
       <strong>Color key:</strong>
@@ -1825,6 +2112,42 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
       document.querySelectorAll('.card[data-genre]').forEach(card => {
         card.style.display = (genre === 'All' || card.dataset.genre === genre) ? '' : 'none';
       });
+    });
+  });
+
+  // Sortable table columns
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const table = th.closest('table');
+      const tbody = table.querySelector('tbody');
+      const col = parseInt(th.dataset.col);
+      const type = th.dataset.sort;
+      const isAsc = th.classList.contains('asc');
+      const dir = isAsc ? -1 : 1;
+
+      // Update header classes
+      table.querySelectorAll('th[data-sort]').forEach(h => h.classList.remove('asc', 'desc'));
+      th.classList.add(isAsc ? 'desc' : 'asc');
+
+      // Get sortable rows (skip failed rows)
+      const rows = Array.from(tbody.querySelectorAll('tr[data-genre]'));
+
+      rows.sort((a, b) => {
+        const cellA = a.children[col];
+        const cellB = b.children[col];
+
+        if (type === 'num') {
+          const vA = parseFloat(cellA.dataset.value || '0');
+          const vB = parseFloat(cellB.dataset.value || '0');
+          return (vA - vB) * dir;
+        } else {
+          const vA = cellA.textContent.trim().toLowerCase();
+          const vB = cellB.textContent.trim().toLowerCase();
+          return vA.localeCompare(vB) * dir;
+        }
+      });
+
+      rows.forEach(row => tbody.appendChild(row));
     });
   });
   </script>

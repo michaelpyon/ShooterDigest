@@ -2453,9 +2453,27 @@ def generate_html(results: list[dict], failed_names: list[str],
       .subtitle {{ font-size: 0.82rem; margin-bottom: 1rem; }}
 
       /* Executive Summary */
-      .exec-summary {{ padding: 0.8rem; }}
-      .exec-summary li {{ font-size: 0.82rem; }}
-      .wnl-table {{ grid-template-columns: 1fr; gap: 0.5rem; }}
+      .exec-summary {{ padding: 0.7rem 0.8rem; margin-bottom: 1.2rem; }}
+      .exec-summary h2 {{ font-size: 0.9rem; margin-bottom: 0.4rem; }}
+      .exec-summary li {{ font-size: 0.8rem; line-height: 1.5; margin-bottom: 0.25rem; }}
+
+      /* WNL — compact stacked columns */
+      .wnl-table {{ grid-template-columns: 1fr; gap: 0.3rem; margin-top: 0.6rem; padding-top: 0.6rem; }}
+      .wnl-header {{ font-size: 0.68rem; padding-bottom: 0.2rem; margin-bottom: 0.15rem; }}
+      .wnl-col table {{ margin-bottom: 0; }}
+      .wnl-col table tr {{ display: flex; align-items: baseline; }}
+      .wnl-col table tr:hover {{ background: none; }}
+      .wnl-col table td {{
+        padding: 0.15rem 0.4rem !important; font-size: 0.78rem !important;
+        border-bottom: none;
+      }}
+      .wnl-col table td:first-child {{ flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+      .wnl-col table td:nth-child(2) {{ flex-shrink: 0; text-align: right; }}
+      .wnl-col table td:nth-child(3) {{ flex-shrink: 0; min-width: 55px; text-align: right; }}
+
+      /* Market chart */
+      .aggregate-chart {{ margin-top: 0.6rem; padding-top: 0.5rem; }}
+      .aggregate-label {{ font-size: 0.68rem; }}
 
       /* Genre filter pills — horizontal scroll */
       .genre-filters {{
@@ -2468,9 +2486,9 @@ def generate_html(results: list[dict], failed_names: list[str],
         flex-shrink: 0; font-size: 0.72rem; padding: 0.3rem 0.6rem;
       }}
 
-      /* Summary table → labeled card layout on mobile */
-      table thead {{ display: none; }}
-      table tbody tr {{
+      /* ── Ranking table → labeled card layout ── */
+      .ranking-table thead {{ display: none; }}
+      .ranking-table tbody tr {{
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0.2rem 0.6rem;
@@ -2480,91 +2498,94 @@ def generate_html(results: list[dict], failed_names: list[str],
         border-radius: 8px;
         background: rgba(27, 40, 56, 0.4);
       }}
-      table tbody tr:hover {{ background: rgba(27, 40, 56, 0.4); }}
-      table tbody td {{
+      .ranking-table tbody tr:hover {{ background: rgba(27, 40, 56, 0.4); }}
+      .ranking-table tbody td {{
         padding: 0; border: none; text-align: left !important;
       }}
-      /* Row 1: Rank + Game — full width */
-      table tbody td.rank {{
+      /* Rank + Genre badge row */
+      .ranking-table tbody td.rank {{
         grid-column: 1 / -1; grid-row: 1;
         font-size: 0.75rem; color: #8f98a0;
         display: flex; align-items: center; gap: 0.4rem;
       }}
-      table tbody td.game {{
+      /* Game name */
+      .ranking-table tbody td.game {{
         grid-column: 1 / -1; grid-row: 2;
         white-space: normal; font-size: 1.05rem; font-weight: 600;
         padding-bottom: 0.35rem;
         border-bottom: 1px solid rgba(255,255,255,0.06);
         margin-bottom: 0.2rem;
       }}
-      /* Genre badge — next to rank */
-      table tbody tr > td:nth-child(3) {{
+      /* Genre badge — right side of rank row */
+      .ranking-table tbody tr > td:nth-child(3) {{
         grid-column: 1 / -1; grid-row: 1;
         display: flex; justify-content: flex-end; align-items: center;
       }}
       /* Stats: 2-column grid with labels */
-      table tbody td.num {{ font-size: 0.85rem; }}
+      .ranking-table tbody td.num {{ font-size: 0.85rem; }}
       /* 24h Peak (col 4) */
-      table tbody tr > td:nth-child(4) {{
+      .ranking-table tbody tr > td:nth-child(4) {{
         grid-column: 1; grid-row: 3;
       }}
-      table tbody tr > td:nth-child(4)::before {{
+      .ranking-table tbody tr > td:nth-child(4)::before {{
         content: "24h Peak  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* Est. Total (col 5) */
-      table tbody tr > td:nth-child(5) {{
+      .ranking-table tbody tr > td:nth-child(5) {{
         grid-column: 2; grid-row: 3;
       }}
-      table tbody tr > td:nth-child(5)::before {{
+      .ranking-table tbody tr > td:nth-child(5)::before {{
         content: "Est. Total  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* Trend (col 6) */
-      table tbody td.trend {{
+      .ranking-table tbody td.trend {{
         grid-column: 1; grid-row: 4;
         text-align: left !important; font-size: 0.85rem;
         width: auto; padding-top: 0.15rem;
       }}
-      table tbody td.trend::before {{
+      .ranking-table tbody td.trend::before {{
         content: "Trend (MoM)  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* All-Time Peak (col 7) */
-      table tbody tr > td:nth-child(7) {{
+      .ranking-table tbody tr > td:nth-child(7) {{
         grid-column: 2; grid-row: 4;
         padding-top: 0.15rem;
       }}
-      table tbody tr > td:nth-child(7)::before {{
+      .ranking-table tbody tr > td:nth-child(7)::before {{
         content: "All-Time Peak  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* % of Peak (col 8) */
-      table tbody td.pct-cell {{
+      .ranking-table tbody td.pct-cell {{
         grid-column: 1 / -1; grid-row: 5;
         width: auto; display: flex; align-items: center; gap: 0.4rem;
         padding-top: 0.3rem;
         border-top: 1px solid rgba(255,255,255,0.06);
         margin-top: 0.2rem;
       }}
-      table tbody td.pct-cell::before {{
+      .ranking-table tbody td.pct-cell::before {{
         content: "% of Peak"; flex-shrink: 0;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      .pct-cell .bar-bg {{
+      .ranking-table .pct-cell .bar-bg {{
         width: 50px; flex-shrink: 0;
       }}
-      .pct-cell span {{ font-size: 0.8rem; }}
-
+      .ranking-table .pct-cell span {{ font-size: 0.8rem; }}
       /* Failed rows */
-      table tbody tr.failed {{
+      .ranking-table tbody tr.failed {{
         display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.6rem;
       }}
+
+      /* Section title */
+      .section-title {{ font-size: 1.1rem; }}
 
       /* Detail cards */
       .card {{ margin-bottom: 1rem; }}
@@ -2595,7 +2616,7 @@ def generate_html(results: list[dict], failed_names: list[str],
 
 {genre_tabs_html}
 
-  <table>
+  <table class="ranking-table">
     <thead>
       <tr>
         <th data-sort="num" data-col="0">Rank</th>

@@ -168,6 +168,147 @@ def _genre_badge_html(genre: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Game Lifecycle States (#4)
+# ---------------------------------------------------------------------------
+
+LIFECYCLE_STATES = {
+    "Counter-Strike 2": "Live",
+    "PUBG: BATTLEGROUNDS": "Live",
+    "Arc Raiders": "Live",
+    "Apex Legends": "Maintenance",
+    "Delta Force": "Live",
+    "Marvel Rivals": "Live",
+    "Overwatch": "Live",
+    "Rainbow Six Siege": "Live",
+    "Battlefield 6": "Live",
+    "Team Fortress 2": "Legacy",
+    "Call of Duty": "Live",
+    "The Finals": "Live",
+    "Destiny 2": "Maintenance",
+    "Halo: MCC": "Legacy",
+    "Halo Infinite": "Sunset",
+}
+
+LIFECYCLE_COLORS = {
+    "Live": ("#4ade80", "#1a3a2a"),      # green
+    "Maintenance": ("#fbbf24", "#3a3520"),  # yellow
+    "Sunset": ("#f87171", "#3a1a1a"),      # red
+    "Legacy": ("#94a3b8", "#2a2e35"),      # gray
+    "Pre-Launch": ("#60a5fa", "#1a2a3a"),  # blue
+}
+
+LIFECYCLE_EMOJI = {
+    "Live": "\U0001f7e2",
+    "Maintenance": "\U0001f7e1",
+    "Sunset": "\U0001f534",
+    "Legacy": "\u26aa",
+    "Pre-Launch": "\U0001f535",
+}
+
+
+def _lifecycle_badge_html(name: str) -> str:
+    state = LIFECYCLE_STATES.get(name)
+    if not state:
+        return ""
+    fg, bg = LIFECYCLE_COLORS.get(state, ("#94a3b8", "#2a2e35"))
+    return f' <span class="lifecycle-badge" style="color:{fg};background:{bg}">{state}</span>'
+
+
+# ---------------------------------------------------------------------------
+# Event Annotations for big movers (#8)
+# ---------------------------------------------------------------------------
+
+EVENT_ANNOTATIONS = {
+    "Overwatch": "+76.4% \u2190 Loverwatch event + OWCS S2 kickoff + sub-role passives patch",
+    "Arc Raiders": "-18.6% \u2190 Post-launch decay. Second Expedition season announced Mar 1.",
+    "Delta Force": "+14.0% \u2190 RED DAY event + Season Morphosis live",
+    "Battlefield 6": "-22.6% \u2190 Season 2 launched Feb 17 but failing to retain",
+    "Halo: MCC": "-21.3% \u2190 Legacy title, Halo 2 Digsite content drop had limited impact",
+    "Halo Infinite": "-9.3% \u2190 Post-final update (Nov 2025). Expected attrition curve.",
+    "Destiny 2": "-23.7% \u2190 Continued structural decline pre-Marathon (Mar 5)",
+}
+
+
+# ---------------------------------------------------------------------------
+# Platform multiplier notes (#7)
+# ---------------------------------------------------------------------------
+
+PLATFORM_NOTES = {
+    "Counter-Strike 2": "Steam-only title",
+    "PUBG: BATTLEGROUNDS": "Krafton earnings; mobile is separate. Console ~20% of PC.",
+    "Arc Raiders": "Steam + Epic. Est. 50/50 split based on Embark data.",
+    "Apex Legends": "EA earnings (Q3 2025). Console-heavy (PS/Xbox ~75%).",
+    "Delta Force": "NetEase; primarily PC (Steam + launcher). ~30% non-Steam.",
+    "Marvel Rivals": "NetEase; PS/Xbox ~65% based on launch week platform split.",
+    "Overwatch": "Blizzard earnings. Console-dominant franchise (~80%).",
+    "Rainbow Six Siege": "Ubisoft earnings. Console ~65% historically.",
+    "Battlefield 6": "EA earnings. Console ~45% for BF franchise.",
+    "Team Fortress 2": "Steam-only title (legacy)",
+    "Call of Duty": "Activision earnings. Console-dominant franchise (~85%).",
+    "The Finals": "Embark data. Steam ~50%, rest PS/Xbox.",
+    "Destiny 2": "Bungie data. Console ~65% (PS dominant).",
+    "Halo: MCC": "Xbox Game Studios. Steam ~30%, Xbox ~70%.",
+    "Halo Infinite": "Xbox Game Studios. Steam ~12%, Xbox ~88%.",
+}
+
+
+# ---------------------------------------------------------------------------
+# Aggregate game sentiment (#5)
+# ---------------------------------------------------------------------------
+
+def _compute_game_sentiment(r: dict) -> str:
+    """Aggregate sentiment across news, press, and Reddit for a game."""
+    pos = 0
+    neg = 0
+    for n in r.get("news", []):
+        s = _analyze_sentiment(n.get("title", "") + " " + (n.get("contents", "") or "")[:200])
+        if s == "positive": pos += 1
+        elif s == "negative": neg += 1
+    for a in r.get("external_news", []):
+        s = _analyze_sentiment(a.get("title", ""))
+        if s == "positive": pos += 1
+        elif s == "negative": neg += 1
+    for p in r.get("reddit_week", []) + r.get("reddit_month", []):
+        s = _analyze_sentiment(p.get("title", ""))
+        if s == "positive": pos += 1
+        elif s == "negative": neg += 1
+    if pos > neg and pos > 0:
+        return "positive"
+    if neg > pos and neg > 0:
+        return "negative"
+    return "mixed"
+
+
+# ---------------------------------------------------------------------------
+# Inline mini-sparkline for trend column (#6)
+# ---------------------------------------------------------------------------
+
+def _inline_sparkline_svg(months_data: list[dict], css_class: str = "neutral") -> str:
+    """Generate a tiny inline SVG sparkline (~60x16px) from monthly avg data."""
+    avgs = [m.get("avg") for m in months_data if m.get("avg") is not None]
+    if len(avgs) < 2:
+        return ""
+    # Use last 4 data points
+    avgs = avgs[:4]
+    if len(avgs) < 2:
+        return ""
+    w, h = 48, 14
+    mn, mx = min(avgs), max(avgs)
+    rng = mx - mn if mx != mn else 1
+    pts = []
+    for i, v in enumerate(avgs):
+        x = i * w / (len(avgs) - 1)
+        y = h - 1 - ((v - mn) / rng) * (h - 2)
+        pts.append(f"{x:.1f},{y:.1f}")
+    color = {"up": "#4ade80", "down": "#f87171", "flat": "#fbbf24"}.get(css_class, "#94a3b8")
+    return (
+        f'<svg class="inline-spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'
+        f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'</svg>'
+    )
+
+
+# ---------------------------------------------------------------------------
 # News summary extraction
 # ---------------------------------------------------------------------------
 
@@ -495,7 +636,7 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
     )
 
     return f'''<div class="aggregate-chart">
-  <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)</div>
+  <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)<br><span style="font-size:0.6rem;font-weight:400;color:#556b7d">Steam Concurrent Players (Source: SteamDB)</span></div>
   <svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg">
     <polygon points="{polygon_pts}" fill="{fill_color}" />
     <polyline points="{polyline_pts}" fill="none" stroke="{stroke}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
@@ -1799,6 +1940,163 @@ def _render_calendar_html(cal_data: dict) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Studio Alert for Halo titles (#3)
+# ---------------------------------------------------------------------------
+
+def _build_studio_alert_html(results: list[dict], date_str: str) -> str:
+    halo_inf = next((r for r in results if r["name"] == "Halo Infinite"), None)
+    halo_mcc = next((r for r in results if r["name"] == "Halo: MCC"), None)
+    if not halo_inf and not halo_mcc:
+        return ""
+
+    # Determine status color
+    inf_declining = halo_inf and (halo_inf.get("trend_pct") or 0) < -2
+    mcc_declining = halo_mcc and (halo_mcc.get("trend_pct") or 0) < -2
+    if inf_declining and mcc_declining:
+        status_color = "#f87171"
+        status_emoji = "\U0001f534"
+        border_color = "#f87171"
+    elif inf_declining or mcc_declining:
+        status_color = "#fbbf24"
+        status_emoji = "\U0001f7e1"
+        border_color = "#fbbf24"
+    else:
+        status_color = "#4ade80"
+        status_emoji = "\U0001f7e2"
+        border_color = "#4ade80"
+
+    def _halo_line(r, lifecycle_note):
+        if not r:
+            return ""
+        trend = f"{r.get('trend_pct', 0):+.1f}%" if r.get("trend_pct") is not None else "N/A"
+        return (
+            f'<div class="studio-alert-game">'
+            f'<strong>{_esc(r["name"])}</strong>: '
+            f'#{r["rank"]}/15 &nbsp;|&nbsp; '
+            f'{_fmt(r["peak_24h"])} Steam (est. {_fmt(r.get("est_total_24h", r["peak_24h"]))} all platforms) &nbsp;|&nbsp; '
+            f'{r["pct_all"]:.1f}% of ATH &nbsp;|&nbsp; '
+            f'<span class="trend {r.get("trend_css", "neutral")}">{trend} MoM</span>'
+            f'<div class="studio-alert-lifecycle">\u2514 Lifecycle: {lifecycle_note}</div>'
+            f'</div>'
+        )
+
+    lines = ""
+    if halo_inf:
+        lines += _halo_line(halo_inf, "Post-final update (Nov 2025). Managed sunset \u2192 Campaign Evolved (Summer 2026).")
+    if halo_mcc:
+        lines += _halo_line(halo_mcc, "Legacy title. Community-driven content only.")
+
+    # Check for Marathon in calendar (within 30 days)
+    marathon_note = ""
+    for r in results:
+        for n in r.get("news", []):
+            if "marathon" in n.get("title", "").lower():
+                marathon_note = '<div class="studio-alert-marathon">\u26a0\ufe0f Marathon (Bungie) launches soon \u2014 HIGH overlap with Halo\'s lapsed audience.</div>'
+                break
+        if marathon_note:
+            break
+
+    return f'''  <div class="studio-alert" style="border-left-color:{border_color}">
+    <div class="studio-alert-header" style="color:{status_color}">{status_emoji} STUDIO ALERT \u2014 Week of {date_str}</div>
+{lines}{marathon_note}  </div>'''
+
+
+# ---------------------------------------------------------------------------
+# Genre Rollup table (#9)
+# ---------------------------------------------------------------------------
+
+def _build_genre_rollup_html(results: list[dict]) -> str:
+    from collections import defaultdict
+    genre_data = defaultdict(lambda: {"games": [], "total_est": 0, "weighted_trend": 0, "trend_weight": 0})
+
+    for r in results:
+        g = r.get("genre", "Other")
+        est = r.get("est_total_24h", r["peak_24h"])
+        trend = r.get("trend_pct") or 0
+        genre_data[g]["games"].append(r)
+        genre_data[g]["total_est"] += est
+        genre_data[g]["weighted_trend"] += trend * est
+        genre_data[g]["trend_weight"] += est
+
+    # Sort by total estimated players descending
+    sorted_genres = sorted(genre_data.items(), key=lambda x: x[1]["total_est"], reverse=True)
+
+    rows = ""
+    for genre, data in sorted_genres:
+        avg_trend = data["weighted_trend"] / data["trend_weight"] if data["trend_weight"] else 0
+        dominant = max(data["games"], key=lambda r: r.get("est_total_24h", r["peak_24h"]))
+        trend_css = "up" if avg_trend > 2 else ("down" if avg_trend < -2 else "flat")
+        fg, bg = GENRE_COLORS.get(genre, GENRE_COLORS["Other"])
+        rows += (
+            f'<tr>'
+            f'<td><span class="genre-badge" style="color:{fg};background:{bg}">{GENRE_SHORT.get(genre, genre)}</span></td>'
+            f'<td class="num" style="color:#60a5fa;font-weight:600">{_fmt(data["total_est"])}</td>'
+            f'<td class="trend {trend_css}" style="text-align:center">{avg_trend:+.1f}%</td>'
+            f'<td>{_esc(dominant["name"])}</td>'
+            f'<td style="text-align:center">{len(data["games"])}</td>'
+            f'</tr>\n'
+        )
+
+    return f'''  <div class="genre-rollup">
+    <h3>Genre Rollup</h3>
+    <table>
+      <thead><tr>
+        <th>Genre</th>
+        <th style="text-align:right">Combined Est. Daily Players</th>
+        <th style="text-align:center">MoM Trend</th>
+        <th>Dominant Title</th>
+        <th style="text-align:center"># Titles</th>
+      </tr></thead>
+      <tbody>
+{rows}      </tbody>
+    </table>
+  </div>'''
+
+
+# ---------------------------------------------------------------------------
+# Methodology section (#7)
+# ---------------------------------------------------------------------------
+
+def _build_methodology_html(results: list[dict]) -> str:
+    rows = ""
+    for r in sorted(results, key=lambda x: x["rank"]):
+        steam_share = r.get("steam_share", 1.0)
+        multiplier = f"{1/steam_share:.1f}x" if steam_share > 0 else "N/A"
+        note = PLATFORM_NOTES.get(r["name"], "")
+        rows += (
+            f'<tr>'
+            f'<td>{_esc(r["name"])}</td>'
+            f'<td class="num">{_fmt(r["peak_24h"])}</td>'
+            f'<td style="text-align:center">{multiplier}</td>'
+            f'<td class="num" style="color:#60a5fa">{_fmt(r.get("est_total_24h", r["peak_24h"]))}</td>'
+            f'<td class="meth-note">{_esc(note)}</td>'
+            f'</tr>\n'
+        )
+
+    return f'''  <div class="methodology">
+    <details>
+      <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
+      <div class="methodology-content">
+        <p class="methodology-disclaimer">All-platform estimates apply per-game multipliers based on platform mix models.
+These are estimates, not validated against first-party data. Sources include publisher earnings reports,
+analytics firms (Alinea, Newzoo), and community trackers.</p>
+        <table>
+          <thead><tr>
+            <th>Game</th>
+            <th style="text-align:right">Steam 24h Peak</th>
+            <th style="text-align:center">Multiplier</th>
+            <th style="text-align:right">Est. All Platforms</th>
+            <th>Source / Notes</th>
+          </tr></thead>
+          <tbody>
+{rows}          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>'''
+
+
+# ---------------------------------------------------------------------------
 # HTML generation
 # ---------------------------------------------------------------------------
 
@@ -1807,6 +2105,9 @@ def generate_html(results: list[dict], failed_names: list[str],
     today = datetime.now()
     date_str = today.strftime("%B %d, %Y")
     timestamp = today.strftime("%Y-%m-%d %H:%M:%S")
+
+    # --- Studio Alert (#3) ---
+    studio_alert_html = _build_studio_alert_html(results, date_str)
 
     # --- Executive Summary with Winners / Neutrals / Losers ---
     exec_items = "\n".join(f"      <li>{_esc(_sanitize_text(t))}</li>" for t in overall_takeaways)
@@ -1825,7 +2126,7 @@ def generate_html(results: list[dict], failed_names: list[str],
                 f'<tr>'
                 f'<td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">{_esc(g["name"])}</td>'
                 f'<td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:{color};font-weight:600">{t_str}</td>'
-                f'<td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">{_fmt(g["peak_24h"])}</td>'
+                f'<td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">{_fmt(g["peak_24h"])}<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td>'
                 f'</tr>'
             )
         return rows
@@ -1866,7 +2167,13 @@ def generate_html(results: list[dict], failed_names: list[str],
             genre_btns += f'    <button class="genre-filter-btn" data-genre="{g}" style="--genre-active-bg:{bg};--genre-active-border:{fg};--genre-active-color:{fg}">{g} <span class="filter-count">{genre_counts[g]}</span></button>\n'
     genre_tabs_html = f'  <div class="genre-filters">\n{genre_btns}  </div>'
 
-    # --- Summary table rows (streamlined: 6 columns) ---
+    # --- Genre Rollup (#9) ---
+    genre_rollup_html = _build_genre_rollup_html(results)
+
+    # --- Methodology (#7) ---
+    methodology_html = _build_methodology_html(results)
+
+    # --- Summary table rows ---
     table_rows = ""
     for r in results:
         trend_pct = r.get("trend_pct")
@@ -1878,13 +2185,30 @@ def generate_html(results: list[dict], failed_names: list[str],
 
         genre = r.get('genre', 'Other')
         trend_val = trend_pct if trend_pct is not None else 0
+
+        # Lifecycle badge (#4)
+        lifecycle = _lifecycle_badge_html(r['name'])
+
+        # Sentiment (#5)
+        game_sentiment = _compute_game_sentiment(r)
+        sent_color = {"positive": "#4ade80", "negative": "#f87171", "mixed": "#fbbf24"}.get(game_sentiment, "#94a3b8")
+        sent_val = {"positive": 1, "mixed": 0, "negative": -1}.get(game_sentiment, 0)
+
+        # Inline sparkline (#6)
+        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"))
+
+        # Event annotation (#8)
+        annotation = EVENT_ANNOTATIONS.get(r['name'], "")
+        annotation_html = f'<div class="event-annotation">{_esc(annotation)}</div>' if annotation and abs(trend_val) > 9 else ""
+
         table_rows += f"""        <tr data-genre="{genre}">
           <td class="rank" data-value="{r['rank']}">#{r['rank']}</td>
-          <td class="game">{_esc(r['name'])}</td>
+          <td class="game">{_esc(r['name'])}{lifecycle}</td>
           <td>{_genre_badge_html(genre)}</td>
+          <td class="sentiment-cell" data-value="{sent_val}"><span style="color:{sent_color}" title="{game_sentiment}">\u25cf</span></td>
           <td class="num" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
           <td class="num" data-value="{r.get('est_total_24h', r['peak_24h'])}" style="color:#60a5fa;font-weight:600">{est_total}</td>
-          <td class="trend {r['trend_css']}" data-value="{trend_val}">{r['trend_arrow']} {trend_str}</td>
+          <td class="trend {r['trend_css']}" data-value="{trend_val}">{r['trend_arrow']} {trend_str} {mini_spark}{annotation_html}</td>
           <td class="num" data-value="{r.get('est_total_all', r['peak_all'])}" style="color:#fbbf24;font-weight:600">{est_all_time}</td>
           <td class="pct-cell" data-value="{r['pct_all']:.2f}">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%"></div></div>
@@ -1896,6 +2220,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         table_rows += f"""        <tr class="failed">
           <td class="rank">-</td>
           <td class="game">{_esc(name)}</td>
+          <td>-</td>
           <td>-</td>
           <td class="num">-</td><td class="num">-</td>
           <td class="trend neutral">-</td>
@@ -2044,10 +2369,14 @@ def generate_html(results: list[dict], failed_names: list[str],
       </div>"""
 
         card_genre = r.get('genre', 'Other')
+        card_lifecycle = _lifecycle_badge_html(r['name'])
+        card_annotation = EVENT_ANNOTATIONS.get(r['name'], "")
+        card_annotation_html = f'<div class="event-annotation">{_esc(card_annotation)}</div>' if card_annotation else ""
         cards_html += f"""
     <div class="card" data-genre="{card_genre}">
       <div class="card-header">
-        <h3>{_esc(r['name'])} {_genre_badge_html(card_genre)} <span class="trend-badge {r['trend_css']}">{r['trend_arrow']} {trend_str} MoM</span></h3>
+        <h3>{_esc(r['name'])}{card_lifecycle} {_genre_badge_html(card_genre)} <span class="trend-badge {r['trend_css']}">{r['trend_arrow']} {trend_str} MoM</span></h3>
+        {card_annotation_html}
         <div class="card-stats">
           24h Peak: <strong>{_fmt(r['peak_24h'])}</strong> (Steam)
           {f'&nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">{_fmt(r.get("est_total_24h", r["peak_24h"]))}</strong> ({r["steam_share"]*100:.0f}% Steam)' if not r.get('is_steam_only') else f'&nbsp;|&nbsp; Est. Total: <strong>{_fmt(r["peak_24h"])}</strong> (100% Steam)'}
@@ -2435,6 +2764,110 @@ def generate_html(results: list[dict], failed_names: list[str],
       padding: 0.4rem 0.8rem;
     }}
 
+    /* Studio Alert (#3) */
+    .studio-alert {{
+      background: #1b2838; border-left: 4px solid #f87171;
+      padding: 1rem 1.2rem; border-radius: 0 6px 6px 0;
+      margin-bottom: 1.5rem;
+    }}
+    .studio-alert-header {{
+      font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 0.6rem;
+    }}
+    .studio-alert-game {{
+      font-size: 0.82rem; margin-bottom: 0.4rem; line-height: 1.5;
+    }}
+    .studio-alert-lifecycle {{
+      font-size: 0.72rem; color: #8f98a0; padding-left: 1rem;
+    }}
+    .studio-alert-marathon {{
+      font-size: 0.82rem; margin-top: 0.5rem; padding-top: 0.5rem;
+      border-top: 1px solid #2a475e; color: #fbbf24;
+    }}
+
+    /* Lifecycle badge (#4) */
+    .lifecycle-badge {{
+      font-size: 0.55rem; padding: 1px 5px; border-radius: 3px;
+      font-weight: 600; vertical-align: middle; margin-left: 0.3rem;
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }}
+
+    /* Sentiment column (#5) */
+    .sentiment-cell {{ text-align: center !important; font-size: 0.9rem; }}
+
+    /* Inline sparkline (#6) */
+    .inline-spark {{ vertical-align: middle; margin-left: 0.3rem; }}
+
+    /* Event annotations (#8) */
+    .event-annotation {{
+      font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+      margin-top: 0.15rem; line-height: 1.3;
+    }}
+
+    /* Genre Rollup (#9) */
+    .genre-rollup {{
+      margin-bottom: 2rem;
+    }}
+    .genre-rollup h3 {{
+      color: #66c0f4; font-size: 0.9rem; margin-bottom: 0.5rem;
+    }}
+    .genre-rollup table {{
+      width: 100%; border-collapse: collapse; font-size: 0.82rem;
+    }}
+    .genre-rollup th {{
+      text-align: left; padding: 0.4rem 0.6rem;
+      border-bottom: 2px solid #2a475e; color: #66c0f4;
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+    }}
+    .genre-rollup td {{
+      padding: 0.35rem 0.6rem; border-bottom: 1px solid #1b2838;
+    }}
+
+    /* Methodology (#7) */
+    .methodology {{
+      margin-top: 2rem; margin-bottom: 1rem;
+    }}
+    .methodology summary {{
+      color: #66c0f4; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; padding: 0.5rem 0;
+    }}
+    .methodology-content {{
+      padding-top: 0.5rem;
+    }}
+    .methodology-disclaimer {{
+      font-size: 0.78rem; color: #8f98a0; line-height: 1.5;
+      margin-bottom: 1rem; padding: 0.6rem 0.8rem;
+      background: rgba(27, 40, 56, 0.5); border-radius: 4px;
+      border-left: 2px solid #fbbf24;
+    }}
+    .methodology table {{
+      width: 100%; border-collapse: collapse; font-size: 0.78rem;
+    }}
+    .methodology th {{
+      text-align: left; padding: 0.4rem 0.5rem;
+      border-bottom: 2px solid #2a475e; color: #66c0f4;
+      font-size: 0.68rem; text-transform: uppercase;
+    }}
+    .methodology td {{
+      padding: 0.35rem 0.5rem; border-bottom: 1px solid #1b2838;
+    }}
+    .meth-note {{ font-size: 0.72rem; color: #8f98a0; }}
+
+    /* Info tooltip (#2) */
+    .info-tip {{
+      display: inline-block; cursor: help; position: relative;
+      font-size: 0.7rem; color: #8f98a0; margin-left: 0.2rem;
+    }}
+    .info-tip:hover::after {{
+      content: attr(data-tip);
+      position: absolute; bottom: 120%; left: 50%;
+      transform: translateX(-50%);
+      background: #1b2838; color: #c7d5e0; border: 1px solid #2a475e;
+      padding: 0.4rem 0.6rem; border-radius: 4px;
+      font-size: 0.7rem; white-space: nowrap; z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }}
+
     .footer {{
       color: #556b7d; font-size: 0.78rem;
       border-top: 1px solid #1b2838; padding-top: 1rem; line-height: 1.6;
@@ -2517,32 +2950,34 @@ def generate_html(results: list[dict], failed_names: list[str],
         border-bottom: 1px solid rgba(255,255,255,0.06);
         margin-bottom: 0.2rem;
       }}
-      /* Genre badge — right side of rank row */
+      /* Genre badge — right side of rank row (col 3) */
       .ranking-table tbody tr > td:nth-child(3) {{
         grid-column: 1 / -1; grid-row: 1;
         display: flex; justify-content: flex-end; align-items: center;
       }}
+      /* Sentiment (col 4) — hide on mobile, redundant with card detail */
+      .ranking-table tbody td.sentiment-cell {{ display: none; }}
       /* Stats: 2-column grid with labels */
       .ranking-table tbody td.num {{ font-size: 0.85rem; }}
-      /* 24h Peak (col 4) */
-      .ranking-table tbody tr > td:nth-child(4) {{
+      /* 24h Peak (col 5) */
+      .ranking-table tbody tr > td:nth-child(5) {{
         grid-column: 1; grid-row: 3;
       }}
-      .ranking-table tbody tr > td:nth-child(4)::before {{
+      .ranking-table tbody tr > td:nth-child(5)::before {{
         content: "24h Peak  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      /* Est. Total (col 5) */
-      .ranking-table tbody tr > td:nth-child(5) {{
+      /* Est. Total (col 6) */
+      .ranking-table tbody tr > td:nth-child(6) {{
         grid-column: 2; grid-row: 3;
       }}
-      .ranking-table tbody tr > td:nth-child(5)::before {{
+      .ranking-table tbody tr > td:nth-child(6)::before {{
         content: "Est. Total  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      /* Trend (col 6) */
+      /* Trend (col 7) */
       .ranking-table tbody td.trend {{
         grid-column: 1; grid-row: 4;
         text-align: left !important; font-size: 0.85rem;
@@ -2553,17 +2988,17 @@ def generate_html(results: list[dict], failed_names: list[str],
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      /* All-Time Peak (col 7) */
-      .ranking-table tbody tr > td:nth-child(7) {{
+      /* All-Time Peak (col 8) */
+      .ranking-table tbody tr > td:nth-child(8) {{
         grid-column: 2; grid-row: 4;
         padding-top: 0.15rem;
       }}
-      .ranking-table tbody tr > td:nth-child(7)::before {{
+      .ranking-table tbody tr > td:nth-child(8)::before {{
         content: "All-Time Peak  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      /* % of Peak (col 8) */
+      /* % of Peak (col 9) */
       .ranking-table tbody td.pct-cell {{
         grid-column: 1 / -1; grid-row: 5;
         width: auto; display: flex; align-items: center; gap: 0.4rem;
@@ -2580,6 +3015,17 @@ def generate_html(results: list[dict], failed_names: list[str],
         width: 50px; flex-shrink: 0;
       }}
       .ranking-table .pct-cell span {{ font-size: 0.8rem; }}
+      /* Studio alert mobile */
+      .studio-alert {{ padding: 0.6rem 0.8rem; margin-bottom: 1rem; font-size: 0.78rem; }}
+      .studio-alert-header {{ font-size: 0.75rem; }}
+      .studio-alert-game {{ font-size: 0.75rem; }}
+      /* Genre rollup mobile */
+      .genre-rollup table {{ font-size: 0.72rem; }}
+      .genre-rollup th, .genre-rollup td {{ padding: 0.25rem 0.4rem; }}
+      /* Methodology mobile */
+      .methodology table {{ font-size: 0.7rem; }}
+      .methodology th, .methodology td {{ padding: 0.25rem 0.3rem; }}
+      .meth-note {{ font-size: 0.6rem; }}
       /* Failed rows */
       .ranking-table tbody tr.failed {{
         display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.6rem;
@@ -2613,6 +3059,8 @@ def generate_html(results: list[dict], failed_names: list[str],
   <h1>Shooter Digest</h1>
   <p class="subtitle">Week of {date_str} &mdash; Player Data, Updates &amp; Community Intel</p>
 
+{studio_alert_html}
+
 {exec_html}
 
 {genre_tabs_html}
@@ -2623,16 +3071,19 @@ def generate_html(results: list[dict], failed_names: list[str],
         <th data-sort="num" data-col="0">Rank</th>
         <th data-sort="str" data-col="1">Game</th>
         <th data-sort="str" data-col="2">Genre</th>
-        <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
-        <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Platforms)</small></th>
-        <th data-sort="num" data-col="5">Trend<br><small>(MoM)</small></th>
-        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
-        <th data-sort="num" data-col="7">% of Peak</th>
+        <th data-sort="num" data-col="3">Sentiment</th>
+        <th data-sort="num" data-col="4" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="5" style="text-align:right">Est. Total<br><small>(All Platforms)</small> <span class="info-tip" data-tip="Steam 24h peak \u00f7 Steam market share. Sources: EA, Krafton, NetEase earnings, Alinea Analytics.">\u24d8</span></th>
+        <th data-sort="num" data-col="6">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="7" style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
+        <th data-sort="num" data-col="8">% of Peak</th>
       </tr>
     </thead>
     <tbody>
 {table_rows}    </tbody>
   </table>
+
+{genre_rollup_html}
 
 {_build_insights_html(results)}
 
@@ -2640,6 +3091,8 @@ def generate_html(results: list[dict], failed_names: list[str],
 {cards_html}
 
 {_render_calendar_html(_build_release_calendar(results))}
+
+{methodology_html}
 
   <div class="footer">
     Generated: {timestamp}<br>

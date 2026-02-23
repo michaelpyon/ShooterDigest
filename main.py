@@ -2532,7 +2532,32 @@ def generate_html(results: list[dict], failed_names: list[str],
     .card {{
       background: #1b2838; border-radius: 8px; margin-bottom: 1.2rem;
       overflow: hidden; border: 1px solid #2a475e;
+      border-left-width: 3px;
     }}
+    /* Trend-colored left border: scan the whole page for winners/losers */
+    .card:has(.trend-badge.up) {{ border-left-color: #4ade80; }}
+    .card:has(.trend-badge.down) {{ border-left-color: #f87171; }}
+    .card:has(.trend-badge.flat) {{ border-left-color: #fbbf24; }}
+    .card:has(.trend-badge.neutral) {{ border-left-color: #8f98a0; }}
+
+    /* Sticky ranking table header */
+    .ranking-table thead th {{
+      position: sticky; top: 44px;
+      background: #0f1923; z-index: 10;
+    }}
+
+    /* Floating back-to-top */
+    .back-to-top {{
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: #1b2838; border: 1px solid #2a475e;
+      color: #66c0f4; border-radius: 6px;
+      padding: 0.5rem 0.85rem; font-size: 0.82rem;
+      cursor: pointer; opacity: 0; transition: opacity 0.25s;
+      z-index: 200; text-decoration: none; font-weight: 600;
+    }}
+    .back-to-top.visible {{ opacity: 1; }}
+    .back-to-top:hover {{ background: #2a475e; color: #e5e7eb; }}
+
     .card-header {{
       padding: 1rem 1.2rem 0.7rem; border-bottom: 1px solid #2a475e;
     }}
@@ -3177,7 +3202,16 @@ def generate_html(results: list[dict], failed_names: list[str],
       rows.forEach(row => tbody.appendChild(row));
     }});
   }});
+
+  // Back-to-top button
+  const btt = document.getElementById('back-to-top');
+  if (btt) {{
+    window.addEventListener('scroll', () => {{
+      btt.classList.toggle('visible', window.scrollY > 600);
+    }});
+  }}
   </script>
+  <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">↑ Top</a>
 </body>
 </html>
 """

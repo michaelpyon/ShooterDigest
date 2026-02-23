@@ -1,47 +1,35 @@
-name: Weekly Shooter Digest
+name: Weekly Digest
 
 on:
   schedule:
-    # Every Monday at 10:00 UTC (5am ET / 2am PT)
-    - cron: '0 10 * * 1'
-  workflow_dispatch: # Allow manual triggers from GitHub UI
+    # Every Monday at noon UTC (7am ET / 4am PT)
+    - cron: '0 12 * * 1'
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch: {}
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
-  build-and-deploy:
+  generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Shooter Digest
+      - name: Generate digest
         run: python main.py
 
-      - name: Copy latest digest to index.html
+      - name: Commit and push digest
         run: |
-          # Find the most recent digest HTML
-          LATEST=$(ls -t output/digest_*.html | head -1)
-          cp "$LATEST" output/index.html
-          echo "Copied $LATEST -> output/index.html"
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output
-          publish_branch: gh-pages
-          commit_message: "Digest update: $(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add output/
+          git diff --cached --quiet || git commit -m "chore: auto-generate weekly digest [skip ci]"
+          git push

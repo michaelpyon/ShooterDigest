@@ -3343,7 +3343,8 @@ def generate_markdown(results: list[dict], failed_names: list[str],
                     except ValueError:
                         pass
                 trend_parts.append(f"{month_label}: {_fmt_k(m['avg'])}")
-            lines.append(f"**Trend:** {' \u2192 '.join(trend_parts)} avg players")
+            arrow = ' \u2192 '
+            lines.append(f"**Trend:** {arrow.join(trend_parts)} avg players")
             lines.append("")
 
         # Developer updates — with sentiment markers

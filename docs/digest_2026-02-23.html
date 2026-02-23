@@ -11,8 +11,31 @@
       background: #0f1923; color: #c7d5e0;
       padding: 2rem; max-width: 1100px; margin: 0 auto;
     }
-    h1 { color: #66c0f4; font-size: 1.8rem; margin-bottom: 0.2rem; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.2rem; }
+    h1 .brand-shooter { color: #ffffff; }
+    h1 .brand-digest { color: #f97316; }
     .subtitle { color: #8f98a0; font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+    /* Sticky back-nav */
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15, 25, 35, 0.96);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid #2a475e;
+      margin: -2rem -2rem 1.5rem -2rem;
+      padding: 0.65rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-back {
+      font-size: 0.82rem; color: #8f98a0; text-decoration: none;
+      transition: color 0.15s; display: flex; align-items: center; gap: 0.35rem;
+    }
+    .nav-back:hover { color: #f97316; }
+    .nav-logo {
+      font-size: 0.9rem; font-weight: 700; color: #ffffff;
+      text-decoration: none; letter-spacing: -0.3px;
+    }
+    .nav-logo span { color: #f97316; }
 
     /* Executive Summary */
     .exec-summary {
@@ -463,6 +486,7 @@
       body { padding: 0.8rem; }
       h1 { font-size: 1.4rem; }
       .subtitle { font-size: 0.82rem; margin-bottom: 1rem; }
+      .site-nav { margin: -0.8rem -0.8rem 1.2rem -0.8rem; padding: 0.5rem 0.8rem; }
 
       /* Executive Summary */
       .exec-summary { padding: 0.7rem 0.8rem; margin-bottom: 1.2rem; }
@@ -635,7 +659,11 @@
   </style>
 </head>
 <body>
-  <h1>Shooter Digest</h1>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back">&#8592; All Digests</a>
+    <a href="index.html" class="nav-logo">Shooter<span>Digest</span></a>
+  </nav>
+  <h1><span class="brand-shooter">Shooter</span><span class="brand-digest">Digest</span></h1>
   <p class="subtitle">Week of February 23, 2026 &mdash; Player Data, Updates &amp; Community Intel</p>
 
   <div class="exec-summary">

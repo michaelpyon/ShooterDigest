@@ -64,12 +64,12 @@
     .rank { color: #8f98a0; font-weight: 600; width: 40px; }
     .game { font-weight: 600; color: #e5e5e5; white-space: nowrap; }
     .num { font-variant-numeric: tabular-nums; text-align: right; }
-    .trend { text-align: center; font-weight: 600; width: 80px; }
+    .trend { text-align: center; font-weight: 600; white-space: nowrap; }
     .trend.up { color: #4ade80; }
     .trend.down { color: #f87171; }
     .trend.flat { color: #fbbf24; }
     .trend.neutral { color: #8f98a0; }
-    .pct-cell { width: 130px; }
+    .pct-cell { width: 120px; }
     .bar-bg {
       background: #1b2838; border-radius: 4px; height: 6px;
       margin-bottom: 2px; overflow: hidden;
@@ -354,27 +354,6 @@
       padding: 0.4rem 0.8rem;
     }
 
-    /* Studio Alert (#3) */
-    .studio-alert {
-      background: #1b2838; border-left: 4px solid #f87171;
-      padding: 1rem 1.2rem; border-radius: 0 6px 6px 0;
-      margin-bottom: 1.5rem;
-    }
-    .studio-alert-header {
-      font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.04em; margin-bottom: 0.6rem;
-    }
-    .studio-alert-game {
-      font-size: 0.82rem; margin-bottom: 0.4rem; line-height: 1.5;
-    }
-    .studio-alert-lifecycle {
-      font-size: 0.72rem; color: #8f98a0; padding-left: 1rem;
-    }
-    .studio-alert-marathon {
-      font-size: 0.82rem; margin-top: 0.5rem; padding-top: 0.5rem;
-      border-top: 1px solid #2a475e; color: #fbbf24;
-    }
-
     /* Lifecycle badge (#4) */
     .lifecycle-badge {
       font-size: 0.55rem; padding: 1px 5px; border-radius: 3px;
@@ -382,17 +361,22 @@
       text-transform: uppercase; letter-spacing: 0.03em;
     }
 
-    /* Sentiment column (#5) */
-    .sentiment-cell { text-align: center !important; font-size: 0.9rem; }
+    /* Sentiment dot inline in game name */
+    .sent-inline {
+      font-size: 0.5rem; vertical-align: middle; margin-left: 0.25rem;
+      opacity: 0.8;
+    }
 
     /* Inline sparkline (#6) */
-    .inline-spark { vertical-align: middle; margin-left: 0.3rem; }
+    .inline-spark { vertical-align: middle; margin-left: 0.4rem; }
 
-    /* Event annotations (#8) */
-    .event-annotation {
-      font-size: 0.65rem; color: #8f98a0; font-weight: 400;
-      margin-top: 0.15rem; line-height: 1.3;
+    /* Annotation info icon — hover to see context */
+    .annot-icon {
+      font-size: 0.7rem; color: #8f98a0; cursor: help;
+      vertical-align: middle; margin-left: 0.2rem;
+      opacity: 0.6; transition: opacity 0.15s;
     }
+    .annot-icon:hover { opacity: 1; color: #66c0f4; }
 
     /* Genre Rollup (#9) */
     .genre-rollup {
@@ -447,6 +431,10 @@
     .info-tip {
       display: inline-block; cursor: help; position: relative;
       font-size: 0.7rem; color: #8f98a0; margin-left: 0.2rem;
+      text-decoration: none;
+    }
+    .info-tip:hover {
+      color: #66c0f4;
     }
     .info-tip:hover::after {
       content: attr(data-tip);
@@ -545,29 +533,30 @@
         grid-column: 1 / -1; grid-row: 1;
         display: flex; justify-content: flex-end; align-items: center;
       }
-      /* Sentiment (col 4) — hide on mobile, redundant with card detail */
-      .ranking-table tbody td.sentiment-cell { display: none; }
+      /* Hide sentiment dot & annotation icon on mobile cards */
+      .ranking-table tbody .sent-inline { display: none; }
+      .ranking-table tbody .annot-icon { display: none; }
       /* Stats: 2-column grid with labels */
       .ranking-table tbody td.num { font-size: 0.85rem; }
-      /* 24h Peak (col 5) */
-      .ranking-table tbody tr > td:nth-child(5) {
+      /* 24h Peak (col 4) */
+      .ranking-table tbody tr > td:nth-child(4) {
         grid-column: 1; grid-row: 3;
       }
-      .ranking-table tbody tr > td:nth-child(5)::before {
+      .ranking-table tbody tr > td:nth-child(4)::before {
         content: "24h Peak  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }
-      /* Est. Total (col 6) */
-      .ranking-table tbody tr > td:nth-child(6) {
+      /* Est. Total (col 5) */
+      .ranking-table tbody tr > td:nth-child(5) {
         grid-column: 2; grid-row: 3;
       }
-      .ranking-table tbody tr > td:nth-child(6)::before {
+      .ranking-table tbody tr > td:nth-child(5)::before {
         content: "Est. Total  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }
-      /* Trend (col 7) */
+      /* Trend (col 6) */
       .ranking-table tbody td.trend {
         grid-column: 1; grid-row: 4;
         text-align: left !important; font-size: 0.85rem;
@@ -578,17 +567,17 @@
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }
-      /* All-Time Peak (col 8) */
-      .ranking-table tbody tr > td:nth-child(8) {
+      /* All-Time Peak (col 7) */
+      .ranking-table tbody tr > td:nth-child(7) {
         grid-column: 2; grid-row: 4;
         padding-top: 0.15rem;
       }
-      .ranking-table tbody tr > td:nth-child(8)::before {
+      .ranking-table tbody tr > td:nth-child(7)::before {
         content: "All-Time Peak  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }
-      /* % of Peak (col 9) */
+      /* % of Peak (col 8) */
       .ranking-table tbody td.pct-cell {
         grid-column: 1 / -1; grid-row: 5;
         width: auto; display: flex; align-items: center; gap: 0.4rem;
@@ -605,10 +594,6 @@
         width: 50px; flex-shrink: 0;
       }
       .ranking-table .pct-cell span { font-size: 0.8rem; }
-      /* Studio alert mobile */
-      .studio-alert { padding: 0.6rem 0.8rem; margin-bottom: 1rem; font-size: 0.78rem; }
-      .studio-alert-header { font-size: 0.75rem; }
-      .studio-alert-game { font-size: 0.75rem; }
       /* Genre rollup mobile */
       .genre-rollup table { font-size: 0.72rem; }
       .genre-rollup th, .genre-rollup td { padding: 0.25rem 0.4rem; }
@@ -649,40 +634,36 @@
   <h1>Shooter Digest</h1>
   <p class="subtitle">Week of February 22, 2026 &mdash; Player Data, Updates &amp; Community Intel</p>
 
-  <div class="studio-alert" style="border-left-color:#f87171">
-    <div class="studio-alert-header" style="color:#f87171">🔴 STUDIO ALERT — Week of February 22, 2026</div>
-<div class="studio-alert-game"><strong>Halo Infinite</strong>: #15/15 &nbsp;|&nbsp; 3,023 Steam (est. 25,191 all platforms) &nbsp;|&nbsp; 1.2% of ATH &nbsp;|&nbsp; <span class="trend down">-8.1% MoM</span><div class="studio-alert-lifecycle">└ Lifecycle: Post-final update (Nov 2025). Managed sunset → Campaign Evolved (Summer 2026).</div></div><div class="studio-alert-game"><strong>Halo: MCC</strong>: #14/15 &nbsp;|&nbsp; 7,136 Steam (est. 23,786 all platforms) &nbsp;|&nbsp; 7.6% of ATH &nbsp;|&nbsp; <span class="trend down">-21.5% MoM</span><div class="studio-alert-lifecycle">└ Lifecycle: Legacy title. Community-driven content only.</div></div>  </div>
-
   <div class="exec-summary">
     <h2>Executive Summary</h2>
     <ul>
-      <li>Biggest mover: Overwatch at +108.6% month-over-month.</li>
+      <li>Biggest mover: Overwatch at +108.8% month-over-month.</li>
       <li>Steepest decline: Destiny 2 at -25.8% month-over-month.</li>
-      <li>Combined 24h peaks across all 15 titles are up 13.2% vs. last week.</li>
+      <li>Combined 24h peaks across all 15 titles are up 13.1% vs. last week.</li>
     </ul>
     <div class="wnl-table">
       <div class="wnl-col">
         <div class="wnl-header" style="color:#4ade80;border-bottom:2px solid #4ade80">&#9650; Winners (5)</div>
-        <table><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Overwatch</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+108.6%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">135,175<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Delta Force</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+17.4%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">145,094<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Rainbow Six Siege</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+11.4%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">110,858<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Team Fortress 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+3.3%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">61,643<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">The Finals</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+2.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">19,890<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr></table>
+        <table><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Overwatch</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+108.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">135,175<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Delta Force</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+17.4%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">145,094<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Rainbow Six Siege</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+11.5%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">110,858<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Team Fortress 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+3.3%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">61,643<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">The Finals</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+2.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">19,890<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr></table>
       </div>
       <div class="wnl-col">
         <div class="wnl-header" style="color:#fbbf24;border-bottom:2px solid #fbbf24">&#9654; Holding Steady (4)</div>
-        <table><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Apex Legends</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.9%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">187,598<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Counter-Strike 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.4%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">1,581,471<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Call of Duty</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.5%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">62,166<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Marvel Rivals</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">123,893<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr></table>
+        <table><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Apex Legends</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.9%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">187,598<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Counter-Strike 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.4%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">1,581,471<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Call of Duty</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.5%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">62,166<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Marvel Rivals</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.9%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">123,351<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr></table>
       </div>
       <div class="wnl-col">
         <div class="wnl-header" style="color:#f87171;border-bottom:2px solid #f87171">&#9660; Losers (6)</div>
-        <table><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Destiny 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-25.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">15,310<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Halo: MCC</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-21.5%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">7,136<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Arc Raiders</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-20.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">277,582<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Battlefield 6</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-19.0%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">95,926<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Halo Infinite</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-8.1%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">3,023<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">PUBG: BATTLEGROUNDS</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-8.0%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">558,468<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr></table>
+        <table><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Destiny 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-25.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">15,310<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Halo: MCC</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-21.5%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">6,710<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Arc Raiders</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-20.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">277,582<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Battlefield 6</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-19.0%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">95,926<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">PUBG: BATTLEGROUNDS</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-8.1%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">558,468<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Halo Infinite</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#f87171;font-weight:600">-8.0%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">3,023<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr></table>
       </div>
     </div>
     <div class="aggregate-chart">
   <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)<br><span style="font-size:0.6rem;font-weight:400;color:#556b7d">Steam Concurrent Players (Source: SteamDB)</span></div>
   <svg width="350" height="70" viewBox="0 0 350 70" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="16.0,12.0 122.0,50.0 228.0,32.7 334.0,38.7 334.0,50 16.0,50" fill="rgba(96,165,250,0.12)" />
-    <polyline points="16.0,12.0 122.0,50.0 228.0,32.7 334.0,38.7" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    <polygon points="16.0,12.0 122.0,50.0 228.0,32.7 334.0,38.8 334.0,50 16.0,50" fill="rgba(96,165,250,0.12)" />
+    <polyline points="16.0,12.0 122.0,50.0 228.0,32.7 334.0,38.8" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
     <circle cx="16.0" cy="12.0" r="3" fill="#60a5fa" />
 <circle cx="122.0" cy="50.0" r="3" fill="#60a5fa" />
 <circle cx="228.0" cy="32.7" r="3" fill="#60a5fa" />
-<circle cx="334.0" cy="38.7" r="3" fill="#60a5fa" />
+<circle cx="334.0" cy="38.8" r="3" fill="#60a5fa" />
 
     <text x="16.0" y="68" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Nov</text>
 <text x="122.0" y="68" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
@@ -690,7 +671,7 @@
 <text x="334.0" y="68" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
 
     <text x="16.0" y="8" text-anchor="start" fill="#8f98a0" font-size="8" font-family="sans-serif">2.2M</text>
-<text x="334.0" y="32.7" text-anchor="end" fill="#60a5fa" font-size="9" font-weight="bold" font-family="sans-serif">2.1M</text>
+<text x="334.0" y="32.8" text-anchor="end" fill="#60a5fa" font-size="9" font-weight="bold" font-family="sans-serif">2.1M</text>
 
   </svg>
 </div>
@@ -713,23 +694,21 @@
         <th data-sort="num" data-col="0">Rank</th>
         <th data-sort="str" data-col="1">Game</th>
         <th data-sort="str" data-col="2">Genre</th>
-        <th data-sort="num" data-col="3">Sentiment</th>
-        <th data-sort="num" data-col="4" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
-        <th data-sort="num" data-col="5" style="text-align:right">Est. Total<br><small>(All Platforms)</small> <span class="info-tip" data-tip="Steam 24h peak ÷ Steam market share. Sources: EA, Krafton, NetEase earnings, Alinea Analytics.">ⓘ</span></th>
-        <th data-sort="num" data-col="6">Trend<br><small>(MoM)</small></th>
-        <th data-sort="num" data-col="7" style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
-        <th data-sort="num" data-col="8">% of Peak</th>
+        <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak &divide; Steam share. Click for methodology.">ⓘ</a></th>
+        <th data-sort="num" data-col="5">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
+        <th data-sort="num" data-col="7">% of Peak</th>
       </tr>
     </thead>
     <tbody>
         <tr data-genre="Tactical">
           <td class="rank" data-value="1">#1</td>
-          <td class="game">Counter-Strike 2 <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="0">Counter-Strike 2 <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#fbbf24" title="Sentiment: mixed">●</span></td>
           <td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td>
-          <td class="sentiment-cell" data-value="0"><span style="color:#fbbf24" title="mixed">●</span></td>
           <td class="num" data-value="1581471">1,581,471</td>
           <td class="num" data-value="1581471" style="color:#60a5fa;font-weight:600">1,581,471</td>
-          <td class="trend flat" data-value="1.4">▶ +1.4% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,11.9 32.0,2.7 48.0,1.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="trend flat" data-value="1.35">▶ +1.4% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,11.9 32.0,2.7 48.0,1.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td class="num" data-value="1818368" style="color:#fbbf24;font-weight:600">1,818,368</td>
           <td class="pct-cell" data-value="86.97">
             <div class="bar-bg"><div class="bar" style="width:86.97199906729551%"></div></div>
@@ -738,12 +717,11 @@
         </tr>
         <tr data-genre="Battle Royale">
           <td class="rank" data-value="2">#2</td>
-          <td class="game">PUBG: BATTLEGROUNDS <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="-1">PUBG: BATTLEGROUNDS <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#f87171" title="Sentiment: negative">●</span></td>
           <td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td>
-          <td class="sentiment-cell" data-value="-1"><span style="color:#f87171" title="negative">●</span></td>
           <td class="num" data-value="558468">558,468</td>
           <td class="num" data-value="698085" style="color:#60a5fa;font-weight:600">698,085</td>
-          <td class="trend down" data-value="-8.02">▼ -8.0% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,7.4 16.0,6.7 32.0,1.0 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="trend down" data-value="-8.07">▼ -8.1% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,7.4 16.0,6.6 32.0,1.0 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td class="num" data-value="4045033" style="color:#fbbf24;font-weight:600">4,045,033</td>
           <td class="pct-cell" data-value="17.26">
             <div class="bar-bg"><div class="bar" style="width:17.257828812923997%"></div></div>
@@ -752,12 +730,11 @@
         </tr>
         <tr data-genre="Extraction">
           <td class="rank" data-value="3">#3</td>
-          <td class="game">Arc Raiders <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="-1">Arc Raiders <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#f87171" title="Sentiment: negative">●</span></td>
           <td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td>
-          <td class="sentiment-cell" data-value="-1"><span style="color:#f87171" title="negative">●</span></td>
           <td class="num" data-value="277582">277,582</td>
           <td class="num" data-value="555164" style="color:#60a5fa;font-weight:600">555,164</td>
-          <td class="trend down" data-value="-20.77">▼ -20.8% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,6.7 32.0,4.8 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="event-annotation">-18.6% ← Post-launch decay. Second Expedition season announced Mar 1.</div></td>
+          <td class="trend down" data-value="-20.78" title="-18.6% ← Post-launch decay. Second Expedition season announced Mar 1.">▼ -20.8% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,6.7 32.0,4.8 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span class="annot-icon" title="-18.6% ← Post-launch decay. Second Expedition season announced Mar 1.">&#9432;</span></td>
           <td class="num" data-value="930194" style="color:#fbbf24;font-weight:600">930,194</td>
           <td class="pct-cell" data-value="59.68">
             <div class="bar-bg"><div class="bar" style="width:59.68260384392933%"></div></div>
@@ -766,12 +743,11 @@
         </tr>
         <tr data-genre="Battle Royale">
           <td class="rank" data-value="4">#4</td>
-          <td class="game">Apex Legends <span class="lifecycle-badge" style="color:#fbbf24;background:#3a3520">Maintenance</span></td>
+          <td class="game" data-value="-1">Apex Legends <span class="lifecycle-badge" style="color:#fbbf24;background:#3a3520">Maintenance</span> <span class="sent-inline" style="color:#f87171" title="Sentiment: negative">●</span></td>
           <td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td>
-          <td class="sentiment-cell" data-value="-1"><span style="color:#f87171" title="negative">●</span></td>
           <td class="num" data-value="187598">187,598</td>
           <td class="num" data-value="750392" style="color:#60a5fa;font-weight:600">750,392</td>
-          <td class="trend flat" data-value="0.92">▶ +0.9% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,13.0 32.0,4.8 48.0,4.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="trend flat" data-value="0.91">▶ +0.9% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,13.0 32.0,4.8 48.0,4.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td class="num" data-value="2497892" style="color:#fbbf24;font-weight:600">2,497,892</td>
           <td class="pct-cell" data-value="30.04">
             <div class="bar-bg"><div class="bar" style="width:30.041010580121156%"></div></div>
@@ -780,12 +756,11 @@
         </tr>
         <tr data-genre="Extraction">
           <td class="rank" data-value="5">#5</td>
-          <td class="game">Delta Force <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="1">Delta Force <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
           <td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td>
-          <td class="sentiment-cell" data-value="1"><span style="color:#4ade80" title="positive">●</span></td>
           <td class="num" data-value="145094">145,094</td>
           <td class="num" data-value="207277" style="color:#60a5fa;font-weight:600">207,277</td>
-          <td class="trend up" data-value="17.37">▲ +17.4% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,11.1 32.0,13.0 48.0,7.4" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="event-annotation">+14.0% ← RED DAY event + Season Morphosis live</div></td>
+          <td class="trend up" data-value="17.35" title="+14.0% ← RED DAY event + Season Morphosis live">▲ +17.4% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,11.1 32.0,13.0 48.0,7.4" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span class="annot-icon" title="+14.0% ← RED DAY event + Season Morphosis live">&#9432;</span></td>
           <td class="num" data-value="352025" style="color:#fbbf24;font-weight:600">352,025</td>
           <td class="pct-cell" data-value="58.88">
             <div class="bar-bg"><div class="bar" style="width:58.881250557994946%"></div></div>
@@ -794,12 +769,11 @@
         </tr>
         <tr data-genre="Hero Shooter">
           <td class="rank" data-value="6">#6</td>
-          <td class="game">Overwatch <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="1">Overwatch <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="sentiment-cell" data-value="1"><span style="color:#4ade80" title="positive">●</span></td>
           <td class="num" data-value="135175">135,175</td>
           <td class="num" data-value="675875" style="color:#60a5fa;font-weight:600">675,875</td>
-          <td class="trend up" data-value="108.64">▲ +108.6% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,12.1 32.0,12.7 48.0,1.0" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="event-annotation">+76.4% ← Loverwatch event + OWCS S2 kickoff + sub-role passives patch</div></td>
+          <td class="trend up" data-value="108.85" title="+76.4% ← Loverwatch event + OWCS S2 kickoff + sub-role passives patch">▲ +108.8% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,12.2 32.0,12.7 48.0,1.0" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span class="annot-icon" title="+76.4% ← Loverwatch event + OWCS S2 kickoff + sub-role passives patch">&#9432;</span></td>
           <td class="num" data-value="823180" style="color:#fbbf24;font-weight:600">823,180</td>
           <td class="pct-cell" data-value="82.11">
             <div class="bar-bg"><div class="bar" style="width:82.10537185062805%"></div></div>
@@ -808,26 +782,24 @@
         </tr>
         <tr data-genre="Hero Shooter">
           <td class="rank" data-value="7">#7</td>
-          <td class="game">Marvel Rivals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="1">Marvel Rivals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="sentiment-cell" data-value="1"><span style="color:#4ade80" title="positive">●</span></td>
-          <td class="num" data-value="123893">123,893</td>
-          <td class="num" data-value="353980" style="color:#60a5fa;font-weight:600">353,980</td>
-          <td class="trend flat" data-value="1.84">▶ +1.8% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,8.1 32.0,1.8 48.0,1.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="123351">123,351</td>
+          <td class="num" data-value="352431" style="color:#60a5fa;font-weight:600">352,431</td>
+          <td class="trend flat" data-value="1.86">▶ +1.9% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,8.1 32.0,1.8 48.0,1.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td class="num" data-value="1835237" style="color:#fbbf24;font-weight:600">1,835,237</td>
-          <td class="pct-cell" data-value="19.29">
-            <div class="bar-bg"><div class="bar" style="width:19.28797056978234%"></div></div>
-            <span>19.3%</span>
+          <td class="pct-cell" data-value="19.20">
+            <div class="bar-bg"><div class="bar" style="width:19.20359066091887%"></div></div>
+            <span>19.2%</span>
           </td>
         </tr>
         <tr data-genre="Tactical">
           <td class="rank" data-value="8">#8</td>
-          <td class="game">Rainbow Six Siege <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="0">Rainbow Six Siege <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#fbbf24" title="Sentiment: mixed">●</span></td>
           <td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td>
-          <td class="sentiment-cell" data-value="0"><span style="color:#fbbf24" title="mixed">●</span></td>
           <td class="num" data-value="110858">110,858</td>
           <td class="num" data-value="316737" style="color:#60a5fa;font-weight:600">316,737</td>
-          <td class="trend up" data-value="11.41">▲ +11.4% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,8.2 32.0,4.2 48.0,1.0" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="trend up" data-value="11.48">▲ +11.5% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,8.2 32.0,4.2 48.0,1.0" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td class="num" data-value="572788" style="color:#fbbf24;font-weight:600">572,788</td>
           <td class="pct-cell" data-value="55.30">
             <div class="bar-bg"><div class="bar" style="width:55.29739220654841%"></div></div>
@@ -836,12 +808,11 @@
         </tr>
         <tr data-genre="Large-Scale">
           <td class="rank" data-value="9">#9</td>
-          <td class="game">Battlefield 6 <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="1">Battlefield 6 <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
           <td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td>
-          <td class="sentiment-cell" data-value="1"><span style="color:#4ade80" title="positive">●</span></td>
           <td class="num" data-value="95926">95,926</td>
           <td class="num" data-value="174410" style="color:#60a5fa;font-weight:600">174,410</td>
-          <td class="trend down" data-value="-18.98">▼ -19.0% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,10.0 32.0,12.3 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="event-annotation">-22.6% ← Season 2 launched Feb 17 but failing to retain</div></td>
+          <td class="trend down" data-value="-18.96" title="-22.6% ← Season 2 launched Feb 17 but failing to retain">▼ -19.0% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,10.0 32.0,12.3 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span class="annot-icon" title="-22.6% ← Season 2 launched Feb 17 but failing to retain">&#9432;</span></td>
           <td class="num" data-value="1192849" style="color:#fbbf24;font-weight:600">1,192,849</td>
           <td class="pct-cell" data-value="14.62">
             <div class="bar-bg"><div class="bar" style="width:14.621372512258656%"></div></div>
@@ -850,12 +821,11 @@
         </tr>
         <tr data-genre="Large-Scale">
           <td class="rank" data-value="10">#10</td>
-          <td class="game">Call of Duty <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="1">Call of Duty <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
           <td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td>
-          <td class="sentiment-cell" data-value="1"><span style="color:#4ade80" title="positive">●</span></td>
           <td class="num" data-value="62166">62,166</td>
           <td class="num" data-value="414440" style="color:#60a5fa;font-weight:600">414,440</td>
-          <td class="trend flat" data-value="1.49">▶ +1.5% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,1.1 32.0,13.0 48.0,12.3" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="trend flat" data-value="1.5">▶ +1.5% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,1.1 32.0,13.0 48.0,12.3" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td class="num" data-value="3259313" style="color:#fbbf24;font-weight:600">3,259,313</td>
           <td class="pct-cell" data-value="12.72">
             <div class="bar-bg"><div class="bar" style="width:12.715561764543452%"></div></div>
@@ -864,12 +834,11 @@
         </tr>
         <tr data-genre="Hero Shooter">
           <td class="rank" data-value="11">#11</td>
-          <td class="game">Team Fortress 2 <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span></td>
+          <td class="game" data-value="0">Team Fortress 2 <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span> <span class="sent-inline" style="color:#fbbf24" title="Sentiment: mixed">●</span></td>
           <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
-          <td class="sentiment-cell" data-value="0"><span style="color:#fbbf24" title="mixed">●</span></td>
           <td class="num" data-value="61643">61,643</td>
           <td class="num" data-value="61643" style="color:#60a5fa;font-weight:600">61,643</td>
-          <td class="trend up" data-value="3.34">▲ +3.3% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,1.0 32.0,7.1 48.0,4.3" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="trend up" data-value="3.33">▲ +3.3% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,1.0 32.0,7.1 48.0,4.3" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td class="num" data-value="253225" style="color:#fbbf24;font-weight:600">253,225</td>
           <td class="pct-cell" data-value="24.34">
             <div class="bar-bg"><div class="bar" style="width:24.34317306743015%"></div></div>
@@ -878,9 +847,8 @@
         </tr>
         <tr data-genre="Arena">
           <td class="rank" data-value="12">#12</td>
-          <td class="game">The Finals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span></td>
+          <td class="game" data-value="0">The Finals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#fbbf24" title="Sentiment: mixed">●</span></td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="sentiment-cell" data-value="0"><span style="color:#fbbf24" title="mixed">●</span></td>
           <td class="num" data-value="19890">19,890</td>
           <td class="num" data-value="39780" style="color:#60a5fa;font-weight:600">39,780</td>
           <td class="trend up" data-value="2.8">▲ +2.8% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,4.2 32.0,2.6 48.0,1.0" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
@@ -892,12 +860,11 @@
         </tr>
         <tr data-genre="Looter Shooter">
           <td class="rank" data-value="13">#13</td>
-          <td class="game">Destiny 2 <span class="lifecycle-badge" style="color:#fbbf24;background:#3a3520">Maintenance</span></td>
+          <td class="game" data-value="-1">Destiny 2 <span class="lifecycle-badge" style="color:#fbbf24;background:#3a3520">Maintenance</span> <span class="sent-inline" style="color:#f87171" title="Sentiment: negative">●</span></td>
           <td><span class="genre-badge" style="color:#f472b6;background:#3b0a2e">Looter</span></td>
-          <td class="sentiment-cell" data-value="-1"><span style="color:#f87171" title="negative">●</span></td>
           <td class="num" data-value="15310">15,310</td>
           <td class="num" data-value="43742" style="color:#60a5fa;font-weight:600">43,742</td>
-          <td class="trend down" data-value="-25.82">▼ -25.8% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,12.6 16.0,1.0 32.0,10.2 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="event-annotation">-23.7% ← Continued structural decline pre-Marathon (Mar 5)</div></td>
+          <td class="trend down" data-value="-25.83" title="-23.7% ← Continued structural decline pre-Marathon (Mar 5)">▼ -25.8% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,12.6 16.0,1.0 32.0,10.2 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span class="annot-icon" title="-23.7% ← Continued structural decline pre-Marathon (Mar 5)">&#9432;</span></td>
           <td class="num" data-value="904717" style="color:#fbbf24;font-weight:600">904,717</td>
           <td class="pct-cell" data-value="4.83">
             <div class="bar-bg"><div class="bar" style="width:4.834976046183337%"></div></div>
@@ -906,26 +873,24 @@
         </tr>
         <tr data-genre="Arena">
           <td class="rank" data-value="14">#14</td>
-          <td class="game">Halo: MCC <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span></td>
+          <td class="game" data-value="1">Halo: MCC <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="sentiment-cell" data-value="1"><span style="color:#4ade80" title="positive">●</span></td>
-          <td class="num" data-value="7136">7,136</td>
-          <td class="num" data-value="23786" style="color:#60a5fa;font-weight:600">23,786</td>
-          <td class="trend down" data-value="-21.51">▼ -21.5% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,3.2 32.0,3.9 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="event-annotation">-21.3% ← Legacy title, Halo 2 Digsite content drop had limited impact</div></td>
+          <td class="num" data-value="6710">6,710</td>
+          <td class="num" data-value="22366" style="color:#60a5fa;font-weight:600">22,366</td>
+          <td class="trend down" data-value="-21.46" title="-21.3% ← Legacy title, Halo 2 Digsite content drop had limited impact">▼ -21.5% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,3.2 32.0,3.9 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span class="annot-icon" title="-21.3% ← Legacy title, Halo 2 Digsite content drop had limited impact">&#9432;</span></td>
           <td class="num" data-value="311016" style="color:#fbbf24;font-weight:600">311,016</td>
-          <td class="pct-cell" data-value="7.65">
-            <div class="bar-bg"><div class="bar" style="width:7.6480360109318895%"></div></div>
-            <span>7.6%</span>
+          <td class="pct-cell" data-value="7.19">
+            <div class="bar-bg"><div class="bar" style="width:7.191468838754622%"></div></div>
+            <span>7.2%</span>
           </td>
         </tr>
         <tr data-genre="Arena">
           <td class="rank" data-value="15">#15</td>
-          <td class="game">Halo Infinite <span class="lifecycle-badge" style="color:#f87171;background:#3a1a1a">Sunset</span></td>
+          <td class="game" data-value="1">Halo Infinite <span class="lifecycle-badge" style="color:#f87171;background:#3a1a1a">Sunset</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
           <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
-          <td class="sentiment-cell" data-value="1"><span style="color:#4ade80" title="positive">●</span></td>
           <td class="num" data-value="3023">3,023</td>
           <td class="num" data-value="25191" style="color:#60a5fa;font-weight:600">25,191</td>
-          <td class="trend down" data-value="-8.05">▼ -8.1% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,11.8 32.0,8.2 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="trend down" data-value="-7.98">▼ -8.0% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,11.9 32.0,8.2 48.0,13.0" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
           <td class="num" data-value="2138491" style="color:#fbbf24;font-weight:600">2,138,491</td>
           <td class="pct-cell" data-value="1.18">
             <div class="bar-bg"><div class="bar" style="width:1.178010981260156%"></div></div>
@@ -946,12 +911,12 @@
         <th style="text-align:center"># Titles</th>
       </tr></thead>
       <tbody>
-<tr><td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td><td class="num" style="color:#60a5fa;font-weight:600">1,898,208</td><td class="trend up" style="text-align:center">+3.1%</td><td>Counter-Strike 2</td><td style="text-align:center">2</td></tr>
+<tr><td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td><td class="num" style="color:#60a5fa;font-weight:600">1,898,208</td><td class="trend up" style="text-align:center">+3.0%</td><td>Counter-Strike 2</td><td style="text-align:center">2</td></tr>
 <tr><td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td><td class="num" style="color:#60a5fa;font-weight:600">1,448,477</td><td class="trend down" style="text-align:center">-3.4%</td><td>Apex Legends</td><td style="text-align:center">2</td></tr>
-<tr><td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td><td class="num" style="color:#60a5fa;font-weight:600">1,091,498</td><td class="trend up" style="text-align:center">+68.1%</td><td>Overwatch</td><td style="text-align:center">3</td></tr>
+<tr><td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td><td class="num" style="color:#60a5fa;font-weight:600">1,089,949</td><td class="trend up" style="text-align:center">+68.3%</td><td>Overwatch</td><td style="text-align:center">3</td></tr>
 <tr><td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td><td class="num" style="color:#60a5fa;font-weight:600">762,441</td><td class="trend down" style="text-align:center">-10.4%</td><td>Arc Raiders</td><td style="text-align:center">2</td></tr>
 <tr><td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td><td class="num" style="color:#60a5fa;font-weight:600">588,850</td><td class="trend down" style="text-align:center">-4.6%</td><td>Call of Duty</td><td style="text-align:center">2</td></tr>
-<tr><td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td><td class="num" style="color:#60a5fa;font-weight:600">88,757</td><td class="trend down" style="text-align:center">-6.8%</td><td>The Finals</td><td style="text-align:center">3</td></tr>
+<tr><td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td><td class="num" style="color:#60a5fa;font-weight:600">87,337</td><td class="trend down" style="text-align:center">-6.5%</td><td>The Finals</td><td style="text-align:center">3</td></tr>
 <tr><td><span class="genre-badge" style="color:#f472b6;background:#3b0a2e">Looter</span></td><td class="num" style="color:#60a5fa;font-weight:600">43,742</td><td class="trend down" style="text-align:center">-25.8%</td><td>Destiny 2</td><td style="text-align:center">1</td></tr>
       </tbody>
     </table>
@@ -961,10 +926,9 @@
     <h2>Key Insights</h2>
     <ul>
       <li><strong>Biggest populations:</strong> Counter-Strike 2, PUBG: BATTLEGROUNDS, Arc Raiders</li>
-      <li><strong>Biggest gainer:</strong> Overwatch (+108.6%)</li>
+      <li><strong>Biggest gainer:</strong> Overwatch (+108.8%)</li>
       <li><strong>Biggest decline:</strong> Destiny 2 (-25.8%)</li>
       <li><strong>Closest to all-time peak:</strong> Counter-Strike 2 (87.0%)</li>
-      <li><strong>Halo position:</strong> #14 with 7,136 players, trend: -21.5%</li>
     </ul>
   </div>
 
@@ -980,11 +944,11 @@
           &nbsp;|&nbsp; All-Time Peak: <strong>1,818,368</strong> <small style="color:#556b7d">(100% Steam)</small> (87.0% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-  <polygon points="12.0,37.0 84.0,34.5 156.0,13.9 228.0,10.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
-  <polyline points="12.0,37.0 84.0,34.5 156.0,13.9 228.0,10.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <polygon points="12.0,37.0 84.0,34.5 156.0,13.8 228.0,10.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,37.0 84.0,34.5 156.0,13.8 228.0,10.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   <circle cx="12.0" cy="37.0" r="3" fill="#fbbf24" />
 <circle cx="84.0" cy="34.5" r="3" fill="#fbbf24" />
-<circle cx="156.0" cy="13.9" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="13.8" r="3" fill="#fbbf24" />
 <circle cx="228.0" cy="10.0" r="3" fill="#fbbf24" />
 
   <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Nov</text>
@@ -1028,13 +992,13 @@
         <details>
           <summary>Community Pulse <span class="sub">r/cs2</span> — 5 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/cs2/comments/1randba/why_wont_this_karambit_equip/" target="_blank" class="item-link">Why won&#x27;t this karambit equip?</a> (3,420 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Prestigious_Look_513</span> (369 pts): damn poor kid got scammed and we are here laughing</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/cs2/comments/1randba/why_wont_this_karambit_equip/" target="_blank" class="item-link">Why won&#x27;t this karambit equip?</a> (3,443 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Prestigious_Look_513</span> (371 pts): damn poor kid got scammed and we are here laughing</li>
 </ul></li>
 </ul>
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1qmzj0t/why_you_are_like_this/" target="_blank" class="item-link">Why you are like this?</a> (4,478 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1qrjula/does_he_reply_to_everyone/" target="_blank" class="item-link">Does he reply to everyone?</a> (4,280 upvotes)</li>
-<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1quaadz/not_on_my_2026_bingo_card/" target="_blank" class="item-link">Not on my 2026 bingo card</a> (4,051 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1r2rk87/how_not_to_censor_a_drink/" target="_blank" class="item-link">How not to censor a drink</a> (3,867 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1qmzj0t/why_you_are_like_this/" target="_blank" class="item-link">Why you are like this?</a> (4,476 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1qrjula/does_he_reply_to_everyone/" target="_blank" class="item-link">Does he reply to everyone?</a> (4,276 upvotes)</li>
+<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1quaadz/not_on_my_2026_bingo_card/" target="_blank" class="item-link">Not on my 2026 bingo card</a> (4,055 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/cs2/comments/1r2rk87/how_not_to_censor_a_drink/" target="_blank" class="item-link">How not to censor a drink</a> (3,861 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1043,7 +1007,7 @@
 
     <div class="card" data-genre="Battle Royale">
       <div class="card-header">
-        <h3>PUBG: BATTLEGROUNDS <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span> <span class="trend-badge down">▼ -8.0% MoM</span></h3>
+        <h3>PUBG: BATTLEGROUNDS <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span> <span class="trend-badge down">▼ -8.1% MoM</span></h3>
         
         <div class="card-stats">
           24h Peak: <strong>558,468</strong> (Steam)
@@ -1051,9 +1015,9 @@
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">4,045,033</strong> <small style="color:#556b7d">(est. all platforms)</small> (17.3% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-  <polygon points="12.0,24.4 84.0,22.7 156.0,10.0 228.0,37.0 228.0,37 12.0,37" fill="rgba(248,113,113,0.12)" />
-  <polyline points="12.0,24.4 84.0,22.7 156.0,10.0 228.0,37.0" fill="none" stroke="#f87171" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
-  <circle cx="12.0" cy="24.4" r="3" fill="#f87171" />
+  <polygon points="12.0,24.3 84.0,22.7 156.0,10.0 228.0,37.0 228.0,37 12.0,37" fill="rgba(248,113,113,0.12)" />
+  <polyline points="12.0,24.3 84.0,22.7 156.0,10.0 228.0,37.0" fill="none" stroke="#f87171" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="24.3" r="3" fill="#f87171" />
 <circle cx="84.0" cy="22.7" r="3" fill="#f87171" />
 <circle cx="156.0" cy="10.0" r="3" fill="#f87171" />
 <circle cx="228.0" cy="37.0" r="3" fill="#f87171" />
@@ -1069,7 +1033,7 @@
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> PUBG: BATTLEGROUNDS is declining (-8.0% MoM, averaging 267K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (1 posts) and game updates and announcements (1 posts). Active press coverage from PUBG: BATTLEGROUNDS (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> PUBG: BATTLEGROUNDS is declining (-8.1% MoM, averaging 267K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (1 posts) and game updates and announcements (1 posts). Active press coverage from PUBG: BATTLEGROUNDS (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> PUBG: BATTLEGROUNDS is declining (-6.7% MoM, averaging 271K players over the last 30 days). At just 14% of all-time peak — well below historical levels. Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend. Limited community activity — one substantive post about game updates and announcements. Active press coverage from The Esports Advocate, PUBG: BATTLEGROUNDS, GamesBeat (5 articles from gaming press in the past week). Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -1099,9 +1063,9 @@
         <details>
           <summary>Community Pulse <span class="sub">r/PUBATTLEGROUNDS</span> — 2 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/PUBATTLEGROUNDS/comments/1ra48pj/is_sks_really_that_weak/" target="_blank" class="item-link">Is SKS really that weak?</a> (151 upvotes)</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/PUBATTLEGROUNDS/comments/1ra48pj/is_sks_really_that_weak/" target="_blank" class="item-link">Is SKS really that weak?</a> (153 upvotes)</li>
 </ul>
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/PUBATTLEGROUNDS/comments/1qvkjvw/the_last_erangel_subzero_map_update_with_the/" target="_blank" class="item-link">The last Erangel SubZero map update (with the transition to full snow) was very</a> (342 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/PUBATTLEGROUNDS/comments/1qvkjvw/the_last_erangel_subzero_map_update_with_the/" target="_blank" class="item-link">The last Erangel SubZero map update (with the transition to full snow) was very</a> (340 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1136,7 +1100,7 @@
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Arc Raiders is dropping sharply (-20.8% MoM, averaging 191K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Sharp decline from elevated levels — likely post-launch or post-season normalization as initial hype fades. This is a typical pattern. Dev activity: 31+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between game updates and announcements (1 posts) and player frustrations and complaints (1 posts). Active press coverage from PC Gamer, Insider Gaming, Polygon (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Arc Raiders is dropping sharply (-20.8% MoM, averaging 191K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Sharp decline from elevated levels — likely post-launch or post-season normalization as initial hype fades. This is a typical pattern. Dev activity: 31+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between game updates and announcements (1 posts) and player frustrations and complaints (1 posts). Active press coverage from PC Gamer, Insider Gaming, GamesRadar+ (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Arc Raiders is dropping sharply (-18.1% MoM, averaging 198K players over the last 30 days). Sharp decline from elevated levels — likely post-launch or post-season normalization as initial hype fades. This is a typical pattern. Dev activity: 31+ bug fixes deployed. Community is actively engaged in gameplay discussion and strategy — 2 of 3 posts this period. Active press coverage from ARC Raiders, GamesRadar+, MP1st (5 articles from gaming press in the past week). Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -1156,8 +1120,8 @@
           </div>
           <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiywFBVV95cUxOVXB0R1BieWFfTWhJekI0LV9iLVFQRU1yX3FoNU5neTNfdVg5YnBlMXczME1CSFh5ZHZqRS1YWldVUUhNcGtKck1fdFpDTnF2OUtyZ3VYUldlZjNQUEt1dnNJV2gyUzB4RnNGcjNyWTIwUnNaSE1nTElPQ0dsMEM4aS0wNFU3eVZHUWtwcnpDbnk1dXNKN09PSXNiNGtuUDRXalhXRE1xUDVuREsxb3Jic0lyTTQ4Qm5HYTNFS0o3S0lud0RqT0FMdHV0UQ?oc=5" target="_blank" class="item-link">Arc Raiders full interview: &#x27;Nobody whatsoever thought we&#x27;d have this many</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">PC Gamer</span></li>
 <li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxNU19ndmlwcDBLLTlacW5OOUMwcmVlTjRYNzc4R1hYa1pQdVVIdUR3MHFpajJmSlhBQ3hUQm1rR1BITTZUUTJtb1pMS0JOYy0wbzBhV09PNzBVelhpNzJvY0t1cUN6cGRsQ0lISlFyVWxjR3JqVXlKWkVKTFJKdVM3enN3cjlsSGlJWjZfZQ?oc=5" target="_blank" class="item-link">Embark Studios is Finally Giving ARC Raiders Players Facial Hair - Insider</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Insider Gaming</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMipgJBVV95cUxQTkFwc3hFZTNGeHlCRWtBNGdWaGxGR3FQWmNkdDJxcjBIeG84RGxld3dZbFZRb1QtODZyUUhJX1QyMG9meHVjYUVGa0hfSHhaenRjam9ILV9FUGRQTEt6YkpvWWkya3E4TkRfbVdLc2Y3ZHpXcmN4anp6MlRkUTZLcHR4SHFraW1FMnhVa2VoTjlmYnh0V3l1eXZCZGpvRTFYdnBaOUtqalpZS2lpYmJGak1vVkxrMnJFZ3pEOVFFTm1iM0FDblkxSGQ3R1NCMzd5MGlIelh5V1ZPVG9DWXpma0xScldwcDEzdTBnR0lJY0NPRy1ZMFVFVkdKUWliYjZodFVWazN1Um5waU1Pdkk0dDBoTlBOU2dfOTlNbnhYYkJVMHJIUXc?oc=5" target="_blank" class="item-link">Arc Raiders lead says &quot;revisions are probably required&quot; on uneven events li</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamesRadar+</span></li>
 <li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMigwFBVV95cUxOUDJrSmNxOFJQX2JKNHJwRFkyZnNSMmRFd3BKMlJpa1hPcUJ6eU9scFR1VzVqNzhjRDIwTTRKQl92OTVvQV9QOFpfYVl3aGFMRFFYLWdXQVZ2bV8yZzBpWDFGaG1lbk9BRTNpbmNlcE1ucEZSaDhNMHdXeGRCME1OU0hrZw?oc=5" target="_blank" class="item-link">What time does the Arc Raiders Shrouded Sky update release in your time zon</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Polygon</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMigwFBVV95cUxPN2hvZnFTYkpWZTNwYkhXN08xNlpjUkNqR0pHREV4QXRqVUZJRmJ4SHBlalk3clhZN0lzLU5TTFAzMDJqQlNNei1KMmcySDNMR3VPRWpOYmNhZU9OMGRXZkE4RUlCOUowUjFlMENsd2hCMGZSNmpxREVwMkt2VjYwekNhcw?oc=5" target="_blank" class="item-link">Uncovered Caches Guide: Cache Locations - Arc Raiders Guide - IGN</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">IGN</span></li>
 </ul>
         </div>
       </div>
@@ -1166,10 +1130,10 @@
         <details>
           <summary>Community Pulse <span class="sub">r/ArcRaiders</span> — 3 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1r9w5ep/the_new_update_voice_lines/" target="_blank" class="item-link">The new Update voice lines.</a> (7,001 upvotes)</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1r9w5ep/the_new_update_voice_lines/" target="_blank" class="item-link">The new Update voice lines.</a> (6,998 upvotes)</li>
 </ul>
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1qwzk34/embark_fix_your_lighting/" target="_blank" class="item-link">Embark, fix your lighting...</a> (16,087 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1qxd6w7/thoughts/" target="_blank" class="item-link">???? Thoughts ????</a> (15,682 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1qwzk34/embark_fix_your_lighting/" target="_blank" class="item-link">Embark, fix your lighting...</a> (16,085 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/ArcRaiders/comments/1qxd6w7/thoughts/" target="_blank" class="item-link">???? Thoughts ????</a> (15,686 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1186,19 +1150,19 @@
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">2,497,892</strong> <small style="color:#556b7d">(est. all platforms)</small> (30.0% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-  <polygon points="12.0,10.0 84.0,37.0 156.0,18.6 228.0,16.6 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
-  <polyline points="12.0,10.0 84.0,37.0 156.0,18.6 228.0,16.6" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <polygon points="12.0,10.0 84.0,37.0 156.0,18.6 228.0,16.7 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,10.0 84.0,37.0 156.0,18.6 228.0,16.7" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   <circle cx="12.0" cy="10.0" r="3" fill="#fbbf24" />
 <circle cx="84.0" cy="37.0" r="3" fill="#fbbf24" />
 <circle cx="156.0" cy="18.6" r="3" fill="#fbbf24" />
-<circle cx="228.0" cy="16.6" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="16.7" r="3" fill="#fbbf24" />
 
   <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Nov</text>
 <text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
 <text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
 <text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
 
-  <text x="228.0" y="10.600000000000001" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">87K</text>
+  <text x="228.0" y="10.7" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">87K</text>
 
 </svg></div>
       </div>
@@ -1236,21 +1200,21 @@ A new detection targeting XIM cheating devices was enabled today that resulted i
         <details>
           <summary>Community Pulse <span class="sub">r/apexlegends</span> — 8 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r97730/can_we_please_get_the_og_rev_back/" target="_blank" class="item-link">Can we please get the OG Rev back?</a> (1,066 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/nocookies4memes</span> (640 pts): I wish he could at least have his death totem in some way, his new ult has always felt so basic. Press button to get more health.</li>
-<li class="comment"><span class="comment-author">u/Alternative_Cow811</span> (167 pts): I just want his silencer back and force players to use there aim and movement</li>
-<li class="comment"><span class="comment-author">u/Effective_Reality870</span> (159 pts): I mean old rev ult is basically just alter nexus</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r97730/can_we_please_get_the_og_rev_back/" target="_blank" class="item-link">Can we please get the OG Rev back?</a> (1,065 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/nocookies4memes</span> (640 pts): I wish he could at least have his death totem in some way, his new ult has always felt so basic. Press button to get more health.</li>
+<li class="comment"><span class="comment-author">u/Alternative_Cow811</span> (163 pts): I just want his silencer back and force players to use there aim and movement</li>
+<li class="comment"><span class="comment-author">u/Effective_Reality870</span> (160 pts): I mean old rev ult is basically just alter nexus</li>
 </ul></li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r8guas/game_on_steam_called_blood_strike_blatantly/" target="_blank" class="item-link">game on steam called ( blood strike ) blatantly stealing abilities from apex</a> (1,023 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Cheasymeteor</span> (498 pts): In their defence, a lot of these aren&#x27;t original ideas</li>
-<li class="comment"><span class="comment-author">u/creative_name_228</span> (356 pts): I played in it on phone,it feels like mobile apex</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r8guas/game_on_steam_called_blood_strike_blatantly/" target="_blank" class="item-link">game on steam called ( blood strike ) blatantly stealing abilities from apex</a> (1,021 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Cheasymeteor</span> (500 pts): In their defence, a lot of these aren&#x27;t original ideas</li>
+<li class="comment"><span class="comment-author">u/creative_name_228</span> (351 pts): I played in it on phone,it feels like mobile apex</li>
 <li class="comment"><span class="comment-author">u/nazranx2</span> (212 pts): Are the heirloom cheaper there?</li>
 </ul></li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r94cx9/how_we_enjoying_kings_canyon_wildcard/" target="_blank" class="item-link">How we enjoying Kings Canyon wildcard?</a> (669 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1rakt9y/they_dont_even_care_about_ranked_anymore/" target="_blank" class="item-link">They dont even care about ranked anymore</a> (601 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r94cx9/how_we_enjoying_kings_canyon_wildcard/" target="_blank" class="item-link">How we enjoying Kings Canyon wildcard?</a> (665 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1rakt9y/they_dont_even_care_about_ranked_anymore/" target="_blank" class="item-link">They dont even care about ranked anymore</a> (605 upvotes)</li>
 </ul>
             <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r05rfq/to_this_day_i_still_do_not_understand_why_they/" target="_blank" class="item-link">To this day i still do not understand why they switched the spitfire from heavy</a> (3,516 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r4c5yq/loba_and_her_massive_ass/" target="_blank" class="item-link">Loba and her massive ass</a> (2,277 upvotes)</li>
-<li><span class="cat-tag" style="color:#4ade80;background:#1e5f2e">PRAISE</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1qv15hu/please_de_not_change_dropzone_it_was_the_best/" target="_blank" class="item-link">Please de NOT change DropZone. It was the best change ever done to rancked</a> (2,206 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r2l5vy/dear_respawn_not_a_single_player_in_your/" target="_blank" class="item-link">Dear Respawn, Not a single player in your community wants stickers.</a> (2,041 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r4c5yq/loba_and_her_massive_ass/" target="_blank" class="item-link">Loba and her massive ass</a> (2,270 upvotes)</li>
+<li><span class="cat-tag" style="color:#4ade80;background:#1e5f2e">PRAISE</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1qv15hu/please_de_not_change_dropzone_it_was_the_best/" target="_blank" class="item-link">Please de NOT change DropZone. It was the best change ever done to rancked</a> (2,207 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/apexlegends/comments/1r2l5vy/dear_respawn_not_a_single_player_in_your/" target="_blank" class="item-link">Dear Respawn, Not a single player in your community wants stickers.</a> (2,038 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1327,7 +1291,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
         <details>
           <summary>Community Pulse <span class="sub">r/DeltaForce</span> — 3 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/deltaforce/comments/1r7iv84/vyrons_new_year_restaurant_what_to_serve_nox_and/" target="_blank" class="item-link">Vyron&#x27;s New Year Restaurant: what to serve Nox and with who.</a> (5 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/PresentationIll378</span> (1 pts): thx! it works!</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/deltaforce/comments/1r7iv84/vyrons_new_year_restaurant_what_to_serve_nox_and/" target="_blank" class="item-link">Vyron&#x27;s New Year Restaurant: what to serve Nox and with who.</a> (6 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/PresentationIll378</span> (1 pts): thx! it works!</li>
 </ul></li>
 </ul>
             <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/deltaforce/comments/1r7iv84/vyrons_new_year_restaurant_what_to_serve_nox_and/" target="_blank" class="item-link">Vyron&#x27;s New Year Restaurant: what to serve Nox and with who.</a> (5 upvotes)</li>
@@ -1340,7 +1304,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
 
     <div class="card" data-genre="Hero Shooter">
       <div class="card-header">
-        <h3>Overwatch <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span> <span class="trend-badge up">▲ +108.6% MoM</span></h3>
+        <h3>Overwatch <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span> <span class="trend-badge up">▲ +108.8% MoM</span></h3>
         <div class="event-annotation">+76.4% ← Loverwatch event + OWCS S2 kickoff + sub-role passives patch</div>
         <div class="card-stats">
           24h Peak: <strong>135,175</strong> (Steam)
@@ -1366,7 +1330,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Overwatch is surging (+108.6% MoM, averaging 58K players over the last 30 days), accelerating vs. last run. Currently at 82% of all-time peak — near historical highs.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from spectatornews.com, PC Gamer, Eurogamer (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Overwatch is surging (+108.8% MoM, averaging 58K players over the last 30 days), accelerating vs. last run. Currently at 82% of all-time peak — near historical highs.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from spectatornews.com, PC Gamer, Eurogamer (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Overwatch is surging (+72.4% MoM, averaging 48K players over the last 30 days). Growth despite no major content — bug fixes and quality-of-life patches may be improving player retention. Community discussion this week centers on game updates and announcements — 3 of 3 posts are news-focused. Active press coverage from Kotaku, PC Gamer, Eurogamer (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
       </div>
       <div class="card-body-2col">
@@ -1396,18 +1360,18 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
 
     <div class="card" data-genre="Hero Shooter">
       <div class="card-header">
-        <h3>Marvel Rivals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span> <span class="trend-badge flat">▶ +1.8% MoM</span></h3>
+        <h3>Marvel Rivals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span> <span class="trend-badge flat">▶ +1.9% MoM</span></h3>
         
         <div class="card-stats">
-          24h Peak: <strong>123,893</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">353,980</strong> (35% Steam)
-          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">1,835,237</strong> <small style="color:#556b7d">(est. all platforms)</small> (19.3% current)
+          24h Peak: <strong>123,351</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">352,431</strong> (35% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">1,835,237</strong> <small style="color:#556b7d">(est. all platforms)</small> (19.2% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-  <polygon points="12.0,37.0 84.0,26.0 156.0,11.8 228.0,10.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
-  <polyline points="12.0,37.0 84.0,26.0 156.0,11.8 228.0,10.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <polygon points="12.0,37.0 84.0,26.1 156.0,11.8 228.0,10.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,37.0 84.0,26.1 156.0,11.8 228.0,10.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   <circle cx="12.0" cy="37.0" r="3" fill="#fbbf24" />
-<circle cx="84.0" cy="26.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="26.1" r="3" fill="#fbbf24" />
 <circle cx="156.0" cy="11.8" r="3" fill="#fbbf24" />
 <circle cx="228.0" cy="10.0" r="3" fill="#fbbf24" />
 
@@ -1422,7 +1386,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Marvel Rivals is holding steady (+1.8%, averaging 90K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 6.5 launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from Cedarville University, Marvel Rivals, VICE (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Outlook:</span> Looking ahead: Here&#x27;s what&#x27;s coming your way: All-New ContentNew Events —— Faulty Dream &amp; Twisted NightmareThis week will see the launch of two brand new events: 
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Marvel Rivals is holding steady (+1.9%, averaging 90K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 6.5 launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from Cedarville University, Marvel Rivals, VICE (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Outlook:</span> Looking ahead: Here&#x27;s what&#x27;s coming your way: All-New ContentNew Events —— Faulty Dream &amp; Twisted NightmareThis week will see the launch of two brand new events: 
 Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a fresh face, festive events, and legendary loot! The update begins on February 13th, 2026, at 09 : 00 : 00 (UTC), with estimated mainte...</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Marvel Rivals is growing (+4.3% MoM, averaging 93K players over the last 30 days). Growth likely driven by (Season 6.5) season launch bringing returning and new players. Dev activity: Season 6.5 launched with Museum of ContemplationA new battlefield, The Clobberin. Community is actively engaged in gameplay discussion and strategy — 2 of 3 posts this period. Active press coverage from VICE, Marvel Rivals, GamingTrend (5 articles from gaming press in the past week). Looking ahead: Marvel Rivals enters its S6.5 season with a fresh face, festive events, and legendary loot!The update begins on February 13th, 2026, at 09 : 00 : 00 (UTC), with estimated mainte... Sustained growth trajectory.</div>
       </div>
@@ -1453,13 +1417,13 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
         <details>
           <summary>Community Pulse <span class="sub">r/marvelrivals</span> — 2 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/marvelrivals/comments/1r6p3aj/marvel_rivals_devs_care_about_the_community/" target="_blank" class="item-link">Marvel Rivals Devs Care About The Community</a> (11,331 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/nemesisdelta24</span> (3,255 pts): That’s such a sweet gesture and condolences</li>
-<li class="comment"><span class="comment-author">u/Zokstone</span> (1,580 pts): I hear the town halls are extra cheap in heaven. 
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/marvelrivals/comments/1r6p3aj/marvel_rivals_devs_care_about_the_community/" target="_blank" class="item-link">Marvel Rivals Devs Care About The Community</a> (11,338 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/nemesisdelta24</span> (3,255 pts): That’s such a sweet gesture and condolences</li>
+<li class="comment"><span class="comment-author">u/Zokstone</span> (1,582 pts): I hear the town halls are extra cheap in heaven. 
 
 💜</li>
-<li class="comment"><span class="comment-author">u/WindyGogo</span> (1,554 pts): That’s pretty. Nice of a company to listen to such request still despite their size.</li>
+<li class="comment"><span class="comment-author">u/WindyGogo</span> (1,558 pts): That’s pretty. Nice of a company to listen to such request still despite their size.</li>
 </ul></li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/marvelrivals/comments/1r6g6xg/lack_of_villains_in_rivals/" target="_blank" class="item-link">Lack of villains in rivals</a> (7,837 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/marvelrivals/comments/1r6g6xg/lack_of_villains_in_rivals/" target="_blank" class="item-link">Lack of villains in rivals</a> (7,833 upvotes)</li>
 </ul>
             
           </div>
@@ -1469,7 +1433,7 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
 
     <div class="card" data-genre="Tactical">
       <div class="card-header">
-        <h3>Rainbow Six Siege <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span> <span class="trend-badge up">▲ +11.4% MoM</span></h3>
+        <h3>Rainbow Six Siege <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span> <span class="trend-badge up">▲ +11.5% MoM</span></h3>
         
         <div class="card-stats">
           24h Peak: <strong>110,858</strong> (Steam)
@@ -1477,11 +1441,11 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">572,788</strong> <small style="color:#556b7d">(est. all platforms)</small> (55.3% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-  <polygon points="12.0,37.0 84.0,26.2 156.0,17.1 228.0,10.0 228.0,37 12.0,37" fill="rgba(74,222,128,0.12)" />
-  <polyline points="12.0,37.0 84.0,26.2 156.0,17.1 228.0,10.0" fill="none" stroke="#4ade80" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <polygon points="12.0,37.0 84.0,26.2 156.0,17.2 228.0,10.0 228.0,37 12.0,37" fill="rgba(74,222,128,0.12)" />
+  <polyline points="12.0,37.0 84.0,26.2 156.0,17.2 228.0,10.0" fill="none" stroke="#4ade80" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   <circle cx="12.0" cy="37.0" r="3" fill="#4ade80" />
 <circle cx="84.0" cy="26.2" r="3" fill="#4ade80" />
-<circle cx="156.0" cy="17.1" r="3" fill="#4ade80" />
+<circle cx="156.0" cy="17.2" r="3" fill="#4ade80" />
 <circle cx="228.0" cy="10.0" r="3" fill="#4ade80" />
 
   <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Nov</text>
@@ -1495,7 +1459,7 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Rainbow Six Siege is surging (+11.4% MoM, averaging 52K players over the last 30 days), accelerating vs. last run.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from Ubisoft, Xbox Wire, GamingTrend (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Rainbow Six Siege is surging (+11.5% MoM, averaging 52K players over the last 30 days), accelerating vs. last run.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from Ubisoft, Xbox Wire, GamingTrend (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Rainbow Six Siege is growing (+4.7% MoM, averaging 49K players over the last 30 days). Growth likely driven by season launch bringing returning and new players. Dev activity:  launched with is none other than Solid Snake, rnized maps and more. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts). Active press coverage from PCGamesN, Shacknews, Express.co.uk (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
       </div>
       <div class="card-body-2col">
@@ -1525,7 +1489,7 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
         <details>
           <summary>Community Pulse <span class="sub">r/Rainbow6</span> — 2 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Rainbow6/comments/1ragjf4/getting_to_this_point_has_to_be_astronomically/" target="_blank" class="item-link">Getting to this point has to be astronomically unlucky</a> (3,226 upvotes)</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Rainbow6/comments/1ragjf4/getting_to_this_point_has_to_be_astronomically/" target="_blank" class="item-link">Getting to this point has to be astronomically unlucky</a> (3,225 upvotes)</li>
 </ul>
             <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Rainbow6/comments/1qou45c/23000_credits_gone/" target="_blank" class="item-link">23000 credits gone</a> (4,436 upvotes)</li>
 </ul>
@@ -1596,12 +1560,12 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
         <details>
           <summary>Community Pulse <span class="sub">r/battlefield</span> — 2 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Battlefield/comments/1r6n58s/so_dice_is_starting_to_listen/" target="_blank" class="item-link">So Dice IS starting to listen?</a> (6,715 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/KiNGTiGER1423</span> (1,965 pts): Now if only we can get them to listen about Maps and Real Persistent Servers…🤔</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Battlefield/comments/1r6n58s/so_dice_is_starting_to_listen/" target="_blank" class="item-link">So Dice IS starting to listen?</a> (6,711 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/KiNGTiGER1423</span> (1,970 pts): Now if only we can get them to listen about Maps and Real Persistent Servers…🤔</li>
 <li class="comment"><span class="comment-author">u/KarevX</span> (583 pts): No, don&#x27;t fall for that, skins are the least of it, there&#x27;s a lot more in the game that needs fixing.</li>
-<li class="comment"><span class="comment-author">u/merkmerc</span> (310 pts): I mean that shit looks 10x better</li>
+<li class="comment"><span class="comment-author">u/merkmerc</span> (309 pts): I mean that shit looks 10x better</li>
 </ul></li>
 </ul>
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Battlefield/comments/1r6n58s/so_dice_is_starting_to_listen/" target="_blank" class="item-link">So Dice IS starting to listen?</a> (6,706 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/Battlefield/comments/1r6n58s/so_dice_is_starting_to_listen/" target="_blank" class="item-link">So Dice IS starting to listen?</a> (6,713 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1618,19 +1582,19 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">3,259,313</strong> <small style="color:#556b7d">(est. all platforms)</small> (12.7% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-  <polygon points="12.0,10.0 84.0,10.2 156.0,37.0 228.0,35.5 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
-  <polyline points="12.0,10.0 84.0,10.2 156.0,37.0 228.0,35.5" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <polygon points="12.0,10.0 84.0,10.2 156.0,37.0 228.0,35.4 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,10.0 84.0,10.2 156.0,37.0 228.0,35.4" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   <circle cx="12.0" cy="10.0" r="3" fill="#fbbf24" />
 <circle cx="84.0" cy="10.2" r="3" fill="#fbbf24" />
 <circle cx="156.0" cy="37.0" r="3" fill="#fbbf24" />
-<circle cx="228.0" cy="35.5" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="35.4" r="3" fill="#fbbf24" />
 
   <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Nov</text>
 <text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
 <text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
 <text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
 
-  <text x="228.0" y="29.5" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">36K</text>
+  <text x="228.0" y="29.4" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">36K</text>
 
 </svg></div>
       </div>
@@ -1666,10 +1630,10 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
         <details>
           <summary>Community Pulse <span class="sub">r/CallOfDuty</span> — 3 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1r9e09s/cod_the_fact_that_general_shepherd_stands_above/" target="_blank" class="item-link">[COD] The fact that General Shepherd stands above every character you see him as</a> (846 upvotes)</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1r9e09s/cod_the_fact_that_general_shepherd_stands_above/" target="_blank" class="item-link">[COD] The fact that General Shepherd stands above every character you see him as</a> (845 upvotes)</li>
 </ul>
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1r415hm/who_remembers_the_emblem_creator_from_cod_black/" target="_blank" class="item-link">Who remembers the emblem creator from [COD]: Black Ops 2?</a> (8,042 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1qt8cnb/cod_do_you_agree_with_this_take/" target="_blank" class="item-link">[COD] Do you agree with this take?</a> (7,924 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1r415hm/who_remembers_the_emblem_creator_from_cod_black/" target="_blank" class="item-link">Who remembers the emblem creator from [COD]: Black Ops 2?</a> (8,047 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/CallOfDuty/comments/1qt8cnb/cod_do_you_agree_with_this_take/" target="_blank" class="item-link">[COD] Do you agree with this take?</a> (7,927 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1704,7 +1668,7 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Team Fortress 2 is growing (+3.3% MoM, averaging 50K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by (Season 4) season launch bringing returning and new players. Dev activity: Season 4 launched recently; 7+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 3 of 3 posts this period. Active press coverage from Rock Paper Shotgun, gamefront.com, GamingOnLinux (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Team Fortress 2 is growing (+3.3% MoM, averaging 50K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by (Season 4) season launch bringing returning and new players. Dev activity: Season 4 launched recently; 7+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Community is actively engaged in gameplay discussion and strategy — 3 of 3 posts this period. Active press coverage from Rock Paper Shotgun, GamingOnLinux, PC Gamer (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Sustained growth trajectory.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Team Fortress 2 is growing (+2.1% MoM, averaging 50K players over the last 30 days). Growth likely driven by (Season 4) season launch bringing returning and new players. Dev activity: Season 4 launched recently; 7+ bug fixes deployed. Community is actively engaged in gameplay discussion and strategy — 3 of 3 posts this period. Active press coverage from Rock Paper Shotgun, PC Gamer, Screen Rant (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
       </div>
       <div class="card-body-2col">
@@ -1727,9 +1691,9 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
             <span><span style="color:#94a3b8">●</span> Neutral</span>
           </div>
           <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPLTBWUnQxekUtakpIX2VqaFdCcVhQUGFybnJaOGZHcmd1Vl9raUx4QnlOTDV1M01nVExqNjB3d19uTmVIelZ1MTVtdFZreTgzTEpPSDBvd2o2dk1HNUNDR1g5Y3ZCNVg5N0FuTGhEZEdpOEJfNS1ZQ2paamowT0Z0MUg5SGpFNkxQMkZxczdPT1NTOTVmOUtwLUdRTkNLNWk5ekN4dHlqaGo0Nk5pN2tMWENNamo?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified is good, clean, hatless fun, despite its cruel H</a> <span class="source-tag" style="color:#f87171;background:#5f1e1e">Rock Paper Shotgun</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxPdDZIWEFlZFFLQTVhQ2dVUDBnZ0FSTm5mb0ZxRHZQbGlLbEozcEdCOW8yaEMtUlNxdXVGNFdmU3A0Z2VlOGxwVC1YRFg0MHp6OVBsX3RsZHJ5aXVoNDdhbFRvYW5oeHZzbU1yWEhSU0tGREptTlc0cDNySVFxaHg1cGpBZ2VHVWtncEVRdEFNcEhwMThoYmY5RjRtZm1fV3gwM3pPNXRucXZ1RkhrZTF5X1hqY0hqQ2dwci1EWjAyMHZYVUc4MUZrbTRoYWhBanQ0cEVKcjYzWS1Ddw?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified Mod Gets Official Steam Page and Hits 10,000 Con</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">gamefront.com</span></li>
 <li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxQZnpTaXFwWHdfUWxpZHRHTHJMamc0YU9QdHBQVXdRRnJteUxldnhXSXNpbnVNbThnUnlJS2ZNdHpzdDFBQ244czhuNTlLd3VSdF9sb1NXdGxGUlE3TUlNcG5uT2pWV0dEOE1HREJNY2xzMW14QXFkUkJaSWxGRGhXeHotbDRsZ3ZyejZSc2lnLWU4Q1pUdmc0cVUtX0x0OVRkaTM0WUc1Y2NqR0phb2RrYWxFOWJaTTN0MF9TZA?oc=5" target="_blank" class="item-link">Team Fortress 2 Classic becomes Team Fortress 2 Classified and arrives Janu</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">GamingOnLinux</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxNR3NQVEtHbTAxVzBFaUgyb1ZZOVNmQmY4b0JrelUtaXl2TnUyN25Ecm5kWmd4WjlEdS1BZGNSa3VETXJBbkp0dHp4SklXeWxhMXo0Y1J1M3NqWExfM1lnMzZBdmFZNU11SmxYb3hoYkMxTGZjalRLbmtSYVUxYzZjVDFkNDVrRzRQRU81S3NrOE4tOTZCVTU5dG5RN0YtUzFwUmtZWHRLVG41cWwwUHJRb2xKM0FXS21nd3c3RlZJQkVuTVd5VXJwNkpjSC14UDMyMGw2MnhTSVpYbTJsMmhj?oc=5" target="_blank" class="item-link">Thousands of players flood into Team Fortress 2 Classified, the free &#x27;TF2 C</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">PC Gamer</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi1AFBVV95cUxOOUExV1dfZTlyNlBMWnNGMEhFbDY2RVlGSVI2bjRZTFFJVWpyVWd4WS1kSU5tZnFmc25rb2FxOXprUVZ2ZVhwbnVTaTBXLXhmcXpOYmV4bmk4M0Q4R2ZOMjRmN0FaWFQ1SElFYzE2aWRfLWtvRU1NSmRRWDNNZkxNWHJmeFRWWnVLMEZfTE1GT0ZzUU51SU40YmVxX2tOS1lQYUVLaGljTkpsdDJ1UC1OZ3NFenRuOVp4NGZXUlFVQUhyMzlycWJ0ejFTd2c5WXR0SUZQRA?oc=5" target="_blank" class="item-link">After almost 18 years, Team Fortress 2 just had its toughest tournament eve</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">PC Gamer</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMia0FVX3lxTFBlb3JwdU1MZGpkcVhCTllSQVpIRk9xRkJQRHNZcDF2ZndIbFJ4aE5NTC1Ydkc3WTUtVG9nQzBHVmlCZUtTY2U2VDQwaDNyc0pVdjZwNkhhQ2czMktyNWFGTmM3eVlSR2pWeUw0?oc=5" target="_blank" class="item-link">Team Fortress Returns With New Release On Steam That’s 100% Free - Screen R</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Screen Rant</span></li>
 </ul>
         </div>
       </div>
@@ -1738,10 +1702,10 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
         <details>
           <summary>Community Pulse <span class="sub">r/tf2</span> — 3 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1r71ju0/my_concept_for_poker_night_3/" target="_blank" class="item-link">My concept for Poker Night 3</a> (5,959 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1r9kjmw/this_does_make_me_wonder_what_peoples_opinions_on/" target="_blank" class="item-link">this does make me wonder what peoples opinions on sniper are? (image somewhat re</a> (5,917 upvotes)</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1r71ju0/my_concept_for_poker_night_3/" target="_blank" class="item-link">My concept for Poker Night 3</a> (5,957 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1r9kjmw/this_does_make_me_wonder_what_peoples_opinions_on/" target="_blank" class="item-link">this does make me wonder what peoples opinions on sniper are? (image somewhat re</a> (5,918 upvotes)</li>
 </ul>
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1qxt0yi/poker_night_coming_to_nintendo_switch_means_that/" target="_blank" class="item-link">Poker Night coming to Nintendo Switch means that Heavy now fits the criteria nee</a> (12,690 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/tf2/comments/1qxt0yi/poker_night_coming_to_nintendo_switch_means_that/" target="_blank" class="item-link">Poker Night coming to Nintendo Switch means that Heavy now fits the criteria nee</a> (12,693 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1807,7 +1771,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
           <summary>Community Pulse <span class="sub">r/thefinals</span> — 1 substantive posts</summary>
           <div class="community-inner">
             
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/thefinals/comments/1qlv5gp/posted_by_the_official_finals_tiktok_no_way_were/" target="_blank" class="item-link">Posted by the official finals TikTok, no way we’re finally getting it???</a> (2,629 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/thefinals/comments/1qlv5gp/posted_by_the_official_finals_tiktok_no_way_were/" target="_blank" class="item-link">Posted by the official finals TikTok, no way we’re finally getting it???</a> (2,637 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1872,28 +1836,28 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
         <details>
           <summary>Community Pulse <span class="sub">r/DestinyTheGame</span> — 10 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7j6gu/time_off_has_been_granted_shadow_and_order_here/" target="_blank" class="item-link">Time off has been granted, Shadow and Order here we come!!</a> (2,589 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/sjb81</span> (1,078 pts): &gt;“I’m afraid I’ve got some bad news”
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7j6gu/time_off_has_been_granted_shadow_and_order_here/" target="_blank" class="item-link">Time off has been granted, Shadow and Order here we come!!</a> (2,591 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/sjb81</span> (1,078 pts): &gt;“I’m afraid I’ve got some bad news”
 
 - Bad News Barrett</li>
-<li class="comment"><span class="comment-author">u/Furiosa27</span> (657 pts): Hey it’s your wife’s boyfriend here, you need to move on and I really would appreciate it if you’d move that funko pop collection out of the living ro</li>
-<li class="comment"><span class="comment-author">u/AbsurdBee</span> (357 pts): Outjerked in the main sub?? Man this one hurts.</li>
+<li class="comment"><span class="comment-author">u/Furiosa27</span> (661 pts): Hey it’s your wife’s boyfriend here, you need to move on and I really would appreciate it if you’d move that funko pop collection out of the living ro</li>
+<li class="comment"><span class="comment-author">u/AbsurdBee</span> (356 pts): Outjerked in the main sub?? Man this one hurts.</li>
 </ul></li>
-<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r8gvip/shadow_and_order_officially_delayed_to_june_9th/" target="_blank" class="item-link">Shadow and Order officially delayed to June 9th</a> (1,738 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/adam4me</span> (1,682 pts): Raids and dungeons getting tiers and pantheon 2.0 is great, but will there even be anyone left playing by then? I still log on every week and play a l</li>
+<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r8gvip/shadow_and_order_officially_delayed_to_june_9th/" target="_blank" class="item-link">Shadow and Order officially delayed to June 9th</a> (1,741 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/adam4me</span> (1,677 pts): Raids and dungeons getting tiers and pantheon 2.0 is great, but will there even be anyone left playing by then? I still log on every week and play a l</li>
 <li class="comment"><span class="comment-author">u/HearingEmotional4355</span> (620 pts): Until June is rough. The population is going to be absolutely dire by then…</li>
-<li class="comment"><span class="comment-author">u/No-Individual-3901</span> (512 pts): 3 month delay is wild.</li>
+<li class="comment"><span class="comment-author">u/No-Individual-3901</span> (511 pts): 3 month delay is wild.</li>
 </ul></li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r8ydcg/seems_like_after_the_news_destiny_2_has_dropped/" target="_blank" class="item-link">Seems like after the news Destiny 2 has dropped below the 6.000 Players Mark aft</a> (1,687 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Wanna_make_cash</span> (1,588 pts): Only 3 and a half months until some quality of life and content !</li>
-<li class="comment"><span class="comment-author">u/HotMachine9</span> (714 pts): Outstanding work Tyson.</li>
-<li class="comment"><span class="comment-author">u/Professional_Shape80</span> (411 pts): Absolute bottom peak</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r8ydcg/seems_like_after_the_news_destiny_2_has_dropped/" target="_blank" class="item-link">Seems like after the news Destiny 2 has dropped below the 6.000 Players Mark aft</a> (1,685 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/Wanna_make_cash</span> (1,582 pts): Only 3 and a half months until some quality of life and content !</li>
+<li class="comment"><span class="comment-author">u/HotMachine9</span> (712 pts): Outstanding work Tyson.</li>
+<li class="comment"><span class="comment-author">u/Professional_Shape80</span> (406 pts): Absolute bottom peak</li>
 </ul></li>
-<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1raga1k/prediction_next_update_is_the_last_big_one_one/" target="_blank" class="item-link">Prediction: next update is the last big one. One more DLC. Then The End.</a> (1,370 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7er6h/we_are_two_weeks_away_from_shadow_and_order_and/" target="_blank" class="item-link">We are two weeks away from Shadow and Order, and Bungie remains silent to deafen</a> (974 upvotes)</li>
+<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1raga1k/prediction_next_update_is_the_last_big_one_one/" target="_blank" class="item-link">Prediction: next update is the last big one. One more DLC. Then The End.</a> (1,367 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7er6h/we_are_two_weeks_away_from_shadow_and_order_and/" target="_blank" class="item-link">We are two weeks away from Shadow and Order, and Bungie remains silent to deafen</a> (976 upvotes)</li>
 </ul>
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7j6gu/time_off_has_been_granted_shadow_and_order_here/" target="_blank" class="item-link">Time off has been granted, Shadow and Order here we come!!</a> (2,587 upvotes)</li>
-<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r4hzme/they_have_no_roadmap_because_they_dont_know_what/" target="_blank" class="item-link">They have no roadmap because they don’t know what to do</a> (2,520 upvotes)</li>
-<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r8gvip/shadow_and_order_officially_delayed_to_june_9th/" target="_blank" class="item-link">Shadow and Order officially delayed to June 9th</a> (1,737 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r8ydcg/seems_like_after_the_news_destiny_2_has_dropped/" target="_blank" class="item-link">Seems like after the news Destiny 2 has dropped below the 6.000 Players Mark aft</a> (1,683 upvotes)</li>
-<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1qvghfp/theres_not_enough_players_for_lfg_anymore/" target="_blank" class="item-link">There’s Not Enough Players for LFG Anymore</a> (1,403 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#f87171;background:#5f1e1e">CRITICISM</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r7j6gu/time_off_has_been_granted_shadow_and_order_here/" target="_blank" class="item-link">Time off has been granted, Shadow and Order here we come!!</a> (2,593 upvotes)</li>
+<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r4hzme/they_have_no_roadmap_because_they_dont_know_what/" target="_blank" class="item-link">They have no roadmap because they don’t know what to do</a> (2,528 upvotes)</li>
+<li><span class="cat-tag" style="color:#3b82f6;background:#1e3a5f">NEWS</span> <span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r8gvip/shadow_and_order_officially_delayed_to_june_9th/" target="_blank" class="item-link">Shadow and Order officially delayed to June 9th</a> (1,735 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1r8ydcg/seems_like_after_the_news_destiny_2_has_dropped/" target="_blank" class="item-link">Seems like after the news Destiny 2 has dropped below the 6.000 Players Mark aft</a> (1,685 upvotes)</li>
+<li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/DestinyTheGame/comments/1qvghfp/theres_not_enough_players_for_lfg_anymore/" target="_blank" class="item-link">There’s Not Enough Players for LFG Anymore</a> (1,404 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1905,9 +1869,9 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
         <h3>Halo: MCC <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span> <span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span> <span class="trend-badge down">▼ -21.5% MoM</span></h3>
         <div class="event-annotation">-21.3% ← Legacy title, Halo 2 Digsite content drop had limited impact</div>
         <div class="card-stats">
-          24h Peak: <strong>7,136</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">23,786</strong> (30% Steam)
-          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">311,016</strong> <small style="color:#556b7d">(est. all platforms)</small> (7.6% current)
+          24h Peak: <strong>6,710</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">22,366</strong> (30% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">311,016</strong> <small style="color:#556b7d">(est. all platforms)</small> (7.2% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
   <polygon points="12.0,10.0 84.0,14.9 156.0,16.6 228.0,37.0 228.0,37 12.0,37" fill="rgba(248,113,113,0.12)" />
@@ -1928,7 +1892,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Halo: MCC is dropping sharply (-21.5% MoM, averaging 4K players over the last 30 days). At just 8% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Reaction:</span> Mixed community sentiment — discussion split between positive reception and appreciation (1 posts) and gameplay discussion and strategy (1 posts). Active press coverage from Pure Xbox, Halo Waypoint, GAMINGbible (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Halo: MCC is dropping sharply (-21.5% MoM, averaging 4K players over the last 30 days). At just 7% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Reaction:</span> Mixed community sentiment — discussion split between positive reception and appreciation (1 posts) and gameplay discussion and strategy (1 posts). Active press coverage from Pure Xbox, Halo Waypoint, GAMINGbible (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Halo: MCC is dropping sharply (-20.8% MoM, averaging 4K players over the last 30 days). At just 6% of all-time peak — well below historical levels. Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts) and positive reception and appreciation (1 posts). Active press coverage from Pure Xbox, GamesRadar+, Halo Waypoint (5 articles from gaming press in the past week). Looking ahead: In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -1960,12 +1924,12 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
         <details>
           <summary>Community Pulse <span class="sub">r/halo</span> — 2 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#4ade80;background:#1e5f2e">PRAISE</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/halo/comments/1r899s6/halo_2_is_my_favorite_first_person_shooter_game/" target="_blank" class="item-link">Halo 2 is my favorite first person shooter game ever. A perfect 10/10 for me.</a> (1,532 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/IAmInevitable325</span> (168 pts): A perfectly imperfect masterpiece</li>
-<li class="comment"><span class="comment-author">u/Zealousideal-Way5100</span> (90 pts): And h2a did it such justice with the graphics and cutscenes. Hard to believe H2A is now 12 years old itself.</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#4ade80;background:#1e5f2e">PRAISE</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/halo/comments/1r899s6/halo_2_is_my_favorite_first_person_shooter_game/" target="_blank" class="item-link">Halo 2 is my favorite first person shooter game ever. A perfect 10/10 for me.</a> (1,537 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/IAmInevitable325</span> (169 pts): A perfectly imperfect masterpiece</li>
+<li class="comment"><span class="comment-author">u/Zealousideal-Way5100</span> (94 pts): And h2a did it such justice with the graphics and cutscenes. Hard to believe H2A is now 12 years old itself.</li>
 <li class="comment"><span class="comment-author">u/poopshaloop</span> (63 pts): It really was incredible back when it came out too. The online play with matchmaking and co-op campaign made it infinitely playable. I’m glad you enjo</li>
 </ul></li>
 </ul>
-            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2hr8y/4_years_of_constant_resentment_for_no/" target="_blank" class="item-link">4+ Years Of Constant Resentment For No Assassinations In Infinite :(</a> (5,332 upvotes)</li>
+            <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2hr8y/4_years_of_constant_resentment_for_no/" target="_blank" class="item-link">4+ Years Of Constant Resentment For No Assassinations In Infinite :(</a> (5,337 upvotes)</li>
 </ul>
           </div>
         </details>
@@ -1974,7 +1938,7 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
 
     <div class="card" data-genre="Arena">
       <div class="card-header">
-        <h3>Halo Infinite <span class="lifecycle-badge" style="color:#f87171;background:#3a1a1a">Sunset</span> <span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span> <span class="trend-badge down">▼ -8.1% MoM</span></h3>
+        <h3>Halo Infinite <span class="lifecycle-badge" style="color:#f87171;background:#3a1a1a">Sunset</span> <span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span> <span class="trend-badge down">▼ -8.0% MoM</span></h3>
         <div class="event-annotation">-9.3% ← Post-final update (Nov 2025). Expected attrition curve.</div>
         <div class="card-stats">
           24h Peak: <strong>3,023</strong> (Steam)
@@ -1982,11 +1946,11 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">2,138,491</strong> <small style="color:#556b7d">(est. all platforms)</small> (1.2% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-  <polygon points="12.0,10.0 84.0,34.4 156.0,26.1 228.0,37.0 228.0,37 12.0,37" fill="rgba(248,113,113,0.12)" />
-  <polyline points="12.0,10.0 84.0,34.4 156.0,26.1 228.0,37.0" fill="none" stroke="#f87171" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <polygon points="12.0,10.0 84.0,34.5 156.0,26.2 228.0,37.0 228.0,37 12.0,37" fill="rgba(248,113,113,0.12)" />
+  <polyline points="12.0,10.0 84.0,34.5 156.0,26.2 228.0,37.0" fill="none" stroke="#f87171" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   <circle cx="12.0" cy="10.0" r="3" fill="#f87171" />
-<circle cx="84.0" cy="34.4" r="3" fill="#f87171" />
-<circle cx="156.0" cy="26.1" r="3" fill="#f87171" />
+<circle cx="84.0" cy="34.5" r="3" fill="#f87171" />
+<circle cx="156.0" cy="26.2" r="3" fill="#f87171" />
 <circle cx="228.0" cy="37.0" r="3" fill="#f87171" />
 
   <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Nov</text>
@@ -2000,7 +1964,7 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
       </div>
       <div class="card-takeaway">
         <h4>Takeaway</h4>
-        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Halo Infinite is declining (-8.1% MoM, averaging 2K players over the last 30 days). At just 1% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Reaction:</span> Mixed community sentiment — discussion split between positive reception and appreciation (1 posts) and gameplay discussion and strategy (1 posts). Active press coverage from Halo Waypoint, Forbes, opus.ing (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: The future is Infinite. OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we’d like to thank our community for your steadfast support. Continued decline from last period — watch for content response.</div>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">State:</span> Halo Infinite is declining (-8.0% MoM, averaging 2K players over the last 30 days). At just 1% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Reaction:</span> Mixed community sentiment — discussion split between positive reception and appreciation (1 posts) and gameplay discussion and strategy (1 posts). Active press coverage from Halo Waypoint, Forbes, Game Developer (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#f87171">Outlook:</span> Looking ahead: The future is Infinite. OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we’d like to thank our community for your steadfast support. Continued decline from last period — watch for content response.</div>
         <div class="prev-takeaway"><strong>Previous:</strong> Halo Infinite is declining (-9.1% MoM, averaging 2K players over the last 30 days). At just 1% of all-time peak — well below historical levels. Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle. Mixed community sentiment — discussion split between gameplay discussion and strategy (2 posts) and positive reception and appreciation (1 posts). Active press coverage from Halo Waypoint, Forbes, Xbox Era (5 articles from gaming press in the past week). Looking ahead: The future is Infinite.OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we’d like to thank our community for your steadfast support. Continued decline from last period — watch for content response.</div>
       </div>
       <div class="card-body-2col">
@@ -2020,8 +1984,8 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
           </div>
           <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE42SGhnUjFmMk1sa0VvRERoQnp6Q1lCZnFBMkFzT3VtelBwTzlmWjF6cEtXbmtBX2tibVRCZHJfRjgyeDRKRTFiRGV1aUNiNFl3eTBmYzNlOGxHRkdULUdQWWhqcFktaEt2blFmdA?oc=5" target="_blank" class="item-link">Operation: Infinite Update Preview - Halo Waypoint</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Halo Waypoint</span></li>
 <li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxOeEVSRkRmTUF2TEJkYzdvWWpmQjA4RjJUdVU2VExlV0xJXzBrTDNTcjJKOS1WQXRPTW1sMzV5eXQ3N0ZSdjZXNHFHTjJZV0Z5OVZvVGVDeEdhREYwdkdRYUQ3d2ZPZXhCenBOY3BmTy1DYVliWFBNclhtRFpsUUNZakFEcVh5RFM0SlFFYTEzM3N1TDIxZ0hhbXJB?oc=5" target="_blank" class="item-link">But Where Is The Next, Actual ‘Halo’ Game, Xbox? - Forbes</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Forbes</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiekFVX3lxTFBHVHRSeTUwUmgwZXUyU2NaWGZmb3ROUVhxRXN5REhRS0toTXV3OVRnZ0JKRE9qVzdQdmpZam1YM3dBMDBFeTV0WnYzUXZJYUI0ZjlGSGsyZl9uZzl0bXNpREpDSjVFNHJIcFJBbmdQZXNCcHlybzBQOFZ3?oc=5" target="_blank" class="item-link">Watch 13 Minutes of the Unreal-Enhanced Halo In Action - opus.ing</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">opus.ing</span></li>
 <li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQYWs4b29hU3NqUXRuamZYWEZOUm1MRlN4OUFUSmQ0OE45NlByNUJiMTFiVDNUeS1ndUpLTzE2bjNKZlZBUWFMMDhmdGZybHRwZ0tzNVIwY0hiVzlHbXlqVlJaNEt2OFM1QTFXYm5DN2xkb3ZvY1NGRnNQLVBUSkpXNzlRcm56WGVzZE9OdlZSTFV2YkRUdW5SV2hWdUdBSDkw?oc=5" target="_blank" class="item-link">Halo Infinite to receive final major update after four years - Game Develop</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Game Developer</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMickFVX3lxTFBMbDQ1RUpuXzR4OS15TEFlbnB3ei1ySHRKaVd2b09HMkVxSy1YeWk0TE9kYUNra1ZjakR4aXRQYUF1ZVJBUXlDcmpIVFpKM1J3c1JhMmc1UFJyWmRQN3dUbENzUzJ0akotakZyRVN3eEhMZw?oc=5" target="_blank" class="item-link">Halo Infinite deserved better - Polygon</a> <span class="source-tag" style="color:#94a3b8;background:#2d3748">Polygon</span></li>
 </ul>
         </div>
       </div>
@@ -2030,9 +1994,9 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
         <details>
           <summary>Community Pulse <span class="sub">r/halo</span> — 2 substantive posts</summary>
           <div class="community-inner">
-            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#4ade80;background:#1e5f2e">PRAISE</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/halo/comments/1r899s6/halo_2_is_my_favorite_first_person_shooter_game/" target="_blank" class="item-link">Halo 2 is my favorite first person shooter game ever. A perfect 10/10 for me.</a> (1,536 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/IAmInevitable325</span> (168 pts): A perfectly imperfect masterpiece</li>
+            <h5>This Week</h5><ul><li><span class="cat-tag" style="color:#4ade80;background:#1e5f2e">PRAISE</span> <span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://www.reddit.com/r/halo/comments/1r899s6/halo_2_is_my_favorite_first_person_shooter_game/" target="_blank" class="item-link">Halo 2 is my favorite first person shooter game ever. A perfect 10/10 for me.</a> (1,531 upvotes)<ul class="comments"><li class="comment"><span class="comment-author">u/IAmInevitable325</span> (166 pts): A perfectly imperfect masterpiece</li>
 <li class="comment"><span class="comment-author">u/Zealousideal-Way5100</span> (92 pts): And h2a did it such justice with the graphics and cutscenes. Hard to believe H2A is now 12 years old itself.</li>
-<li class="comment"><span class="comment-author">u/poopshaloop</span> (65 pts): It really was incredible back when it came out too. The online play with matchmaking and co-op campaign made it infinitely playable. I’m glad you enjo</li>
+<li class="comment"><span class="comment-author">u/poopshaloop</span> (63 pts): It really was incredible back when it came out too. The online play with matchmaking and co-op campaign made it infinitely playable. I’m glad you enjo</li>
 </ul></li>
 </ul>
             <h5>This Month</h5><ul><li><span class="cat-tag" style="color:#94a3b8;background:#2d3748">DISCUSSION</span> <span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://www.reddit.com/r/halo/comments/1r2hr8y/4_years_of_constant_resentment_for_no/" target="_blank" class="item-link">4+ Years Of Constant Resentment For No Assassinations In Infinite :(</a> (5,337 upvotes)</li>
@@ -2335,7 +2299,7 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
     </div>
   </div>
 
-  <div class="methodology">
+  <div class="methodology" id="methodology">
     <details>
       <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
       <div class="methodology-content">
@@ -2357,14 +2321,14 @@ analytics firms (Alinea, Newzoo), and community trackers.</p>
 <tr><td>Apex Legends</td><td class="num">187,598</td><td style="text-align:center">4.0x</td><td class="num" style="color:#60a5fa">750,392</td><td class="meth-note">EA earnings (Q3 2025). Console-heavy (PS/Xbox ~75%).</td></tr>
 <tr><td>Delta Force</td><td class="num">145,094</td><td style="text-align:center">1.4x</td><td class="num" style="color:#60a5fa">207,277</td><td class="meth-note">NetEase; primarily PC (Steam + launcher). ~30% non-Steam.</td></tr>
 <tr><td>Overwatch</td><td class="num">135,175</td><td style="text-align:center">5.0x</td><td class="num" style="color:#60a5fa">675,875</td><td class="meth-note">Blizzard earnings. Console-dominant franchise (~80%).</td></tr>
-<tr><td>Marvel Rivals</td><td class="num">123,893</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">353,980</td><td class="meth-note">NetEase; PS/Xbox ~65% based on launch week platform split.</td></tr>
+<tr><td>Marvel Rivals</td><td class="num">123,351</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">352,431</td><td class="meth-note">NetEase; PS/Xbox ~65% based on launch week platform split.</td></tr>
 <tr><td>Rainbow Six Siege</td><td class="num">110,858</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">316,737</td><td class="meth-note">Ubisoft earnings. Console ~65% historically.</td></tr>
 <tr><td>Battlefield 6</td><td class="num">95,926</td><td style="text-align:center">1.8x</td><td class="num" style="color:#60a5fa">174,410</td><td class="meth-note">EA earnings. Console ~45% for BF franchise.</td></tr>
 <tr><td>Call of Duty</td><td class="num">62,166</td><td style="text-align:center">6.7x</td><td class="num" style="color:#60a5fa">414,440</td><td class="meth-note">Activision earnings. Console-dominant franchise (~85%).</td></tr>
 <tr><td>Team Fortress 2</td><td class="num">61,643</td><td style="text-align:center">1.0x</td><td class="num" style="color:#60a5fa">61,643</td><td class="meth-note">Steam-only title (legacy)</td></tr>
 <tr><td>The Finals</td><td class="num">19,890</td><td style="text-align:center">2.0x</td><td class="num" style="color:#60a5fa">39,780</td><td class="meth-note">Embark data. Steam ~50%, rest PS/Xbox.</td></tr>
 <tr><td>Destiny 2</td><td class="num">15,310</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">43,742</td><td class="meth-note">Bungie data. Console ~65% (PS dominant).</td></tr>
-<tr><td>Halo: MCC</td><td class="num">7,136</td><td style="text-align:center">3.3x</td><td class="num" style="color:#60a5fa">23,786</td><td class="meth-note">Xbox Game Studios. Steam ~30%, Xbox ~70%.</td></tr>
+<tr><td>Halo: MCC</td><td class="num">6,710</td><td style="text-align:center">3.3x</td><td class="num" style="color:#60a5fa">22,366</td><td class="meth-note">Xbox Game Studios. Steam ~30%, Xbox ~70%.</td></tr>
 <tr><td>Halo Infinite</td><td class="num">3,023</td><td style="text-align:center">8.3x</td><td class="num" style="color:#60a5fa">25,191</td><td class="meth-note">Xbox Game Studios. Steam ~12%, Xbox ~88%.</td></tr>
           </tbody>
         </table>
@@ -2373,7 +2337,7 @@ analytics firms (Alinea, Newzoo), and community trackers.</p>
   </div>
 
   <div class="footer">
-    Generated: 2026-02-22 19:42:46<br>
+    Generated: 2026-02-22 20:31:13<br>
     Data: SteamCharts, Steam News API, Reddit, Google News<br>
     <small>
       <strong>Color key:</strong>

@@ -2073,7 +2073,7 @@ def _build_methodology_html(results: list[dict]) -> str:
             f'</tr>\n'
         )
 
-    return f'''  <div class="methodology">
+    return f'''  <div class="methodology" id="methodology">
     <details>
       <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
       <div class="methodology-content">
@@ -2105,9 +2105,6 @@ def generate_html(results: list[dict], failed_names: list[str],
     today = datetime.now()
     date_str = today.strftime("%B %d, %Y")
     timestamp = today.strftime("%Y-%m-%d %H:%M:%S")
-
-    # --- Studio Alert (#3) ---
-    studio_alert_html = _build_studio_alert_html(results, date_str)
 
     # --- Executive Summary with Winners / Neutrals / Losers ---
     exec_items = "\n".join(f"      <li>{_esc(_sanitize_text(t))}</li>" for t in overall_takeaways)
@@ -2197,18 +2194,21 @@ def generate_html(results: list[dict], failed_names: list[str],
         # Inline sparkline (#6)
         mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"))
 
-        # Event annotation (#8)
+        # Event annotation (#8) — shown as tooltip on trend value
         annotation = EVENT_ANNOTATIONS.get(r['name'], "")
-        annotation_html = f'<div class="event-annotation">{_esc(annotation)}</div>' if annotation and abs(trend_val) > 9 else ""
+        trend_title = f' title="{_esc(annotation)}"' if annotation and abs(trend_val) > 9 else ""
+        annotation_icon = ' <span class="annot-icon" title="' + _esc(annotation) + '">&#9432;</span>' if annotation and abs(trend_val) > 9 else ""
+
+        # Sentiment dot merged into game name cell
+        sent_dot = f' <span class="sent-inline" style="color:{sent_color}" title="Sentiment: {game_sentiment}">\u25cf</span>'
 
         table_rows += f"""        <tr data-genre="{genre}">
           <td class="rank" data-value="{r['rank']}">#{r['rank']}</td>
-          <td class="game">{_esc(r['name'])}{lifecycle}</td>
+          <td class="game" data-value="{sent_val}">{_esc(r['name'])}{lifecycle}{sent_dot}</td>
           <td>{_genre_badge_html(genre)}</td>
-          <td class="sentiment-cell" data-value="{sent_val}"><span style="color:{sent_color}" title="{game_sentiment}">\u25cf</span></td>
           <td class="num" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
           <td class="num" data-value="{r.get('est_total_24h', r['peak_24h'])}" style="color:#60a5fa;font-weight:600">{est_total}</td>
-          <td class="trend {r['trend_css']}" data-value="{trend_val}">{r['trend_arrow']} {trend_str} {mini_spark}{annotation_html}</td>
+          <td class="trend {r['trend_css']}" data-value="{trend_val}"{trend_title}>{r['trend_arrow']} {trend_str} {mini_spark}{annotation_icon}</td>
           <td class="num" data-value="{r.get('est_total_all', r['peak_all'])}" style="color:#fbbf24;font-weight:600">{est_all_time}</td>
           <td class="pct-cell" data-value="{r['pct_all']:.2f}">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%"></div></div>
@@ -2220,7 +2220,6 @@ def generate_html(results: list[dict], failed_names: list[str],
         table_rows += f"""        <tr class="failed">
           <td class="rank">-</td>
           <td class="game">{_esc(name)}</td>
-          <td>-</td>
           <td>-</td>
           <td class="num">-</td><td class="num">-</td>
           <td class="trend neutral">-</td>
@@ -2474,12 +2473,12 @@ def generate_html(results: list[dict], failed_names: list[str],
     .rank {{ color: #8f98a0; font-weight: 600; width: 40px; }}
     .game {{ font-weight: 600; color: #e5e5e5; white-space: nowrap; }}
     .num {{ font-variant-numeric: tabular-nums; text-align: right; }}
-    .trend {{ text-align: center; font-weight: 600; width: 80px; }}
+    .trend {{ text-align: center; font-weight: 600; white-space: nowrap; }}
     .trend.up {{ color: #4ade80; }}
     .trend.down {{ color: #f87171; }}
     .trend.flat {{ color: #fbbf24; }}
     .trend.neutral {{ color: #8f98a0; }}
-    .pct-cell {{ width: 130px; }}
+    .pct-cell {{ width: 120px; }}
     .bar-bg {{
       background: #1b2838; border-radius: 4px; height: 6px;
       margin-bottom: 2px; overflow: hidden;
@@ -2764,27 +2763,6 @@ def generate_html(results: list[dict], failed_names: list[str],
       padding: 0.4rem 0.8rem;
     }}
 
-    /* Studio Alert (#3) */
-    .studio-alert {{
-      background: #1b2838; border-left: 4px solid #f87171;
-      padding: 1rem 1.2rem; border-radius: 0 6px 6px 0;
-      margin-bottom: 1.5rem;
-    }}
-    .studio-alert-header {{
-      font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.04em; margin-bottom: 0.6rem;
-    }}
-    .studio-alert-game {{
-      font-size: 0.82rem; margin-bottom: 0.4rem; line-height: 1.5;
-    }}
-    .studio-alert-lifecycle {{
-      font-size: 0.72rem; color: #8f98a0; padding-left: 1rem;
-    }}
-    .studio-alert-marathon {{
-      font-size: 0.82rem; margin-top: 0.5rem; padding-top: 0.5rem;
-      border-top: 1px solid #2a475e; color: #fbbf24;
-    }}
-
     /* Lifecycle badge (#4) */
     .lifecycle-badge {{
       font-size: 0.55rem; padding: 1px 5px; border-radius: 3px;
@@ -2792,17 +2770,22 @@ def generate_html(results: list[dict], failed_names: list[str],
       text-transform: uppercase; letter-spacing: 0.03em;
     }}
 
-    /* Sentiment column (#5) */
-    .sentiment-cell {{ text-align: center !important; font-size: 0.9rem; }}
+    /* Sentiment dot inline in game name */
+    .sent-inline {{
+      font-size: 0.5rem; vertical-align: middle; margin-left: 0.25rem;
+      opacity: 0.8;
+    }}
 
     /* Inline sparkline (#6) */
-    .inline-spark {{ vertical-align: middle; margin-left: 0.3rem; }}
+    .inline-spark {{ vertical-align: middle; margin-left: 0.4rem; }}
 
-    /* Event annotations (#8) */
-    .event-annotation {{
-      font-size: 0.65rem; color: #8f98a0; font-weight: 400;
-      margin-top: 0.15rem; line-height: 1.3;
+    /* Annotation info icon — hover to see context */
+    .annot-icon {{
+      font-size: 0.7rem; color: #8f98a0; cursor: help;
+      vertical-align: middle; margin-left: 0.2rem;
+      opacity: 0.6; transition: opacity 0.15s;
     }}
+    .annot-icon:hover {{ opacity: 1; color: #66c0f4; }}
 
     /* Genre Rollup (#9) */
     .genre-rollup {{
@@ -2857,6 +2840,10 @@ def generate_html(results: list[dict], failed_names: list[str],
     .info-tip {{
       display: inline-block; cursor: help; position: relative;
       font-size: 0.7rem; color: #8f98a0; margin-left: 0.2rem;
+      text-decoration: none;
+    }}
+    .info-tip:hover {{
+      color: #66c0f4;
     }}
     .info-tip:hover::after {{
       content: attr(data-tip);
@@ -2955,29 +2942,30 @@ def generate_html(results: list[dict], failed_names: list[str],
         grid-column: 1 / -1; grid-row: 1;
         display: flex; justify-content: flex-end; align-items: center;
       }}
-      /* Sentiment (col 4) — hide on mobile, redundant with card detail */
-      .ranking-table tbody td.sentiment-cell {{ display: none; }}
+      /* Hide sentiment dot & annotation icon on mobile cards */
+      .ranking-table tbody .sent-inline {{ display: none; }}
+      .ranking-table tbody .annot-icon {{ display: none; }}
       /* Stats: 2-column grid with labels */
       .ranking-table tbody td.num {{ font-size: 0.85rem; }}
-      /* 24h Peak (col 5) */
-      .ranking-table tbody tr > td:nth-child(5) {{
+      /* 24h Peak (col 4) */
+      .ranking-table tbody tr > td:nth-child(4) {{
         grid-column: 1; grid-row: 3;
       }}
-      .ranking-table tbody tr > td:nth-child(5)::before {{
+      .ranking-table tbody tr > td:nth-child(4)::before {{
         content: "24h Peak  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      /* Est. Total (col 6) */
-      .ranking-table tbody tr > td:nth-child(6) {{
+      /* Est. Total (col 5) */
+      .ranking-table tbody tr > td:nth-child(5) {{
         grid-column: 2; grid-row: 3;
       }}
-      .ranking-table tbody tr > td:nth-child(6)::before {{
+      .ranking-table tbody tr > td:nth-child(5)::before {{
         content: "Est. Total  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      /* Trend (col 7) */
+      /* Trend (col 6) */
       .ranking-table tbody td.trend {{
         grid-column: 1; grid-row: 4;
         text-align: left !important; font-size: 0.85rem;
@@ -2988,17 +2976,17 @@ def generate_html(results: list[dict], failed_names: list[str],
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      /* All-Time Peak (col 8) */
-      .ranking-table tbody tr > td:nth-child(8) {{
+      /* All-Time Peak (col 7) */
+      .ranking-table tbody tr > td:nth-child(7) {{
         grid-column: 2; grid-row: 4;
         padding-top: 0.15rem;
       }}
-      .ranking-table tbody tr > td:nth-child(8)::before {{
+      .ranking-table tbody tr > td:nth-child(7)::before {{
         content: "All-Time Peak  "; display: block;
         font-size: 0.65rem; color: #8f98a0; font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
-      /* % of Peak (col 9) */
+      /* % of Peak (col 8) */
       .ranking-table tbody td.pct-cell {{
         grid-column: 1 / -1; grid-row: 5;
         width: auto; display: flex; align-items: center; gap: 0.4rem;
@@ -3015,10 +3003,6 @@ def generate_html(results: list[dict], failed_names: list[str],
         width: 50px; flex-shrink: 0;
       }}
       .ranking-table .pct-cell span {{ font-size: 0.8rem; }}
-      /* Studio alert mobile */
-      .studio-alert {{ padding: 0.6rem 0.8rem; margin-bottom: 1rem; font-size: 0.78rem; }}
-      .studio-alert-header {{ font-size: 0.75rem; }}
-      .studio-alert-game {{ font-size: 0.75rem; }}
       /* Genre rollup mobile */
       .genre-rollup table {{ font-size: 0.72rem; }}
       .genre-rollup th, .genre-rollup td {{ padding: 0.25rem 0.4rem; }}
@@ -3059,8 +3043,6 @@ def generate_html(results: list[dict], failed_names: list[str],
   <h1>Shooter Digest</h1>
   <p class="subtitle">Week of {date_str} &mdash; Player Data, Updates &amp; Community Intel</p>
 
-{studio_alert_html}
-
 {exec_html}
 
 {genre_tabs_html}
@@ -3071,12 +3053,11 @@ def generate_html(results: list[dict], failed_names: list[str],
         <th data-sort="num" data-col="0">Rank</th>
         <th data-sort="str" data-col="1">Game</th>
         <th data-sort="str" data-col="2">Genre</th>
-        <th data-sort="num" data-col="3">Sentiment</th>
-        <th data-sort="num" data-col="4" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
-        <th data-sort="num" data-col="5" style="text-align:right">Est. Total<br><small>(All Platforms)</small> <span class="info-tip" data-tip="Steam 24h peak \u00f7 Steam market share. Sources: EA, Krafton, NetEase earnings, Alinea Analytics.">\u24d8</span></th>
-        <th data-sort="num" data-col="6">Trend<br><small>(MoM)</small></th>
-        <th data-sort="num" data-col="7" style="text-align:right">All-Time Peak<br><small>(Est. All Platforms)</small></th>
-        <th data-sort="num" data-col="8">% of Peak</th>
+        <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak &divide; Steam share. Click for methodology.">\u24d8</a></th>
+        <th data-sort="num" data-col="5">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
+        <th data-sort="num" data-col="7">% of Peak</th>
       </tr>
     </thead>
     <tbody>
@@ -3199,14 +3180,6 @@ def _build_insights_html(results: list[dict]) -> str:
         f'<strong>Closest to all-time peak:</strong> {closest["name"]} '
         f'({closest["pct_all"]:.1f}%)'
     )
-
-    halo = next((r for r in results if "Halo" in r["name"]), None)
-    if halo:
-        trend_s = f', trend: {halo["trend_pct"]:+.1f}%' if halo.get("trend_pct") is not None else ""
-        items.append(
-            f'<strong>Halo position:</strong> #{halo["rank"]} '
-            f'with {_fmt(halo["peak_24h"])} players{trend_s}'
-        )
 
     li = "\n".join(f"      <li>{i}</li>" for i in items)
     return f"""  <div class="insights">

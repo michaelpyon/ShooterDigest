@@ -8,8 +8,22 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 logger = logging.getLogger(__name__)
+
+
+@retry(
+    retry=retry_if_exception_type(requests.exceptions.RequestException),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=2, max=10),
+    reraise=True,
+)
+def _http_get(url: str, headers: dict, timeout: int = 10) -> requests.Response:
+    """HTTP GET with automatic retry on transient failures."""
+    resp = requests.get(url, headers=headers, timeout=timeout)
+    resp.raise_for_status()
+    return resp
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; ShooterDigest/1.0)",
@@ -159,8 +173,7 @@ def get_steam_data(game: dict) -> dict | None:
     url = f"https://steamcharts.com/app/{app_id}"
 
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=10)
-        resp.raise_for_status()
+        resp = _http_get(url, headers=HEADERS, timeout=10)
     except requests.RequestException as e:
         logger.error("Failed to fetch %s: %s", name, e)
         return None
@@ -236,8 +249,7 @@ def get_steam_news(app_id: int, count: int = 5) -> list[dict]:
     )
 
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=10)
-        resp.raise_for_status()
+        resp = _http_get(url, headers=HEADERS, timeout=10)
         data = resp.json()
     except (requests.RequestException, ValueError) as e:
         logger.error("Steam News failed for app %d: %s", app_id, e)
@@ -283,8 +295,7 @@ def get_reddit_posts(subreddit: str, timeframe: str = "week", limit: int = 5) ->
     url = f"https://www.reddit.com/r/{subreddit}/top.json?t={timeframe}&limit={limit}"
 
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=10)
-        resp.raise_for_status()
+        resp = _http_get(url, headers=HEADERS, timeout=10)
         data = resp.json()
     except (requests.RequestException, ValueError) as e:
         logger.error("Reddit failed for r/%s (%s): %s", subreddit, timeframe, e)
@@ -319,8 +330,7 @@ def get_reddit_comments(permalink: str, limit: int = 3) -> list[dict]:
     url = f"https://www.reddit.com{permalink}.json?sort=top&limit={limit}&depth=1"
 
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=10)
-        resp.raise_for_status()
+        resp = _http_get(url, headers=HEADERS, timeout=10)
         data = resp.json()
     except (requests.RequestException, ValueError) as e:
         logger.error("Reddit comments failed for %s: %s", permalink, e)
@@ -371,8 +381,7 @@ def get_google_news_rss(game_name: str, limit: int = 5) -> list[dict]:
     )
 
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=10)
-        resp.raise_for_status()
+        resp = _http_get(url, headers=HEADERS, timeout=10)
     except requests.RequestException as e:
         logger.error("Google News RSS failed for %s: %s", game_name, e)
         return []

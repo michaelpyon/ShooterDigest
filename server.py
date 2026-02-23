@@ -29,6 +29,14 @@ class DigestHandler(SimpleHTTPRequestHandler):
             self.wfile.write(b'{"status":"ok"}')
             return
 
+        # Digest archive index
+        if self.path in ("/digests", "/digests/"):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(self._build_index_page().encode("utf-8"))
+            return
+
         # Serve the NYC guy diagnostic
         if self.path in ("/nyc", "/nyc/"):
             self.send_response(200)
@@ -53,6 +61,43 @@ class DigestHandler(SimpleHTTPRequestHandler):
             if files:
                 self.path = "/" + os.path.basename(files[-1])
         super().do_GET()
+
+    def _build_index_page(self) -> str:
+        files = sorted(glob.glob(os.path.join(OUTPUT_DIR, "digest_*.html")), reverse=True)
+        if not files:
+            return "<html><body><h1>No digests yet.</h1></body></html>"
+
+        rows = []
+        for f in files:
+            name = os.path.basename(f)
+            # Extract date from filename like digest_2025-12-30.html
+            date_str = name.replace("digest_", "").replace(".html", "")
+            rows.append(
+                f'<li><a href="/{name}">{date_str}</a></li>'
+            )
+
+        items = "\n".join(rows)
+        return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ShooterDigest — Archive</title>
+<style>
+  body {{ font-family: system-ui, sans-serif; background: #0f1923; color: #c7d5e0; max-width: 600px; margin: 60px auto; padding: 0 20px; }}
+  h1 {{ color: #66c0f4; margin-bottom: 8px; }}
+  p {{ color: #8f98a0; margin-bottom: 24px; }}
+  ul {{ list-style: none; padding: 0; }}
+  li {{ margin: 8px 0; }}
+  a {{ color: #66c0f4; text-decoration: none; font-size: 1.05rem; }}
+  a:hover {{ text-decoration: underline; }}
+</style>
+</head>
+<body>
+<h1>ShooterDigest Archive</h1>
+<p>Weekly competitive FPS analytics. Pick a digest below.</p>
+<ul>{items}</ul>
+</body>
+</html>"""
 
 
 if __name__ == "__main__":

@@ -3036,6 +3036,10 @@ def generate_html(results: list[dict], failed_names: list[str],
 
       /* Insights */
       .insights li {{ font-size: 0.82rem; }}
+
+      /* Generic table overflow — catches any table not already styled responsively */
+      .genre-rollup table {{ display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }}
+      .genre-rollup th, .genre-rollup td {{ font-size: 0.78rem; padding: 0.3rem 0.5rem; }}
     }}
   </style>
 </head>

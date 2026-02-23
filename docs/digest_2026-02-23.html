@@ -681,6 +681,21 @@
       .genre-rollup table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
       .genre-rollup th, .genre-rollup td { font-size: 0.78rem; padding: 0.3rem 0.5rem; }
     }
+    /* Prev/Next digest navigation */
+    .digest-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 3rem 0 1rem;
+      padding: 1rem 0;
+      border-top: 1px solid #2a475e;
+    }
+    .digest-nav-link {
+      color: #66c0f4; text-decoration: none; font-size: 0.88rem;
+      font-weight: 600; transition: color 0.15s;
+      padding: 0.4rem 0;
+    }
+    .digest-nav-link:hover { color: #f97316; }
+    .digest-nav-placeholder { display: block; }
+
   </style>
 </head>
 <body>
@@ -2257,6 +2272,10 @@ analytics firms (Alinea, Newzoo), and community trackers.</p>
     });
   }
   </script>
-  <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Top</a>
+  <div class="digest-nav">
+    <a href="digest_2026-02-22.html" class="digest-nav-link prev">&#8592; February 22, 2026</a>
+    <span class="digest-nav-placeholder"></span>
+  </div>
+  <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">&#8593; Top</a>
 </body>
 </html>

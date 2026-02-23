@@ -3506,6 +3506,132 @@ def generate_markdown(results: list[dict], failed_names: list[str],
 
 
 # ---------------------------------------------------------------------------
+# Index page generation
+# ---------------------------------------------------------------------------
+
+def generate_index(docs_dir: str) -> str:
+    """
+    Regenerate index.html by parsing all digest HTML files in docs_dir.
+    Extracts top gainer/loser from each digest for the teaser line.
+    """
+    import re as _re
+    from datetime import datetime as _dt
+
+    def _fmt_date(date_str):
+        dt = _dt.strptime(date_str, "%Y-%m-%d")
+        return dt.strftime("%B %-d, %Y")
+
+    def _parse_movers(html):
+        gainer_name, gainer_pct, loser_name, loser_pct = None, None, None, None
+        m = _re.search(r'Biggest mover:\s*([^<\n]+?)\s+at\s+([+-][\d.]+)%\s+month', html)
+        if m:
+            gainer_name = m.group(1).strip()
+            try:
+                gainer_pct = float(m.group(2))
+            except Exception:
+                pass
+        m = _re.search(r'Steepest decline:\s*([^<\n]+?)\s+at\s+([+-][\d.]+)%\s+month', html)
+        if m:
+            loser_name = m.group(1).strip()
+            try:
+                loser_pct = float(m.group(2))
+            except Exception:
+                pass
+        return gainer_name, gainer_pct, loser_name, loser_pct
+
+    # Discover digest files
+    files = []
+    for fname in os.listdir(docs_dir):
+        mm = _re.match(r'digest_(\d{4}-\d{2}-\d{2})\.html$', fname)
+        if mm:
+            files.append((mm.group(1), fname, os.path.join(docs_dir, fname)))
+    files.sort(key=lambda x: x[0])
+
+    # Build list items newest-first
+    items_html = ""
+    for i, (date_str, fname, path) in enumerate(reversed(files)):
+        with open(path, "r", encoding="utf-8") as f:
+            html = f.read()
+        gainer_name, gainer_pct, loser_name, loser_pct = _parse_movers(html)
+
+        display_date = _fmt_date(date_str)
+        is_latest = (i == 0)
+        badge = ' <span class="badge-new">Latest</span>' if is_latest else ''
+
+        count = len(_re.findall(r'<div class="card"', html)) or 15
+        teaser_parts = [f"{count} games"]
+
+        if gainer_name and gainer_pct is not None:
+            pct_str = f"+{gainer_pct:.0f}%" if gainer_pct >= 0 else f"{gainer_pct:.0f}%"
+            teaser_parts.append(f'<span class="t-up">&#9650; {gainer_name} {pct_str}</span>')
+        if loser_name and loser_pct is not None:
+            pct_str = f"{loser_pct:.0f}%"
+            teaser_parts.append(f'<span class="t-down">&#9660; {loser_name} {pct_str}</span>')
+
+        teaser_html = " &nbsp;&middot;&nbsp; ".join(teaser_parts)
+        items_html += (
+            f'      <li><a href="{fname}">'
+            f'<span class="date">{display_date}{badge}'
+            f'<span class="teaser">{teaser_html}</span></span>'
+            f'<span class="arrow">&#8594;</span></a></li>\n'
+        )
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShooterDigest &mdash; Archive</title>
+  <style>
+    *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{
+      background: #0f0f0f; color: #e8e8e8;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh; padding: 60px 24px;
+    }}
+    .container {{ max-width: 640px; margin: 0 auto; }}
+    header {{ margin-bottom: 48px; }}
+    h1 {{ font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; }}
+    h1 span {{ color: #f97316; }}
+    .subtitle {{ margin-top: 8px; font-size: 0.9rem; color: #666; }}
+    ul {{ list-style: none; }}
+    ul li {{ border-bottom: 1px solid #1e1e1e; }}
+    ul li:first-child {{ border-top: 1px solid #1e1e1e; }}
+    ul li a {{
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 4px; color: #e8e8e8; text-decoration: none;
+      font-size: 1rem; transition: color 0.15s;
+    }}
+    ul li a:hover {{ color: #f97316; }}
+    ul li a .date {{ font-weight: 600; }}
+    .teaser {{ display: block; font-size: 0.72rem; font-weight: 400; color: #555; margin-top: 3px; }}
+    .t-up {{ color: #4ade80; }}
+    .t-down {{ color: #f87171; }}
+    ul li a .arrow {{ color: #444; font-size: 0.85rem; transition: color 0.15s, transform 0.15s; }}
+    ul li a:hover .arrow {{ color: #f97316; transform: translateX(4px); }}
+    .badge-new {{
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px;
+      text-transform: uppercase; color: #f97316; border: 1px solid #f97316;
+      border-radius: 4px; padding: 2px 6px; margin-left: 10px; vertical-align: middle;
+    }}
+    footer {{ margin-top: 56px; font-size: 0.78rem; color: #444; }}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Shooter<span>Digest</span></h1>
+      <p class="subtitle">Weekly competitive FPS briefings &mdash; sorted newest first</p>
+    </header>
+    <ul>
+{items_html}    </ul>
+    <footer>Auto-updated weekly &middot; <a href="https://github.com/michaelpyon/ShooterDigest" style="color:#555;text-decoration:none;">GitHub</a></footer>
+  </div>
+</body>
+</html>
+"""
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -3558,6 +3684,16 @@ def main():
     html_path = os.path.join(out_dir, f"digest_{date_str}.html")
     with open(html_path, "w") as f:
         f.write(generate_html(results, failed_names, overall_takeaways))
+
+
+    # Write index.html
+    docs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs")
+    os.makedirs(docs_dir, exist_ok=True)
+    # Copy new digest to docs/ (optional step — usually done manually)
+    index_path = os.path.join(docs_dir, "index.html")
+    with open(index_path, "w") as f:
+        f.write(generate_index(docs_dir))
+    print(f"  Updated: {index_path}")
 
     # Save history
     _save_history(results, out_dir)

@@ -21,6 +21,14 @@ class DigestHandler(SimpleHTTPRequestHandler):
         super().end_headers()
 
     def do_GET(self):
+        # Health check
+        if self.path == "/health":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"status":"ok"}')
+            return
+
         # Serve the NYC guy diagnostic
         if self.path in ("/nyc", "/nyc/"):
             self.send_response(200)

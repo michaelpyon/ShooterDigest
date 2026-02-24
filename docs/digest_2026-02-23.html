@@ -256,8 +256,8 @@
       font-size: 0.55rem; vertical-align: middle; margin-right: 0.15rem;
     }
     .sentiment-legend {
-      display: flex; gap: 1rem; margin-bottom: 0.5rem;
-      font-size: 0.7rem; color: #8f98a0;
+      display: flex; gap: 0.75rem; margin-bottom: 4px;
+      font-size: 0.75rem; color: #94a3b8; text-align: left;
     }
     .sentiment-legend span { display: inline-flex; align-items: center; gap: 0.2rem; }
 
@@ -1041,22 +1041,27 @@
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466506792" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Feb 09 <span class="badge patch">PATCH</span><div class="news-preview">Localization code and text changes.</div></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466495240" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Feb 04 <span class="badge patch">PATCH</span><div class="news-preview">Fixed a case where switching firstperson spectator targets would cause viewmodel animations to reset. Fixed a case where physics calculations far from the origin were causing performance issues. AnubisAdjusted player clipping around new drop.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198603765" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Jan 30 <span class="badge patch">PATCH</span><div class="news-preview">Damage from HE grenades that explode mid-air near the ground will no longer be calculated as if they exploded on the ground. Various knife sound adjustments. Performance optimizations for exploding chickens.</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466506792" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Feb 09 <span class="badge patch">PATCH</span><div class="news-preview">Localization code and text changes.</div></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466495240" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Feb 04 <span class="badge patch">PATCH</span><div class="news-preview">Fixed a case where switching firstperson spectator targets would cause viewmodel animations to reset. Fixed a case where physics calculations far from the origin were causing performance issues. AnubisAdjusted player clipping around new drop.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198603765" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Jan 30 <span class="badge patch">PATCH</span><div class="news-preview">Damage from HE grenades that explode mid-air near the ground will no longer be calculated as if they exploded on the ground. Various knife sound adjustments. Performance optimizations for exploding chickens.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxQT0dVRDF0SjhSSFhfWDZKV1NZcVB5MUtobk9RWDNsZlJ2WEpJczZSQk9sbjFVSjY4UGkyUVJzdEo2b3ZSSGUtUXRuVW5WdktTemRndjNPTVFqZWU3WG01NFJkajFYNV9KTnZPNm53Q2lzZlRyb2RSaHNpdWdCaXBKOElQVXdjSEpU?oc=5" target="_blank" class="item-link">&#x27;Counter-Strike 2&#x27; update wipes $2 billion in real money from game&#x27;s econom</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 24, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxPa3BPamp2eEl3WGFWS0ZWTkRRUDVxWF93c1d3WGFrLUptUWNyZncyWG1vclZlek9QbVlaMy0wa2ExVUFZYnlpcGhQQ21FXzJhbm00TTYxYUduLWtZdFNDTGlFaDMtdFpTTktjLW12Y001Wm9OVmVkbUN2N080c1lPMkF0aW5nNl9BZ3F4dVBWejFwT2JEZEc2Vm5MRnBoQ2lTMmlUXzlEdWxEMmZqdzRRQg?oc=5" target="_blank" class="item-link">Razer Huntsman V3 Pro TKL – Counter-Strike 2 Edition review — Breath of fre</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 21, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxPb3dqRFF4alYxNEhVZFJ2Z29ObVBJN3pzQTlPbTZNWDZUaFlIYzljcmNxTTFhZFRXUGFfdVNhcGE4cUpJaVdaTGw4R0pzSnJ0YXFiTWNSQWtwdEFobXBjZnpQWmY5MnMtc3BVRzdURF9NNk41VUJiaFM3T2k0cS1aSjJBbmlKZw?oc=5" target="_blank" class="item-link">Vitality win PGL Cluj-Napoca 2026, defeat PARAVISION on apEX’s birthday - e</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQWjB2M3FqQ05jWWRSY0JOQ0Q5WFZYYUxIX3d3bWJFSnYwVU5ERV9PUWYtSkNveTNZZGZzQ3oyYTdmUUtKQ0xlVTNvcmpfOWh5akhpUDdEakpPRGNxZVZ6ZC11MDQ1ZlgyNUNPdEtJdlVIZkFYS280RDQ2VmxwT3Ayc09pWnBuWUxhQ2dCR29LMA?oc=5" target="_blank" class="item-link">$2 Billion USD Wiped From ‘Counter-Strike 2’ Market Due to Game Update - hy</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 26, 2025</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxQT0dVRDF0SjhSSFhfWDZKV1NZcVB5MUtobk9RWDNsZlJ2WEpJczZSQk9sbjFVSjY4UGkyUVJzdEo2b3ZSSGUtUXRuVW5WdktTemRndjNPTVFqZWU3WG01NFJkajFYNV9KTnZPNm53Q2lzZlRyb2RSaHNpdWdCaXBKOElQVXdjSEpU?oc=5" target="_blank" class="item-link">&#x27;Counter-Strike 2&#x27; update wipes $2 billion in real money from game&#x27;s econom</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 24, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxPa3BPamp2eEl3WGFWS0ZWTkRRUDVxWF93c1d3WGFrLUptUWNyZncyWG1vclZlek9QbVlaMy0wa2ExVUFZYnlpcGhQQ21FXzJhbm00TTYxYUduLWtZdFNDTGlFaDMtdFpTTktjLW12Y001Wm9OVmVkbUN2N080c1lPMkF0aW5nNl9BZ3F4dVBWejFwT2JEZEc2Vm5MRnBoQ2lTMmlUXzlEdWxEMmZqdzRRQg?oc=5" target="_blank" class="item-link">Razer Huntsman V3 Pro TKL – Counter-Strike 2 Edition review — Breath of fre</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 21, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxPb3dqRFF4alYxNEhVZFJ2Z29ObVBJN3pzQTlPbTZNWDZUaFlIYzljcmNxTTFhZFRXUGFfdVNhcGE4cUpJaVdaTGw4R0pzSnJ0YXFiTWNSQWtwdEFobXBjZnpQWmY5MnMtc3BVRzdURF9NNk41VUJiaFM3T2k0cS1aSjJBbmlKZw?oc=5" target="_blank" class="item-link">Vitality win PGL Cluj-Napoca 2026, defeat PARAVISION on apEX’s birthday - e</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQWjB2M3FqQ05jWWRSY0JOQ0Q5WFZYYUxIX3d3bWJFSnYwVU5ERV9PUWYtSkNveTNZZGZzQ3oyYTdmUUtKQ0xlVTNvcmpfOWh5akhpUDdEakpPRGNxZVZ6ZC11MDQ1ZlgyNUNPdEtJdlVIZkFYS280RDQ2VmxwT3Ayc09pWnBuWUxhQ2dCR29LMA?oc=5" target="_blank" class="item-link">$2 Billion USD Wiped From ‘Counter-Strike 2’ Market Due to Game Update - hy</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 26, 2025</span></li>
 </ul>
         </div>
       </div>
@@ -1069,7 +1074,7 @@
         
         <div class="card-stats">
           24h Peak: <strong>564,151</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">705,188</strong> (80% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">705,188</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (80%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (80% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">4,045,033</strong> <small style="color:#556b7d">(est. all platforms)</small> (17.4% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1097,22 +1102,27 @@
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522838459" target="_blank" class="item-link">[Dev Letter] Anti-Cheat Action Plan Based on Community Feedback</a> — Feb 13<div class="news-preview">Read the full announcement here!</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501602811" target="_blank" class="item-link">PUBG: BATTLEGROUNDS Weekly Bans Notice (02/02~02/08)</a> — Feb 11<div class="news-preview">Read the full announcement here!</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466493136" target="_blank" class="item-link">PUBG: BATTLEGROUNDS Weekly Bans Notice (01/26~02/01)</a> — Feb 04<div class="news-preview">Read the full announcement here!</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522838459" target="_blank" class="item-link">[Dev Letter] Anti-Cheat Action Plan Based on Community Feedback</a> — Feb 13<div class="news-preview">Read the full announcement here!</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501602811" target="_blank" class="item-link">PUBG: BATTLEGROUNDS Weekly Bans Notice (02/02~02/08)</a> — Feb 11<div class="news-preview">Read the full announcement here!</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466493136" target="_blank" class="item-link">PUBG: BATTLEGROUNDS Weekly Bans Notice (01/26~02/01)</a> — Feb 04<div class="news-preview">Read the full announcement here!</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTFBqNk5tVWhKN3BFYkloeDlHenBkb2ZCZzFtVDJpN0M1NDhNa3d5VTdKWVBTc1BSTF9ydW9uRDIyZ3dHMjQ?oc=5" target="_blank" class="item-link">Spring Fest 2026 - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 03, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxOVXF0R21NZkJ2Vkh1b0I0X3JUWHpKU2MwbmdDd28tM182TnFiWDJ5b0RRbHFsOU4ySGZvVU16MzVkR2pWV3JJVXh4Q3dTUEdfb21wWE01eFo0MkNOVVI4XzlpaUtQVTlqbzU1OXZKVXhzMkpUcE9ldlRxMVlWQ3FnTnFkMGNWb1dybElGYlptQUFVSm53?oc=5" target="_blank" class="item-link">PUBG: Battlegrounds Joins the Esports Nations Cup 2026 - The Esports Advoca</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 16, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE5ZaDRlTV9vbmNxVkNYQ3F4QUMzYXMzdENEWmFSWXdXY21IcUQ3N1BVaG0xMW9UYmhYLTlSc2l1UU1XcThxb0k0M3NQTUxUc3FDcjE4and0TS1pWWUwR1BoLXNsUmMxY3FTb0Z4N2JzUl8?oc=5" target="_blank" class="item-link">‘Battlegrounds’ game maker extends frontline with Indian expansion - Financ</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 30, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTE51dEppUFpEQmxmYU9DWENiWGRVcXpKaDQ1X1ZkNlo5TlhyQTB6RUNjNVNlNGlwazlzNnNtbk0zX2VQb2s?oc=5" target="_blank" class="item-link">Patch Notes - Update 40.1 - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02, 2026</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTFBqNk5tVWhKN3BFYkloeDlHenBkb2ZCZzFtVDJpN0M1NDhNa3d5VTdKWVBTc1BSTF9ydW9uRDIyZ3dHMjQ?oc=5" target="_blank" class="item-link">Spring Fest 2026 - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 03, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxOVXF0R21NZkJ2Vkh1b0I0X3JUWHpKU2MwbmdDd28tM182TnFiWDJ5b0RRbHFsOU4ySGZvVU16MzVkR2pWV3JJVXh4Q3dTUEdfb21wWE01eFo0MkNOVVI4XzlpaUtQVTlqbzU1OXZKVXhzMkpUcE9ldlRxMVlWQ3FnTnFkMGNWb1dybElGYlptQUFVSm53?oc=5" target="_blank" class="item-link">PUBG: Battlegrounds Joins the Esports Nations Cup 2026 - The Esports Advoca</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 16, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE5ZaDRlTV9vbmNxVkNYQ3F4QUMzYXMzdENEWmFSWXdXY21IcUQ3N1BVaG0xMW9UYmhYLTlSc2l1UU1XcThxb0k0M3NQTUxUc3FDcjE4and0TS1pWWUwR1BoLXNsUmMxY3FTb0Z4N2JzUl8?oc=5" target="_blank" class="item-link">‘Battlegrounds’ game maker extends frontline with Indian expansion - Financ</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 30, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTE51dEppUFpEQmxmYU9DWENiWGRVcXpKaDQ1X1ZkNlo5TlhyQTB6RUNjNVNlNGlwazlzNnNtbk0zX2VQb2s?oc=5" target="_blank" class="item-link">Patch Notes - Update 40.1 - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02, 2026</span></li>
 </ul>
         </div>
       </div>
@@ -1125,7 +1135,7 @@
         <div class="event-annotation">-18.6% ← Post-launch decay. Second Expedition season announced Mar 1.</div>
         <div class="card-stats">
           24h Peak: <strong>277,582</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">555,164</strong> (50% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">555,164</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (50%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (50% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">930,194</strong> <small style="color:#556b7d">(est. all platforms)</small> (59.7% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1153,22 +1163,27 @@
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497248" target="_blank" class="item-link">Preparing for your Second Expedition</a> — Feb 05<div class="news-preview">It will soon be time to open up the tunnels out of Speranza and send our second wave of ambitious Raiders to new adventures beyond the Rust Belt. Raiders can sign up from February 25th and the departure will take place on March 1st.</div></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198599856" target="_blank" class="item-link">Hotfix 1.13.1</a> — Jan 28 <span class="badge patch">PATCH</span><div class="news-preview">Yesterday’s update introduced a handful of unintended issues. We are rolling out a hotfix that addresses the most impactful ones we’ve identified so far.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1822556746168686" target="_blank" class="item-link">HEADWINDS - Patch Notes 1.13.0</a> — Jan 27<div class="news-preview">Raiders,Trouble is brewing in the Rust Belt. Heavy sandstorms have been battering the surface. Flocks of birds have been spotted around Buried City, gathering around chimneys for what many assume to be nefarious reasons.</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497248" target="_blank" class="item-link">Preparing for your Second Expedition</a> — Feb 05<div class="news-preview">It will soon be time to open up the tunnels out of Speranza and send our second wave of ambitious Raiders to new adventures beyond the Rust Belt. Raiders can sign up from February 25th and the departure will take place on March 1st.</div></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198599856" target="_blank" class="item-link">Hotfix 1.13.1</a> — Jan 28 <span class="badge patch">PATCH</span><div class="news-preview">Yesterday’s update introduced a handful of unintended issues. We are rolling out a hotfix that addresses the most impactful ones we’ve identified so far.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1822556746168686" target="_blank" class="item-link">HEADWINDS - Patch Notes 1.13.0</a> — Jan 27<div class="news-preview">Raiders,Trouble is brewing in the Rust Belt. Heavy sandstorms have been battering the surface. Flocks of birds have been spotted around Buried City, gathering around chimneys for what many assume to be nefarious reasons.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxPeGtfcXBkb0RLeDhUSTVIT1J1cnpzT082UktRZkpuUzR5T1EyMzBuQ196TUNaVjdYMDJtZG9UODVqeW1pVGxTSnhLamhsVnNoMkhPbFBlR0RuM1J4SVR4NTliTUwzWmM5VFdoWk5sbmpfdkxpMjRKS3lZMVAxWHJBMHRwbURjZUVT?oc=5" target="_blank" class="item-link">Embark Confirms ARC Raiders Does Not Use ‘Binary’ Aggression-Based Matchmak</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMigwFBVV95cUxOUDJrSmNxOFJQX2JKNHJwRFkyZnNSMmRFd3BKMlJpa1hPcUJ6eU9scFR1VzVqNzhjRDIwTTRKQl92OTVvQV9QOFpfYVl3aGFMRFFYLWdXQVZ2bV8yZzBpWDFGaG1lbk9BRTNpbmNlcE1ucEZSaDhNMHdXeGRCME1OU0hrZw?oc=5" target="_blank" class="item-link">What time does the Arc Raiders Shrouded Sky update release in your time zon</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi6wFBVV95cUxQa0dkcF9INFFkc2FWdkJILTA0R1p4WjRxTWhqNXhwY1FkWWRja1pFajNETncwUFlXbGtIcERrckFDcThTMDRoZF8yTEhRc2oxT0FpcjBqSWVScUpGcHNEN1FDMHlnY3FXUU5QUmhJYXBxcWtoQVZQZlktMEJHN21CTk1ELW5sV1pIX3JNMWZNbWtFMTFsT2pvOVZLdzdFbmJfY2YzTWFGTVdmSWh2bHZsaDBqQVZtZG5KQk1GQl80U3E2SVdUYTZUNVVRei15emdzdFBOVHB1QngzMlFXcGJsOWgxSDJHaG1uRHgw?oc=5" target="_blank" class="item-link">Arc Raiders is such a huge hit, Nexon has put Embark Studios CEO Patrick Sö</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMipgJBVV95cUxQTkFwc3hFZTNGeHlCRWtBNGdWaGxGR3FQWmNkdDJxcjBIeG84RGxld3dZbFZRb1QtODZyUUhJX1QyMG9meHVjYUVGa0hfSHhaenRjam9ILV9FUGRQTEt6YkpvWWkya3E4TkRfbVdLc2Y3ZHpXcmN4anp6MlRkUTZLcHR4SHFraW1FMnhVa2VoTjlmYnh0V3l1eXZCZGpvRTFYdnBaOUtqalpZS2lpYmJGak1vVkxrMnJFZ3pEOVFFTm1iM0FDblkxSGQ3R1NCMzd5MGlIelh5V1ZPVG9DWXpma0xScldwcDEzdTBnR0lJY0NPRy1ZMFVFVkdKUWliYjZodFVWazN1Um5waU1Pdkk0dDBoTlBOU2dfOTlNbnhYYkJVMHJIUXc?oc=5" target="_blank" class="item-link">Arc Raiders lead says &quot;revisions are probably required&quot; on uneven events li</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxPeGtfcXBkb0RLeDhUSTVIT1J1cnpzT082UktRZkpuUzR5T1EyMzBuQ196TUNaVjdYMDJtZG9UODVqeW1pVGxTSnhLamhsVnNoMkhPbFBlR0RuM1J4SVR4NTliTUwzWmM5VFdoWk5sbmpfdkxpMjRKS3lZMVAxWHJBMHRwbURjZUVT?oc=5" target="_blank" class="item-link">Embark Confirms ARC Raiders Does Not Use ‘Binary’ Aggression-Based Matchmak</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMigwFBVV95cUxOUDJrSmNxOFJQX2JKNHJwRFkyZnNSMmRFd3BKMlJpa1hPcUJ6eU9scFR1VzVqNzhjRDIwTTRKQl92OTVvQV9QOFpfYVl3aGFMRFFYLWdXQVZ2bV8yZzBpWDFGaG1lbk9BRTNpbmNlcE1ucEZSaDhNMHdXeGRCME1OU0hrZw?oc=5" target="_blank" class="item-link">What time does the Arc Raiders Shrouded Sky update release in your time zon</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi6wFBVV95cUxQa0dkcF9INFFkc2FWdkJILTA0R1p4WjRxTWhqNXhwY1FkWWRja1pFajNETncwUFlXbGtIcERrckFDcThTMDRoZF8yTEhRc2oxT0FpcjBqSWVScUpGcHNEN1FDMHlnY3FXUU5QUmhJYXBxcWtoQVZQZlktMEJHN21CTk1ELW5sV1pIX3JNMWZNbWtFMTFsT2pvOVZLdzdFbmJfY2YzTWFGTVdmSWh2bHZsaDBqQVZtZG5KQk1GQl80U3E2SVdUYTZUNVVRei15emdzdFBOVHB1QngzMlFXcGJsOWgxSDJHaG1uRHgw?oc=5" target="_blank" class="item-link">Arc Raiders is such a huge hit, Nexon has put Embark Studios CEO Patrick Sö</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMipgJBVV95cUxQTkFwc3hFZTNGeHlCRWtBNGdWaGxGR3FQWmNkdDJxcjBIeG84RGxld3dZbFZRb1QtODZyUUhJX1QyMG9meHVjYUVGa0hfSHhaenRjam9ILV9FUGRQTEt6YkpvWWkya3E4TkRfbVdLc2Y3ZHpXcmN4anp6MlRkUTZLcHR4SHFraW1FMnhVa2VoTjlmYnh0V3l1eXZCZGpvRTFYdnBaOUtqalpZS2lpYmJGak1vVkxrMnJFZ3pEOVFFTm1iM0FDblkxSGQ3R1NCMzd5MGlIelh5V1ZPVG9DWXpma0xScldwcDEzdTBnR0lJY0NPRy1ZMFVFVkdKUWliYjZodFVWazN1Um5waU1Pdkk0dDBoTlBOU2dfOTlNbnhYYkJVMHJIUXc?oc=5" target="_blank" class="item-link">Arc Raiders lead says &quot;revisions are probably required&quot; on uneven events li</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
 </ul>
         </div>
       </div>
@@ -1181,7 +1196,7 @@
         
         <div class="card-stats">
           24h Peak: <strong>170,951</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">683,804</strong> (25% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">683,804</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (25%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (25% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">2,497,892</strong> <small style="color:#556b7d">(est. all platforms)</small> (27.4% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1209,19 +1224,24 @@
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633183596" target="_blank" class="item-link">An Update from the Anti Cheat Team 02/18/2026</a> — Feb 18<div class="news-preview">BANWAVE:
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633183596" target="_blank" class="item-link">An Update from the Anti Cheat Team 02/18/2026</a> — Feb 18<div class="news-preview">BANWAVE:
 
 A new detection targeting XIM cheating devices was enabled today that resulted in over 2000 accounts being permanently banned.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633183152" target="_blank" class="item-link">Apex Legends: Latest Update 02/18/2026</a> — Feb 18 <span class="badge patch">PATCH</span><div class="news-preview">Check out what&#x27;s included in todays patch - live now!</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633181374" target="_blank" class="item-link">Apex Legends: New Ranked System 02/17/2026</a> — Feb 18<div class="news-preview">The update to Ranked lobbies hybridizing Dropship and Drop Zones is now live.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633183152" target="_blank" class="item-link">Apex Legends: Latest Update 02/18/2026</a> — Feb 18 <span class="badge patch">PATCH</span><div class="news-preview">Check out what&#x27;s included in todays patch - live now!</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633181374" target="_blank" class="item-link">Apex Legends: New Ranked System 02/17/2026</a> — Feb 18<div class="news-preview">The update to Ranked lobbies hybridizing Dropship and Drop Zones is now live.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
           <ul><li>No recent press coverage</li>
 </ul>
@@ -1236,7 +1256,7 @@ A new detection targeting XIM cheating devices was enabled today that resulted i
         <div class="event-annotation">+14.0% ← RED DAY event + Season Morphosis live</div>
         <div class="card-stats">
           24h Peak: <strong>146,473</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">209,247</strong> (70% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">209,247</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (70%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (70% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">352,025</strong> <small style="color:#556b7d">(est. all platforms)</small> (59.4% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1276,22 +1296,27 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501606600" target="_blank" class="item-link">RED DAY Special Update</a> — Feb 12<div class="news-preview">Happy RED DAY, Operators! Wishing you all an abundance of gifts this RED DAY! The new season&#x27;s first rewards update is locked and loaded.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466504409" target="_blank" class="item-link">Delta Force | Vyron&#x27;s Ultimate Appearance &quot;Cosmic Guardian&quot; Now Available</a> — Feb 09<div class="news-preview">Vyron&#x27;s ultimate appearance Cosmic Guardian is now available. Operators, it&#x27;s time to chase the dreams beyond the stars.</div></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466492839" target="_blank" class="item-link">SEASON MORPHOSIS | STREAMER WEEK</a> — Feb 04<div class="news-preview">Dear Operators,Season Morphosis is now live, and instead of just telling you to jump in and play, we figured we’d let the streamers to introduce the new season for you. So this week, Delta Force is &quot;taken over&quot; by streamers.</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501606600" target="_blank" class="item-link">RED DAY Special Update</a> — Feb 12<div class="news-preview">Happy RED DAY, Operators! Wishing you all an abundance of gifts this RED DAY! The new season&#x27;s first rewards update is locked and loaded.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466504409" target="_blank" class="item-link">Delta Force | Vyron&#x27;s Ultimate Appearance &quot;Cosmic Guardian&quot; Now Available</a> — Feb 09<div class="news-preview">Vyron&#x27;s ultimate appearance Cosmic Guardian is now available. Operators, it&#x27;s time to chase the dreams beyond the stars.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466492839" target="_blank" class="item-link">SEASON MORPHOSIS | STREAMER WEEK</a> — Feb 04<div class="news-preview">Dear Operators,Season Morphosis is now live, and instead of just telling you to jump in and play, we figured we’d let the streamers to introduce the new season for you. So this week, Delta Force is &quot;taken over&quot; by streamers.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxPN3o0UzN1LTZDSDRablFvNXlCVktvYktFZ1RhR0JiaWwzb3ZuYmZFMXg5cVhVWHdJQnRLcllXN3VaODJ0Zk9jS2JjdVdmSlNnTnpycUhoREVSQlJuQy12ZlZsSzh2VGhMNUZMb043RElqX0dqQjUyc1BVSE9fb3h2QnlMZGwxQzBBeDdYZDh0RUhBRUxzc0drUk5aTFQ5a29FQU5YTUhwT3ljWWkwTTJTbjA3V2hsV2REUjRxb1VGRDFBZHh6V3BnaQ?oc=5" target="_blank" class="item-link">An Interview with the &#x27;Delta Force&#x27; Narrative Team on Story and the Ongoing</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 15, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxPSnFJT2Q5YlJZUG11OEkycHJ6SUV1YWFGVXBrN2NqMWNBYmVUbllLOTZtZ2VBVUxUMDFYbjRja21nZzRmNkc4a25uX0NlNzZzdmRaQ053TExLMEFfQkRtNVpyRjl6cVFXanJmcUlJTElYREdpWi1MQV9NY250WVhxVUZObXVVdjl1N2tvT255NFRNbjFuTEFuTlZTUWNYYjlGVTh3ZklWZVVKaUdsbmtIMnJRSm9pRVU?oc=5" target="_blank" class="item-link">Opinion: Delta Force Is Solid On Xbox, But Another Upcoming FPS Runs Rings</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 22, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSFRnbjVpZXBiTU9KNk9mVTMtSm1XcGdqVnZvam5HQ29oQUpYSU5XSVp6MVBSOFRRVTRYdVVLM3p6RnBLXy1YSjhJeTBIY3BTU1lTWk44NmsxdFhWLXNtc1dsV25GYUNRR0FPMHRQR0RSRHk0Z3I2SmRqUnh3UzNhd0FoM1h6d3Va0gGWAUFVX3lxTE1qMWs5YXU5R1RucTVvcUhteXN1bDFUVGNKdnY1cUFMU01wbGRfd082VkFhaUFtaGhLQlpnTE5SZmZ1YzV3MEpPVTBCb29ieUJRbDYtZGtVNTZYSHktZ2RqOXVHTEFjVEdiSlc4RkhtaHNiOUs1T2U1QmdsZzh6NThNdXRNOXNaVlh5RWNfSlFRVFN5czlFQQ?oc=5" target="_blank" class="item-link">New Delta Force season release date revealed with a new Operator, weapons,</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 26, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxPZk5oWVZfTWRlRVNoS210ZDJiQ2VETTc1cGZseEs3eXNSRzBWek1zSEJYWUZIejdjeGJmdHUtTEVFNG5TWVc3dlgySHA1TXcxbHB4cHlTYkhjVDVlc0hHTWE4TTZXV2VQRE82by14U0RWVkE4WW9Wd3gwYmt0M1BkZ1lxd29fYkhOZVNoeTBLUmZXcjJyc3JXaE10ckd5cW1jeS1FUg?oc=5" target="_blank" class="item-link">The Delta Force Technical Test is LIVE today for Xbox Insiders! - Xbox Wire</a> <span style="color:#8f98a0;font-size:0.7rem">Jul 16, 2025</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxPN3o0UzN1LTZDSDRablFvNXlCVktvYktFZ1RhR0JiaWwzb3ZuYmZFMXg5cVhVWHdJQnRLcllXN3VaODJ0Zk9jS2JjdVdmSlNnTnpycUhoREVSQlJuQy12ZlZsSzh2VGhMNUZMb043RElqX0dqQjUyc1BVSE9fb3h2QnlMZGwxQzBBeDdYZDh0RUhBRUxzc0drUk5aTFQ5a29FQU5YTUhwT3ljWWkwTTJTbjA3V2hsV2REUjRxb1VGRDFBZHh6V3BnaQ?oc=5" target="_blank" class="item-link">An Interview with the &#x27;Delta Force&#x27; Narrative Team on Story and the Ongoing</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 15, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxPSnFJT2Q5YlJZUG11OEkycHJ6SUV1YWFGVXBrN2NqMWNBYmVUbllLOTZtZ2VBVUxUMDFYbjRja21nZzRmNkc4a25uX0NlNzZzdmRaQ053TExLMEFfQkRtNVpyRjl6cVFXanJmcUlJTElYREdpWi1MQV9NY250WVhxVUZObXVVdjl1N2tvT255NFRNbjFuTEFuTlZTUWNYYjlGVTh3ZklWZVVKaUdsbmtIMnJRSm9pRVU?oc=5" target="_blank" class="item-link">Opinion: Delta Force Is Solid On Xbox, But Another Upcoming FPS Runs Rings</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 22, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSFRnbjVpZXBiTU9KNk9mVTMtSm1XcGdqVnZvam5HQ29oQUpYSU5XSVp6MVBSOFRRVTRYdVVLM3p6RnBLXy1YSjhJeTBIY3BTU1lTWk44NmsxdFhWLXNtc1dsV25GYUNRR0FPMHRQR0RSRHk0Z3I2SmRqUnh3UzNhd0FoM1h6d3Va0gGWAUFVX3lxTE1qMWs5YXU5R1RucTVvcUhteXN1bDFUVGNKdnY1cUFMU01wbGRfd082VkFhaUFtaGhLQlpnTE5SZmZ1YzV3MEpPVTBCb29ieUJRbDYtZGtVNTZYSHktZ2RqOXVHTEFjVEdiSlc4RkhtaHNiOUs1T2U1QmdsZzh6NThNdXRNOXNaVlh5RWNfSlFRVFN5czlFQQ?oc=5" target="_blank" class="item-link">New Delta Force season release date revealed with a new Operator, weapons,</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 26, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxPZk5oWVZfTWRlRVNoS210ZDJiQ2VETTc1cGZseEs3eXNSRzBWek1zSEJYWUZIejdjeGJmdHUtTEVFNG5TWVc3dlgySHA1TXcxbHB4cHlTYkhjVDVlc0hHTWE4TTZXV2VQRE82by14U0RWVkE4WW9Wd3gwYmt0M1BkZ1lxd29fYkhOZVNoeTBLUmZXcjJyc3JXaE10ckd5cW1jeS1FUg?oc=5" target="_blank" class="item-link">The Delta Force Technical Test is LIVE today for Xbox Insiders! - Xbox Wire</a> <span style="color:#8f98a0;font-size:0.7rem">Jul 16, 2025</span></li>
 </ul>
         </div>
       </div>
@@ -1304,7 +1329,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
         <div class="event-annotation">+76.4% ← Loverwatch event + OWCS S2 kickoff + sub-role passives patch</div>
         <div class="card-stats">
           24h Peak: <strong>135,175</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">675,875</strong> (20% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">675,875</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (20%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (20% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">823,180</strong> <small style="color:#556b7d">(est. all platforms)</small> (82.1% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1332,22 +1357,27 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633186579" target="_blank" class="item-link">Double XP Weekend, Thanks for Playing Week 1!</a> — Feb 20<div class="news-preview">Double XP Weekend! Thanks for Playing Week 1! Your plays helped drive a huge Season 1 launch—and the momentum is still building.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633179699" target="_blank" class="item-link">Roles Refined</a> — Feb 17<div class="news-preview">Subrole PassivesCore gameplay gets refined with sub-role passives designed to reinforce your Hero identity.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522840405" target="_blank" class="item-link">Loverwatch</a> — Feb 13<div class="news-preview">Play through the web event on desktop or mobile, spend time with iconic Heroes, uncover inside jokes and easter eggs, and earn sweet returning rewards along the way.</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633186579" target="_blank" class="item-link">Double XP Weekend, Thanks for Playing Week 1!</a> — Feb 20<div class="news-preview">Double XP Weekend! Thanks for Playing Week 1! Your plays helped drive a huge Season 1 launch—and the momentum is still building.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633179699" target="_blank" class="item-link">Roles Refined</a> — Feb 17<div class="news-preview">Subrole PassivesCore gameplay gets refined with sub-role passives designed to reinforce your Hero identity.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522840405" target="_blank" class="item-link">Loverwatch</a> — Feb 13<div class="news-preview">Play through the web event on desktop or mobile, spend time with iconic Heroes, uncover inside jokes and easter eggs, and earn sweet returning rewards along the way.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi6wFBVV95cUxOT0lDLWd1ZHQzcnJfUTAtR3RDRGhFWExkMFExX3duc1pKd0JsOHkzNm0tUlNWaHVXaFk4R004ekVGUkthVWxISmhFbDJaTExtSGdZWWhsTjd2UVBTYUlYR1REcl9iRnVKMXVzNHBadUV3ODUtOGZzVlBEbGpLTmM0b05FWFJpVFNzZXJqVDVfdHl4MmF2ZnBVcTBaMTZJRElyZjZBWEUtQXgwZ1I5Z3VlV2N5UWdEUFdTU1MyTjd5cGZqdkZKYXJCWjk5eWk5aW9EOU9ENWJPd2FFN3dhUm44Q0t2WDRZZUZvMDdj?oc=5" target="_blank" class="item-link">Blizzard is already nerfing Overwatch&#x27;s Jetpack Cat as the hero continues t</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxOaENsVUEta0xjWEoxUTlNQ3h6RGxwVG1WOS0wcVhiU0FocGFJUFM0Y293M3dnMHFEc0VzQ0lfUU0zNldwc0tVaktQU0FBdFRiQTJPd21qeEtiYjQyVlVGX2J2Q2RLMGRyZWZLSWp3UVFkcXRGampfekRtalhmVFZha0o1MWtMQlFMWkloSVh4NnNSN2U0TUZMSUd5S0FHMmota3FhWXBGLWdkZU9yeUlj?oc=5" target="_blank" class="item-link">Overwatch dev confirms nerfs to heroes that have dominated Season 1 - Dexer</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi8gFBVV95cUxQdnVaSWtLU1g4Y29saDBOTktpMktZZzRyLWRrODBjNkNpaDFXTk4tMktEVHdkZUs2eXlFU3Z1VUY0WDBBbVZzeGZLQ1JGWW9KcnBkemhmU1NtQ19xY0ZnWGdnZllZTFE2eFltYnhHSlZuRlQyaUhMMmk2ZHhWLVk2ZUJta2JvX3h5d3dRaWY2MVRIdWtqc0NMeHd6VGR2OWpRNmFTdEUyemU1RmFVczR6dWNJLVJkeXhiNTZhejFsY3NrV3poUm4yaGdnVnNXSEpnaGxITmFuRjVXNU03ODhyZDR6NVJYWVZ3RFJqbmZqSC1YZw?oc=5" target="_blank" class="item-link">After breaking Winston&#x27;s heart last week, Overwatch players have abandoned</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiYkFVX3lxTFBua0xmSmZDVUhRVjA0QUsyN0F3cG41OHpGSkFPMTdoMnB6Z2FrWTc3ajdJNy1kcUNaTHpBb1BpOFIzeDBldjE4UXRkOUpaemw1ZjJxdVdhX3pvR2VTRWdiaVdn?oc=5" target="_blank" class="item-link">Overwatch is Nerfing One of Its New Heroes From Reign of Talon Season 1 - G</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi6wFBVV95cUxOT0lDLWd1ZHQzcnJfUTAtR3RDRGhFWExkMFExX3duc1pKd0JsOHkzNm0tUlNWaHVXaFk4R004ekVGUkthVWxISmhFbDJaTExtSGdZWWhsTjd2UVBTYUlYR1REcl9iRnVKMXVzNHBadUV3ODUtOGZzVlBEbGpLTmM0b05FWFJpVFNzZXJqVDVfdHl4MmF2ZnBVcTBaMTZJRElyZjZBWEUtQXgwZ1I5Z3VlV2N5UWdEUFdTU1MyTjd5cGZqdkZKYXJCWjk5eWk5aW9EOU9ENWJPd2FFN3dhUm44Q0t2WDRZZUZvMDdj?oc=5" target="_blank" class="item-link">Blizzard is already nerfing Overwatch&#x27;s Jetpack Cat as the hero continues t</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxOaENsVUEta0xjWEoxUTlNQ3h6RGxwVG1WOS0wcVhiU0FocGFJUFM0Y293M3dnMHFEc0VzQ0lfUU0zNldwc0tVaktQU0FBdFRiQTJPd21qeEtiYjQyVlVGX2J2Q2RLMGRyZWZLSWp3UVFkcXRGampfekRtalhmVFZha0o1MWtMQlFMWkloSVh4NnNSN2U0TUZMSUd5S0FHMmota3FhWXBGLWdkZU9yeUlj?oc=5" target="_blank" class="item-link">Overwatch dev confirms nerfs to heroes that have dominated Season 1 - Dexer</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi8gFBVV95cUxQdnVaSWtLU1g4Y29saDBOTktpMktZZzRyLWRrODBjNkNpaDFXTk4tMktEVHdkZUs2eXlFU3Z1VUY0WDBBbVZzeGZLQ1JGWW9KcnBkemhmU1NtQ19xY0ZnWGdnZllZTFE2eFltYnhHSlZuRlQyaUhMMmk2ZHhWLVk2ZUJta2JvX3h5d3dRaWY2MVRIdWtqc0NMeHd6VGR2OWpRNmFTdEUyemU1RmFVczR6dWNJLVJkeXhiNTZhejFsY3NrV3poUm4yaGdnVnNXSEpnaGxITmFuRjVXNU03ODhyZDR6NVJYWVZ3RFJqbmZqSC1YZw?oc=5" target="_blank" class="item-link">After breaking Winston&#x27;s heart last week, Overwatch players have abandoned</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiYkFVX3lxTFBua0xmSmZDVUhRVjA0QUsyN0F3cG41OHpGSkFPMTdoMnB6Z2FrWTc3ajdJNy1kcUNaTHpBb1BpOFIzeDBldjE4UXRkOUpaemw1ZjJxdVdhX3pvR2VTRWdiaVdn?oc=5" target="_blank" class="item-link">Overwatch is Nerfing One of Its New Heroes From Reign of Talon Season 1 - G</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
 </ul>
         </div>
       </div>
@@ -1360,7 +1390,7 @@ Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ult
         
         <div class="card-stats">
           24h Peak: <strong>123,351</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">352,431</strong> (35% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">352,431</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (35%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (35% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">1,835,237</strong> <small style="color:#556b7d">(est. all platforms)</small> (19.2% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1390,22 +1420,27 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633184133" target="_blank" class="item-link">Marvel Rivals Version 20260219 Patch Notes</a> — Feb 19<div class="news-preview">Greetings, Rivals! We&#x27;re thrilled to announce the upcoming patch drops on February 19th, 2026, at 09 : 00 : 00 (UTC)! No server downtime; just patch and play!</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522838199" target="_blank" class="item-link">Marvel Rivals Version 20260213 Patch Notes: Season 6.5 Arrives</a> — Feb 13<div class="news-preview">Greetings, Rivals! After teaming up to defeat the Brood Queen, Elsa Bloodstone and Deadpool have finally buried the hatchet, while Gambit and Rogue made it back to Krakoa to finish their dream wedding ceremony.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501603127" target="_blank" class="item-link">Marvel Rivals: What&#x27;s new in Season 6.5 // Dev Vision Vol. 14</a> — Feb 11<div class="news-preview">Deadpool&#x27;s not done being in the spotlight just yet, he&#x27;s here to host a brand-new competition on February 21 - 22: the Monster Kingdom Championship! 🎉</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633184133" target="_blank" class="item-link">Marvel Rivals Version 20260219 Patch Notes</a> — Feb 19<div class="news-preview">Greetings, Rivals! We&#x27;re thrilled to announce the upcoming patch drops on February 19th, 2026, at 09 : 00 : 00 (UTC)! No server downtime; just patch and play!</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522838199" target="_blank" class="item-link">Marvel Rivals Version 20260213 Patch Notes: Season 6.5 Arrives</a> — Feb 13<div class="news-preview">Greetings, Rivals! After teaming up to defeat the Brood Queen, Elsa Bloodstone and Deadpool have finally buried the hatchet, while Gambit and Rogue made it back to Krakoa to finish their dream wedding ceremony.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501603127" target="_blank" class="item-link">Marvel Rivals: What&#x27;s new in Season 6.5 // Dev Vision Vol. 14</a> — Feb 11<div class="news-preview">Deadpool&#x27;s not done being in the spotlight just yet, he&#x27;s here to host a brand-new competition on February 21 - 22: the Monster Kingdom Championship! 🎉</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxNSU9OUlI3NDJsM3pUSWJtTWgzS3JrUDg4MEdUdDBMS2NXTzZZT193dlVWNVZPRnJaWjJVUkh4ZnExQmRBWTVLMml3enJfblAtYjRsYzFqWGFxSkFDRG5LTkpkT3h1WWV4YkY1REVabV9KanpOUFNfYUI5V1NvT3VRbmc4RXdaY1N3SmUweHNPOGxxSjFHbUlNV2RHY1ByY2NlcGk5RA?oc=5" target="_blank" class="item-link">Marvel Rivals: Iron Fist&#x27;s Voice Actor Revealed! - thedetroitbureau.com</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE5peC1IQXp4WUVVSVRXdk1xN2NXMno2dWFyRGlqUDF5My1jUnNoOXVmTWRyWUlBWElVTlA1cmFWdmVxa0tYTDBYeUxPM1V2QVRSd2Z0ZURHMl9SR0JTT3pvSWxHUHYxWUdsYjBsRnkxOGxJakhhaWNsOW1Edw?oc=5" target="_blank" class="item-link">Marvel Rivals should avoid role queue - GamingTrend</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 16, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiekFVX3lxTFBEbm5hMHljNGhQVFF4bUEyaVZkc0RaVThrNGRub090NDZXVmxfSVhhUnVLRm9VUDJMNTBLbWhJUEFvUF9Wc1JuTDgyUVRpbGstbjJlMDlLQklzNDA2Tnp3Z1RPVzZweTRlakM4aDRvTE1fVFMzVXl1dTZB?oc=5" target="_blank" class="item-link">The Super Hero Team-based PVP Shooter - Marvel Rivals</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 15, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxPOElGMGlpVVJWdDRPYy1JcTZpeERfNUVObUN6NkV2NUstUENmTzVYWWVpd1lseklhRGozal9TLVpncnVIaHF6UFFSWjNoN2hKWm92RkJwR1ZFaDRUV0ZDZGNicDJIcEJOXzZlX0x0RE10eUdqWlVKcTk5RmVNRFdSSm01Y1gwRU55alo0NU5lSkZBVUwwRE5KTVp5eU9KVUZWV1ZXYzNGd2pXTXlHWF80cUU1YlBVOHFwMUZr?oc=5" target="_blank" class="item-link">Rocket League and Marvel Rivals boast strong defense across a loss and a vi</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxNSU9OUlI3NDJsM3pUSWJtTWgzS3JrUDg4MEdUdDBMS2NXTzZZT193dlVWNVZPRnJaWjJVUkh4ZnExQmRBWTVLMml3enJfblAtYjRsYzFqWGFxSkFDRG5LTkpkT3h1WWV4YkY1REVabV9KanpOUFNfYUI5V1NvT3VRbmc4RXdaY1N3SmUweHNPOGxxSjFHbUlNV2RHY1ByY2NlcGk5RA?oc=5" target="_blank" class="item-link">Marvel Rivals: Iron Fist&#x27;s Voice Actor Revealed! - thedetroitbureau.com</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE5peC1IQXp4WUVVSVRXdk1xN2NXMno2dWFyRGlqUDF5My1jUnNoOXVmTWRyWUlBWElVTlA1cmFWdmVxa0tYTDBYeUxPM1V2QVRSd2Z0ZURHMl9SR0JTT3pvSWxHUHYxWUdsYjBsRnkxOGxJakhhaWNsOW1Edw?oc=5" target="_blank" class="item-link">Marvel Rivals should avoid role queue - GamingTrend</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 16, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiekFVX3lxTFBEbm5hMHljNGhQVFF4bUEyaVZkc0RaVThrNGRub090NDZXVmxfSVhhUnVLRm9VUDJMNTBLbWhJUEFvUF9Wc1JuTDgyUVRpbGstbjJlMDlLQklzNDA2Tnp3Z1RPVzZweTRlakM4aDRvTE1fVFMzVXl1dTZB?oc=5" target="_blank" class="item-link">The Super Hero Team-based PVP Shooter - Marvel Rivals</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 15, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxPOElGMGlpVVJWdDRPYy1JcTZpeERfNUVObUN6NkV2NUstUENmTzVYWWVpd1lseklhRGozal9TLVpncnVIaHF6UFFSWjNoN2hKWm92RkJwR1ZFaDRUV0ZDZGNicDJIcEJOXzZlX0x0RE10eUdqWlVKcTk5RmVNRFdSSm01Y1gwRU55alo0NU5lSkZBVUwwRE5KTVp5eU9KVUZWV1ZXYzNGd2pXTXlHWF80cUU1YlBVOHFwMUZr?oc=5" target="_blank" class="item-link">Rocket League and Marvel Rivals boast strong defense across a loss and a vi</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
 </ul>
         </div>
       </div>
@@ -1418,7 +1453,7 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
         
         <div class="card-stats">
           24h Peak: <strong>110,858</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">316,737</strong> (35% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">316,737</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (35%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (35% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">572,788</strong> <small style="color:#556b7d">(est. all platforms)</small> (55.3% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1446,22 +1481,27 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633182063" target="_blank" class="item-link">Y11S1 DESIGNER&#x27;S NOTES</a> — Feb 18<div class="news-preview">Y11S1 Designer’s NotesIn this latest edition of Designer&#x27;s Notes, we&#x27;ll go into detail about the balancing changes that&#x27;ll come with the Y11S1 update and give you some insight into the reasons behind them.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522844922" target="_blank" class="item-link">Solid Snake joins Rainbow!</a> — Feb 16<div class="news-preview">KEPT YOU WAITING, HUH? A legend joins Siege as Operation Silent Hunt begins. A man shrouded in mystery, the new Operator is none other than Solid Snake.</div></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198606153" target="_blank" class="item-link">PLAYER PROTECTION IN YEAR 11</a> — Jan 30<div class="news-preview">In Year 11, the Siege team is delivering important changes across our account security, anti-cheat, and anti-toxicity systems.</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633182063" target="_blank" class="item-link">Y11S1 DESIGNER&#x27;S NOTES</a> — Feb 18<div class="news-preview">Y11S1 Designer’s NotesIn this latest edition of Designer&#x27;s Notes, we&#x27;ll go into detail about the balancing changes that&#x27;ll come with the Y11S1 update and give you some insight into the reasons behind them.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522844922" target="_blank" class="item-link">Solid Snake joins Rainbow!</a> — Feb 16<div class="news-preview">KEPT YOU WAITING, HUH? A legend joins Siege as Operation Silent Hunt begins. A man shrouded in mystery, the new Operator is none other than Solid Snake.</div></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198606153" target="_blank" class="item-link">PLAYER PROTECTION IN YEAR 11</a> — Jan 30<div class="news-preview">In Year 11, the Siege team is delivering important changes across our account security, anti-cheat, and anti-toxicity systems.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxNamxqUXctZGZzZFVWNkhVV0FwNTE5SDgzNXlHREJpc25EMWQ5dURKRHpWWUNPX2wxQm53UTVjQlc3azM2UlpDRFBkOW1oRzhUX1hHTHlRZWstdldJOFdIcXRiZ3FnRlVYa3ctVXJlNlNXWmlKVFZyMWRlbjItUzhETGt3?oc=5" target="_blank" class="item-link">FREE Rewards for Siege Players - Ubisoft</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMia0FVX3lxTFBENkFUcFc4NWlSR2VUR240cXAwNjJsd01hUHZ5MmgtYTBpZGVDOVJKR0ctRmIyZ2lfZXBXeEVVMi04OVBxUVNJbnlKeURUemxrWU5ZS2VqaUl6TU1jaVYxNTR5UUxzWmJyTUxR?oc=5" target="_blank" class="item-link">1V1 NOW by Xbox Game Pass: The 1st Official 1v1 Competition in Rainbow Six</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 13, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQQk1mQmI4TmpwVGN2bUt5b2p2cHJLeFVSVGRmVWlzR3pQVkRFd3JzZWZfWkZFUktTTm1uYUlpLVVKcXdacXNWai1sWnpvQm9ocWI4WUpMbVhOeWlkN1VfSlNYcjZQTnVMLV9TQl9mYVVsUjhVYlVoUFdNQnN4b0VKQg?oc=5" target="_blank" class="item-link">Rainbow Six Siege Devs Reflect on 10 Years and the Game’s Future - Comics G</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 15, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMivwFBVV95cUxQal9Uc242cXJ2MGxldkFLemMyVWk3ZmVWLThxNnJscWF0WDdmS0pPREdoU040ZGk4YTFhRlY2N0dwWU9uMkN3OFJfT1htVFE5enJlc3lSWnJEOXQxXzRrZGtkak1wVXlrc24tajd6WFB6U2tFNUMwQ1daZXJwRnN4ZXdLOFUzcUZueWkxeGw4OF9Sb3JOZkdDNk9WU0l3eWlLdzZ5N2U3LVp2TGFKdVNOOXZSYk42RjFhTFg0bmcwZw?oc=5" target="_blank" class="item-link">Rainbow Six Siege X director Joshua Mills talks difficulty and future plans</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 22, 2025</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxNamxqUXctZGZzZFVWNkhVV0FwNTE5SDgzNXlHREJpc25EMWQ5dURKRHpWWUNPX2wxQm53UTVjQlc3azM2UlpDRFBkOW1oRzhUX1hHTHlRZWstdldJOFdIcXRiZ3FnRlVYa3ctVXJlNlNXWmlKVFZyMWRlbjItUzhETGt3?oc=5" target="_blank" class="item-link">FREE Rewards for Siege Players - Ubisoft</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 18, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMia0FVX3lxTFBENkFUcFc4NWlSR2VUR240cXAwNjJsd01hUHZ5MmgtYTBpZGVDOVJKR0ctRmIyZ2lfZXBXeEVVMi04OVBxUVNJbnlKeURUemxrWU5ZS2VqaUl6TU1jaVYxNTR5UUxzWmJyTUxR?oc=5" target="_blank" class="item-link">1V1 NOW by Xbox Game Pass: The 1st Official 1v1 Competition in Rainbow Six</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 13, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQQk1mQmI4TmpwVGN2bUt5b2p2cHJLeFVSVGRmVWlzR3pQVkRFd3JzZWZfWkZFUktTTm1uYUlpLVVKcXdacXNWai1sWnpvQm9ocWI4WUpMbVhOeWlkN1VfSlNYcjZQTnVMLV9TQl9mYVVsUjhVYlVoUFdNQnN4b0VKQg?oc=5" target="_blank" class="item-link">Rainbow Six Siege Devs Reflect on 10 Years and the Game’s Future - Comics G</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 15, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMivwFBVV95cUxQal9Uc242cXJ2MGxldkFLemMyVWk3ZmVWLThxNnJscWF0WDdmS0pPREdoU040ZGk4YTFhRlY2N0dwWU9uMkN3OFJfT1htVFE5enJlc3lSWnJEOXQxXzRrZGtkak1wVXlrc24tajd6WFB6U2tFNUMwQ1daZXJwRnN4ZXdLOFUzcUZueWkxeGw4OF9Sb3JOZkdDNk9WU0l3eWlLdzZ5N2U3LVp2TGFKdVNOOXZSYk42RjFhTFg0bmcwZw?oc=5" target="_blank" class="item-link">Rainbow Six Siege X director Joshua Mills talks difficulty and future plans</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 22, 2025</span></li>
 </ul>
         </div>
       </div>
@@ -1474,7 +1514,7 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
         <div class="event-annotation">-22.6% ← Season 2 launched Feb 17 but failing to retain</div>
         <div class="card-stats">
           24h Peak: <strong>95,926</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">174,410</strong> (55% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">174,410</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (55%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (55% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">1,192,849</strong> <small style="color:#556b7d">(est. all platforms)</small> (14.6% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1502,26 +1542,31 @@ Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a f
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633182662" target="_blank" class="item-link">Year of the Horse in Battlefield 6 | REDSEC</a> — Feb 18<div class="news-preview">Bring the fireworks – and firepower – to the battlefield during the Year of the Horse
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633182662" target="_blank" class="item-link">Year of the Horse in Battlefield 6 | REDSEC</a> — Feb 18<div class="news-preview">Bring the fireworks – and firepower – to the battlefield during the Year of the Horse
 
 CHALLENGES &amp; REWARDS
 
 Show off your horsepower and earn rewards by completing 7 new challenges.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522847401" target="_blank" class="item-link">Battlefield 6 | REDSEC Season 2 Live Now</a> — Feb 17<div class="news-preview">Season 2 erupts onto the battlefield, taking the thrill of all-out war to another level with new content and features.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522847112" target="_blank" class="item-link">New Map: Contaminated</a> — Feb 17<div class="news-preview">Drop into the European mountainside and evade the psychoactive smoke filling the air.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522847401" target="_blank" class="item-link">Battlefield 6 | REDSEC Season 2 Live Now</a> — Feb 17<div class="news-preview">Season 2 erupts onto the battlefield, taking the thrill of all-out war to another level with new content and features.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522847112" target="_blank" class="item-link">New Map: Contaminated</a> — Feb 17<div class="news-preview">Drop into the European mountainside and evade the psychoactive smoke filling the air.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi7gFBVV95cUxNZURYQkVEdzhzWW1qemxEMmJPQlR1ZXVsSWJqWHJ2QmI0bURqS2hSeWEtaHp4eWhZVGpydC1GZUc1VmNpS182UjBCYzNqd2hVYzJCQS1lQjZfcmlWMUVraUVxSHNGTU1RazU4czBlNU5KSjhyaWtVczhMeXhSQXJDT1JGWHUzZXRFcDBUSGJVZG80eWpZbG1kd0JGT2VBT1MwR3Q0c1k3YUdjQWRPUFFndnJCSFlkSklMUlkxVVpGMDN4eW8wVUdLNWZ5N21oa0RhYTJuamRfdUZ4UC1ENm40STdvM09UeHcwaU5PWnZR?oc=5" target="_blank" class="item-link">DICE agrees that some Battlefield 6 vehicles are &#x27;death traps&#x27; and is plann</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMi4gFBVV95cUxNbTc5WUg4ckxYcVloNE91TmFTZE14OFdGdlJjQUlYR3ZrdFY0d2JyUmlFRzRrWlBlVG03OGFIZU53OEpoeEVxSUdQMkJzRndUSXJXamM5MGstQllYNnZJNm5IN3RDbE53bm5MNElzbDYwZEpNVi1hV3JDelFwVkNFUG9JaTFheHhtV1REengzTWhzQlVnc3p4VHZrdUMtb09tVmgtSC1jZHlCTUh4cGRPSXBRYjNrVjFEd3Q3NDNYQXA2QS1GaS1NX0pzWWc1aEs0NG1HeGkxTjFMUXlMMGd5T2R3?oc=5" target="_blank" class="item-link">Step aside, Battlefield 6 — Call of Duty: Black Ops 7 was January 2026’s be</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 21, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxQQ09HTl9GcU1fcktnTUpGX0RlWmI4SERUNVZqLTZhb09pQjBtUlR0T3JDWThfdzBfVXlTME1MOHZqU05JUVltYkRoY3VIMVp6bUZHUEwyeFNTbV9pUmt0WFgtOFU5T3B0dlVkbVlWYXJnX3U3ei13LXhYU2RHMmpqUXh3RUFqSmxPWWI3cW1GN2lrVUJlZWhNd0wtS0xUMGpNVmhoUklMUTRmNnNfaHBrUHpnOGQ5cndL?oc=5" target="_blank" class="item-link">Battlefield 6 Players Want More DLC Maps, And Faster, But EA Won&#x27;t Do It -</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxPNXBmTUJaTXktRFNzU2pNMkwzdF82MmRmcHc2UHdYcWZZRGJMV0NDUGpoTWhLa1YweEp6WjVZY1lwQnh1QnA3dzlkMXhCcmJUX29SY3NoZUdGU01QOXVLZV9Hel9heDUwdVpiQXhrcWFWaHNKTUlKTzhJT0g3OXhKWU43MjNadGpYNGRFbkxIU1dpZmczb1o0b3AyWVhoSloxRVRRYQ?oc=5" target="_blank" class="item-link">Battlefield 6 devs promise a “package of vehicle improvements” as they admi</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi7gFBVV95cUxNZURYQkVEdzhzWW1qemxEMmJPQlR1ZXVsSWJqWHJ2QmI0bURqS2hSeWEtaHp4eWhZVGpydC1GZUc1VmNpS182UjBCYzNqd2hVYzJCQS1lQjZfcmlWMUVraUVxSHNGTU1RazU4czBlNU5KSjhyaWtVczhMeXhSQXJDT1JGWHUzZXRFcDBUSGJVZG80eWpZbG1kd0JGT2VBT1MwR3Q0c1k3YUdjQWRPUFFndnJCSFlkSklMUlkxVVpGMDN4eW8wVUdLNWZ5N21oa0RhYTJuamRfdUZ4UC1ENm40STdvM09UeHcwaU5PWnZR?oc=5" target="_blank" class="item-link">DICE agrees that some Battlefield 6 vehicles are &#x27;death traps&#x27; and is plann</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMi4gFBVV95cUxNbTc5WUg4ckxYcVloNE91TmFTZE14OFdGdlJjQUlYR3ZrdFY0d2JyUmlFRzRrWlBlVG03OGFIZU53OEpoeEVxSUdQMkJzRndUSXJXamM5MGstQllYNnZJNm5IN3RDbE53bm5MNElzbDYwZEpNVi1hV3JDelFwVkNFUG9JaTFheHhtV1REengzTWhzQlVnc3p4VHZrdUMtb09tVmgtSC1jZHlCTUh4cGRPSXBRYjNrVjFEd3Q3NDNYQXA2QS1GaS1NX0pzWWc1aEs0NG1HeGkxTjFMUXlMMGd5T2R3?oc=5" target="_blank" class="item-link">Step aside, Battlefield 6 — Call of Duty: Black Ops 7 was January 2026’s be</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 21, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxQQ09HTl9GcU1fcktnTUpGX0RlWmI4SERUNVZqLTZhb09pQjBtUlR0T3JDWThfdzBfVXlTME1MOHZqU05JUVltYkRoY3VIMVp6bUZHUEwyeFNTbV9pUmt0WFgtOFU5T3B0dlVkbVlWYXJnX3U3ei13LXhYU2RHMmpqUXh3RUFqSmxPWWI3cW1GN2lrVUJlZWhNd0wtS0xUMGpNVmhoUklMUTRmNnNfaHBrUHpnOGQ5cndL?oc=5" target="_blank" class="item-link">Battlefield 6 Players Want More DLC Maps, And Faster, But EA Won&#x27;t Do It -</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxPNXBmTUJaTXktRFNzU2pNMkwzdF82MmRmcHc2UHdYcWZZRGJMV0NDUGpoTWhLa1YweEp6WjVZY1lwQnh1QnA3dzlkMXhCcmJUX29SY3NoZUdGU01QOXVLZV9Hel9heDUwdVpiQXhrcWFWaHNKTUlKTzhJT0g3OXhKWU43MjNadGpYNGRFbkxIU1dpZmczb1o0b3AyWVhoSloxRVRRYQ?oc=5" target="_blank" class="item-link">Battlefield 6 devs promise a “package of vehicle improvements” as they admi</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
 </ul>
         </div>
       </div>
@@ -1534,7 +1579,7 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
         
         <div class="card-stats">
           24h Peak: <strong>62,166</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">414,440</strong> (15% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">414,440</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (15%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (15% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">3,259,313</strong> <small style="color:#556b7d">(est. all platforms)</small> (12.7% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1562,22 +1607,27 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522843850" target="_blank" class="item-link">Power Unleashed — Fighting with Wei Lin!</a> — Feb 15<div class="news-preview">We look forward to fighting side by side with you in the year ahead, creating legendary victories together.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497329" target="_blank" class="item-link">Call of Duty: Black Ops 7 and Warzone - Season 2 - Live Now</a> — Feb 05<div class="news-preview">Season 02 brings new maps, weapons, BO7 Ranked Play, Zombies content, a snow-covered Rebirth Island, and more starting today.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466495621" target="_blank" class="item-link">Introducing the Season 02 Battle Pass, BlackCell, and New Store Bundles</a> — Feb 05<div class="news-preview">Escalation Starts Now with the Season 02 Battle Pass!</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522843850" target="_blank" class="item-link">Power Unleashed — Fighting with Wei Lin!</a> — Feb 15<div class="news-preview">We look forward to fighting side by side with you in the year ahead, creating legendary victories together.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497329" target="_blank" class="item-link">Call of Duty: Black Ops 7 and Warzone - Season 2 - Live Now</a> — Feb 05<div class="news-preview">Season 02 brings new maps, weapons, BO7 Ranked Play, Zombies content, a snow-covered Rebirth Island, and more starting today.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466495621" target="_blank" class="item-link">Introducing the Season 02 Battle Pass, BlackCell, and New Store Bundles</a> — Feb 05<div class="news-preview">Escalation Starts Now with the Season 02 Battle Pass!</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiywFBVV95cUxPY1pwWkh1MHNxTWl5Z0hqVmJ0eFlNLWJ2dDFoMjJSVDktOTlNdE5pcS1hUEdCT1FVWVFhV01mYmJEb0YtSXpaV1ZFcE91QkwybGlBSTZLR0RNTG1wbUdzYXFkNm1qNzZYVVBTVG52N2tiNEY1MmZsZWF4N0ZPZ2xVTHFNZV9SNUxPSG1tZWZldjlvSkhCT2FhN0N2cEVtLUZtZDRXdWk5ajNBTG44SHU3QXczYmFkSnVSdThUZGRKNVZKUDRkcGN3QlhZaw?oc=5" target="_blank" class="item-link">Call of Duty: Modern Warfare 4 Release Date Update, Standalone Zombies Game</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMizwFBVV95cUxQUHJTb3g5NkVSajItMDdRRTVha3RnZl95R2YwbFNTYzdERHVqd0JUbHFsNjZUNUVXdTFOc2xYQ3BEV29QVVc2c1djandTZWhuR1NkY1pYTEZBcExueDM3eWE2TXpWWHpPcXV3eDFSc21QXzFxeE03Z0Z0aHB6eF8tODhnM3dJbTZ1UUk5YnExc2dOSTROSE9DRXFtdGhlSG5PcXZ5QXdpb1BRT3hvTHdqS05ZcmFUbjdvV1ZlbHNMV0JaWXFvRHlJTy1ON1lhUGM?oc=5" target="_blank" class="item-link">New Xbox console delay reportedly affected Call of Duty game slated to comp</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxObFkyN1Z4enJNc1c1bFhmeEN2MnduaU5wdEEzUUNMc3NJODlTTDdUZmVhbXIzZ2tHLUtJbkxrc2I2b3NXU3lhWm84amtYNjBYcHVhcUFHLUZ1Q3NjMWV5MGgwVnh5SEtmeUZSa0ZGSHAzVWNPTlZ1NlJCTUV6WmdIbnVOWXhIOE92cTZlVURoR1FuOTQxTVRzUUdqQmVFakZTaHlBbDNn?oc=5" target="_blank" class="item-link">Call of Duty and PlayStation 5 Lead U. S. Video Game Sales in a Quiet Januar</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTFBGMkNDclVwQlItXzZsWF9OaWhhZC1GMjlBdExNSTlBaUt6Q2xnUk16b29xNkFDY3ZwWlpoSWNwS0RGWnJtQUdURWtHTTBfdXg5S3RSWl84dDBKOFpDS3pCandlMF9lYXRxZENEWThiTWVrMUx0VVE?oc=5" target="_blank" class="item-link">Call of Duty Leaker Suggests Xbox Shake-Up Could Impact Series’ Future - Ga</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiywFBVV95cUxPY1pwWkh1MHNxTWl5Z0hqVmJ0eFlNLWJ2dDFoMjJSVDktOTlNdE5pcS1hUEdCT1FVWVFhV01mYmJEb0YtSXpaV1ZFcE91QkwybGlBSTZLR0RNTG1wbUdzYXFkNm1qNzZYVVBTVG52N2tiNEY1MmZsZWF4N0ZPZ2xVTHFNZV9SNUxPSG1tZWZldjlvSkhCT2FhN0N2cEVtLUZtZDRXdWk5ajNBTG44SHU3QXczYmFkSnVSdThUZGRKNVZKUDRkcGN3QlhZaw?oc=5" target="_blank" class="item-link">Call of Duty: Modern Warfare 4 Release Date Update, Standalone Zombies Game</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://news.google.com/rss/articles/CBMizwFBVV95cUxQUHJTb3g5NkVSajItMDdRRTVha3RnZl95R2YwbFNTYzdERHVqd0JUbHFsNjZUNUVXdTFOc2xYQ3BEV29QVVc2c1djandTZWhuR1NkY1pYTEZBcExueDM3eWE2TXpWWHpPcXV3eDFSc21QXzFxeE03Z0Z0aHB6eF8tODhnM3dJbTZ1UUk5YnExc2dOSTROSE9DRXFtdGhlSG5PcXZ5QXdpb1BRT3hvTHdqS05ZcmFUbjdvV1ZlbHNMV0JaWXFvRHlJTy1ON1lhUGM?oc=5" target="_blank" class="item-link">New Xbox console delay reportedly affected Call of Duty game slated to comp</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxObFkyN1Z4enJNc1c1bFhmeEN2MnduaU5wdEEzUUNMc3NJODlTTDdUZmVhbXIzZ2tHLUtJbkxrc2I2b3NXU3lhWm84amtYNjBYcHVhcUFHLUZ1Q3NjMWV5MGgwVnh5SEtmeUZSa0ZGSHAzVWNPTlZ1NlJCTUV6WmdIbnVOWXhIOE92cTZlVURoR1FuOTQxTVRzUUdqQmVFakZTaHlBbDNn?oc=5" target="_blank" class="item-link">Call of Duty and PlayStation 5 Lead U. S. Video Game Sales in a Quiet Januar</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTFBGMkNDclVwQlItXzZsWF9OaWhhZC1GMjlBdExNSTlBaUt6Q2xnUk16b29xNkFDY3ZwWlpoSWNwS0RGWnJtQUdURWtHTTBfdXg5S3RSWl84dDBKOFpDS3pCandlMF9lYXRxZENEWThiTWVrMUx0VVE?oc=5" target="_blank" class="item-link">Call of Duty Leaker Suggests Xbox Shake-Up Could Impact Series’ Future - Ga</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
 </ul>
         </div>
       </div>
@@ -1618,26 +1668,31 @@ Show off your horsepower and earn rewards by completing 7 new challenges.</div><
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522846343" target="_blank" class="item-link">United Dodgeball League Season 1 2026</a> — Feb 16<div class="news-preview">(Image credit: Metalcloud)
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522846343" target="_blank" class="item-link">United Dodgeball League Season 1 2026</a> — Feb 16<div class="news-preview">(Image credit: Metalcloud)
 
 United Dodgeball League is excited to relaunch with a brand new tournament! This time, teams consisting of 3 players will compete throughout a marathon of four weeks in a Swiss style tournament bracket.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497672" target="_blank" class="item-link">Seasonalander Winter 2026</a> — Feb 05<div class="news-preview">(Image credit: SFM Render/Compositing/Overlays - Breez, Organization - IanTheAwsm, CyberWizard, and Dynam)
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497672" target="_blank" class="item-link">Seasonalander Winter 2026</a> — Feb 05<div class="news-preview">(Image credit: SFM Render/Compositing/Overlays - Breez, Organization - IanTheAwsm, CyberWizard, and Dynam)
 
 Seasonalander has arrived for the Winter of 2026!</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198617406" target="_blank" class="item-link">TF2 Painter&#x27;s Workshop War Paint Contest</a> — Feb 03<div class="news-preview">Behold, The Americana contest! TF2 Painter&#x27;s Workshop is proud to announce their second War Paint contest, aimed at capturing the 1950s! Think rock &#x27;n&#x27; roll, diners serving bacon, eggs and waffles, and classic Cadillacs!</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198617406" target="_blank" class="item-link">TF2 Painter&#x27;s Workshop War Paint Contest</a> — Feb 03<div class="news-preview">Behold, The Americana contest! TF2 Painter&#x27;s Workshop is proud to announce their second War Paint contest, aimed at capturing the 1950s! Think rock &#x27;n&#x27; roll, diners serving bacon, eggs and waffles, and classic Cadillacs!</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPLTBWUnQxekUtakpIX2VqaFdCcVhQUGFybnJaOGZHcmd1Vl9raUx4QnlOTDV1M01nVExqNjB3d19uTmVIelZ1MTVtdFZreTgzTEpPSDBvd2o2dk1HNUNDR1g5Y3ZCNVg5N0FuTGhEZEdpOEJfNS1ZQ2paamowT0Z0MUg5SGpFNkxQMkZxczdPT1NTOTVmOUtwLUdRTkNLNWk5ekN4dHlqaGo0Nk5pN2tMWENNamo?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified is good, clean, hatless fun, despite its cruel H</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxNR3NQVEtHbTAxVzBFaUgyb1ZZOVNmQmY4b0JrelUtaXl2TnUyN25Ecm5kWmd4WjlEdS1BZGNSa3VETXJBbkp0dHp4SklXeWxhMXo0Y1J1M3NqWExfM1lnMzZBdmFZNU11SmxYb3hoYkMxTGZjalRLbmtSYVUxYzZjVDFkNDVrRzRQRU81S3NrOE4tOTZCVTU5dG5RN0YtUzFwUmtZWHRLVG41cWwwUHJRb2xKM0FXS21nd3c3RlZJQkVuTVd5VXJwNkpjSC14UDMyMGw2MnhTSVpYbTJsMmhj?oc=5" target="_blank" class="item-link">Thousands of players flood into Team Fortress 2 Classified, the free &#x27;TF2 C</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 30, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxQZnpTaXFwWHdfUWxpZHRHTHJMamc0YU9QdHBQVXdRRnJteUxldnhXSXNpbnVNbThnUnlJS2ZNdHpzdDFBQ244czhuNTlLd3VSdF9sb1NXdGxGUlE3TUlNcG5uT2pWV0dEOE1HREJNY2xzMW14QXFkUkJaSWxGRGhXeHotbDRsZ3ZyejZSc2lnLWU4Q1pUdmc0cVUtX0x0OVRkaTM0WUc1Y2NqR0phb2RrYWxFOWJaTTN0MF9TZA?oc=5" target="_blank" class="item-link">Team Fortress 2 Classic becomes Team Fortress 2 Classified and arrives Janu</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 09, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxPdDZIWEFlZFFLQTVhQ2dVUDBnZ0FSTm5mb0ZxRHZQbGlLbEozcEdCOW8yaEMtUlNxdXVGNFdmU3A0Z2VlOGxwVC1YRFg0MHp6OVBsX3RsZHJ5aXVoNDdhbFRvYW5oeHZzbU1yWEhSU0tGREptTlc0cDNySVFxaHg1cGpBZ2VHVWtncEVRdEFNcEhwMThoYmY5RjRtZm1fV3gwM3pPNXRucXZ1RkhrZTF5X1hqY0hqQ2dwci1EWjAyMHZYVUc4MUZrbTRoYWhBanQ0cEVKcjYzWS1Ddw?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified Mod Gets Official Steam Page and Hits 10,000 Con</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 01, 2026</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPLTBWUnQxekUtakpIX2VqaFdCcVhQUGFybnJaOGZHcmd1Vl9raUx4QnlOTDV1M01nVExqNjB3d19uTmVIelZ1MTVtdFZreTgzTEpPSDBvd2o2dk1HNUNDR1g5Y3ZCNVg5N0FuTGhEZEdpOEJfNS1ZQ2paamowT0Z0MUg5SGpFNkxQMkZxczdPT1NTOTVmOUtwLUdRTkNLNWk5ekN4dHlqaGo0Nk5pN2tMWENNamo?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified is good, clean, hatless fun, despite its cruel H</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxNR3NQVEtHbTAxVzBFaUgyb1ZZOVNmQmY4b0JrelUtaXl2TnUyN25Ecm5kWmd4WjlEdS1BZGNSa3VETXJBbkp0dHp4SklXeWxhMXo0Y1J1M3NqWExfM1lnMzZBdmFZNU11SmxYb3hoYkMxTGZjalRLbmtSYVUxYzZjVDFkNDVrRzRQRU81S3NrOE4tOTZCVTU5dG5RN0YtUzFwUmtZWHRLVG41cWwwUHJRb2xKM0FXS21nd3c3RlZJQkVuTVd5VXJwNkpjSC14UDMyMGw2MnhTSVpYbTJsMmhj?oc=5" target="_blank" class="item-link">Thousands of players flood into Team Fortress 2 Classified, the free &#x27;TF2 C</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 30, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxQZnpTaXFwWHdfUWxpZHRHTHJMamc0YU9QdHBQVXdRRnJteUxldnhXSXNpbnVNbThnUnlJS2ZNdHpzdDFBQ244czhuNTlLd3VSdF9sb1NXdGxGUlE3TUlNcG5uT2pWV0dEOE1HREJNY2xzMW14QXFkUkJaSWxGRGhXeHotbDRsZ3ZyejZSc2lnLWU4Q1pUdmc0cVUtX0x0OVRkaTM0WUc1Y2NqR0phb2RrYWxFOWJaTTN0MF9TZA?oc=5" target="_blank" class="item-link">Team Fortress 2 Classic becomes Team Fortress 2 Classified and arrives Janu</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 09, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxPdDZIWEFlZFFLQTVhQ2dVUDBnZ0FSTm5mb0ZxRHZQbGlLbEozcEdCOW8yaEMtUlNxdXVGNFdmU3A0Z2VlOGxwVC1YRFg0MHp6OVBsX3RsZHJ5aXVoNDdhbFRvYW5oeHZzbU1yWEhSU0tGREptTlc0cDNySVFxaHg1cGpBZ2VHVWtncEVRdEFNcEhwMThoYmY5RjRtZm1fV3gwM3pPNXRucXZ1RkhrZTF5X1hqY0hqQ2dwci1EWjAyMHZYVUc4MUZrbTRoYWhBanQ0cEVKcjYzWS1Ddw?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified Mod Gets Official Steam Page and Hits 10,000 Con</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 01, 2026</span></li>
 </ul>
         </div>
       </div>
@@ -1650,7 +1705,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
         
         <div class="card-stats">
           24h Peak: <strong>19,890</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">39,780</strong> (50% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">39,780</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (50%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (50% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">484,798</strong> <small style="color:#556b7d">(est. all platforms)</small> (8.2% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1678,22 +1733,27 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633184431" target="_blank" class="item-link">Store Update 9.10.0</a> — Feb 19<div class="news-preview">We have crafted a very cool high-tech Store update for you all featuring the Longwei Prime Pack as well as some extra goodies, courtesy of IVADA!</div></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522847694" target="_blank" class="item-link">Hotfix 9.9.1</a> — Feb 17<div class="news-preview">Hello Contestants! We’re pushing an update through now that will fix the broken text strings that some players have been seeing in-game since Update 9.9.0. This issue was caused by an update to the system we use for text strings.</div></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501606303" target="_blank" class="item-link">Update 9.9.0</a> — Feb 12<div class="news-preview">A beautiful moon takes over the Arena, and rising lanterns float upwards, casting a soft glow across the Arena. The Lunar New Year festivities have officially started in THE FINALS!</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633184431" target="_blank" class="item-link">Store Update 9.10.0</a> — Feb 19<div class="news-preview">We have crafted a very cool high-tech Store update for you all featuring the Longwei Prime Pack as well as some extra goodies, courtesy of IVADA!</div></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522847694" target="_blank" class="item-link">Hotfix 9.9.1</a> — Feb 17<div class="news-preview">Hello Contestants! We’re pushing an update through now that will fix the broken text strings that some players have been seeing in-game since Update 9.9.0. This issue was caused by an update to the system we use for text strings.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501606303" target="_blank" class="item-link">Update 9.9.0</a> — Feb 12<div class="news-preview">A beautiful moon takes over the Arena, and rising lanterns float upwards, casting a soft glow across the Arena. The Lunar New Year festivities have officially started in THE FINALS!</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMi5gJBVV95cUxOclZEOGliV1l1cl9sX1AwUG45SXQtWWxzbk15Q1pCY0hJRnoxRVVMSDhnaFZIT0JyU2ZOa0dqdnZkdkZXYm90S0pKbDctbzZHbTBPdk5TSU1iWTRrRmFOQ3U2UmRLRWNmdFp4VjNzaVZEU21wTzVZbGxZNEJVTDZOYWFhanpkWFZmV3pqZDVtRkVRTEhsOHBWQjdhYUx6d1JPc3NvYTZPa2kzdzRrSGJMdHMxc1FaeWd1alhsckl5enNMaTBDSUhTSk9QYVUtZDluSFQyeUhmeXJrb2dZTUtscXJSMVZzMksxOE92dm1XRVgtRW9kUThNLW5uMVFhSFlqeWRhTEFYa0dHR0tmTVc4QlJyZTB3VGpPRVlReGZLaXR4S0sza2QzQURoaWw1NGJseGlfTndWdktFNHFRNzVsaTVYT0lKN1dnemRONTBkYk54WGNJMGhnc1E3a19DTUJiZVpJRnRB?oc=5" target="_blank" class="item-link">The Finals is still going strong and Arc Raiders is about to release, but E</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 29, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE9QXy1JMTRDTzR6UzdSTGFLQnFtNzU0Y2lqQmwwT2p6WGFXV1dPUmdzWWRoeEFfbDZVeHdnZndMajF4TU11MkVoWmgwWVZLcVNoZ2s3TGxFeDBwNlhSR0lLWkx0T21uVFJSWTBtRmJPaW40ZWdw?oc=5" target="_blank" class="item-link">Embark unleashes The Finals Season 8 - GamingTrend</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 11, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE1aMFdGRWg3TjBvWUJpanRwb2tMWFdZWGRZQ1VXN3pTMTJYVGIzRVctWE1ibmhzRE5oZnJQWHd0NEFtSTFLWUhqcDY2VDFGSlA0d1F5M29UcWE3bjdKaVBPakczWGJvbzk4U2d2S1dIVUFQeXl0NHZOaE1wcE5mU0E?oc=5" target="_blank" class="item-link">As cheats improve, Arc Raiders dev Embark is fighting back in its squad FPS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 15, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxONHd5cENKMlhyeEdtOEhrVklGREFIU2h2TzNuMWczNzBpTXNDSXM5REh4bU40S0tpRzA4VlpDajdmV0JhT1RxUVJHZkJ0MTN2bUw0d0c4REtOYndiRDE5S2NxV1ktRlVZUnM1ZUMtV3l0M19OQU9ObXBrUGRiaUhPOWxtbHZBNzhKdVY2ZHNqaDFQQXNQVDR0SUdvMEN5NDdSTDdVYU5PcEtuaGc?oc=5" target="_blank" class="item-link">Embark Studios Games ARC Raiders And The Finals Were DDOS’ed - Gameranx</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 29, 2026</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi5gJBVV95cUxOclZEOGliV1l1cl9sX1AwUG45SXQtWWxzbk15Q1pCY0hJRnoxRVVMSDhnaFZIT0JyU2ZOa0dqdnZkdkZXYm90S0pKbDctbzZHbTBPdk5TSU1iWTRrRmFOQ3U2UmRLRWNmdFp4VjNzaVZEU21wTzVZbGxZNEJVTDZOYWFhanpkWFZmV3pqZDVtRkVRTEhsOHBWQjdhYUx6d1JPc3NvYTZPa2kzdzRrSGJMdHMxc1FaeWd1alhsckl5enNMaTBDSUhTSk9QYVUtZDluSFQyeUhmeXJrb2dZTUtscXJSMVZzMksxOE92dm1XRVgtRW9kUThNLW5uMVFhSFlqeWRhTEFYa0dHR0tmTVc4QlJyZTB3VGpPRVlReGZLaXR4S0sza2QzQURoaWw1NGJseGlfTndWdktFNHFRNzVsaTVYT0lKN1dnemRONTBkYk54WGNJMGhnc1E3a19DTUJiZVpJRnRB?oc=5" target="_blank" class="item-link">The Finals is still going strong and Arc Raiders is about to release, but E</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 29, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE9QXy1JMTRDTzR6UzdSTGFLQnFtNzU0Y2lqQmwwT2p6WGFXV1dPUmdzWWRoeEFfbDZVeHdnZndMajF4TU11MkVoWmgwWVZLcVNoZ2s3TGxFeDBwNlhSR0lLWkx0T21uVFJSWTBtRmJPaW40ZWdw?oc=5" target="_blank" class="item-link">Embark unleashes The Finals Season 8 - GamingTrend</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 11, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE1aMFdGRWg3TjBvWUJpanRwb2tMWFdZWGRZQ1VXN3pTMTJYVGIzRVctWE1ibmhzRE5oZnJQWHd0NEFtSTFLWUhqcDY2VDFGSlA0d1F5M29UcWE3bjdKaVBPakczWGJvbzk4U2d2S1dIVUFQeXl0NHZOaE1wcE5mU0E?oc=5" target="_blank" class="item-link">As cheats improve, Arc Raiders dev Embark is fighting back in its squad FPS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 15, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxONHd5cENKMlhyeEdtOEhrVklGREFIU2h2TzNuMWczNzBpTXNDSXM5REh4bU40S0tpRzA4VlpDajdmV0JhT1RxUVJHZkJ0MTN2bUw0d0c4REtOYndiRDE5S2NxV1ktRlVZUnM1ZUMtV3l0M19OQU9ObXBrUGRiaUhPOWxtbHZBNzhKdVY2ZHNqaDFQQXNQVDR0SUdvMEN5NDdSTDdVYU5PcEtuaGc?oc=5" target="_blank" class="item-link">Embark Studios Games ARC Raiders And The Finals Were DDOS’ed - Gameranx</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 29, 2026</span></li>
 </ul>
         </div>
       </div>
@@ -1706,7 +1766,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
         <div class="event-annotation">-23.7% ← Continued structural decline pre-Marathon (Mar 5)</div>
         <div class="card-stats">
           24h Peak: <strong>15,310</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">43,742</strong> (35% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">43,742</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (35%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (35% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">904,717</strong> <small style="color:#556b7d">(est. all platforms)</small> (4.8% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1734,22 +1794,27 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633186002" target="_blank" class="item-link">This Week in Destiny - 02/19/2026</a> — Feb 19<div class="news-preview">Before jumping into this week&#x27;s topics, we wanted to share again the news about Shadow and Order from yesterday:Our next Major Update, Destiny 2: Shadow and Order, is undergoing large revisions and will be delayed.</div></li>
-<li><span class="sentiment-dot" style="color:#4ade80" title="positive">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501607970" target="_blank" class="item-link">This Week In Destiny - 02/12/2026</a> — Feb 12<div class="news-preview">This week in Destiny, we’re celebrating the season of love with some free in-game cosmetics, kicking off a new Community Challenge, and chatting a bit about a new character naming convention.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497976" target="_blank" class="item-link">This Week in Destiny – 02/05/2026</a> — Feb 05<div class="news-preview">This week in Destiny, we’ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlord&#x27;s Ruin.</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633186002" target="_blank" class="item-link">This Week in Destiny - 02/19/2026</a> — Feb 19<div class="news-preview">Before jumping into this week&#x27;s topics, we wanted to share again the news about Shadow and Order from yesterday:Our next Major Update, Destiny 2: Shadow and Order, is undergoing large revisions and will be delayed.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501607970" target="_blank" class="item-link">This Week In Destiny - 02/12/2026</a> — Feb 12<div class="news-preview">This week in Destiny, we’re celebrating the season of love with some free in-game cosmetics, kicking off a new Community Challenge, and chatting a bit about a new character naming convention.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497976" target="_blank" class="item-link">This Week in Destiny – 02/05/2026</a> — Feb 05<div class="news-preview">This week in Destiny, we’ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlord&#x27;s Ruin.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNdTBhTmpSTEVrYTRQRm96OExLZkJDdXVLWGMxMFk3QWp3TUNHM0hQS3lncUt5QTMyelVoZ0tmMjduSG5WdnNDOWN2VHVzZEZJSlJ0UEgzVHdfbmxTVGpnVXlOV2NmQi1GT21KLW82UTNQcHdYNGRqb0pfbGRPU3dIYmYySldNM2JfQ0l5cG95Ui1ubEtJVFItanEzU2Q5Zm5VdlRxSl9yTlZFSnE3cTNjWXIzUlJtdmRT?oc=5" target="_blank" class="item-link">The Portal Poisoned ‘Destiny 2’ And Bungie Is Not Looking For A Cure - Forb</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxNNWNNRkJRenQyeXBUYktuNFRRXzdGbFRqdE5BdV85bk94WWkzNjB4RWYzWG42RWZkMlNTdTBzcGlhd25neDFFaWVFWnhwUTYzenJMUGdSdnNwTjVSMGt1d0FrQmczcWJnV3IzUkgyMENsN25oSmJXam1ackVSS1E2cW1RbHBveWPSAYcBQVVfeXFMTTVjTUZCUXp0MnlwVGJLbjRUUV83RmxUanROQXVfOW5PeFlpMzYweEVmM1huNkVmZDJTU3Uwc3BpYXduZ3gxRWllRVp4cFE2M3pyTFBnUnZzcE41UjBrdXdBa0JnM3FiZ1dyM1JIMjBDbDduaEpiV2ptWnJFUktRNnFtUWxwb3lj?oc=5" target="_blank" class="item-link">Destiny 2&#x27;s golden days are in the past - Shacknews</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 21, 2026</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxONGs0MmZSOXJLMnF6Uzg0SzFudExQQjhoZmRuYWc4RnlIeWVrMlJtdjA4Rk1WZHNkRE9UZl9SeXltMzVUMVIzSlFtZ2ktenVaUDNXZHpZYmpXT19vSThZNWNKcF9IbFkybi1TRm03OFpoRV9sZWFvRUc1a2Jyc2VseA?oc=5" target="_blank" class="item-link">Destiny 2: The Edge of Fate Review - Missing The Mark - Game Informer</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 05, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxPVk5SR05FLXRPd01HMWx5eXJ3dGhlNm5tcGV6MVpLSzg3M0lZRmZVN2JYNDM3WThzZG02QmhqWU16dlNfbmhMZnYzQWluOXFYM2o5TEdNTkNzbEpvLWFQanV5UlRDdG5IeFRxSEJEdGt6STVwV01oT3dyc01FazdBU1NYeVdiR0thazZJeU9BR3RXdExxVVZLT0FGXy05bm8xclMtQ0ltek9TRnFHRFM2WDFJcnpFeVVFZ19jMVhWWGYyOFFiQUFhbQ?oc=5" target="_blank" class="item-link">Boring, grindy and vindictive to veteran players: Destiny 2&#x27;s Portal is a c</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 03, 2025</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNdTBhTmpSTEVrYTRQRm96OExLZkJDdXVLWGMxMFk3QWp3TUNHM0hQS3lncUt5QTMyelVoZ0tmMjduSG5WdnNDOWN2VHVzZEZJSlJ0UEgzVHdfbmxTVGpnVXlOV2NmQi1GT21KLW82UTNQcHdYNGRqb0pfbGRPU3dIYmYySldNM2JfQ0l5cG95Ui1ubEtJVFItanEzU2Q5Zm5VdlRxSl9yTlZFSnE3cTNjWXIzUlJtdmRT?oc=5" target="_blank" class="item-link">The Portal Poisoned ‘Destiny 2’ And Bungie Is Not Looking For A Cure - Forb</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 20, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxNNWNNRkJRenQyeXBUYktuNFRRXzdGbFRqdE5BdV85bk94WWkzNjB4RWYzWG42RWZkMlNTdTBzcGlhd25neDFFaWVFWnhwUTYzenJMUGdSdnNwTjVSMGt1d0FrQmczcWJnV3IzUkgyMENsN25oSmJXam1ackVSS1E2cW1RbHBveWPSAYcBQVVfeXFMTTVjTUZCUXp0MnlwVGJLbjRUUV83RmxUanROQXVfOW5PeFlpMzYweEVmM1huNkVmZDJTU3Uwc3BpYXduZ3gxRWllRVp4cFE2M3pyTFBnUnZzcE41UjBrdXdBa0JnM3FiZ1dyM1JIMjBDbDduaEpiV2ptWnJFUktRNnFtUWxwb3lj?oc=5" target="_blank" class="item-link">Destiny 2&#x27;s golden days are in the past - Shacknews</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 21, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxONGs0MmZSOXJLMnF6Uzg0SzFudExQQjhoZmRuYWc4RnlIeWVrMlJtdjA4Rk1WZHNkRE9UZl9SeXltMzVUMVIzSlFtZ2ktenVaUDNXZHpZYmpXT19vSThZNWNKcF9IbFkybi1TRm03OFpoRV9sZWFvRUc1a2Jyc2VseA?oc=5" target="_blank" class="item-link">Destiny 2: The Edge of Fate Review - Missing The Mark - Game Informer</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 05, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxPVk5SR05FLXRPd01HMWx5eXJ3dGhlNm5tcGV6MVpLSzg3M0lZRmZVN2JYNDM3WThzZG02QmhqWU16dlNfbmhMZnYzQWluOXFYM2o5TEdNTkNzbEpvLWFQanV5UlRDdG5IeFRxSEJEdGt6STVwV01oT3dyc01FazdBU1NYeVdiR0thazZJeU9BR3RXdExxVVZLT0FGXy05bm8xclMtQ0ltek9TRnFHRFM2WDFJcnpFeVVFZ19jMVhWWGYyOFFiQUFhbQ?oc=5" target="_blank" class="item-link">Boring, grindy and vindictive to veteran players: Destiny 2&#x27;s Portal is a c</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 03, 2025</span></li>
 </ul>
         </div>
       </div>
@@ -1762,7 +1827,7 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
         <div class="event-annotation">-21.3% ← Legacy title, Halo 2 Digsite content drop had limited impact</div>
         <div class="card-stats">
           24h Peak: <strong>6,710</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">22,366</strong> (30% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">22,366</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (30%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (30% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">311,016</strong> <small style="color:#556b7d">(est. all platforms)</small> (7.2% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1790,24 +1855,29 @@ Seasonalander has arrived for the Winter of 2026!</div></li>
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501604789" target="_blank" class="item-link">Mod Minute: Warthog Rally</a> — Feb 11<div class="news-preview">Welcome to the MCC Mod Minute, a focused look at a creative mod for Halo: The Master Chief Collection, with details on how to try it out yourself through the Steam Workshop. Start your engines!</div></li>
-<li><span class="sentiment-dot" style="color:#f87171" title="negative">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1792751526054511" target="_blank" class="item-link">February 2025 Update Patch Notes</a> — Feb 28 <span class="badge patch">PATCH</span><div class="news-preview">A small patch for MCC has been released today, February 28. Resolved Issues
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501604789" target="_blank" class="item-link">Mod Minute: Warthog Rally</a> — Feb 11<div class="news-preview">Welcome to the MCC Mod Minute, a focused look at a creative mod for Halo: The Master Chief Collection, with details on how to try it out yourself through the Steam Workshop. Start your engines!</div></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1792751526054511" target="_blank" class="item-link">February 2025 Update Patch Notes</a> — Feb 28 <span class="badge patch">PATCH</span><div class="news-preview">A small patch for MCC has been released today, February 28. Resolved Issues
 
 This update includes maintenance for the Easy Anti-Cheat implementation in Halo: The Master Chief Collection.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/6148070194801734099" target="_blank" class="item-link">Digsite Demos: Halo 2</a> — Nov 11<div class="news-preview">The time has come. In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/6148070194801734099" target="_blank" class="item-link">Digsite Demos: Halo 2</a> — Nov 11<div class="news-preview">The time has come. In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQQzZxa1owTFl6YV96OVVvUGh3ZVJ1MlBVVzdoeGp6VmFicFV2SXBNNE5wVkVQaXJEN3lFZVlwMnc2Sk1sLXE5REJjMU5aN2w4ZnRCc2ZTSHdFSHdsNElObnZiZnVITkpOTUJlQ0dsVU9GZXdkd3dzRk9YbjZrRE51aE91MW5aZlh3ek1WQ0pzd3NhWmlIZHN6a2JUSl9DZFJ6N3BtWnljNXY4c1l2Z3c?oc=5" target="_blank" class="item-link">Halo: MCC Hit Its Highest Steam Player Count Since 2021 Over The Weekend -</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 01, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE1YeWlyOS0zdjBDbTFmRGdwTVB2cm83NFZJSnhDWDliU180VGRFWW1FSGhicnRvYWJFbmMwc2p2TkNVWVYxQk5YbFFwRllDR1VoazNFSDQ0MngxX1FTcnhIdUZjazlfT29FalY1Wm94UHdQLW1kU0E?oc=5" target="_blank" class="item-link">Introducing Halo: Campaign Evolved | Halo - Official Site (en) - Halo Waypo</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 24, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMif0FVX3lxTFBoYS1DN2RXM0twWkRVdHRiRTJucTR5WmFta2ZtTGhtMVBfVDhKUjEtcEdQWHNyaUhsODhYVU1ic3VjUkM1bTdYcUNKQkFEcnYzcFd4RHZJSU5tc0dzQlhTblJLZmd5Y0JPcFZIamR6LXRTWkJzQUtnY3dVX3NkMGM?oc=5" target="_blank" class="item-link">Every Halo Game, Ranked From Worst To Best - Page 12 of 12 - Kotaku</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 04, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNdUhWU3ZpYVhPTWtCNjUxWFFLVnpOUGthRTVRVXFXNERadXZ1Wjh5bTJuYzM1TVdhQThlS2s3SUlYWGpoVmt3TVFrZFd6UXh4anhUcUR0Vnd0T09fREROSFlFalAzZFJpNU5DVE1fVFZnQ2xSTDhmbDNHNVR2UmlnNnRtZE0wbUZ2TWw1eHk5RlptcHdvOHdwMQ?oc=5" target="_blank" class="item-link">Halo Finally Looks Set to Make the Jump to PlayStation This Year - IGN</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 26, 2025</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQQzZxa1owTFl6YV96OVVvUGh3ZVJ1MlBVVzdoeGp6VmFicFV2SXBNNE5wVkVQaXJEN3lFZVlwMnc2Sk1sLXE5REJjMU5aN2w4ZnRCc2ZTSHdFSHdsNElObnZiZnVITkpOTUJlQ0dsVU9GZXdkd3dzRk9YbjZrRE51aE91MW5aZlh3ek1WQ0pzd3NhWmlIZHN6a2JUSl9DZFJ6N3BtWnljNXY4c1l2Z3c?oc=5" target="_blank" class="item-link">Halo: MCC Hit Its Highest Steam Player Count Since 2021 Over The Weekend -</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 01, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE1YeWlyOS0zdjBDbTFmRGdwTVB2cm83NFZJSnhDWDliU180VGRFWW1FSGhicnRvYWJFbmMwc2p2TkNVWVYxQk5YbFFwRllDR1VoazNFSDQ0MngxX1FTcnhIdUZjazlfT29FalY1Wm94UHdQLW1kU0E?oc=5" target="_blank" class="item-link">Introducing Halo: Campaign Evolved | Halo - Official Site (en) - Halo Waypo</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 24, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMif0FVX3lxTFBoYS1DN2RXM0twWkRVdHRiRTJucTR5WmFta2ZtTGhtMVBfVDhKUjEtcEdQWHNyaUhsODhYVU1ic3VjUkM1bTdYcUNKQkFEcnYzcFd4RHZJSU5tc0dzQlhTblJLZmd5Y0JPcFZIamR6LXRTWkJzQUtnY3dVX3NkMGM?oc=5" target="_blank" class="item-link">Every Halo Game, Ranked From Worst To Best - Page 12 of 12 - Kotaku</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 04, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNdUhWU3ZpYVhPTWtCNjUxWFFLVnpOUGthRTVRVXFXNERadXZ1Wjh5bTJuYzM1TVdhQThlS2s3SUlYWGpoVmt3TVFrZFd6UXh4anhUcUR0Vnd0T09fREROSFlFalAzZFJpNU5DVE1fVFZnQ2xSTDhmbDNHNVR2UmlnNnRtZE0wbUZ2TWw1eHk5RlptcHdvOHdwMQ?oc=5" target="_blank" class="item-link">Halo Finally Looks Set to Make the Jump to PlayStation This Year - IGN</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 26, 2025</span></li>
 </ul>
         </div>
       </div>
@@ -1820,7 +1890,7 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
         <div class="event-annotation">-9.3% ← Post-final update (Nov 2025). Expected attrition curve.</div>
         <div class="card-stats">
           24h Peak: <strong>3,023</strong> (Steam)
-          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">25,191</strong> (12% Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">25,191</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (12%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (12% Steam)
           &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">2,138,491</strong> <small style="color:#556b7d">(est. all platforms)</small> (1.2% current)
         </div>
         <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
@@ -1848,22 +1918,27 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198617744" target="_blank" class="item-link">Forge Features</a> — Feb 03<div class="news-preview">Welcome to another edition of Forge Features! This series highlights notable maps, modes, and other creations from our talented Forge community. Bookmark your favorites using the links below for your next custom game.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1816307528974578" target="_blank" class="item-link">Operation: Infinite Out Now</a> — Nov 18<div class="news-preview">To celebrate all the Spartans in our Halo Infinite Fireteam, Operation: Infinite introduces a 100-tier free Operation Pass featuring three full armor sets and a 100-tier Premium Pass offering five more sets, six weapon models, and over 30 exclusive Spartan customizations.</div></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1815580768306863" target="_blank" class="item-link">Operation: Infinite Out Now</a> — Nov 07<div class="news-preview">To celebrate all the Spartans in our Halo Infinite Fireteam, Operation: Infinite introduces a 100-tier free Operation Pass featuring three full armor sets and a 100-tier Premium Pass offering five more sets, six weapon models, and over 30 exclusive Spartan customizations.</div></li>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198617744" target="_blank" class="item-link">Forge Features</a> — Feb 03<div class="news-preview">Welcome to another edition of Forge Features! This series highlights notable maps, modes, and other creations from our talented Forge community. Bookmark your favorites using the links below for your next custom game.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1816307528974578" target="_blank" class="item-link">Operation: Infinite Out Now</a> — Nov 18<div class="news-preview">To celebrate all the Spartans in our Halo Infinite Fireteam, Operation: Infinite introduces a 100-tier free Operation Pass featuring three full armor sets and a 100-tier Premium Pass offering five more sets, six weapon models, and over 30 exclusive Spartan customizations.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1815580768306863" target="_blank" class="item-link">Operation: Infinite Out Now</a> — Nov 07<div class="news-preview">To celebrate all the Spartans in our Halo Infinite Fireteam, Operation: Infinite introduces a 100-tier free Operation Pass featuring three full armor sets and a 100-tier Premium Pass offering five more sets, six weapon models, and over 30 exclusive Spartan customizations.</div></li>
 </ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">●</span> Positive</span>
-            <span><span style="color:#f87171">●</span> Negative</span>
-            <span><span style="color:#94a3b8">●</span> Neutral</span>
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
           </div>
-          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE42SGhnUjFmMk1sa0VvRERoQnp6Q1lCZnFBMkFzT3VtelBwTzlmWjF6cEtXbmtBX2tibVRCZHJfRjgyeDRKRTFiRGV1aUNiNFl3eTBmYzNlOGxHRkdULUdQWWhqcFktaEt2blFmdA?oc=5" target="_blank" class="item-link">Operation: Infinite Update Preview - Halo Waypoint</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 07, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxOeEVSRkRmTUF2TEJkYzdvWWpmQjA4RjJUdVU2VExlV0xJXzBrTDNTcjJKOS1WQXRPTW1sMzV5eXQ3N0ZSdjZXNHFHTjJZV0Z5OVZvVGVDeEdhREYwdkdRYUQ3d2ZPZXhCenBOY3BmTy1DYVliWFBNclhtRFpsUUNZakFEcVh5RFM0SlFFYTEzM3N1TDIxZ0hhbXJB?oc=5" target="_blank" class="item-link">But Where Is The Next, Actual ‘Halo’ Game, Xbox? - Forbes</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 25, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMiekFVX3lxTFBHVHRSeTUwUmgwZXUyU2NaWGZmb3ROUVhxRXN5REhRS0toTXV3OVRnZ0JKRE9qVzdQdmpZam1YM3dBMDBFeTV0WnYzUXZJYUI0ZjlGSGsyZl9uZzl0bXNpREpDSjVFNHJIcFJBbmdQZXNCcHlybzBQOFZ3?oc=5" target="_blank" class="item-link">Watch 13 Minutes of the Unreal-Enhanced Halo In Action - opus.ing</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 25, 2025</span></li>
-<li><span class="sentiment-dot" style="color:#94a3b8" title="neutral">●</span> <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQYWs4b29hU3NqUXRuamZYWEZOUm1MRlN4OUFUSmQ0OE45NlByNUJiMTFiVDNUeS1ndUpLTzE2bjNKZlZBUWFMMDhmdGZybHRwZ0tzNVIwY0hiVzlHbXlqVlJaNEt2OFM1QTFXYm5DN2xkb3ZvY1NGRnNQLVBUSkpXNzlRcm56WGVzZE9OdlZSTFV2YkRUdW5SV2hWdUdBSDkw?oc=5" target="_blank" class="item-link">Halo Infinite to receive final major update after four years - Game Develop</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 10, 2025</span></li>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE42SGhnUjFmMk1sa0VvRERoQnp6Q1lCZnFBMkFzT3VtelBwTzlmWjF6cEtXbmtBX2tibVRCZHJfRjgyeDRKRTFiRGV1aUNiNFl3eTBmYzNlOGxHRkdULUdQWWhqcFktaEt2blFmdA?oc=5" target="_blank" class="item-link">Operation: Infinite Update Preview - Halo Waypoint</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 07, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxOeEVSRkRmTUF2TEJkYzdvWWpmQjA4RjJUdVU2VExlV0xJXzBrTDNTcjJKOS1WQXRPTW1sMzV5eXQ3N0ZSdjZXNHFHTjJZV0Z5OVZvVGVDeEdhREYwdkdRYUQ3d2ZPZXhCenBOY3BmTy1DYVliWFBNclhtRFpsUUNZakFEcVh5RFM0SlFFYTEzM3N1TDIxZ0hhbXJB?oc=5" target="_blank" class="item-link">But Where Is The Next, Actual ‘Halo’ Game, Xbox? - Forbes</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 25, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiekFVX3lxTFBHVHRSeTUwUmgwZXUyU2NaWGZmb3ROUVhxRXN5REhRS0toTXV3OVRnZ0JKRE9qVzdQdmpZam1YM3dBMDBFeTV0WnYzUXZJYUI0ZjlGSGsyZl9uZzl0bXNpREpDSjVFNHJIcFJBbmdQZXNCcHlybzBQOFZ3?oc=5" target="_blank" class="item-link">Watch 13 Minutes of the Unreal-Enhanced Halo In Action - opus.ing</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 25, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQYWs4b29hU3NqUXRuamZYWEZOUm1MRlN4OUFUSmQ0OE45NlByNUJiMTFiVDNUeS1ndUpLTzE2bjNKZlZBUWFMMDhmdGZybHRwZ0tzNVIwY0hiVzlHbXlqVlJaNEt2OFM1QTFXYm5DN2xkb3ZvY1NGRnNQLVBUSkpXNzlRcm56WGVzZE9OdlZSTFV2YkRUdW5SV2hWdUdBSDkw?oc=5" target="_blank" class="item-link">Halo Infinite to receive final major update after four years - Game Develop</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 10, 2025</span></li>
 </ul>
         </div>
       </div>
@@ -2083,9 +2158,7 @@ This update includes maintenance for the Easy Anti-Cheat implementation in Halo:
     <details>
       <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
       <div class="methodology-content">
-        <p class="methodology-disclaimer">All-platform estimates apply per-game multipliers based on platform mix models.
-These are estimates, not validated against first-party data. Sources include publisher earnings reports,
-analytics firms (Alinea, Newzoo), and community trackers.</p>
+        <p class="methodology-disclaimer">Steam share % represents our estimate of what fraction of total cross-platform players are captured by Steam concurrent data. Sources vary by game: some are derived from publisher earnings disclosures, others are modeled from platform mix ratios. These are estimates, not validated first-party data. Treat all-platform figures as directional.</p>
         <table>
           <thead><tr>
             <th>Game</th>
@@ -2095,21 +2168,21 @@ analytics firms (Alinea, Newzoo), and community trackers.</p>
             <th>Source / Notes</th>
           </tr></thead>
           <tbody>
-<tr><td>Counter-Strike 2</td><td class="num">1,563,711</td><td style="text-align:center">1.0x</td><td class="num" style="color:#60a5fa">1,563,711</td><td class="meth-note">Steam-only title</td></tr>
-<tr><td>PUBG: BATTLEGROUNDS</td><td class="num">564,151</td><td style="text-align:center">1.2x</td><td class="num" style="color:#60a5fa">705,188</td><td class="meth-note">Krafton earnings; mobile is separate. Console ~20% of PC.</td></tr>
-<tr><td>Arc Raiders</td><td class="num">277,582</td><td style="text-align:center">2.0x</td><td class="num" style="color:#60a5fa">555,164</td><td class="meth-note">Steam + Epic. Est. 50/50 split based on Embark data.</td></tr>
-<tr><td>Apex Legends</td><td class="num">170,951</td><td style="text-align:center">4.0x</td><td class="num" style="color:#60a5fa">683,804</td><td class="meth-note">EA earnings (Q3 2025). Console-heavy (PS/Xbox ~75%).</td></tr>
-<tr><td>Delta Force</td><td class="num">146,473</td><td style="text-align:center">1.4x</td><td class="num" style="color:#60a5fa">209,247</td><td class="meth-note">NetEase; primarily PC (Steam + launcher). ~30% non-Steam.</td></tr>
-<tr><td>Overwatch</td><td class="num">135,175</td><td style="text-align:center">5.0x</td><td class="num" style="color:#60a5fa">675,875</td><td class="meth-note">Blizzard earnings. Console-dominant franchise (~80%).</td></tr>
-<tr><td>Marvel Rivals</td><td class="num">123,351</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">352,431</td><td class="meth-note">NetEase; PS/Xbox ~65% based on launch week platform split.</td></tr>
-<tr><td>Rainbow Six Siege</td><td class="num">110,858</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">316,737</td><td class="meth-note">Ubisoft earnings. Console ~65% historically.</td></tr>
-<tr><td>Battlefield 6</td><td class="num">95,926</td><td style="text-align:center">1.8x</td><td class="num" style="color:#60a5fa">174,410</td><td class="meth-note">EA earnings. Console ~45% for BF franchise.</td></tr>
-<tr><td>Call of Duty</td><td class="num">62,166</td><td style="text-align:center">6.7x</td><td class="num" style="color:#60a5fa">414,440</td><td class="meth-note">Activision earnings. Console-dominant franchise (~85%).</td></tr>
-<tr><td>Team Fortress 2</td><td class="num">61,643</td><td style="text-align:center">1.0x</td><td class="num" style="color:#60a5fa">61,643</td><td class="meth-note">Steam-only title (legacy)</td></tr>
-<tr><td>The Finals</td><td class="num">19,890</td><td style="text-align:center">2.0x</td><td class="num" style="color:#60a5fa">39,780</td><td class="meth-note">Embark data. Steam ~50%, rest PS/Xbox.</td></tr>
-<tr><td>Destiny 2</td><td class="num">15,310</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">43,742</td><td class="meth-note">Bungie data. Console ~65% (PS dominant).</td></tr>
-<tr><td>Halo: MCC</td><td class="num">6,710</td><td style="text-align:center">3.3x</td><td class="num" style="color:#60a5fa">22,366</td><td class="meth-note">Xbox Game Studios. Steam ~30%, Xbox ~70%.</td></tr>
-<tr><td>Halo Infinite</td><td class="num">3,023</td><td style="text-align:center">8.3x</td><td class="num" style="color:#60a5fa">25,191</td><td class="meth-note">Xbox Game Studios. Steam ~12%, Xbox ~88%.</td></tr>
+<tr><td>Counter-Strike 2</td><td class="num">1,563,711</td><td style="text-align:center">1.0x</td><td class="num" style="color:#60a5fa">1,563,711</td><td class="meth-note">Steam-only title. 1.0x multiplier.</td></tr>
+<tr><td>PUBG: BATTLEGROUNDS</td><td class="num">564,151</td><td style="text-align:center">1.2x</td><td class="num" style="color:#60a5fa">705,188</td><td class="meth-note">Est. 80% Steam. Krafton earnings confirm PC-dominant (~80%) playerbase. Mobile counted separately.</td></tr>
+<tr><td>Arc Raiders</td><td class="num">277,582</td><td style="text-align:center">2.0x</td><td class="num" style="color:#60a5fa">555,164</td><td class="meth-note">Est. 50% Steam. Steam + Epic Games Store split; based on Embark Studios platform distribution data.</td></tr>
+<tr><td>Apex Legends</td><td class="num">170,951</td><td style="text-align:center">4.0x</td><td class="num" style="color:#60a5fa">683,804</td><td class="meth-note">Est. 25% Steam. EA earnings cite ~60% console; remainder split between Origin/EA App and Steam.</td></tr>
+<tr><td>Delta Force</td><td class="num">146,473</td><td style="text-align:center">1.4x</td><td class="num" style="color:#60a5fa">209,247</td><td class="meth-note">Est. 70% Steam. NetEase PC-primary title; remainder on proprietary launcher. Console share unconfirmed.</td></tr>
+<tr><td>Overwatch</td><td class="num">135,175</td><td style="text-align:center">5.0x</td><td class="num" style="color:#60a5fa">675,875</td><td class="meth-note">Est. 20% Steam. Battle.net-primary; Steam version launched 2022. Blizzard has not disclosed platform split.</td></tr>
+<tr><td>Marvel Rivals</td><td class="num">123,351</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">352,431</td><td class="meth-note">Est. 35% Steam. NetEase; PS/Xbox ~65% based on launch-week platform split reported in press.</td></tr>
+<tr><td>Rainbow Six Siege</td><td class="num">110,858</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">316,737</td><td class="meth-note">Est. 35% Steam. Ubisoft earnings cite console ~65% historically across franchise.</td></tr>
+<tr><td>Battlefield 6</td><td class="num">95,926</td><td style="text-align:center">1.8x</td><td class="num" style="color:#60a5fa">174,410</td><td class="meth-note">Est. 55% Steam. EA earnings; console ~45% for BF franchise historically.</td></tr>
+<tr><td>Call of Duty</td><td class="num">62,166</td><td style="text-align:center">6.7x</td><td class="num" style="color:#60a5fa">414,440</td><td class="meth-note">Est. 15% Steam. Activision Blizzard earnings (2023) cited ~70% console split; remainder split between Battle.net and Steam.</td></tr>
+<tr><td>Team Fortress 2</td><td class="num">61,643</td><td style="text-align:center">1.0x</td><td class="num" style="color:#60a5fa">61,643</td><td class="meth-note">Steam-only title. 1.0x multiplier (legacy title).</td></tr>
+<tr><td>The Finals</td><td class="num">19,890</td><td style="text-align:center">2.0x</td><td class="num" style="color:#60a5fa">39,780</td><td class="meth-note">Est. 50% Steam. Embark Studios data; remainder PS/Xbox.</td></tr>
+<tr><td>Destiny 2</td><td class="num">15,310</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">43,742</td><td class="meth-note">Est. 35% Steam. Bungie data; console ~65% (PS dominant historically).</td></tr>
+<tr><td>Halo: MCC</td><td class="num">6,710</td><td style="text-align:center">3.3x</td><td class="num" style="color:#60a5fa">22,366</td><td class="meth-note">Est. 30% Steam. Xbox Game Studios; Steam added 2019. Xbox ~70% based on platform MAU ratio.</td></tr>
+<tr><td>Halo Infinite</td><td class="num">3,023</td><td style="text-align:center">8.3x</td><td class="num" style="color:#60a5fa">25,191</td><td class="meth-note">Est. 12% Steam. Xbox-first franchise; Steam added 2021. Based on Xbox MAU disclosures vs. SteamDB concurrent ratio.</td></tr>
           </tbody>
         </table>
       </div>

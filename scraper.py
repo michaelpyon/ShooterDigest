@@ -32,37 +32,66 @@ HEADERS = {
 # Each game: name, Steam app ID, subreddit, steam_share
 # steam_share: fraction of total players represented by Steam data (0.0-1.0).
 # Used to extrapolate estimated total players across all platforms.
-# Sources: EA/Krafton/NetEase earnings, Alinea Analytics, community trackers,
-#          press releases (Tom's Hardware, PC Gamer, Dexerto, etc.)
+# All steam_share values are ESTIMATES. Sources vary by game — see inline comments.
+# Treat all-platform figures as directional, not validated first-party data.
 GAMES = [
+    # Steam-only title. 1.0x multiplier.
     {"name": "Counter-Strike 2", "app_id": 730, "subreddit": "cs2",
      "steam_share": 1.0, "genre": "Tactical"},
+
+    # Est. 25% Steam. EA earnings cite ~60% console; remainder split between Origin/EA App and Steam.
     {"name": "Apex Legends", "app_id": 1172470, "subreddit": "apexlegends",
      "steam_share": 0.25, "genre": "Battle Royale"},
+
+    # Est. 35% Steam. NetEase; PS/Xbox ~65% based on launch-week platform split reported in press.
     {"name": "Marvel Rivals", "app_id": 2767030, "subreddit": "marvelrivals",
      "steam_share": 0.35, "genre": "Hero Shooter"},
+
+    # Est. 70% Steam. NetEase PC-primary title; remainder on proprietary launcher. Console share unconfirmed.
     {"name": "Delta Force", "app_id": 2507950, "subreddit": "DeltaForce",
      "steam_share": 0.70, "genre": "Extraction"},
+
+    # Est. 50% Steam. Steam + Epic Games Store split; based on Embark Studios platform distribution data.
     {"name": "Arc Raiders", "app_id": 1808500, "subreddit": "ArcRaiders",
      "steam_share": 0.50, "genre": "Extraction"},
+
+    # Est. 55% Steam. EA earnings; console ~45% for BF franchise historically.
     {"name": "Battlefield 6", "app_id": 2807960, "subreddit": "battlefield",
      "steam_share": 0.55, "genre": "Large-Scale"},
+
+    # Est. 15% Steam. Activision Blizzard earnings (2023) cited ~70% console split; remainder split between Battle.net and Steam.
     {"name": "Call of Duty", "app_id": 1938090, "subreddit": "CallOfDuty",
      "steam_share": 0.15, "genre": "Large-Scale"},
+
+    # Est. 12% Steam. Xbox-first franchise; Steam added 2021. Based on Xbox MAU disclosures vs. SteamDB concurrent ratio.
     {"name": "Halo Infinite", "app_id": 1240440, "subreddit": "halo",
      "steam_share": 0.12, "genre": "Arena"},
+
+    # Est. 20% Steam. Battle.net-primary; Steam version launched 2022. Blizzard has not disclosed split.
     {"name": "Overwatch", "app_id": 2357570, "subreddit": "Overwatch",
      "steam_share": 0.20, "genre": "Hero Shooter"},
+
+    # Est. 35% Steam. Ubisoft earnings cite console ~65% historically across franchise.
     {"name": "Rainbow Six Siege", "app_id": 359550, "subreddit": "Rainbow6",
      "steam_share": 0.35, "genre": "Tactical"},
+
+    # Est. 80% Steam. Krafton earnings confirm PC-dominant (~80%) playerbase. Mobile counted separately.
     {"name": "PUBG: BATTLEGROUNDS", "app_id": 578080, "subreddit": "PUBATTLEGROUNDS",
      "steam_share": 0.80, "genre": "Battle Royale"},
+
+    # Est. 50% Steam. Embark Studios data; remainder PS/Xbox.
     {"name": "The Finals", "app_id": 2073850, "subreddit": "thefinals",
      "steam_share": 0.50, "genre": "Arena"},
+
+    # Est. 35% Steam. Bungie data; console ~65% (PS dominant historically).
     {"name": "Destiny 2", "app_id": 1085660, "subreddit": "DestinyTheGame",
      "steam_share": 0.35, "genre": "Looter Shooter"},
+
+    # Steam-only title. 1.0x multiplier (legacy title).
     {"name": "Team Fortress 2", "app_id": 440, "subreddit": "tf2",
      "steam_share": 1.0, "genre": "Hero Shooter"},
+
+    # Est. 30% Steam. Xbox Game Studios; Steam added 2019. Xbox ~70% based on platform MAU ratio.
     {"name": "Halo: MCC", "app_id": 976730, "subreddit": "halo",
      "steam_share": 0.30, "genre": "Arena"},
 ]

@@ -88,37 +88,36 @@ def _sanitize_text(text: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Sentiment analysis
+# Sentiment analysis — intent-based categories for gaming news
 # ---------------------------------------------------------------------------
 
-_POSITIVE_KW = re.compile(
-    r'\b(?:love|amazing|best|great|excited|improve|improving|growing|launch|'
-    r'new season|buff|returns|celebrates|incredible|perfect|beautiful|'
-    r'gorgeous|masterpiece|appreciation|underrated|fantastic|excellent|'
-    r'awesome|thriving|hype|hyped|praised|popular|record|surge|surging|'
-    r'win|winning|won|victory|epic|stunning|brilliant|outstanding)\b',
-    re.I
-)
+# Signals that indicate new content / updates / positive developer activity
+CONTENT_SIGNALS = re.compile(
+    r'\b(?:season|update|patch|launch|launches|launched|event|new content|'
+    r'expansion|dlc|battle pass|roadmap|introduces|arrives|coming|drops|'
+    r'adds|added|introducing|announced|release|releasing)\b', re.I)
 
-_NEGATIVE_KW = re.compile(
-    r'\b(?:broken|nerf|nerfed|dead|worst|decline|declining|bug|bugs|issue|issues|'
-    r'complaint|shut down|disappointed|removes|controversy|terrible|awful|garbage|'
-    r'trash|unplayable|ruined|rant|frustrat|anger|angry|outrage|boycott|'
-    r'dropping|crashed|exploit|cheat|hacked|pay.to.win|p2w|scam|predatory|'
-    r'toxic|ban|banned|delay|delayed|cancel|cancelled|failing|failed|worse)\b',
-    re.I
-)
+# Signals that indicate service problems / exploits / shutdowns
+PROBLEM_SIGNALS = re.compile(
+    r'\b(?:outage|down|offline|exploit|cheat|hacked|breach|shutdown|shutting down|'
+    r'servers down|ban wave|issue affecting|broken|unplayable|emergency|hotfix required|'
+    r'service disruption|critical bug|data breach|end of service|closing)\b', re.I)
+
+# Human-readable labels for each intent category
+SENTIMENT_LABELS = {
+    "positive": "New Content",
+    "negative": "Service Issue",
+    "neutral":  "Update",
+}
 
 
 def _analyze_sentiment(text: str) -> str:
-    """Keyword-based sentiment scoring. Returns 'positive', 'negative', or 'neutral'."""
+    """Intent-based sentiment. Returns 'positive', 'negative', or 'neutral'."""
     if not text:
         return "neutral"
-    pos = len(_POSITIVE_KW.findall(text))
-    neg = len(_NEGATIVE_KW.findall(text))
-    if pos > neg and pos > 0:
+    if CONTENT_SIGNALS.search(text):
         return "positive"
-    if neg > pos and neg > 0:
+    if PROBLEM_SIGNALS.search(text):
         return "negative"
     return "neutral"
 
@@ -234,21 +233,21 @@ EVENT_ANNOTATIONS = {
 # ---------------------------------------------------------------------------
 
 PLATFORM_NOTES = {
-    "Counter-Strike 2": "Steam-only title",
-    "PUBG: BATTLEGROUNDS": "Krafton earnings; mobile is separate. Console ~20% of PC.",
-    "Arc Raiders": "Steam + Epic. Est. 50/50 split based on Embark data.",
-    "Apex Legends": "EA earnings (Q3 2025). Console-heavy (PS/Xbox ~75%).",
-    "Delta Force": "NetEase; primarily PC (Steam + launcher). ~30% non-Steam.",
-    "Marvel Rivals": "NetEase; PS/Xbox ~65% based on launch week platform split.",
-    "Overwatch": "Blizzard earnings. Console-dominant franchise (~80%).",
-    "Rainbow Six Siege": "Ubisoft earnings. Console ~65% historically.",
-    "Battlefield 6": "EA earnings. Console ~45% for BF franchise.",
-    "Team Fortress 2": "Steam-only title (legacy)",
-    "Call of Duty": "Activision earnings. Console-dominant franchise (~85%).",
-    "The Finals": "Embark data. Steam ~50%, rest PS/Xbox.",
-    "Destiny 2": "Bungie data. Console ~65% (PS dominant).",
-    "Halo: MCC": "Xbox Game Studios. Steam ~30%, Xbox ~70%.",
-    "Halo Infinite": "Xbox Game Studios. Steam ~12%, Xbox ~88%.",
+    "Counter-Strike 2": "Steam-only title. 1.0x multiplier.",
+    "PUBG: BATTLEGROUNDS": "Est. 80% Steam. Krafton earnings confirm PC-dominant (~80%) playerbase. Mobile counted separately.",
+    "Arc Raiders": "Est. 50% Steam. Steam + Epic Games Store split; based on Embark Studios platform distribution data.",
+    "Apex Legends": "Est. 25% Steam. EA earnings cite ~60% console; remainder split between Origin/EA App and Steam.",
+    "Delta Force": "Est. 70% Steam. NetEase PC-primary title; remainder on proprietary launcher. Console share unconfirmed.",
+    "Marvel Rivals": "Est. 35% Steam. NetEase; PS/Xbox ~65% based on launch-week platform split reported in press.",
+    "Overwatch": "Est. 20% Steam. Battle.net-primary; Steam version launched 2022. Blizzard has not disclosed platform split.",
+    "Rainbow Six Siege": "Est. 35% Steam. Ubisoft earnings cite console ~65% historically across franchise.",
+    "Battlefield 6": "Est. 55% Steam. EA earnings; console ~45% for BF franchise historically.",
+    "Team Fortress 2": "Steam-only title. 1.0x multiplier (legacy title).",
+    "Call of Duty": "Est. 15% Steam. Activision Blizzard earnings (2023) cited ~70% console split; remainder split between Battle.net and Steam.",
+    "The Finals": "Est. 50% Steam. Embark Studios data; remainder PS/Xbox.",
+    "Destiny 2": "Est. 35% Steam. Bungie data; console ~65% (PS dominant historically).",
+    "Halo: MCC": "Est. 30% Steam. Xbox Game Studios; Steam added 2019. Xbox ~70% based on platform MAU ratio.",
+    "Halo Infinite": "Est. 12% Steam. Xbox-first franchise; Steam added 2021. Based on Xbox MAU disclosures vs. SteamDB concurrent ratio.",
 }
 
 
@@ -2122,9 +2121,7 @@ def _build_methodology_html(results: list[dict]) -> str:
     <details>
       <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
       <div class="methodology-content">
-        <p class="methodology-disclaimer">All-platform estimates apply per-game multipliers based on platform mix models.
-These are estimates, not validated against first-party data. Sources include publisher earnings reports,
-analytics firms (Alinea, Newzoo), and community trackers.</p>
+        <p class="methodology-disclaimer">Steam share % represents our estimate of what fraction of total cross-platform players are captured by Steam concurrent data. Sources vary by game: some are derived from publisher earnings disclosures, others are modeled from platform mix ratios. These are estimates, not validated first-party data. Treat all-platform figures as directional.</p>
         <table>
           <thead><tr>
             <th>Game</th>
@@ -2289,7 +2286,8 @@ def generate_html(results: list[dict], failed_names: list[str],
             badge = ' <span class="badge patch">PATCH</span>' if n["is_patch"] else ""
             sentiment = _analyze_sentiment(n.get("title", "") + " " + (n.get("contents", "") or "")[:200])
             s_fg, _ = _sentiment_css(sentiment)
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sentiment}">\u25cf</span> '
+            sent_label = SENTIMENT_LABELS.get(sentiment, sentiment)
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span> '
             summary = _extract_news_summary(n)
             summary_div = f'<div class="news-preview">{_esc(_sanitize_text(summary))}</div>' if summary else ""
             news_html += f'<li>{sent_dot}{title} \u2014 {n["date"]}{badge}{summary_div}</li>\n'
@@ -2310,7 +2308,8 @@ def generate_html(results: list[dict], failed_names: list[str],
             sentiment = _analyze_sentiment(a.get("title", ""))
             s_fg, s_bg = _sentiment_css(sentiment)
             source_badge = f' <span class="source-tag" style="color:{s_fg};background:{s_bg}">{source}</span>' if source else ""
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sentiment}">\u25cf</span> '
+            sent_label = SENTIMENT_LABELS.get(sentiment, sentiment)
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span> '
             date_span = f' <span style="color:#8f98a0;font-size:0.7rem">{date}</span>' if date else ""
             press_html += f'<li>{sent_dot}{title}{source_badge}{date_span}</li>\n'
         if not press_html:
@@ -2337,7 +2336,8 @@ def generate_html(results: list[dict], failed_names: list[str],
             cat_badge = f'<span class="cat-tag" style="color:{fg};background:{bg}">{cat}</span>'
             sentiment = _analyze_sentiment(p["title"])
             s_fg, _ = _sentiment_css(sentiment)
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sentiment}">\u25cf</span>'
+            sent_label = SENTIMENT_LABELS.get(sentiment, sentiment)
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span>'
             comments_html = ""
             for c in p.get("top_comments", []):
                 body = _esc(_sanitize_text(c["body"][:150]))
@@ -2363,7 +2363,8 @@ def generate_html(results: list[dict], failed_names: list[str],
             cat_badge = f'<span class="cat-tag" style="color:{fg};background:{bg}">{cat}</span>'
             sentiment = _analyze_sentiment(p["title"])
             s_fg, _ = _sentiment_css(sentiment)
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sentiment}">\u25cf</span>'
+            sent_label = SENTIMENT_LABELS.get(sentiment, sentiment)
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span>'
             reddit_month_html += f'<li>{cat_badge} {sent_dot} {title} ({score} upvotes)</li>\n'
 
         trend_pct = r.get("trend_pct")
@@ -2416,6 +2417,18 @@ def generate_html(results: list[dict], failed_names: list[str],
         card_lifecycle = _lifecycle_badge_html(r['name'])
         card_annotation = EVENT_ANNOTATIONS.get(r['name'], "")
         card_annotation_html = f'<div class="event-annotation">{_esc(card_annotation)}</div>' if card_annotation else ""
+        # Pre-compute Est. Total HTML to avoid backslash-in-f-string issues
+        _steam_pct = r["steam_share"] * 100
+        _est_tip = (f'Estimated all-platform total = Steam 24h peak \u00f7 Steam share ({_steam_pct:.0f}%). '
+                    f'This is a directional estimate, not validated first-party data.')
+        _est_total_html = (
+            f'&nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">'
+            f'{_fmt(r.get("est_total_24h", r["peak_24h"]))}</strong>'
+            f' <a href="#methodology" class="info-tip" data-tip="{_est_tip}">\u24d8 Est.</a>'
+            f' ({_steam_pct:.0f}% Steam)'
+            if not r.get('is_steam_only') else
+            f'&nbsp;|&nbsp; Est. Total: <strong>{_fmt(r["peak_24h"])}</strong> (100% Steam)'
+        )
         cards_html += f"""
     <div class="card" data-genre="{card_genre}">
       <div class="card-header">
@@ -2423,7 +2436,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         {card_annotation_html}
         <div class="card-stats">
           24h Peak: <strong>{_fmt(r['peak_24h'])}</strong> (Steam)
-          {f'&nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">{_fmt(r.get("est_total_24h", r["peak_24h"]))}</strong> ({r["steam_share"]*100:.0f}% Steam)' if not r.get('is_steam_only') else f'&nbsp;|&nbsp; Est. Total: <strong>{_fmt(r["peak_24h"])}</strong> (100% Steam)'}
+          {_est_total_html}
           &nbsp;|&nbsp; All-Time Peak: {f'<strong style="color:#fbbf24">{_fmt(r.get("est_total_all", r["peak_all"]))}</strong> <small style="color:#556b7d">(est. all platforms)</small>' if not r.get('is_steam_only') else f'<strong>{_fmt(r["peak_all"])}</strong> <small style="color:#556b7d">(100% Steam)</small>'} ({r['pct_all']:.1f}% current)
         </div>
         {"<div class='card-trend'>" + sparkline + "</div>" if sparkline else ""}
@@ -2436,14 +2449,19 @@ def generate_html(results: list[dict], failed_names: list[str],
       <div class="card-body-2col">
         <div class="card-section">
           <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>\U0001f7e2 New Content</span>
+            <span>\U0001f534 Service Issue</span>
+            <span>\u26aa Update/Other</span>
+          </div>
           <ul>{news_html}</ul>
         </div>
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span><span style="color:#4ade80">\u25cf</span> Positive</span>
-            <span><span style="color:#f87171">\u25cf</span> Negative</span>
-            <span><span style="color:#94a3b8">\u25cf</span> Neutral</span>
+            <span>\U0001f7e2 New Content</span>
+            <span>\U0001f534 Service Issue</span>
+            <span>\u26aa Update/Other</span>
           </div>
           <ul>{press_html}</ul>
         </div>
@@ -2710,8 +2728,8 @@ def generate_html(results: list[dict], failed_names: list[str],
       font-size: 0.55rem; vertical-align: middle; margin-right: 0.15rem;
     }}
     .sentiment-legend {{
-      display: flex; gap: 1rem; margin-bottom: 0.5rem;
-      font-size: 0.7rem; color: #8f98a0;
+      display: flex; gap: 0.75rem; margin-bottom: 4px;
+      font-size: 0.75rem; color: #94a3b8; text-align: left;
     }}
     .sentiment-legend span {{ display: inline-flex; align-items: center; gap: 0.2rem; }}
 

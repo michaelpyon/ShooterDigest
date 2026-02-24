@@ -270,7 +270,7 @@ def get_steam_news(app_id: int, count: int = 5) -> list[dict]:
 
         results.append({
             "title": title,
-            "date": date.strftime("%b %d"),
+            "date": date.strftime("%b %d, %Y"),
             "url": item.get("url", ""),
             "feed": item.get("feedlabel", ""),
             "is_patch": "patchnotes" in (item.get("tags") or []),
@@ -431,10 +431,11 @@ def get_google_news_rss(game_name: str, limit: int = 5) -> list[dict]:
         # Date
         pub_date_tag = item.find("pubdate")
         date_str = ""
+        date_dt = None
         if pub_date_tag and pub_date_tag.get_text(strip=True):
             try:
-                dt = parsedate_to_datetime(pub_date_tag.get_text(strip=True))
-                date_str = dt.strftime("%b %d")
+                date_dt = parsedate_to_datetime(pub_date_tag.get_text(strip=True))
+                date_str = date_dt.strftime("%b %d, %Y")
             except (ValueError, TypeError):
                 date_str = ""
 
@@ -458,11 +459,15 @@ def get_google_news_rss(game_name: str, limit: int = 5) -> list[dict]:
             "title": title,
             "source": source,
             "date": date_str,
+            "date_dt": date_dt,
             "url": link,
             "description": desc,
         })
 
         if len(results) >= limit:
             break
+
+    # Sort by publication date descending (newest first), articles with no date go last
+    results.sort(key=lambda x: x["date_dt"] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
 
     return results

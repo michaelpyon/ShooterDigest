@@ -271,6 +271,7 @@ def get_steam_news(app_id: int, count: int = 5) -> list[dict]:
         results.append({
             "title": title,
             "date": date.strftime("%b %d, %Y"),
+            "pub_dt": date.strftime("%Y-%m-%d"),  # Full ISO date — preserves year for calendar filtering
             "url": item.get("url", ""),
             "feed": item.get("feedlabel", ""),
             "is_patch": "patchnotes" in (item.get("tags") or []),

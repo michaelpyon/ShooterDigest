@@ -1615,12 +1615,18 @@ def _build_release_calendar(results: list[dict]) -> dict:
         game_name = r["name"]
 
         # --- Source 1: Steam News (patches, seasons, events) ---
+        # Policy: use the article's ACTUAL publish date only.
+        # We never mine article body text for date mentions — that caused
+        # "Purple Heart Day" to spawn three separate Aug 7/14/20 entries
+        # all pointing to the same URL, because the article body happened
+        # to mention those dates in passing.
         from datetime import timedelta as _td
-        _30d_ago = today - _td(days=30)
+        _six_months_ahead = today + _td(days=183)
 
         for n in r.get("news", []):
             date_str = n.get("date", "")
             title = n.get("title", "")
+            url = n.get("url", "")
 
             # Skip retrospective/past-event articles by title before any other processing.
             if RETRO_TITLE_BLOCKLIST.search(title):
@@ -1633,8 +1639,8 @@ def _build_release_calendar(results: list[dict]) -> dict:
             event_type = _classify_event_type(title, n.get("is_patch", False))
             desc = _sanitize_text(title)
 
-            # Parse event publication date — use pub_dt (ISO, includes year) when available
-            # so we never accidentally assign an old article to a future year.
+            # Parse event publication date using pub_dt (ISO date with year) when
+            # available, so the year is never silently overwritten with current_year.
             event_dt = None
             pub_dt_str = n.get("pub_dt", "")
             if pub_dt_str:
@@ -1643,62 +1649,47 @@ def _build_release_calendar(results: list[dict]) -> dict:
                 except ValueError:
                     pass
             elif date_str:
-                # Legacy fallback: no pub_dt field — append current year.
-                # This is the old buggy path; left only for historical JSON replays.
-                try:
-                    event_dt = datetime.strptime(f"{date_str} {current_year}", "%b %d %Y")
-                except ValueError:
-                    pass
+                # Legacy fallback for historical JSON without pub_dt.
+                # Try parsing with year first (new format "Oct 30, 2025"),
+                # then bare month+day as current year (old format "Oct 30").
+                parsed = False
+                for fmt in ("%b %d, %Y", "%B %d, %Y"):
+                    try:
+                        event_dt = datetime.strptime(date_str, fmt)
+                        parsed = True
+                        break
+                    except ValueError:
+                        pass
+                if not parsed:
+                    try:
+                        event_dt = datetime.strptime(f"{date_str} {current_year}", "%b %d %Y")
+                    except ValueError:
+                        pass
 
-            # KEY FIX: Only add the article itself as a calendar entry if its actual
-            # publish date is recent (within the past 7 days or in the future).
-            # Older articles are past events — their publish date must NOT be
-            # projected into the current year as a fake future date.
+            # Only include this article if its actual publish date falls in the
+            # "This Week" window (past 7 days → today).  Articles older than that
+            # are historical records, not upcoming events.
             article_is_recent = event_dt is None or event_dt >= week_ago
+            if not article_is_recent:
+                continue
 
-            if article_is_recent:
-                entry = {
-                    "game": game_name,
-                    "type": event_type,
-                    "date_str": date_str or "Recent",
-                    "date_dt": event_dt,
-                    "desc": desc,
-                    "url": n.get("url", ""),
-                    "estimated": False,
-                    "importance": importance,
-                }
-                all_raw.append(entry)
+            # For Steam community announcements (not dedicated roadmap posts), drop
+            # entries whose publish date is more than 6 months in the future — those
+            # are almost certainly stale articles whose year was mis-parsed.
+            is_steam_community = "steam_community" in url
+            if is_steam_community and event_dt and event_dt > _six_months_ahead:
+                continue
 
-            # Scan article content for explicit future date mentions.
-            # Only scan articles published within the last 30 days — stale articles
-            # mention dates without years that belong to a past year, not current year.
-            # Additionally, require an explicit year in the extracted date string to
-            # avoid treating "August 14" from a Nov 2025 article as Aug 14, 2026.
-            article_is_scannable = event_dt is None or event_dt >= _30d_ago
-            if article_is_scannable:
-                contents = n.get("contents", "")
-                if contents:
-                    future_refs = _extract_future_dates(contents, current_year)
-                    for raw_date_str, future_dt in future_refs:
-                        if future_dt <= today:
-                            continue
-                        # Require an explicit year in the date string for non-recent articles
-                        # (articles older than 7 days). This prevents "August 14" in a
-                        # 3-week-old article from becoming August 14, 2026.
-                        if not article_is_recent and str(future_dt.year) not in raw_date_str:
-                            continue
-                        month_key = future_dt.strftime("%B %Y")
-                        if month_key in future_months:
-                            all_raw.append({
-                                "game": game_name,
-                                "type": event_type,
-                                "date_str": future_dt.strftime("%b %d"),
-                                "date_dt": future_dt,
-                                "desc": f"{desc} (mentioned: {raw_date_str})",
-                                "url": n.get("url", ""),
-                                "estimated": False,
-                                "importance": importance,
-                            })
+            all_raw.append({
+                "game": game_name,
+                "type": event_type,
+                "date_str": date_str or "Recent",
+                "date_dt": event_dt,
+                "desc": desc,
+                "url": url,
+                "estimated": False,
+                "importance": importance,
+            })
 
         # --- Source 2: dev_comms upcoming events ---
         dev = r.get("dev_comms", {})
@@ -1730,13 +1721,19 @@ def _build_release_calendar(results: list[dict]) -> dict:
         norm = re.sub(r'\d+', '', e["desc"].lower())[:30].strip()
         return (e["game"], norm)
 
-    seen = {}
+    seen_keys = {}
+    seen_urls: set[str] = set()   # same URL must never appear more than once
     deduped = []
     for e in sorted(all_raw, key=lambda x: x["importance"]):
+        url = e.get("url", "")
+        if url and url in seen_urls:
+            continue        # reject duplicate source URL
         key = _dedup_key(e)
-        if key not in seen:
-            seen[key] = True
+        if key not in seen_keys:
+            seen_keys[key] = True
             deduped.append(e)
+            if url:
+                seen_urls.add(url)
 
     # --- Bucket into this_week / coming_up / future months ---
     for e in deduped:
@@ -2947,7 +2944,8 @@ def generate_html(results: list[dict], failed_names: list[str],
       transform: translateX(-50%);
       background: #1b2838; color: #c7d5e0; border: 1px solid #2a475e;
       padding: 0.4rem 0.6rem; border-radius: 4px;
-      font-size: 0.7rem; white-space: nowrap; z-index: 10;
+      font-size: 0.7rem; white-space: normal; word-break: break-word;
+      max-width: 220px; z-index: 10;
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }}
 

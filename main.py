@@ -2498,7 +2498,8 @@ def generate_html(results: list[dict], failed_names: list[str],
     h1 {{ font-size: 1.8rem; margin-bottom: 0.2rem; }}
     h1 .brand-shooter {{ color: #ffffff; }}
     h1 .brand-digest {{ color: #f97316; }}
-    .subtitle {{ color: #8f98a0; font-size: 0.95rem; margin-bottom: 1.5rem; }}
+    .subtitle {{ color: #8f98a0; font-size: 0.95rem; margin-bottom: 0.25rem; }}
+    .subtitle-date {{ color: #556b7d; font-size: 0.78rem; margin-bottom: 1.5rem; }}
 
     /* Sticky back-nav */
     .site-nav {{
@@ -3187,7 +3188,8 @@ def generate_html(results: list[dict], failed_names: list[str],
     <a href="index.html" class="nav-logo">Shooter<span>Digest</span></a>
   </nav>
   <h1><span class="brand-shooter">Shooter</span><span class="brand-digest">Digest</span></h1>
-  <p class="subtitle">Week of {date_str} &mdash; Player Data, Updates &amp; Community Intel</p>
+  <p class="subtitle">PC competitive shooter market &mdash; Steam concurrent players, developer updates &amp; community pulse</p>
+  <p class="subtitle-date">Week of {date_str}</p>
 
 {exec_html}
 

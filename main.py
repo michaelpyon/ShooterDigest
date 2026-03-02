@@ -36,6 +36,12 @@ def _fmt(n: int | float | None) -> str:
     return f"{n:,}"
 
 
+def _card_id(name: str) -> str:
+    """Generate a URL-safe id for a game's detail card."""
+    slug = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')
+    return f"card-{slug}"
+
+
 def _fmt_k(n: float | None) -> str:
     if n is None:
         return "-"
@@ -2252,7 +2258,7 @@ def generate_html(results: list[dict], failed_names: list[str],
 
         table_rows += f"""        <tr data-genre="{genre}">
           <td class="rank" data-value="{r['rank']}">#{r['rank']}</td>
-          <td class="game" data-value="{sent_val}">{_esc(r['name'])}{lifecycle}{sent_dot}</td>
+          <td class="game" data-value="{sent_val}"><a href="#{_card_id(r['name'])}" class="game-link">{_esc(r['name'])}</a>{lifecycle}{sent_dot}</td>
           <td>{_genre_badge_html(genre)}</td>
           <td class="num" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
           <td class="num" data-value="{r.get('est_total_24h', r['peak_24h'])}" style="color:#60a5fa;font-weight:600">{est_total}</td>
@@ -2436,7 +2442,7 @@ def generate_html(results: list[dict], failed_names: list[str],
             f'&nbsp;|&nbsp; Est. Total: <strong>{_fmt(r["peak_24h"])}</strong> (100% Steam)'
         )
         cards_html += f"""
-    <div class="card" data-genre="{card_genre}">
+    <div class="card" id="{_card_id(r['name'])}" data-genre="{card_genre}">
       <div class="card-header">
         <h3>{_esc(r['name'])}{card_lifecycle} {_genre_badge_html(card_genre)} <span class="trend-badge {r['trend_css']}">{r['trend_arrow']} {trend_str} MoM</span></h3>
         {card_annotation_html}
@@ -2570,6 +2576,12 @@ def generate_html(results: list[dict], failed_names: list[str],
     tr:hover {{ background: #1b2838; }}
     .rank {{ color: #8f98a0; font-weight: 600; width: 40px; }}
     .game {{ font-weight: 600; color: #e5e5e5; white-space: nowrap; }}
+    .game-link {{
+      color: inherit; text-decoration: none;
+      border-bottom: 1px dotted #3a5269;
+      transition: color 0.15s, border-color 0.15s;
+    }}
+    .game-link:hover {{ color: #66c0f4; border-bottom-color: #66c0f4; }}
     .num {{ font-variant-numeric: tabular-nums; text-align: right; }}
     .trend {{ text-align: center; font-weight: 600; white-space: nowrap; }}
     .trend.up {{ color: #4ade80; }}

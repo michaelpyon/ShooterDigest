@@ -229,8 +229,6 @@ EVENT_ANNOTATIONS = {
     "Arc Raiders": "Post-launch decay following launch window. Second Expedition season may stabilize floor.",
     "Delta Force": "RED DAY event + Season Morphosis live — content cadence driving growth.",
     "Battlefield 6": "Season 2 launched recently but struggling to retain new players.",
-    "Halo: MCC": "Legacy title — Halo 2 Digsite content drop had limited impact on long-term retention.",
-    "Halo Infinite": "Post-final update (Nov 2025). Managed sunset ahead of Campaign Evolved.",
     "Destiny 2": "Structural decline continues pre-Marathon. Player base contracting into core audience.",
 }
 

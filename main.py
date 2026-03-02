@@ -2620,6 +2620,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       background: #1b2838; border-radius: 8px; margin-bottom: 1.2rem;
       overflow: hidden; border: 1px solid #2a475e;
       border-left-width: 3px;
+      scroll-margin-top: 60px;
     }}
     /* Trend-colored left border: scan the whole page for winners/losers */
     .card:has(.trend-badge.up) {{ border-left-color: #4ade80; }}

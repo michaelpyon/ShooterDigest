@@ -2195,6 +2195,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     <ul>
 {exec_items}
     </ul>
+    <div class="wnl-label">Month-over-Month Steam Concurrent Player Trend</div>
 {wnl_html}
     {aggregate_chart}
   </div>"""
@@ -2532,9 +2533,15 @@ def generate_html(results: list[dict], failed_names: list[str],
       color: #60a5fa; font-size: 0.75rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem;
     }}
+    .wnl-label {{
+      font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.06em; color: #556b7d;
+      margin-top: 0.9rem; padding-top: 0.6rem;
+      border-top: 1px solid #2a475e;
+    }}
     .wnl-table {{
       display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem;
-      margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #2a475e;
+      margin-top: 0.4rem;
     }}
     .wnl-col {{ min-width: 0; }}
     .wnl-col table {{ width: 100%; border-collapse: collapse; }}

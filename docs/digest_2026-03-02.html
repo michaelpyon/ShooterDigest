@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shooter Digest - March 02, 2026</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1923; color: #c7d5e0;
+      padding: 2rem; max-width: 1100px; margin: 0 auto;
+    }
+    h1 { font-size: 1.8rem; margin-bottom: 0.2rem; }
+    h1 .brand-shooter { color: #ffffff; }
+    h1 .brand-digest { color: #f97316; }
+    .subtitle { color: #8f98a0; font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+    /* Sticky back-nav */
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15, 25, 35, 0.96);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid #2a475e;
+      margin: -2rem -2rem 1.5rem -2rem;
+      padding: 0.65rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-back {
+      font-size: 0.82rem; color: #8f98a0; text-decoration: none;
+      transition: color 0.15s; display: flex; align-items: center; gap: 0.35rem;
+    }
+    .nav-back:hover { color: #f97316; }
+    .nav-logo {
+      font-size: 0.9rem; font-weight: 700; color: #ffffff;
+      text-decoration: none; letter-spacing: -0.3px;
+    }
+    .nav-logo span { color: #f97316; }
+
+    /* Executive Summary */
+    .exec-summary {
+      background: #1b2838; border-left: 3px solid #fbbf24;
+      padding: 1rem 1.2rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
+    }
+    .exec-summary h2 { color: #fbbf24; font-size: 1rem; margin-bottom: 0.6rem; }
+    .exec-summary li {
+      margin-bottom: 0.4rem; margin-left: 1rem;
+      color: #c7d5e0; font-size: 0.9rem; line-height: 1.6;
+    }
+    .aggregate-chart {
+      margin-top: 1rem; padding-top: 0.8rem;
+      border-top: 1px solid #2a475e;
+    }
+    .aggregate-label {
+      color: #60a5fa; font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem;
+    }
+    .wnl-table {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem;
+      margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #2a475e;
+    }
+    .wnl-col { min-width: 0; }
+    .wnl-col table { width: 100%; border-collapse: collapse; }
+    .wnl-header {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; padding-bottom: 0.35rem; margin-bottom: 0.3rem;
+    }
+
+    /* Summary table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+    th {
+      text-align: left; padding: 0.6rem 0.7rem;
+      border-bottom: 2px solid #2a475e; color: #66c0f4;
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    th[data-sort] {
+      cursor: pointer; user-select: none; position: relative;
+    }
+    th[data-sort]:hover { color: #e5e5e5; }
+    th[data-sort]::after {
+      content: '⇅'; opacity: 0.3; margin-left: 4px; font-size: 0.7rem;
+    }
+    th[data-sort].asc::after { content: '▲'; opacity: 0.8; }
+    th[data-sort].desc::after { content: '▼'; opacity: 0.8; }
+    td { padding: 0.5rem 0.7rem; border-bottom: 1px solid #1b2838; }
+    tr:hover { background: #1b2838; }
+    .rank { color: #8f98a0; font-weight: 600; width: 40px; }
+    .game { font-weight: 600; color: #e5e5e5; white-space: nowrap; }
+    .num { font-variant-numeric: tabular-nums; text-align: right; }
+    .trend { text-align: center; font-weight: 600; white-space: nowrap; }
+    .trend.up { color: #4ade80; }
+    .trend.down { color: #f87171; }
+    .trend.flat { color: #fbbf24; }
+    .trend.neutral { color: #8f98a0; }
+    .pct-cell { width: 120px; }
+    .bar-bg {
+      background: #1b2838; border-radius: 4px; height: 6px;
+      margin-bottom: 2px; overflow: hidden;
+    }
+    .bar {
+      background: linear-gradient(90deg, #66c0f4, #4fa3d7);
+      height: 100%; border-radius: 4px;
+    }
+    .pct-cell span { font-size: 0.8rem; color: #8f98a0; }
+    .failed td { color: #555; font-style: italic; }
+
+    /* Key Insights */
+    .insights {
+      background: #1b2838; border-left: 3px solid #66c0f4;
+      padding: 1rem 1.2rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
+    }
+    .insights h2 { color: #66c0f4; font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .insights li {
+      margin-bottom: 0.3rem; margin-left: 1rem;
+      color: #b0bec5; font-size: 0.9rem; line-height: 1.5;
+    }
+
+    /* Detail cards */
+    .section-title {
+      color: #66c0f4; font-size: 1.1rem; margin: 2rem 0 1rem;
+      border-bottom: 1px solid #2a475e; padding-bottom: 0.5rem;
+    }
+    .card {
+      background: #1b2838; border-radius: 8px; margin-bottom: 1.2rem;
+      overflow: hidden; border: 1px solid #2a475e;
+      border-left-width: 3px;
+    }
+    /* Trend-colored left border: scan the whole page for winners/losers */
+    .card:has(.trend-badge.up) { border-left-color: #4ade80; }
+    .card:has(.trend-badge.down) { border-left-color: #f87171; }
+    .card:has(.trend-badge.flat) { border-left-color: #fbbf24; }
+    .card:has(.trend-badge.neutral) { border-left-color: #8f98a0; }
+
+    /* Sticky ranking table header */
+    .ranking-table thead th {
+      position: sticky; top: 44px;
+      background: #0f1923; z-index: 10;
+    }
+
+    /* Floating back-to-top */
+    .back-to-top {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: #1b2838; border: 1px solid #2a475e;
+      color: #66c0f4; border-radius: 6px;
+      padding: 0.5rem 0.85rem; font-size: 0.82rem;
+      cursor: pointer; opacity: 0; transition: opacity 0.25s;
+      z-index: 200; text-decoration: none; font-weight: 600;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { background: #2a475e; color: #e5e7eb; }
+
+    .card-header {
+      padding: 1rem 1.2rem 0.7rem; border-bottom: 1px solid #2a475e;
+    }
+    .card-header h3 {
+      color: #e5e5e5; font-size: 1.1rem; margin-bottom: 0.3rem;
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    }
+    .trend-badge {
+      font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; font-weight: 600;
+    }
+    .trend-badge.up { background: rgba(74,222,128,0.15); color: #4ade80; }
+    .trend-badge.down { background: rgba(248,113,113,0.15); color: #f87171; }
+    .trend-badge.flat { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .trend-badge.neutral { background: rgba(143,152,160,0.15); color: #8f98a0; }
+    .card-stats { color: #8f98a0; font-size: 0.82rem; }
+    .card-stats strong { color: #c7d5e0; }
+    .card-trend { color: #8f98a0; font-size: 0.8rem; margin-top: 0.2rem; }
+
+    /* Takeaway — structured 4-part */
+    .card-takeaway {
+      padding: 0.8rem 1.2rem; border-bottom: 1px solid #2a475e;
+    }
+    .card-takeaway h4 {
+      color: #fbbf24; font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 0.5rem;
+    }
+    .card-takeaway p {
+      color: #c7d5e0; font-size: 0.85rem; line-height: 1.6; font-style: italic;
+    }
+    .takeaway-part {
+      color: #c7d5e0; font-size: 0.83rem; line-height: 1.55;
+      margin-bottom: 0.3rem;
+    }
+    .takeaway-label {
+      color: #66c0f4; font-weight: 700; font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      margin-right: 0.3rem;
+    }
+    .prev-takeaway {
+      color: #8f98a0; font-size: 0.78rem; margin-top: 0.5rem;
+      padding-top: 0.4rem; border-top: 1px dashed #2a475e; line-height: 1.5;
+    }
+
+    /* Card body: 2 columns */
+    .card-body-2col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }
+    .card-section { padding: 0.7rem 1rem; border-right: 1px solid #2a475e; }
+    .card-section:last-child { border-right: none; }
+    .card-section h4 {
+      color: #66c0f4; font-size: 0.72rem; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 0.4rem;
+    }
+    .card-section .sub { color: #8f98a0; font-size: 0.68rem; text-transform: none; }
+    .card-section ul { list-style: none; }
+    .card-section li {
+      color: #b0bec5; font-size: 0.8rem; line-height: 1.45;
+      padding: 0.15rem 0;
+    }
+    .card-section li::before {
+      content: "\2022"; color: #66c0f4; margin-right: 0.4rem;
+    }
+    .badge {
+      font-size: 0.6rem; padding: 1px 5px; border-radius: 3px;
+      font-weight: 600; vertical-align: middle;
+    }
+    .badge.patch { background: #4a3b00; color: #fbbf24; }
+
+    /* Genre badges */
+    .genre-badge {
+      font-size: 0.55rem; padding: 2px 6px; border-radius: 3px;
+      font-weight: 700; vertical-align: middle; margin-left: 0.4rem;
+      letter-spacing: 0.03em; text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Genre filter tabs */
+    .genre-filters {
+      display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0;
+      padding: 0.6rem 0; border-bottom: 1px solid #2a475e;
+    }
+    .genre-filter-btn {
+      padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid #2a475e;
+      background: #1b2838; color: #8f98a0; font-size: 0.78rem; cursor: pointer;
+      font-weight: 600; transition: all 0.15s ease;
+    }
+    .genre-filter-btn:hover { border-color: #4a90d9; color: #c6d4df; }
+    .genre-filter-btn.active {
+      background: var(--genre-active-bg, #1a3a5c);
+      border-color: var(--genre-active-border, #4a90d9);
+      color: var(--genre-active-color, #e5e7eb);
+    }
+    .genre-filter-btn .filter-count {
+      font-size: 0.65rem; color: #556b7d; margin-left: 0.3rem;
+    }
+    .genre-filter-btn.active .filter-count { color: #8bb9e0; }
+
+    /* Source tags — colors set inline per-element based on sentiment */
+    .source-tag {
+      font-size: 0.6rem; padding: 1px 5px; border-radius: 3px;
+      font-weight: 600; vertical-align: middle;
+      background: #2d3748; color: #94a3b8;
+    }
+    .sentiment-dot {
+      font-size: 0.55rem; vertical-align: middle; margin-right: 0.15rem;
+    }
+    .sentiment-legend {
+      display: flex; gap: 0.75rem; margin-bottom: 4px;
+      font-size: 0.75rem; color: #94a3b8; text-align: left;
+    }
+    .sentiment-legend span { display: inline-flex; align-items: center; gap: 0.2rem; }
+
+    /* Category tags */
+    .cat-tag {
+      font-size: 0.58rem; padding: 1px 5px; border-radius: 3px;
+      font-weight: 700; vertical-align: middle; margin-right: 0.3rem;
+      letter-spacing: 0.03em; display: inline-block;
+    }
+
+    /* Clickable links */
+    .item-link {
+      color: #c7d5e0; text-decoration: none;
+      border-bottom: 1px dotted #556b7d;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .item-link:hover {
+      color: #66c0f4; border-bottom-color: #66c0f4;
+    }
+
+    /* News preview */
+    .news-preview {
+      color: #8f98a0; font-size: 0.72rem; line-height: 1.35;
+      margin-top: 0.15rem; max-height: 2.7em; overflow: hidden;
+    }
+
+    /* Community pulse (collapsible) */
+    .card-community {
+      padding: 0; border-top: 1px solid #2a475e;
+    }
+    .card-community details {
+      padding: 0;
+    }
+    .card-community summary {
+      color: #66c0f4; font-size: 0.72rem; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      padding: 0.6rem 1rem; user-select: none;
+    }
+    .card-community summary:hover {
+      background: rgba(102,192,244,0.05);
+    }
+    .card-community .sub { color: #8f98a0; font-size: 0.68rem; text-transform: none; }
+    .community-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      padding: 0 1rem 0.7rem;
+    }
+    .community-inner h5 {
+      color: #8f98a0; font-size: 0.68rem; text-transform: uppercase;
+      letter-spacing: 0.03em; margin-bottom: 0.3rem;
+    }
+    .community-inner ul { list-style: none; }
+    .community-inner li {
+      color: #b0bec5; font-size: 0.78rem; line-height: 1.4;
+      padding: 0.1rem 0;
+    }
+    .community-inner li::before {
+      content: "\2022"; color: #556b7d; margin-right: 0.3rem;
+    }
+
+    /* Reddit comments */
+    .comments {
+      margin-left: 0.8rem; margin-top: 0.25rem; margin-bottom: 0.3rem;
+    }
+    .comments li::before { content: "\21B3"; color: #556b7d; margin-right: 0.3rem; }
+    .comments li { font-size: 0.72rem; color: #8f98a0; line-height: 1.35; }
+    .comment-author { color: #66c0f4; font-size: 0.68rem; }
+
+    /* Sparkline chart */
+    .card-trend { margin-top: 0.3rem; }
+    .card-trend svg { max-width: 240px; height: 55px; }
+
+    /* Release Calendar */
+    .calendar-section { margin-top: 2rem; }
+    .cal-section { margin-bottom: 1rem; }
+    .cal-section-header {
+      font-size: 0.82rem; text-transform: uppercase;
+      letter-spacing: 0.05em; margin-bottom: 0.4rem;
+      padding: 0.4rem 0.8rem; border-radius: 0 4px 4px 0;
+    }
+    .cal-section-header.past {
+      color: #8f98a0; background: #141e2b; border-left: 3px solid #556b7d;
+    }
+    .cal-section-header.upcoming {
+      color: #4ade80; background: #0f2818; border-left: 3px solid #4ade80;
+    }
+    .cal-section-header.future {
+      color: #fbbf24; background: #1b2838; border-left: 3px solid #fbbf24;
+    }
+    .cal-count {
+      font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+      text-transform: none; letter-spacing: 0;
+    }
+    .cal-today-divider {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 0.4rem 0; margin: 0.3rem 0;
+    }
+    .cal-today-divider::before,
+    .cal-today-divider::after {
+      content: ""; flex: 1; height: 1px; background: #60a5fa;
+    }
+    .cal-today-divider span {
+      color: #60a5fa; font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+    }
+    .cal-entry {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      padding: 0.4rem 0.8rem; border-bottom: 1px solid #141e2b;
+    }
+    .cal-entry:hover { background: rgba(102,192,244,0.03); }
+    .cal-entry.estimated { opacity: 0.7; }
+    .cal-date {
+      min-width: 50px; color: #8f98a0; font-size: 0.75rem;
+      font-weight: 600; padding-top: 0.1rem;
+    }
+    .cal-game {
+      min-width: 130px; max-width: 130px; color: #e5e5e5;
+      font-size: 0.8rem; font-weight: 600;
+    }
+    .calendar-type {
+      font-size: 0.58rem; padding: 1px 6px; border-radius: 3px;
+      font-weight: 700; min-width: 70px; text-align: center;
+      display: inline-block; white-space: nowrap; flex-shrink: 0;
+    }
+    .calendar-type.season { background: #1e3a5f; color: #3b82f6; }
+    .calendar-type.patch { background: #4a3b00; color: #fbbf24; }
+    .calendar-type.event { background: #3b1e5f; color: #a78bfa; }
+    .calendar-type.content { background: #1e5f2e; color: #4ade80; }
+    .calendar-type.roadmap { background: #1e4a5f; color: #38bdf8; }
+    .calendar-type.industry { background: #4a3b00; color: #f59e0b; }
+    .calendar-type.newrelease { background: #5f1e3a; color: #f472b6; font-weight: 800; }
+    .cal-desc {
+      color: #b0bec5; font-size: 0.78rem; line-height: 1.5; flex: 1;
+      white-space: normal; word-wrap: break-word;
+    }
+    .est-tag {
+      font-size: 0.55rem; color: #8f98a0; background: #1e293b;
+      padding: 1px 4px; border-radius: 2px; font-weight: 600;
+      vertical-align: middle; margin-left: 0.3rem;
+    }
+    .cal-empty {
+      color: #556b7d; font-size: 0.78rem; font-style: italic;
+      padding: 0.4rem 0.8rem;
+    }
+
+    /* Lifecycle badge (#4) */
+    .lifecycle-badge {
+      font-size: 0.55rem; padding: 1px 5px; border-radius: 3px;
+      font-weight: 600; vertical-align: middle; margin-left: 0.3rem;
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }
+
+    /* Sentiment dot inline in game name */
+    .sent-inline {
+      font-size: 0.5rem; vertical-align: middle; margin-left: 0.25rem;
+      opacity: 0.8;
+    }
+
+    /* Inline sparkline (#6) */
+    .inline-spark { vertical-align: middle; margin-left: 0.4rem; }
+
+    /* Annotation info icon — hover to see context */
+    .annot-icon {
+      font-size: 0.7rem; color: #8f98a0; cursor: help;
+      vertical-align: middle; margin-left: 0.2rem;
+      opacity: 0.6; transition: opacity 0.15s;
+    }
+    .annot-icon:hover { opacity: 1; color: #66c0f4; }
+
+    /* Genre Rollup (#9) */
+    .genre-rollup {
+      margin-bottom: 2rem;
+    }
+    .genre-rollup h3 {
+      color: #66c0f4; font-size: 0.9rem; margin-bottom: 0.5rem;
+    }
+    .genre-rollup table {
+      width: 100%; border-collapse: collapse; font-size: 0.82rem;
+    }
+    .genre-rollup th {
+      text-align: left; padding: 0.4rem 0.6rem;
+      border-bottom: 2px solid #2a475e; color: #66c0f4;
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .genre-rollup td {
+      padding: 0.35rem 0.6rem; border-bottom: 1px solid #1b2838;
+    }
+
+    /* Methodology (#7) */
+    .methodology {
+      margin-top: 2rem; margin-bottom: 1rem;
+    }
+    .methodology summary {
+      color: #66c0f4; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; padding: 0.5rem 0;
+    }
+    .methodology-content {
+      padding-top: 0.5rem;
+    }
+    .methodology-disclaimer {
+      font-size: 0.78rem; color: #8f98a0; line-height: 1.5;
+      margin-bottom: 1rem; padding: 0.6rem 0.8rem;
+      background: rgba(27, 40, 56, 0.5); border-radius: 4px;
+      border-left: 2px solid #fbbf24;
+    }
+    .methodology table {
+      width: 100%; border-collapse: collapse; font-size: 0.78rem;
+    }
+    .methodology th {
+      text-align: left; padding: 0.4rem 0.5rem;
+      border-bottom: 2px solid #2a475e; color: #66c0f4;
+      font-size: 0.68rem; text-transform: uppercase;
+    }
+    .methodology td {
+      padding: 0.35rem 0.5rem; border-bottom: 1px solid #1b2838;
+    }
+    .meth-note { font-size: 0.72rem; color: #8f98a0; }
+
+    /* Info tooltip (#2) */
+    .info-tip {
+      display: inline-block; cursor: help; position: relative;
+      font-size: 0.7rem; color: #8f98a0; margin-left: 0.2rem;
+      text-decoration: none;
+    }
+    .info-tip:hover {
+      color: #66c0f4;
+    }
+    .info-tip:hover::after {
+      content: attr(data-tip);
+      position: absolute; bottom: 120%; left: 50%;
+      transform: translateX(-50%);
+      background: #1b2838; color: #c7d5e0; border: 1px solid #2a475e;
+      padding: 0.4rem 0.6rem; border-radius: 4px;
+      font-size: 0.7rem; white-space: normal; word-break: break-word;
+      max-width: 220px; z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .footer {
+      color: #556b7d; font-size: 0.78rem;
+      border-top: 1px solid #1b2838; padding-top: 1rem; line-height: 1.6;
+    }
+
+    @media (max-width: 800px) {
+      .card-body-2col { grid-template-columns: 1fr; }
+      .community-inner { grid-template-columns: 1fr; }
+      .card-section { border-right: none; border-bottom: 1px solid #2a475e; }
+      .card-section:last-child { border-bottom: none; }
+    }
+
+    /* ── Mobile-first responsive ── */
+    @media (max-width: 600px) {
+      body { padding: 0.8rem; }
+      h1 { font-size: 1.4rem; }
+      .subtitle { font-size: 0.82rem; margin-bottom: 1rem; }
+      .site-nav { margin: -0.8rem -0.8rem 1.2rem -0.8rem; padding: 0.5rem 0.8rem; }
+
+      /* Executive Summary */
+      .exec-summary { padding: 0.7rem 0.8rem; margin-bottom: 1.2rem; }
+      .exec-summary h2 { font-size: 0.9rem; margin-bottom: 0.4rem; }
+      .exec-summary li { font-size: 0.8rem; line-height: 1.5; margin-bottom: 0.25rem; }
+
+      /* WNL — compact stacked columns */
+      .wnl-table { grid-template-columns: 1fr; gap: 0.3rem; margin-top: 0.6rem; padding-top: 0.6rem; }
+      .wnl-header { font-size: 0.68rem; padding-bottom: 0.2rem; margin-bottom: 0.15rem; }
+      .wnl-col table { margin-bottom: 0; }
+      .wnl-col table tr { display: flex; align-items: baseline; }
+      .wnl-col table tr:hover { background: none; }
+      .wnl-col table td {
+        padding: 0.15rem 0.4rem !important; font-size: 0.78rem !important;
+        border-bottom: none;
+      }
+      .wnl-col table td:first-child { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .wnl-col table td:nth-child(2) { flex-shrink: 0; text-align: right; }
+      .wnl-col table td:nth-child(3) { flex-shrink: 0; min-width: 55px; text-align: right; }
+
+      /* Market chart */
+      .aggregate-chart { margin-top: 0.6rem; padding-top: 0.5rem; }
+      .aggregate-label { font-size: 0.68rem; }
+
+      /* Genre filter pills — horizontal scroll */
+      .genre-filters {
+        flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+        gap: 0.35rem; padding-bottom: 0.8rem;
+        scrollbar-width: none;
+      }
+      .genre-filters::-webkit-scrollbar { display: none; }
+      .genre-filter-btn {
+        flex-shrink: 0; font-size: 0.72rem; padding: 0.3rem 0.6rem;
+      }
+
+      /* ── Ranking table → labeled card layout ── */
+      .ranking-table thead { display: none; }
+      .ranking-table tbody tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.2rem 0.6rem;
+        padding: 0.8rem 0.6rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid #1b2838;
+        border-radius: 8px;
+        background: rgba(27, 40, 56, 0.4);
+      }
+      .ranking-table tbody tr:hover { background: rgba(27, 40, 56, 0.4); }
+      .ranking-table tbody td {
+        padding: 0; border: none; text-align: left !important;
+      }
+      /* Rank + Genre badge row */
+      .ranking-table tbody td.rank {
+        grid-column: 1 / -1; grid-row: 1;
+        font-size: 0.75rem; color: #8f98a0;
+        display: flex; align-items: center; gap: 0.4rem;
+      }
+      /* Game name */
+      .ranking-table tbody td.game {
+        grid-column: 1 / -1; grid-row: 2;
+        white-space: normal; font-size: 1.05rem; font-weight: 600;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        margin-bottom: 0.2rem;
+      }
+      /* Genre badge — right side of rank row (col 3) */
+      .ranking-table tbody tr > td:nth-child(3) {
+        grid-column: 1 / -1; grid-row: 1;
+        display: flex; justify-content: flex-end; align-items: center;
+      }
+      /* Hide sentiment dot & annotation icon on mobile cards */
+      .ranking-table tbody .sent-inline { display: none; }
+      .ranking-table tbody .annot-icon { display: none; }
+      /* Stats: 2-column grid with labels */
+      .ranking-table tbody td.num { font-size: 0.85rem; }
+      /* 24h Peak (col 4) */
+      .ranking-table tbody tr > td:nth-child(4) {
+        grid-column: 1; grid-row: 3;
+      }
+      .ranking-table tbody tr > td:nth-child(4)::before {
+        content: "24h Peak  "; display: block;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
+      }
+      /* Est. Total (col 5) */
+      .ranking-table tbody tr > td:nth-child(5) {
+        grid-column: 2; grid-row: 3;
+      }
+      .ranking-table tbody tr > td:nth-child(5)::before {
+        content: "Est. Total  "; display: block;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
+      }
+      /* Trend (col 6) */
+      .ranking-table tbody td.trend {
+        grid-column: 1; grid-row: 4;
+        text-align: left !important; font-size: 0.85rem;
+        width: auto; padding-top: 0.15rem;
+      }
+      .ranking-table tbody td.trend::before {
+        content: "Trend (MoM)  "; display: block;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
+      }
+      /* All-Time Peak (col 7) */
+      .ranking-table tbody tr > td:nth-child(7) {
+        grid-column: 2; grid-row: 4;
+        padding-top: 0.15rem;
+      }
+      .ranking-table tbody tr > td:nth-child(7)::before {
+        content: "All-Time Peak  "; display: block;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
+      }
+      /* % of Peak (col 8) */
+      .ranking-table tbody td.pct-cell {
+        grid-column: 1 / -1; grid-row: 5;
+        width: auto; display: flex; align-items: center; gap: 0.4rem;
+        padding-top: 0.3rem;
+        border-top: 1px solid rgba(255,255,255,0.06);
+        margin-top: 0.2rem;
+      }
+      .ranking-table tbody td.pct-cell::before {
+        content: "% of Peak"; flex-shrink: 0;
+        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.03em;
+      }
+      .ranking-table .pct-cell .bar-bg {
+        width: 50px; flex-shrink: 0;
+      }
+      .ranking-table .pct-cell span { font-size: 0.8rem; }
+      /* Genre rollup mobile */
+      .genre-rollup table { font-size: 0.72rem; }
+      .genre-rollup th, .genre-rollup td { padding: 0.25rem 0.4rem; }
+      /* Methodology mobile */
+      .methodology table { font-size: 0.7rem; }
+      .methodology th, .methodology td { padding: 0.25rem 0.3rem; }
+      .meth-note { font-size: 0.6rem; }
+      /* Failed rows */
+      .ranking-table tbody tr.failed {
+        display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.6rem;
+      }
+
+      /* Section title */
+      .section-title { font-size: 1.1rem; }
+
+      /* Detail cards */
+      .card { margin-bottom: 1rem; }
+      .card-header { padding: 0.6rem 0.8rem; }
+      .card-header-left h3 { font-size: 0.95rem; }
+      .card-section { padding: 0.6rem 0.8rem; }
+
+      /* Calendar */
+      .cal-entry {
+        flex-wrap: wrap; gap: 0.3rem; padding: 0.4rem 0.5rem;
+      }
+      .cal-game { min-width: 0; max-width: none; font-size: 0.75rem; }
+      .cal-desc { font-size: 0.72rem; width: 100%; }
+
+      /* Footer */
+      .footer { font-size: 0.7rem; }
+
+      /* Insights */
+      .insights li { font-size: 0.82rem; }
+
+      /* Generic table overflow — catches any table not already styled responsively */
+      .genre-rollup table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+      .genre-rollup th, .genre-rollup td { font-size: 0.78rem; padding: 0.3rem 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back">&#8592; All Digests</a>
+    <a href="index.html" class="nav-logo">Shooter<span>Digest</span></a>
+  </nav>
+  <h1><span class="brand-shooter">Shooter</span><span class="brand-digest">Digest</span></h1>
+  <p class="subtitle">Week of March 02, 2026 &mdash; Player Data, Updates &amp; Community Intel</p>
+
+  <div class="exec-summary">
+    <h2>Executive Summary</h2>
+    <ul>
+      <li>Combined 24h peaks across all 15 titles are down 1.6% vs. last week.</li>
+    </ul>
+    <div class="wnl-table">
+      <div class="wnl-col">
+        <div class="wnl-header" style="color:#4ade80;border-bottom:2px solid #4ade80">&#9650; Winners (2)</div>
+        <table><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Halo: MCC</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+4.4%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">9,415<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Halo Infinite</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#4ade80;font-weight:600">+2.2%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">3,144<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr></table>
+      </div>
+      <div class="wnl-col">
+        <div class="wnl-header" style="color:#fbbf24;border-bottom:2px solid #fbbf24">&#9654; Holding Steady (13)</div>
+        <table><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">The Finals</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.0%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">16,379<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Counter-Strike 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.0%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">1,519,117<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Marvel Rivals</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.1%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">95,735<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Call of Duty</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">-0.2%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">52,847<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Team Fortress 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.4%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">61,421<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Battlefield 6</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.5%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">72,531<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Delta Force</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.6%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">155,467<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Apex Legends</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.7%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">183,542<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Arc Raiders</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+0.8%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">235,773<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Destiny 2</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.0%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">11,841<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Overwatch</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">-1.0%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">112,793<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">Rainbow Six Siege</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.4%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">107,095<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr><tr><td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">PUBG: BATTLEGROUNDS</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#fbbf24;font-weight:600">+1.5%</td><td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">666,099<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td></tr></table>
+      </div>
+      <div class="wnl-col">
+        <div class="wnl-header" style="color:#f87171;border-bottom:2px solid #f87171">&#9660; Losers (0)</div>
+        <table><tr><td colspan="3" style="color:#556b7d;font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr></table>
+      </div>
+    </div>
+    <div class="aggregate-chart">
+  <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)<br><span style="font-size:0.6rem;font-weight:400;color:#556b7d">Steam Concurrent Players (Source: SteamDB)</span></div>
+  <svg width="350" height="70" viewBox="0 0 350 70" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="16.0,12.0 95.5,50.0 175.0,32.7 254.5,42.7 334.0,40.7 334.0,50 16.0,50" fill="rgba(96,165,250,0.12)" />
+    <polyline points="16.0,12.0 95.5,50.0 175.0,32.7 254.5,42.7 334.0,40.7" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    <circle cx="16.0" cy="12.0" r="3" fill="#60a5fa" />
+<circle cx="95.5" cy="50.0" r="3" fill="#60a5fa" />
+<circle cx="175.0" cy="32.7" r="3" fill="#60a5fa" />
+<circle cx="254.5" cy="42.7" r="3" fill="#60a5fa" />
+<circle cx="334.0" cy="40.7" r="3" fill="#60a5fa" />
+
+    <text x="16.0" y="68" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Nov</text>
+<text x="95.5" y="68" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="175.0" y="68" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="254.5" y="68" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="334.0" y="68" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+    <text x="16.0" y="8" text-anchor="start" fill="#8f98a0" font-size="8" font-family="sans-serif">2.2M</text>
+<text x="334.0" y="34.7" text-anchor="end" fill="#60a5fa" font-size="9" font-weight="bold" font-family="sans-serif">2.1M</text>
+
+  </svg>
+</div>
+  </div>
+
+  <div class="genre-filters">
+    <button class="genre-filter-btn active" data-genre="All">All <span class="filter-count">15</span></button>
+    <button class="genre-filter-btn" data-genre="Battle Royale" style="--genre-active-bg:#3b2f0a;--genre-active-border:#fbbf24;--genre-active-color:#fbbf24">Battle Royale <span class="filter-count">2</span></button>
+    <button class="genre-filter-btn" data-genre="Hero Shooter" style="--genre-active-bg:#2e1065;--genre-active-border:#c084fc;--genre-active-color:#c084fc">Hero Shooter <span class="filter-count">3</span></button>
+    <button class="genre-filter-btn" data-genre="Arena" style="--genre-active-bg:#0a3b2b;--genre-active-border:#34d399;--genre-active-color:#34d399">Arena <span class="filter-count">3</span></button>
+    <button class="genre-filter-btn" data-genre="Tactical" style="--genre-active-bg:#0c2d48;--genre-active-border:#38bdf8;--genre-active-color:#38bdf8">Tactical <span class="filter-count">2</span></button>
+    <button class="genre-filter-btn" data-genre="Extraction" style="--genre-active-bg:#3b1f0a;--genre-active-border:#fb923c;--genre-active-color:#fb923c">Extraction <span class="filter-count">2</span></button>
+    <button class="genre-filter-btn" data-genre="Large-Scale" style="--genre-active-bg:#0a3b1f;--genre-active-border:#4ade80;--genre-active-color:#4ade80">Large-Scale <span class="filter-count">2</span></button>
+    <button class="genre-filter-btn" data-genre="Looter Shooter" style="--genre-active-bg:#3b0a2e;--genre-active-border:#f472b6;--genre-active-color:#f472b6">Looter Shooter <span class="filter-count">1</span></button>
+  </div>
+
+  <table class="ranking-table">
+    <thead>
+      <tr>
+        <th data-sort="num" data-col="0">Rank</th>
+        <th data-sort="str" data-col="1">Game</th>
+        <th data-sort="str" data-col="2">Genre</th>
+        <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak &divide; Steam share. Click for methodology.">ⓘ</a></th>
+        <th data-sort="num" data-col="5">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
+        <th data-sort="num" data-col="7">% of Peak</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr data-genre="Tactical">
+          <td class="rank" data-value="1">#1</td>
+          <td class="game" data-value="1">Counter-Strike 2 <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td>
+          <td class="num" data-value="1519117">1,519,117</td>
+          <td class="num" data-value="1519117" style="color:#60a5fa;font-weight:600">1,519,117</td>
+          <td class="trend flat" data-value="0.04">▶ +0.0% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,2.8 32.0,1.1 48.0,1.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="1818368" style="color:#fbbf24;font-weight:600">1,818,368</td>
+          <td class="pct-cell" data-value="83.54">
+            <div class="bar-bg"><div class="bar" style="width:83.5428802090666%"></div></div>
+            <span>83.5%</span>
+          </td>
+        </tr>
+        <tr data-genre="Battle Royale">
+          <td class="rank" data-value="2">#2</td>
+          <td class="game" data-value="1">PUBG: BATTLEGROUNDS <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td>
+          <td class="num" data-value="666099">666,099</td>
+          <td class="num" data-value="832623" style="color:#60a5fa;font-weight:600">832,623</td>
+          <td class="trend flat" data-value="1.53">▶ +1.5% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,6.7 16.0,1.0 32.0,13.0 48.0,10.9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="4045033" style="color:#fbbf24;font-weight:600">4,045,033</td>
+          <td class="pct-cell" data-value="20.58">
+            <div class="bar-bg"><div class="bar" style="width:20.583851741657284%"></div></div>
+            <span>20.6%</span>
+          </td>
+        </tr>
+        <tr data-genre="Extraction">
+          <td class="rank" data-value="3">#3</td>
+          <td class="game" data-value="1">Arc Raiders <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td>
+          <td class="num" data-value="235773">235,773</td>
+          <td class="num" data-value="471546" style="color:#60a5fa;font-weight:600">471,546</td>
+          <td class="trend flat" data-value="0.76">▶ +0.8% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,3.0 16.0,1.0 32.0,13.0 48.0,12.8" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="930194" style="color:#fbbf24;font-weight:600">930,194</td>
+          <td class="pct-cell" data-value="50.69">
+            <div class="bar-bg"><div class="bar" style="width:50.693296237129026%"></div></div>
+            <span>50.7%</span>
+          </td>
+        </tr>
+        <tr data-genre="Battle Royale">
+          <td class="rank" data-value="4">#4</td>
+          <td class="game" data-value="1">Apex Legends <span class="lifecycle-badge" style="color:#fbbf24;background:#3a3520">Maintenance</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td>
+          <td class="num" data-value="183542">183,542</td>
+          <td class="num" data-value="734168" style="color:#60a5fa;font-weight:600">734,168</td>
+          <td class="trend flat" data-value="0.7">▶ +0.7% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,4.5 32.0,1.7 48.0,1.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="2497892" style="color:#fbbf24;font-weight:600">2,497,892</td>
+          <td class="pct-cell" data-value="29.39">
+            <div class="bar-bg"><div class="bar" style="width:29.391502915258144%"></div></div>
+            <span>29.4%</span>
+          </td>
+        </tr>
+        <tr data-genre="Extraction">
+          <td class="rank" data-value="5">#5</td>
+          <td class="game" data-value="1">Delta Force <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td>
+          <td class="num" data-value="155467">155,467</td>
+          <td class="num" data-value="222095" style="color:#60a5fa;font-weight:600">222,095</td>
+          <td class="trend flat" data-value="0.55">▶ +0.6% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,9.9 16.0,13.0 32.0,1.4 48.0,1.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="352025" style="color:#fbbf24;font-weight:600">352,025</td>
+          <td class="pct-cell" data-value="63.09">
+            <div class="bar-bg"><div class="bar" style="width:63.090764473374506%"></div></div>
+            <span>63.1%</span>
+          </td>
+        </tr>
+        <tr data-genre="Hero Shooter">
+          <td class="rank" data-value="6">#6</td>
+          <td class="game" data-value="1">Overwatch <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
+          <td class="num" data-value="112793">112,793</td>
+          <td class="num" data-value="563965" style="color:#60a5fa;font-weight:600">563,965</td>
+          <td class="trend flat" data-value="-1.01">▶ -1.0% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,12.6 16.0,13.0 32.0,1.0 48.0,1.2" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="823180" style="color:#fbbf24;font-weight:600">823,180</td>
+          <td class="pct-cell" data-value="68.51">
+            <div class="bar-bg"><div class="bar" style="width:68.51053232585825%"></div></div>
+            <span>68.5%</span>
+          </td>
+        </tr>
+        <tr data-genre="Tactical">
+          <td class="rank" data-value="7">#7</td>
+          <td class="game" data-value="1">Rainbow Six Siege <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td>
+          <td class="num" data-value="107095">107,095</td>
+          <td class="num" data-value="305985" style="color:#60a5fa;font-weight:600">305,985</td>
+          <td class="trend flat" data-value="1.35">▶ +1.4% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,7.5 32.0,1.6 48.0,1.0" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="572788" style="color:#fbbf24;font-weight:600">572,788</td>
+          <td class="pct-cell" data-value="53.42">
+            <div class="bar-bg"><div class="bar" style="width:53.4203595442846%"></div></div>
+            <span>53.4%</span>
+          </td>
+        </tr>
+        <tr data-genre="Hero Shooter">
+          <td class="rank" data-value="8">#8</td>
+          <td class="game" data-value="1">Marvel Rivals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
+          <td class="num" data-value="95735">95,735</td>
+          <td class="num" data-value="273528" style="color:#60a5fa;font-weight:600">273,528</td>
+          <td class="trend flat" data-value="0.11">▶ +0.1% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,1.0 32.0,7.7 48.0,7.6" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="1835237" style="color:#fbbf24;font-weight:600">1,835,237</td>
+          <td class="pct-cell" data-value="14.90">
+            <div class="bar-bg"><div class="bar" style="width:14.904263053587469%"></div></div>
+            <span>14.9%</span>
+          </td>
+        </tr>
+        <tr data-genre="Large-Scale">
+          <td class="rank" data-value="9">#9</td>
+          <td class="game" data-value="0">Battlefield 6 <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#fbbf24" title="Sentiment: mixed">●</span></td>
+          <td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td>
+          <td class="num" data-value="72531">72,531</td>
+          <td class="num" data-value="131874" style="color:#60a5fa;font-weight:600">131,874</td>
+          <td class="trend flat" data-value="0.48">▶ +0.5% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,9.9 32.0,13.0 48.0,12.9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="1192849" style="color:#fbbf24;font-weight:600">1,192,849</td>
+          <td class="pct-cell" data-value="11.06">
+            <div class="bar-bg"><div class="bar" style="width:11.055425741578222%"></div></div>
+            <span>11.1%</span>
+          </td>
+        </tr>
+        <tr data-genre="Hero Shooter">
+          <td class="rank" data-value="10">#10</td>
+          <td class="game" data-value="1">Team Fortress 2 <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td>
+          <td class="num" data-value="61421">61,421</td>
+          <td class="num" data-value="61421" style="color:#60a5fa;font-weight:600">61,421</td>
+          <td class="trend flat" data-value="0.4">▶ +0.4% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,13.0 32.0,10.5 48.0,9.9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="253225" style="color:#fbbf24;font-weight:600">253,225</td>
+          <td class="pct-cell" data-value="24.26">
+            <div class="bar-bg"><div class="bar" style="width:24.255503998420377%"></div></div>
+            <span>24.3%</span>
+          </td>
+        </tr>
+        <tr data-genre="Large-Scale">
+          <td class="rank" data-value="11">#11</td>
+          <td class="game" data-value="1">Call of Duty <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td>
+          <td class="num" data-value="52847">52,847</td>
+          <td class="num" data-value="352313" style="color:#60a5fa;font-weight:600">352,313</td>
+          <td class="trend flat" data-value="-0.24">▶ -0.2% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,13.0 32.0,12.4 48.0,12.5" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="3259313" style="color:#fbbf24;font-weight:600">3,259,313</td>
+          <td class="pct-cell" data-value="10.81">
+            <div class="bar-bg"><div class="bar" style="width:10.809434298021873%"></div></div>
+            <span>10.8%</span>
+          </td>
+        </tr>
+        <tr data-genre="Arena">
+          <td class="rank" data-value="12">#12</td>
+          <td class="game" data-value="1">The Finals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
+          <td class="num" data-value="16379">16,379</td>
+          <td class="num" data-value="32758" style="color:#60a5fa;font-weight:600">32,758</td>
+          <td class="trend flat" data-value="0.02">▶ +0.0% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,13.0 16.0,1.0 32.0,4.6 48.0,4.5" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="484798" style="color:#fbbf24;font-weight:600">484,798</td>
+          <td class="pct-cell" data-value="6.76">
+            <div class="bar-bg"><div class="bar" style="width:6.757041076902133%"></div></div>
+            <span>6.8%</span>
+          </td>
+        </tr>
+        <tr data-genre="Looter Shooter">
+          <td class="rank" data-value="13">#13</td>
+          <td class="game" data-value="1">Destiny 2 <span class="lifecycle-badge" style="color:#fbbf24;background:#3a3520">Maintenance</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#f472b6;background:#3b0a2e">Looter</span></td>
+          <td class="num" data-value="11841">11,841</td>
+          <td class="num" data-value="33831" style="color:#60a5fa;font-weight:600">33,831</td>
+          <td class="trend flat" data-value="0.97">▶ +1.0% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,9.4 32.0,13.0 48.0,12.9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="904717" style="color:#fbbf24;font-weight:600">904,717</td>
+          <td class="pct-cell" data-value="3.74">
+            <div class="bar-bg"><div class="bar" style="width:3.739448162172234%"></div></div>
+            <span>3.7%</span>
+          </td>
+        </tr>
+        <tr data-genre="Arena">
+          <td class="rank" data-value="14">#14</td>
+          <td class="game" data-value="1">Halo: MCC <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
+          <td class="num" data-value="9415">9,415</td>
+          <td class="num" data-value="31383" style="color:#60a5fa;font-weight:600">31,383</td>
+          <td class="trend up" data-value="4.44">▲ +4.4% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,1.0 16.0,1.7 32.0,13.0 48.0,11.6" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="311016" style="color:#fbbf24;font-weight:600">311,016</td>
+          <td class="pct-cell" data-value="10.09">
+            <div class="bar-bg"><div class="bar" style="width:10.090563206687744%"></div></div>
+            <span>10.1%</span>
+          </td>
+        </tr>
+        <tr data-genre="Arena">
+          <td class="rank" data-value="15">#15</td>
+          <td class="game" data-value="1">Halo Infinite <span class="lifecycle-badge" style="color:#f87171;background:#3a1a1a">Sunset</span> <span class="sent-inline" style="color:#4ade80" title="Sentiment: positive">●</span></td>
+          <td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td>
+          <td class="num" data-value="3144">3,144</td>
+          <td class="num" data-value="26200" style="color:#60a5fa;font-weight:600">26,200</td>
+          <td class="trend up" data-value="2.24">▲ +2.2% <svg class="inline-spark" width="48" height="14" viewBox="0 0 48 14"><polyline points="0.0,7.4 16.0,1.0 32.0,13.0 48.0,10.9" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+          <td class="num" data-value="2138491" style="color:#fbbf24;font-weight:600">2,138,491</td>
+          <td class="pct-cell" data-value="1.23">
+            <div class="bar-bg"><div class="bar" style="width:1.2251625951313037%"></div></div>
+            <span>1.2%</span>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <div class="genre-rollup">
+    <h3>Genre Rollup</h3>
+    <table>
+      <thead><tr>
+        <th>Genre</th>
+        <th style="text-align:right">Combined Est. Daily Players</th>
+        <th style="text-align:center">MoM Trend</th>
+        <th>Dominant Title</th>
+        <th style="text-align:center"># Titles</th>
+      </tr></thead>
+      <tbody>
+<tr><td><span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span></td><td class="num" style="color:#60a5fa;font-weight:600">1,825,102</td><td class="trend flat" style="text-align:center">+0.3%</td><td>Counter-Strike 2</td><td style="text-align:center">2</td></tr>
+<tr><td><span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span></td><td class="num" style="color:#60a5fa;font-weight:600">1,566,791</td><td class="trend flat" style="text-align:center">+1.1%</td><td>PUBG: BATTLEGROUNDS</td><td style="text-align:center">2</td></tr>
+<tr><td><span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span></td><td class="num" style="color:#60a5fa;font-weight:600">898,914</td><td class="trend flat" style="text-align:center">-0.6%</td><td>Overwatch</td><td style="text-align:center">3</td></tr>
+<tr><td><span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span></td><td class="num" style="color:#60a5fa;font-weight:600">693,641</td><td class="trend flat" style="text-align:center">+0.7%</td><td>Arc Raiders</td><td style="text-align:center">2</td></tr>
+<tr><td><span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span></td><td class="num" style="color:#60a5fa;font-weight:600">484,187</td><td class="trend flat" style="text-align:center">-0.0%</td><td>Call of Duty</td><td style="text-align:center">2</td></tr>
+<tr><td><span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span></td><td class="num" style="color:#60a5fa;font-weight:600">90,341</td><td class="trend up" style="text-align:center">+2.2%</td><td>The Finals</td><td style="text-align:center">3</td></tr>
+<tr><td><span class="genre-badge" style="color:#f472b6;background:#3b0a2e">Looter</span></td><td class="num" style="color:#60a5fa;font-weight:600">33,831</td><td class="trend flat" style="text-align:center">+1.0%</td><td>Destiny 2</td><td style="text-align:center">1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="insights">
+    <h2>Key Insights</h2>
+    <ul>
+      <li><strong>Biggest populations:</strong> Counter-Strike 2, PUBG: BATTLEGROUNDS, Arc Raiders</li>
+      <li><strong>Biggest gainer:</strong> Halo: MCC (+4.4%)</li>
+      <li><strong>Biggest decline:</strong> Overwatch (-1.0%)</li>
+      <li><strong>Closest to all-time peak:</strong> Counter-Strike 2 (83.5%)</li>
+    </ul>
+  </div>
+
+  <h2 class="section-title">Game Details</h2>
+
+    <div class="card" data-genre="Tactical">
+      <div class="card-header">
+        <h3>Counter-Strike 2 <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span> <span class="trend-badge flat">▶ +0.0% MoM</span></h3>
+        
+        <div class="card-stats">
+          24h Peak: <strong>1,519,117</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong>1,519,117</strong> (100% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong>1,818,368</strong> <small style="color:#556b7d">(100% Steam)</small> (83.5% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,37.0 84.0,14.1 156.0,10.1 228.0,10.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,37.0 84.0,14.1 156.0,10.1 228.0,10.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="14.1" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="10.1" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="10.0" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="8" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">1.1M</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Counter-Strike 2 is holding steady (+0.0%, averaging 1.1M players over the last 30 days). Currently at 84% of all-time peak — near historical highs.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (4 articles from gaming press in the past week).</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Counter-Strike 2 is holding steady (+1.4%, averaging 1.1M players over the last 30 days). Currently at 86% of all-time peak — near historical highs. Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806706141" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Feb 25, 2026 <span class="badge patch">PATCH</span><div class="news-preview">Added Instance. SetSaveDataAdded Instance. GetSaveDataWorkshop maps can write up to 1MB of save data.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633195926" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Feb 23, 2026 <span class="badge patch">PATCH</span><div class="news-preview">Mitigated a performance issue that primarily affected Windows 10 users with recent Intel CPUs. Fixed a case where the Delete Item inventory option wasn&#x27;t working. Fixed a case of visual corruption using iron sights on AMD GPUs.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466506792" target="_blank" class="item-link">Counter-Strike 2 Update</a> — Feb 09, 2026 <span class="badge patch">PATCH</span><div class="news-preview">Localization code and text changes.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxPT0FYanNYQll0UlJ6MkNIUE8xV2NNdWt3Q24tV1JYZlBxV3JZUDZJRS02bmt1SXlPLUV6UUhpbzlNY2lETXVROWRoZEkzZnNjb09fY1dfNTRVTFJIbjgtaG1qX1FNZEtEcDhWS2ZuRktjMko1U1ZPak1NQ1p0VlFROXVmeXdMNmQ0YXBoTlotcTY?oc=5" target="_blank" class="item-link">G2 Esports VS Legacy: 02.03.2026 at 18:00. Counter-Strike (CS2) ➥ Betting T</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 01, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTE9XbVp0c2d4SFBGRnFlNWVzWHRpLWtqRTJyR0V4cVNXZzVaWXBCbXFoZzB1cm5ibjBiY1RSQjNPSjlhZ3FyX1JfNGg0NHNJOUhTSTRsZGRPWQ?oc=5" target="_blank" class="item-link">These are the best Counter-Strike 2 Settings - Team Liquid</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxPYmhWVE1WeVRFT2lVdTN5MWRXZTJ3c09fdFNuUkFNTzhiaHk0dFN0bHpJM01jT1BOeGFZTTJuU2lnX0tWNmFIelRNRG95LXl0a2ljQ0p5RkxYUkJsMVFtNWlIY2poZFkxdUFfc29mOFF3MjU1V3Vrdjc0M3dMN3NMS1JmUEhCOHBkTi1xNDZJazdWREE1RFc0Qk9vdm9ncHR2MFlORDBVdU5rdw?oc=5" target="_blank" class="item-link">ESL FACEIT Group Renews ZOWIE Partnership for Counter-Strike 2 Events - The</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 26, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxQT0dVRDF0SjhSSFhfWDZKV1NZcVB5MUtobk9RWDNsZlJ2WEpJczZSQk9sbjFVSjY4UGkyUVJzdEo2b3ZSSGUtUXRuVW5WdktTemRndjNPTVFqZWU3WG01NFJkajFYNV9KTnZPNm53Q2lzZlRyb2RSaHNpdWdCaXBKOElQVXdjSEpU?oc=5" target="_blank" class="item-link">&#x27;Counter-Strike 2&#x27; update wipes $2 billion in real money from game&#x27;s econom</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 24, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Battle Royale">
+      <div class="card-header">
+        <h3>PUBG: BATTLEGROUNDS <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span> <span class="trend-badge flat">▶ +1.5% MoM</span></h3>
+        
+        <div class="card-stats">
+          24h Peak: <strong>666,099</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">832,623</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (80%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (80% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">4,045,033</strong> <small style="color:#556b7d">(est. all platforms)</small> (20.6% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,22.8 84.0,10.0 156.0,37.0 228.0,32.3 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,22.8 84.0,10.0 156.0,37.0 228.0,32.3" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="22.8" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="32.3" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="26.299999999999997" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">271K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> PUBG: BATTLEGROUNDS is holding steady (+1.5%, averaging 271K players over the last 30 days), accelerating vs. last run.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> PUBG: BATTLEGROUNDS is declining (-7.4% MoM, averaging 269K players over the last 30 days). Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Continued decline from last period — watch for content response.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806703875" target="_blank" class="item-link">PUBG: BATTLEGROUNDS Weekly Bans Notice (02/09~02/22)</a> — Feb 25, 2026<div class="news-preview">Read the full announcement here!</div></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522838459" target="_blank" class="item-link">[Dev Letter] Anti-Cheat Action Plan Based on Community Feedback</a> — Feb 13, 2026<div class="news-preview">Read the full announcement here!</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501602811" target="_blank" class="item-link">PUBG: BATTLEGROUNDS Weekly Bans Notice (02/02~02/08)</a> — Feb 11, 2026<div class="news-preview">Read the full announcement here!</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiSEFVX3lxTFBQN2xaZXdGUXFLTWtZUHk0UW4wQm9oQUdYRUpFdHhaZGJxNUhuakN1UmNFQkszTWxSR1YyRzl3c3FBZEpfbUl4Rw?oc=5" target="_blank" class="item-link">PUBG: BATTLEGROUNDS Weekly Bans Notice (02/09~02/22) - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 25, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTE9hZGpUaXhxVkRIblB5U1czU1dmY2kteXNKazFwejJvdnBvYnpfYng5cFp0UEdDR29XWUwzZU1TZkxGc28?oc=5" target="_blank" class="item-link">[Dev Letter] Anti-Cheat Action Plan Based on Community Feedback - PUBG: BAT</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 10, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTE51dEppUFpEQmxmYU9DWENiWGRVcXpKaDQ1X1ZkNlo5TlhyQTB6RUNjNVNlNGlwazlzNnNtbk0zX2VQb2s?oc=5" target="_blank" class="item-link">Patch Notes - Update 40.1 - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiQ0FVX3lxTFBhZm9FRnVfYlJHYk9GSmRGejBVZENUbGd2R19YMmg5SVd5SFQ1Z0dxZGpiVVdjd3RyWkhPS05qWVAtQlE?oc=5" target="_blank" class="item-link">Patch Notes - Update 39.2 - PUBG: BATTLEGROUNDS</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 05, 2026</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Extraction">
+      <div class="card-header">
+        <h3>Arc Raiders <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span> <span class="trend-badge flat">▶ +0.8% MoM</span></h3>
+        <div class="event-annotation">-18.6% ← Post-launch decay. Second Expedition season announced Mar 1.</div>
+        <div class="card-stats">
+          24h Peak: <strong>235,773</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">471,546</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (50%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (50% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">930,194</strong> <small style="color:#556b7d">(est. all platforms)</small> (50.7% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,14.6 84.0,10.0 156.0,37.0 228.0,36.5 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,14.6 84.0,10.0 156.0,37.0 228.0,36.5" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="14.6" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="36.5" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="30.5" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">172K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Arc Raiders is holding steady (+0.8%, averaging 172K players over the last 30 days), accelerating vs. last run.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Dev activity: 37+ bug fixes deployed.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Arc Raiders is dropping sharply (-21.3% MoM, averaging 190K players over the last 30 days). Sharp decline from elevated levels — likely post-launch or post-season normalization as initial hype fades. This is a typical pattern. Dev activity: 31+ bug fixes deployed. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Continued decline from last period — watch for content response.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633197017" target="_blank" class="item-link">SHROUDED SKY - Patch Notes 1.17.0</a> — Feb 24, 2026<div class="news-preview">Attention Raiders! Violent hurricanes are sweeping topside, forcing new strategies for low-visibility combat, powerful gales, and hurtling debris.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633194772" target="_blank" class="item-link">Headwinds January Update Feedback Survey</a> — Feb 23, 2026<div class="news-preview">We want to hear your feedback about the Headwinds January Update. Please take a few minutes to share your thoughts about: ExpeditionSolo vs SquadsQuestsShared Watch EventTrophy Display ProjectAnd general feedback and ideas for future updates.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497248" target="_blank" class="item-link">Preparing for your Second Expedition</a> — Feb 05, 2026<div class="news-preview">It will soon be time to open up the tunnels out of Speranza and send our second wave of ambitious Raiders to new adventures beyond the Rust Belt. Raiders can sign up from February 25th and the departure will take place on March 1st.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiogFBVV95cUxOcFRHZEFmS0hJb1RrSGNCbWdLWTRyY1phaEF1X0tPY252VHpXZzNuYmVseExrODVSS0xCcjk3MjBCWUVtRi1wWFdrYTFodGd2MWJ0b1V4UGVYVGZsYnVFbmgwcjgzOW9RVnoweUxsdElUUWdtVkR1WE8yZlZjVjdwYXU2QkhKNGs5MXRqSkVMNXMwd19zWml6SHJDYlY4bHI5X3c?oc=5" target="_blank" class="item-link">Is Marathon&#x27;s time-to-kill too fast, or am I too Arc Raiders-pilled? - PC G</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxQdmtKWUVvcmxhSVgxU2RMZVdfR3gtcGRlQlZQTGYzR2tzOEtmWmV3MS1LcGU1Ynp1SDNfbGlzbkk3Y0N5Z1JZNkk3VS1QeVVVWXNQY2Y1dEJPeVFYWGE1RmYtNEltUXBOTW1ZTWt4bk9EMTNLdDhmNV9JYmlNZ2xyVE9hTWhabXctSTJFcmRCNElLa3RuRnBGQmZ6TWlMc0RiQXo1YkY3bmdsOFU?oc=5" target="_blank" class="item-link">Marathon Beta Censored &quot;Arc Raiders&quot; In Chat For A Brief Time - GameSpot</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMimwJBVV95cUxNay1McV9FcGhHaWFCMnNPOGNlWURUSWZpYmN2TlhyXzlRdnRNNlR1QkY1Z1lLRXhqWmlJYkpGbkNOV2ctdkZfNVl5dGlKYldzMUlsZ0hRUlZKb3hjTm9lOG1Cbmlkd1RPdndEY0w4M29Gd0hILW50ZFZYa3N6VWI3Z3JySzlKNmdFeHE3bm0zdGhlXy1pWGh4OXdtQVNTbkZnazZEaEVQQmk3UWdPTmtvdEhDUTVhSF85OFdhN05tcVVydTVzZWZ2NlRrSExSUDJRazJiOXBna25fM0lUVVFvLXdzZzZHSXZwQmRKcXo3RHhRRFdiTzRCdllIaEl0VW9sd2tnWTFJXzJNNjRLblpxZGRhRmYwdEdCSnJr?oc=5" target="_blank" class="item-link">Embark has no hard feelings about Arc Raiders briefly being censored in Bun</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMia0FVX3lxTE5YZkJxV1o3dzEyVFctZFBoOWtmLXlzWm5SRnZrNmhNVm9ubWc1bXZzWkFRQ2dTNTFnTFQ4cndqdVdKLW1nRXRjSFJJX2o3SHBaWVctV3FNdWRxZmpXQXNUS0h1RHNQWlY2UFdn?oc=5" target="_blank" class="item-link">Shrouded Sky - Patch Notes 1.17.0 - ARC Raiders</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 24, 2026</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Battle Royale">
+      <div class="card-header">
+        <h3>Apex Legends <span class="lifecycle-badge" style="color:#fbbf24;background:#3a3520">Maintenance</span> <span class="genre-badge" style="color:#fbbf24;background:#3b2f0a">BR</span> <span class="trend-badge flat">▶ +0.7% MoM</span></h3>
+        
+        <div class="card-stats">
+          24h Peak: <strong>183,542</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">734,168</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (25%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (25% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">2,497,892</strong> <small style="color:#556b7d">(est. all platforms)</small> (29.4% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,37.0 84.0,17.8 156.0,11.6 228.0,10.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,37.0 84.0,17.8 156.0,11.6 228.0,10.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="17.8" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="11.6" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="10.0" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="8" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">90K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Apex Legends is holding steady (+0.7%, averaging 90K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Apex Legends is holding steady (+1.5%, averaging 88K players over the last 30 days). Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively. Looking ahead: The update to Ranked lobbies hybridizing Dropship and Drop Zones is now live.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806708416" target="_blank" class="item-link">Apex Legends: Game Stability Update - 2/26/2026</a> — Feb 26, 2026<div class="news-preview">With the launch of Season 28, our team made changes that resulted in a significantly more stable, performant Apex Legends experience for our community - specifically, in instances where players would encounter FPS drops or their match would feel like it was running in slow mot...</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806705527" target="_blank" class="item-link">An Update from the Anti Cheat Team - 02/25/2026</a> — Feb 25, 2026<div class="news-preview">Valkyrie “Wallhack” Exploit
+ We recently resolved an exploit involving Valkyrie’s Ultimate ability that allowed players to improperly retain enemy highlight information outside of its intended activation window.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633196041" target="_blank" class="item-link">Apex Legends: Latest Update 2/23/26</a> — Feb 24, 2026 <span class="badge patch">PATCH</span><div class="news-preview">Recently, looking at Valkyrie, we saw that Octane&#x27;s rework naturally brought her back down to earth, with little nerfing of Valkyrie required.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQaUtNWndTUEYxLUFmTGNPV2VfTkh2YmE2MWZySmVmeE5YbHNRMWhGLUhMQzVZTXRhaWg3c1RYVTNoTVBaM3ViZ3RjLWYyYzUxa0JBa0VTblI0TnJXVlcwQmpoRlhyWVVCOHFycFBSS2ZoV1BRQ1lpb1hJakVNYUh1N1BlZ056Wm1WTU92eWRhWVFYYlpBM2RJQnpsVDR0S3c3VmZuY2VtclMtZ0l6bnfSAbMBQVVfeXFMTUpFVTJZamdqV2EzN1hfQXdtS1hHMU5VZmlsZTFFaHpXX1IzU1BBRWpqaG85UWY3YW40VTRlZTZ5UERBYXhYdWwtbXBOVjJNUHNVOWwwYTBpTlVqckVsMURmdDdEZXVNU2N5RmFxVHVrRkxQNUV6dFhNT0psNzdzcTNjYXRxNU9uaXFhNkFCSUV1TWZqb2V0VFNDODgzQ1g4bkF3M0VIZE55bVpvOGNTUDhjem8?oc=5" target="_blank" class="item-link">Highguard Leadership Nixed External Playtests for Apex Legends-Style Shadow</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMikwJBVV95cUxOTWFKTGgwMjBYaktCMFZwX1FMQTRNdjNfRTI2SDE1UUxLbnBOYVR0MmQ3QUl3Q2dTdXlFRDJqUmJKVjZfUUxfMVlBRzFocUFRVEx6T09NOXdXeWN6SDRVT0VoUExvU1B0RnlrZ1ZuWW15Yi1wUUNDSVV5WkFybm9WX2xyWkwxQzBHeWdyQmVTeVJYOGtsMm9JcU4xM3NKVi1mY1RZVU5Uel9BV3R4dEl6SFVsUmR5ODVBWUp0WDF0bWxFTjkxRzNuWEJVRzg3SFdYYzNPb2swaUNiUXVRUEUtTkRpSWI0V2VOM3BIay1wdXVsRHljMHJ4VDRnNm9RREIzUXhpT1Rvd0tma0M4SzNyS2QxUQ?oc=5" target="_blank" class="item-link">Ex Highguard developers blame &quot;hubris&quot; for the game&#x27;s failure in new report</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxPUEFQa3RoVndIWVFKUlRuLUo1aHotcnBwSEFaMGxGTWF4dUhVNWcwMzBOdUhwUHU5eUVPcTgtS093SktyU3pSajlKYnpMMEczVWtSS0djUDFGdzBHOVhlUGdqbE9yb0w1Y3paNGd6dW5vTG1xUUk4d1FHLWliUnhpY1c4V3lKMWtSZi12MnY2RjdURWI3bzUwS0hRQ1gtN184ZUpFNENlQTBfcnhnQ1pKMFhZanZhMVnSAbwBQVVfeXFMTzhjN01UNG9WSGRRdkVHbW8xRXlaVFFVbk5ibHVOMGJDQVFkOTB4alBEdVp1TThwejI1RHA3Zm0wSXl4d0pzcGo2QUFUWEpBLVMtN24xVUdOS0w2UUpuTVUxb25jMHNZR3JSX1RZRUY4WC1DckwwTnJyRHRVT2lOQzltcTctM3JyNEJMamhONFVfTFB6Y25adUtqNTF6ZmlTWXZSUkR0SXpEcTUzV1lpSThtVjcxbWpzelJZWGk?oc=5" target="_blank" class="item-link">Laid Off Highguard Devs Chalk Up Game’s Failure to Leadership’s “Hubris,” B</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 26, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMid0FVX3lxTE95T2NoNFA1NWNaU1pJM2xTRGNJVktzWFA2YkpOS3A5X2dzX3g4UXdZbGhFQUZLWWtZamh5b0p2REpXODlxcmJHS1JpQnkyUkxrVDctWHI2NnR3Q25XQldrazcxb1hNZmlCNmZqSDg3NXB1NzJ5emNN?oc=5" target="_blank" class="item-link">Apex Legends: The Road Ahead - Electronic Arts Home Page</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 12, 2026</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Extraction">
+      <div class="card-header">
+        <h3>Delta Force <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#fb923c;background:#3b1f0a">Extract</span> <span class="trend-badge flat">▶ +0.6% MoM</span></h3>
+        <div class="event-annotation">+14.0% ← RED DAY event + Season Morphosis live</div>
+        <div class="card-stats">
+          24h Peak: <strong>155,467</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">222,095</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (70%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (70% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">352,025</strong> <small style="color:#556b7d">(est. all platforms)</small> (63.1% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,29.9 84.0,37.0 156.0,10.8 228.0,10.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,29.9 84.0,37.0 156.0,10.8 228.0,10.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="29.9" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="10.8" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="10.0" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="8" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">81K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Delta Force is holding steady (+0.6%, averaging 81K players over the last 30 days), decelerating vs. last run.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Outlook:</span> Looking ahead: The main highlights of this update include:
+
+RED DAY Event
+ Vyron&#x27;s New Year Restaurant
+
+Event Time: 2/13–3/5
+Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ultimate appearance Cosmic Guardian is now available. Operators, it&#x27;s time to chase the dreams beyond the stars.</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Delta Force is surging (+18.2% MoM, averaging 78K players over the last 30 days). Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity:  launched recently. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: The main highlights of this update include:
+
+RED DAY Event
+● Vyron&#x27;s New Year Restaurant
+
+Event Time: 2/13–3/5
+Details: Take a break from the gunfire and chaos of Ahsarah. | Vyron&#x27;s ultimate appearance Cosmic Guardian is now available.Operators, it&#x27;s time to chase the dreams beyond the stars. Sustained growth trajectory.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806717012" target="_blank" class="item-link">G. T. I. Security | Notice of penalties for violations</a> — Mar 02, 2026<div class="news-preview">Hello Operators, 
+The Delta Force security team is committed to maintaining a fair gaming experience,and will impose appropriate restrictions on those found to be cheating or in breach of our terms of service.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806707323" target="_blank" class="item-link">Update | New Year Koi Fortune, Spring Steed Appearance Lucky Draw</a> — Feb 26, 2026<div class="news-preview">Dear Operators,
+
+We&#x27;re planning an update on February 26. There will be no downtime, and gameplay and matchmaking will not be affected during the update. If you encounter any issues after the update, try restarting the game to complete the update.</div></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806704226" target="_blank" class="item-link">G. T. I. Security | Notice of penalties for violations</a> — Feb 25, 2026<div class="news-preview">Hello Operators, 
+The Delta Force security team is committed to maintaining a fair gaming experience,and will impose appropriate restrictions on those found to be cheating or in breach of our terms of service.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMifkFVX3lxTE5WSk13cl9UR2ROcWZ5M1l6M2ZuZUhDU25ZRndXdjEtZlpyYlVWMFNpRklmMnQ2ZmVJLVJRdGJtNTV5Q3lEdzZmSWdSNnR4SDVLem90MkdWY2NYc1h6RU9MaE1YVFM1OENnOVpWMFRGYW5KUllDQXZSUEZPTlBwdw?oc=5" target="_blank" class="item-link">The Nightmare Returns in the Cloud: GeForce NOW Unleashes Capcom’s ‘Residen</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 26, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE9NUGlLLUhuOUNSVTR5LXVRRm9Ia2V4RjNTSmE2ek1QQmpad1VSQ1RmVnJnQi0wSno3MlVSSlBjR0Q2Q3JfMjlQd0I0S1ZnUFJuRERUM0l2VFdyaHF0TmhET0NOT1REc3NxUDk2YUJIOWVfcjdYNnc?oc=5" target="_blank" class="item-link">Become the Boss (Literally!) in Delta Force’s New Extraction Update - Xbox</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 03, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSFRnbjVpZXBiTU9KNk9mVTMtSm1XcGdqVnZvam5HQ29oQUpYSU5XSVp6MVBSOFRRVTRYdVVLM3p6RnBLXy1YSjhJeTBIY3BTU1lTWk44NmsxdFhWLXNtc1dsV25GYUNRR0FPMHRQR0RSRHk0Z3I2SmRqUnh3UzNhd0FoM1h6d3Va0gGWAUFVX3lxTE1qMWs5YXU5R1RucTVvcUhteXN1bDFUVGNKdnY1cUFMU01wbGRfd082VkFhaUFtaGhLQlpnTE5SZmZ1YzV3MEpPVTBCb29ieUJRbDYtZGtVNTZYSHktZ2RqOXVHTEFjVEdiSlc4RkhtaHNiOUs1T2U1QmdsZzh6NThNdXRNOXNaVlh5RWNfSlFRVFN5czlFQQ?oc=5" target="_blank" class="item-link">New Delta Force season release date revealed with a new Operator, weapons,</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 26, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxNVVFIeHhUY19iTzVob1BWZXAtQktrTkpYWnpTX1Vsb2d6NzBHQXRLNW9YU1RYODhsSEFVT3lkdUVSRFdpenpwemJFemp1bjZuTGJoMVh6cFNaeEZlNndYUlhEdDkyaU5SWnBGQkRuc3pOQXd2ZGY2T1ZzbEhXa2tDWVQzdjJPSi1jVHRiejBHaklmeXhUSEc2U0FnZXZGNWdR?oc=5" target="_blank" class="item-link">Metal Gear Solid’s Naked Snake hits Delta Force on January 1 - Epic Games</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 08, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Hero Shooter">
+      <div class="card-header">
+        <h3>Overwatch <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span> <span class="trend-badge flat">▶ -1.0% MoM</span></h3>
+        <div class="event-annotation">+76.4% ← Loverwatch event + OWCS S2 kickoff + sub-role passives patch</div>
+        <div class="card-stats">
+          24h Peak: <strong>112,793</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">563,965</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (20%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (20% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">823,180</strong> <small style="color:#556b7d">(est. all platforms)</small> (68.5% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,36.1 84.0,37.0 156.0,10.0 228.0,10.4 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,36.1 84.0,37.0 156.0,10.0 228.0,10.4" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="36.1" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="10.4" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="8" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">71K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Overwatch is holding steady (-1.0%, averaging 71K players over the last 30 days), decelerating vs. last run.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Overwatch is surging (+109.4% MoM, averaging 59K players over the last 30 days). Currently at 82% of all-time peak — near historical highs. Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity:  launched recently. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633186579" target="_blank" class="item-link">Double XP Weekend, Thanks for Playing Week 1!</a> — Feb 20, 2026<div class="news-preview">Double XP Weekend! Thanks for Playing Week 1! Your plays helped drive a huge Season 1 launch—and the momentum is still building.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633179699" target="_blank" class="item-link">Roles Refined</a> — Feb 17, 2026<div class="news-preview">Subrole PassivesCore gameplay gets refined with sub-role passives designed to reinforce your Hero identity.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522840405" target="_blank" class="item-link">Loverwatch</a> — Feb 13, 2026<div class="news-preview">Play through the web event on desktop or mobile, spend time with iconic Heroes, uncover inside jokes and easter eggs, and earn sweet returning rewards along the way.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE1rbkFvSWR6T09QTmd6cWExTUUxSmVsS044Ny0xdTJtaVJqR3FfRGsxQUVpR25NM09VdFg4aXVxZXJUV09OMHVOeEhtcUpwRF9GTG5Kbm5VMVNsZGp3aVBGM3dqeEE0R0s4U3c?oc=5" target="_blank" class="item-link">Don&#x27;t Forget About These Underrated Overwatch Heroes - GameRant</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 01, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxNZ0ZXVF9XQ25FV1lvX2RDQnhQaGhVYm5Ra1prX3BtaWQ0UFZCNG8xMnpCZ3pYaHZfOXpLTTF4VWU5MUdRWEZVTEV0VjJTTzhDZ2tBLVYxUG42bElwNTRINWhubnA4dWt0VGhrTi1td2RTUmdnbDFFdWF6Q19PRkViQjJhaHV5b3ktQ0dvdEN4cmHSAZYBQVVfeXFMT1NKb0k3SkNfekdscHVOQ0NFYWR4TDQtQkQ0OVBMZnl5eUQyMjJ1WWlMSGRfbDc3OFFuUUZvWW9RYjF1TTR4cVhBZGZuNDRicmdraC1QamFPQnpxY3ZXNWttQ0Z2TEVqVFl4cGQyUWFobjJtdTVfNEk4QVRCU1dEcG5FTUpJWHBmRENIelc1WEh1NUFTRmtB?oc=5" target="_blank" class="item-link">Overwatch Rush Is Blizzard’s New Mobile Game - Press Start Australia</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 01, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOOW96dW1wM0VJT1NJY0NLQ044RE5FczZGbVhwSW12a1JNUUcxSHlkV1lhdlNMWU13TGRSRXVqRjVJam9SNnRmdjg0TTk5UUJCQ19EZXh1TzRpb3J6Z3JLRmpESzNza25jZ0JlRTY5TjlHRXhwbmtzM0xCQXdNSzU4S1NhaGVjdkY4cmNibzNhbUhvaXFPbDJjYXM4YmtTRFkwa2RJOU1aRHl1T1djdUoxQjJoUnROQQ?oc=5" target="_blank" class="item-link">Overwatch’s New Game Reminds Me Why It’s Hard To Stay Invested In Hero Shoo</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 01, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiiAJBVV95cUxPcGN6YklvanV1MElIX3RKdEItUS0zNFViM3pMbzJzNzQyei1HaGowU19fckJqVXpBN0tZbzNjUzRNRHE5czhqWTE0bmlQdkpBaXZpTmVCTlBaV2dOSTVDc3g1bzdSNWhMOGxDbnY0R2x6b1dDNk1XOTBCdTJxMmN6ODNMaEx2V2VJd0gyRmlUVFNxTjYydnVzVXVmQ2tvcnUyQlBFaHNmNV9QWnhQNmlDTi04S2xRYlNnc0V3WjZhdDZjN1lnU05sektiREpFNnlndkVMektPU0N5ZmVQXy1lalltQkp6dTc0UXUwYlpMaXJuUGJfdVpMR18tQml3OExqTHh3VVdCWkQ?oc=5" target="_blank" class="item-link">The only thing more impressive than the speed in which I bought the Overwat</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 01, 2026</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Tactical">
+      <div class="card-header">
+        <h3>Rainbow Six Siege <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#38bdf8;background:#0c2d48">Tactical</span> <span class="trend-badge flat">▶ +1.4% MoM</span></h3>
+        
+        <div class="card-stats">
+          24h Peak: <strong>107,095</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">305,985</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (35%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (35% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">572,788</strong> <small style="color:#556b7d">(est. all platforms)</small> (53.4% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,37.0 84.0,24.6 156.0,11.3 228.0,10.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,37.0 84.0,24.6 156.0,11.3 228.0,10.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="24.6" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="11.3" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="10.0" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="8" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">55K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Rainbow Six Siege is holding steady (+1.4%, averaging 55K players over the last 30 days), decelerating vs. last run.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Rainbow Six Siege is surging (+11.2% MoM, averaging 52K players over the last 30 days). Surge likely driven by new season launch. Fresh content typically triggers a player spike in the first 2-4 weeks. Dev activity:  launched recently. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633182063" target="_blank" class="item-link">Y11S1 DESIGNER&#x27;S NOTES</a> — Feb 18, 2026<div class="news-preview">Y11S1 Designer’s NotesIn this latest edition of Designer&#x27;s Notes, we&#x27;ll go into detail about the balancing changes that&#x27;ll come with the Y11S1 update and give you some insight into the reasons behind them.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522844922" target="_blank" class="item-link">Solid Snake joins Rainbow!</a> — Feb 16, 2026<div class="news-preview">KEPT YOU WAITING, HUH? A legend joins Siege as Operation Silent Hunt begins. A man shrouded in mystery, the new Operator is none other than Solid Snake.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198606153" target="_blank" class="item-link">PLAYER PROTECTION IN YEAR 11</a> — Jan 30, 2026<div class="news-preview">In Year 11, the Siege team is delivering important changes across our account security, anti-cheat, and anti-toxicity systems.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxQTjh2T2dLS0xKYm43enI3ZGt1ckpia3JoYVlXbEcxQzduM0xkdHZDN1lndjViUW01YzNYb2ZheElLcFo2WktfQWFjd0taYXYwNlpucGh3OTRVMDNWMnU0dkhKcnhKYkVkR0VjbU1OTTdMcHc0SUpua3RkTlpVWDRHcnhudXdmalZzTkxSejVZYVp2V1JKczFRejVfZWFfRHBNUzZHSEw2ZDFDRFdvcE54bVdZdi1heDJIVUQ3Sl9CNDA3UQ?oc=5" target="_blank" class="item-link">Rainbow Six Mobile Now Available to Play for Free Worldwide on iOS and Andr</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxQSnBoREZDUnNKeEdMRERUOGI4ajdYM0xuR2xVVXVkdDk0UVlPV1lmYnFPRWFWazJmUmVQQlBZLWNSOHRJVTROOVFoaWdsNTZXaEtrcS1WYkpTYUJZWFM2VmNULUUxaWNxdzdNbmxLWGZaX1V1MlZWeVV3d2VaRlNPSmE1SGRhRDdXVnBGN1Fjai1iMkdSWHBhbllOYmFlMm5UVlh4UTFNd05DUzBtODY0SWphV2VJN1JkN3hwcjhiOFg5Wk9YT1E?oc=5" target="_blank" class="item-link">Rainbow Six Siege X release new time-limited game mode Wildcards Siege to c</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 22, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMia0FVX3lxTFBENkFUcFc4NWlSR2VUR240cXAwNjJsd01hUHZ5MmgtYTBpZGVDOVJKR0ctRmIyZ2lfZXBXeEVVMi04OVBxUVNJbnlKeURUemxrWU5ZS2VqaUl6TU1jaVYxNTR5UUxzWmJyTUxR?oc=5" target="_blank" class="item-link">1V1 NOW by Xbox Game Pass: The 1st Official 1v1 Competition in Rainbow Six</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 13, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQQk1mQmI4TmpwVGN2bUt5b2p2cHJLeFVSVGRmVWlzR3pQVkRFd3JzZWZfWkZFUktTTm1uYUlpLVVKcXdacXNWai1sWnpvQm9ocWI4WUpMbVhOeWlkN1VfSlNYcjZQTnVMLV9TQl9mYVVsUjhVYlVoUFdNQnN4b0VKQg?oc=5" target="_blank" class="item-link">Rainbow Six Siege Devs Reflect on 10 Years and the Game’s Future - Comics G</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 15, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Hero Shooter">
+      <div class="card-header">
+        <h3>Marvel Rivals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span> <span class="trend-badge flat">▶ +0.1% MoM</span></h3>
+        
+        <div class="card-stats">
+          24h Peak: <strong>95,735</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">273,528</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (35%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (35% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">1,835,237</strong> <small style="color:#556b7d">(est. all platforms)</small> (14.9% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,37.0 84.0,10.0 156.0,25.1 228.0,24.9 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,37.0 84.0,10.0 156.0,25.1 228.0,24.9" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="25.1" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="24.9" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="18.9" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">81K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Marvel Rivals is holding steady (+0.1%, averaging 81K players over the last 30 days). At just 15% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 6.5 launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">Outlook:</span> Looking ahead: Here&#x27;s what&#x27;s coming your way: All-New ContentNew Events —— Faulty Dream &amp; Twisted NightmareThis week will see the launch of two brand new events: 
+Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a fresh face, festive events, and legendary loot! The update begins on February 13th, 2026, at 09 : 00 : 00 (UTC), with estimated mainte...</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Marvel Rivals is holding steady (+1.2%, averaging 90K players over the last 30 days). Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 6.5 launched recently. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: Here&#x27;s what&#x27;s coming your way: All-New ContentNew Events —— Faulty Dream &amp; Twisted NightmareThis week will see the launch of two brand new events: 
+Complete the Faulty Dream eve... | Marvel Rivals enters its S6.5 season with a fresh face, festive events, and legendary loot!The update begins on February 13th, 2026, at 09 : 00 : 00 (UTC), with estimated mainte...</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633184133" target="_blank" class="item-link">Marvel Rivals Version 20260219 Patch Notes</a> — Feb 19, 2026<div class="news-preview">Greetings, Rivals! We&#x27;re thrilled to announce the upcoming patch drops on February 19th, 2026, at 09 : 00 : 00 (UTC)! No server downtime; just patch and play!</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522838199" target="_blank" class="item-link">Marvel Rivals Version 20260213 Patch Notes: Season 6.5 Arrives</a> — Feb 13, 2026<div class="news-preview">Greetings, Rivals! After teaming up to defeat the Brood Queen, Elsa Bloodstone and Deadpool have finally buried the hatchet, while Gambit and Rogue made it back to Krakoa to finish their dream wedding ceremony.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501603127" target="_blank" class="item-link">Marvel Rivals: What&#x27;s new in Season 6.5 // Dev Vision Vol. 14</a> — Feb 11, 2026<div class="news-preview">Deadpool&#x27;s not done being in the spotlight just yet, he&#x27;s here to host a brand-new competition on February 21 - 22: the Monster Kingdom Championship! 🎉</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxOZm9wN285TkswLUI0WmZlMlRma2xDZ3p1cFZuM2lvOXB3endNWWV1eWowYXBjZ1BHM3puNXEtalNpekZsejUwZXdCWnVJQ2FtMFNkVmJhUnpEaGhURjdpaEMzS2ZGYzNoaEpiM2JGNDloY2R0Q0tmdENvY1M5a0QtSFVicVlkU3NoSUE1SlBvT0NsMGN3YklJaTFB?oc=5" target="_blank" class="item-link">Marvel Rivals Leaked Characters List: All Potential Upcoming Heroes (2026)</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTFA4OVhwX2xKZktTbDlZa0FpTkpHbGZlYmlLUmxOWVlsX2gyWURVNnNQTTBIbW8zdUZIdGpieDIxY1dGY2lyV0NtS2oxOXpkSWl2cFUxUzhSMFE4Z1RxcUxOOUphVHlqV3c?oc=5" target="_blank" class="item-link">With Marvel Rivals in Its Worst State, It’s Time NetEase Games Addressed th</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMib0FVX3lxTFBiU2c3cUExcDBzaExrUjd0S05tM1NlU1pUQldTdnpic2N1bUs0bkFOUjFSVXA0R192ajUtMWFsOFU5a0Fnczl6X2p1WFNHZFMybWxzanlDYWR0cENxTWh1WTVqeXhBZUdTVExKYWpocw?oc=5" target="_blank" class="item-link">New website pays players to grief Marvel Rivals cheaters, but it&#x27;s just mak</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 26, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi0wFBVV95cUxNUUQ1dlNMRWlLYjRlelczSHJQLS1RTXhKM1F2M2ZJQlFKbXhlYmZOZk4zdUxyanR2YmF6bkFCVmxjN1R2TnNOZDRVNFEtRmprNzV2S05tT2JQT1VGQUV3LWtESUpIM3dfR1lGSGVZanMyT0FjemdEcUNwMVlnY1l3Z1laRkh0QmhITGJnUnJtZUp2N05PWExVemRNTFpXRm9yaTRnNERQV3MxSXdheXBhcGFfbVM1cHhaMFZJaHMwQkNVa1lUSHJjc0NSWnZiS1gzTWtj?oc=5" target="_blank" class="item-link">&#x27;Get Paid to Throw&#x27; — Unofficial Marvel Rivals Bounty Website Faces Backlas</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 26, 2026</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Large-Scale">
+      <div class="card-header">
+        <h3>Battlefield 6 <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span> <span class="trend-badge flat">▶ +0.5% MoM</span></h3>
+        <div class="event-annotation">-22.6% ← Season 2 launched Feb 17 but failing to retain</div>
+        <div class="card-stats">
+          24h Peak: <strong>72,531</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">131,874</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (55%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (55% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">1,192,849</strong> <small style="color:#556b7d">(est. all platforms)</small> (11.1% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,10.0 84.0,30.0 156.0,37.0 228.0,36.9 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,10.0 84.0,30.0 156.0,37.0 228.0,36.9" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="30.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="36.9" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="30.9" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">45K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Battlefield 6 is holding steady (+0.5%, averaging 45K players over the last 30 days), accelerating vs. last run. At just 11% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 2 launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Battlefield 6 is dropping sharply (-19.1% MoM, averaging 46K players over the last 30 days). At just 15% of all-time peak — well below historical levels. Declining sharply despite new season content — may indicate content quality concerns or post-launch player churn exceeding new player acquisition. Dev activity: Season 2 launched recently. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: Season 2 begins February 17th with Game Update 1.2.1.0, introducing a new map, limited-time modes, the Little Bird helicopter, weapons, gadgets, and progression to Battlefield 6. Continued decline from last period — watch for content response.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806712315" target="_blank" class="item-link">Battlefield 6 - Anticheat Metrics - January</a> — Feb 28, 2026<div class="news-preview">Hey Soldier,
+We saw ongoing discussion on how match infection rate (MIR) could be effectively calculated when cheaters and cheat developers aim to avoid detection. While we can’t share every detail, we can explain the fundamentals of its design.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806711225" target="_blank" class="item-link">BATTLEFIELD 6 GAME UPDATE 1.2.1.5</a> — Feb 27, 2026<div class="news-preview">Game update 1.2.1.5 focuses on quality-of-life improvements, stability fixes, and resolving several issues across gameplay, UI, Battle Pass, and Battle Royale.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633182662" target="_blank" class="item-link">Year of the Horse in Battlefield 6 | REDSEC</a> — Feb 18, 2026<div class="news-preview">Bring the fireworks – and firepower – to the battlefield during the Year of the Horse
+
+CHALLENGES &amp; REWARDS
+
+Show off your horsepower and earn rewards by completing 7 new challenges.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://news.google.com/rss/articles/CBMi2wFBVV95cUxOc1pOVXlZVzhTUnVQZGU4YjVXcjFIRTNtMjRiamlpSjktOFRVWnFlNjhBeE9HNDVCNUhMS05UdDR1NldBa0k5RTJRbFVoeW5tdUZ4UWtWUk0tZFFodVZ6XzNSZUhwTXYtY2ZZNndoNnRmOThRUHczeFJ1VGdiaENhbS16dVRRNmpZR0QxUURQMV9ELXYtQzRpUkpoajNndEZlWVdHbzZmTUw0NlJTaUNiLUZZM3dhWk9XTDZ6Ukw3dVcwSEt3cEVUeTFoYXd0a0pDNlBUQ2xwV0VScWc?oc=5" target="_blank" class="item-link">Battlefield 6 explains how its Javelin anticheat system works—and it kind o</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiigFBVV95cUxObDVOOGtyYVlfNmtxSmVBcFZSbVdLSllJSzBUVS1aUFVtbVBjQkdZN19XZFc2VkJPTmlHMVJfWXN3Ny01Mjd2N2Npc3BjTldDMk91RVRvV3E5R25UNHhsMzExUDJHRV93SnZEZ2x2c0hiWG0xVURPMmxrb0dhV3NnVUhLSUlueTlnOXc?oc=5" target="_blank" class="item-link">3.6% of All Battlefield 6 Matches Are Affected by Cheaters, But Devs Are Fi</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQYVZsTHFBcDNHb1BQYzFJNUhRWTFFSC1qM196SUlmVFZhaUctdlBBdlJUMUd1WXBfWTZENGs2OHhVaGE3RVB1eXlnbzVSWnNjTEMzM19LVG5lejRGWHg4ZGJVT05zYlVpQk5XTXlXZk51T19GN0EtWGhXWWowSTdzUDFnaHVhczg4T09BRUhHck13ZS15bVdIVGh6RQ?oc=5" target="_blank" class="item-link">Battlefield 6 is Free to Play With Game Pass This Weekend - Thurrott.com</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 19, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMifkFVX3lxTE8tQ1FvdFE4UkVxemRoZjFvaV9aS05RSFpJcW55R0dVUS1mdnJ0aW5ka09nZjdZcjl2V21ZQVpKUlZzYUZvaEVocTlMYkFvLVRkUWU3RnVOLWo0YkdCaE1VdFdwWUFRclMxeTFLZDY2QVBFS1pXbEluMXFGejVKQQ?oc=5" target="_blank" class="item-link">&#x27;Battlefield 6&#x27; Review: Checking in on EA&#x27;s Online Shooter - Men&#x27;s Journal</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 11, 2026</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Hero Shooter">
+      <div class="card-header">
+        <h3>Team Fortress 2 <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span> <span class="genre-badge" style="color:#c084fc;background:#2e1065">Hero</span> <span class="trend-badge flat">▶ +0.4% MoM</span></h3>
+        
+        <div class="card-stats">
+          24h Peak: <strong>61,421</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong>61,421</strong> (100% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong>253,225</strong> <small style="color:#556b7d">(100% Steam)</small> (24.3% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,10.0 84.0,37.0 156.0,31.4 228.0,29.9 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,10.0 84.0,37.0 156.0,31.4 228.0,29.9" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="31.4" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="29.9" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="23.9" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">50K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Team Fortress 2 is holding steady (+0.4%, averaging 50K players over the last 30 days).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 4 launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Team Fortress 2 is growing (+3.3% MoM, averaging 50K players over the last 30 days). Growth likely driven by (Season 4) season launch bringing returning and new players. Dev activity: Season 4 launched recently; 7+ bug fixes deployed. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806705842" target="_blank" class="item-link">poLANd.tf 2026</a> — Feb 25, 2026<div class="news-preview">(Image credit: deli)
+
+Dzień dobry, howdy and welcome to poLANd.tf 2026!</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522846343" target="_blank" class="item-link">United Dodgeball League Season 1 2026</a> — Feb 16, 2026<div class="news-preview">(Image credit: Metalcloud)
+
+United Dodgeball League is excited to relaunch with a brand new tournament! This time, teams consisting of 3 players will compete throughout a marathon of four weeks in a Swiss style tournament bracket.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497672" target="_blank" class="item-link">Seasonalander Winter 2026</a> — Feb 05, 2026<div class="news-preview">(Image credit: SFM Render/Compositing/Overlays - Breez, Organization - IanTheAwsm, CyberWizard, and Dynam)
+
+Seasonalander has arrived for the Winter of 2026!</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxPRHZ4UXVtNUNqZ1o2ZzlJUmR0WUV4bWxUWGVGZElqYnFITmVRekJ3ZnEtZ0REeHdzU2lGeUlHY2UtMk9wR0pjZUMwZlo0cExZbE9ZVHhRbk1OdEExNmFGdWtzOGVnX1l4UzhCTmNTZjhWOHpzVG5zSmhaWFpCcmhlckI0dllrYzZ3Zjg2ZXp0UUhaeWxlMThTS0NEV0xBVUZvZTBFVmNGd0h1dXc?oc=5" target="_blank" class="item-link">New York takes maker of Counter-Strike 2 to court over &quot;illegal&quot; loot boxes</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPLTBWUnQxekUtakpIX2VqaFdCcVhQUGFybnJaOGZHcmd1Vl9raUx4QnlOTDV1M01nVExqNjB3d19uTmVIelZ1MTVtdFZreTgzTEpPSDBvd2o2dk1HNUNDR1g5Y3ZCNVg5N0FuTGhEZEdpOEJfNS1ZQ2paamowT0Z0MUg5SGpFNkxQMkZxczdPT1NTOTVmOUtwLUdRTkNLNWk5ekN4dHlqaGo0Nk5pN2tMWENNamo?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified is good, clean, hatless fun, despite its cruel H</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxPdDZIWEFlZFFLQTVhQ2dVUDBnZ0FSTm5mb0ZxRHZQbGlLbEozcEdCOW8yaEMtUlNxdXVGNFdmU3A0Z2VlOGxwVC1YRFg0MHp6OVBsX3RsZHJ5aXVoNDdhbFRvYW5oeHZzbU1yWEhSU0tGREptTlc0cDNySVFxaHg1cGpBZ2VHVWtncEVRdEFNcEhwMThoYmY5RjRtZm1fV3gwM3pPNXRucXZ1RkhrZTF5X1hqY0hqQ2dwci1EWjAyMHZYVUc4MUZrbTRoYWhBanQ0cEVKcjYzWS1Ddw?oc=5" target="_blank" class="item-link">Team Fortress 2 Classified Mod Gets Official Steam Page and Hits 10,000 Con</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 01, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMizAFBVV95cUxQNkxQNXRaUl8yVVZvbHpRQU1hUlo1cFdpTnRIa2xCNVI5enNBeEpxeWVoNUFPOEZCaGd2bjFwRGlFbUZtcmFpTHc4UHFKcDZCSkZmaHkxVUhrNGNBbVhVcHJyME93Zk1GNDR4bG5SV2p6WUJzaWZBenlmSExqTV9IVWE2M2xKeXZZR1pSVFJ1NExBNmFpc0xwbWt6dE96dDdTcGFPUHl1NXFxNm9EVFhSam5QbE00UlhMVDRMT3V1UlVtU250T204cHM1Zzg?oc=5" target="_blank" class="item-link">Pre-Fortress 2 is coming to Steam to bridge the gap between Team Fortress a</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 18, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Large-Scale">
+      <div class="card-header">
+        <h3>Call of Duty <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#4ade80;background:#0a3b1f">Large</span> <span class="trend-badge flat">▶ -0.2% MoM</span></h3>
+        
+        <div class="card-stats">
+          24h Peak: <strong>52,847</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">352,313</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (15%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (15% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">3,259,313</strong> <small style="color:#556b7d">(est. all platforms)</small> (10.8% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,10.0 84.0,37.0 156.0,35.7 228.0,36.0 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,10.0 84.0,37.0 156.0,35.7 228.0,36.0" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="35.7" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="36.0" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="30.0" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">36K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Call of Duty is holding steady (-0.2%, averaging 36K players over the last 30 days). At just 11% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 02 - Part launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: These modes accelerate pacing, increase player counts, or introduce high-stakes competitive rulesets designed to test skill, decision-making, and adaptability. Perks, Killstreaks...</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Call of Duty is holding steady (+1.1%, averaging 36K players over the last 30 days). At just 13% of all-time peak — well below historical levels. Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: Season 02 - Part launched recently. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: These modes accelerate pacing, increase player counts, or introduce high-stakes competitive rulesets designed to test skill, decision-making, and adaptability.Perks, Killstreaks...</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522843850" target="_blank" class="item-link">Power Unleashed — Fighting with Wei Lin!</a> — Feb 15, 2026<div class="news-preview">We look forward to fighting side by side with you in the year ahead, creating legendary victories together.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466497329" target="_blank" class="item-link">Call of Duty: Black Ops 7 and Warzone - Season 2 - Live Now</a> — Feb 05, 2026<div class="news-preview">Season 02 brings new maps, weapons, BO7 Ranked Play, Zombies content, a snow-covered Rebirth Island, and more starting today.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823825466495621" target="_blank" class="item-link">Introducing the Season 02 Battle Pass, BlackCell, and New Store Bundles</a> — Feb 05, 2026<div class="news-preview">Escalation Starts Now with the Season 02 Battle Pass!</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxQQlZ3cGRUcmRTTkVyV3RQNndFOXYxMTF4NTNLem44YkhhcnV4amJaS3NFZjBsMXRkYXZ5QlNUZF9sVDdnSHpIT08zc0x2YjdOMnhrTzBsTzgtTnQ4LUdUX0dCMlVoVTljNjdFMVRQSjczM2NCbkVXUl80WDhGQ2QtZ2J5VzVOdWp5UUlvQ1ZUeGdTSEV2bmFZYw?oc=5" target="_blank" class="item-link">Is The Era Of Call Of Duty &amp; Battlefield Coming To An End? - ComicBook.com</a> <span style="color:#8f98a0;font-size:0.7rem">Mar 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxQaDl0c0szZUNkMFhhcXhRQ1ZDaHI5b08zdEx2UktfTlhzTTFPZUt0eVVPcm14cTVOQU9ldm1jZWZLbm5sTXVQTTF6WkFlQm5rMnd3ck1jaUJzNHBMY0hmd2JheWFQWWtPVE9QSWJFZG00SUh6VTRpSV9DUmN4eE5FWkFxLVhodWxLWFJOSmZLSzc3eGhYckh5OQ?oc=5" target="_blank" class="item-link">Activision abandons key Call of Duty trademark after Major League Baseball</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxQdTZkUWdNZTlicTdCcUhmdmJsT0pBUWtRWHZHMDBic1ZBR0w3N202LTN2QTNyTUFJUV9DSlpHT1dUTWw0aXRMbHpPcXJMR25RdXhaUng1dVUxSEEyM0s4dS1Ra0JIMFAxMERJRmhwclAxM0dRaFZoUU9PRW11S3lRc2xPdnhYTHBPTmdGVVV0VjBPWGNuZlEwcUN2VmVGd1NoN2V2STJfem5fTnJiQWc?oc=5" target="_blank" class="item-link">Call Of Duty 2026: Everything We Know About The Rumored Modern Warfare 4 -</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 27, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMif0FVX3lxTFB1enRRRHMxTm82TmFqNVN4Nm1XTHg0NWV4RGMyYzQtTmpEWi0zWEUwTXNvQ3R0V1g4QlJTNE80czVMNlFKMWRrR1BhR3NaZDJQRGZZdnI2ajN6VVhwSDdkbmstUjFNNEdZNkFWVmUwUldvYVRmZl9xd01UMU1rWmM?oc=5" target="_blank" class="item-link">Black Ops 7: Update - Call of Duty</a> <span style="color:#8f98a0;font-size:0.7rem">Dec 09, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Arena">
+      <div class="card-header">
+        <h3>The Finals <span class="lifecycle-badge" style="color:#4ade80;background:#1a3a2a">Live</span> <span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span> <span class="trend-badge flat">▶ +0.0% MoM</span></h3>
+        
+        <div class="card-stats">
+          24h Peak: <strong>16,379</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">32,758</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (50%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (50% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">484,798</strong> <small style="color:#556b7d">(est. all platforms)</small> (6.8% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,37.0 84.0,10.0 156.0,18.1 228.0,17.9 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,37.0 84.0,10.0 156.0,18.1 228.0,17.9" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="18.1" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="17.9" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="11.899999999999999" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">12K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> The Finals is holding steady (+0.0%, averaging 12K players over the last 30 days). At just 7% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (4 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: We’ve restocked the Store with a fresh new drop of content alongside a sale on some old favorites, so make sure to take a look!</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> The Finals is growing (+2.4% MoM, averaging 12K players over the last 30 days). At just 8% of all-time peak — well below historical levels. Growth likely driven by season launch bringing returning and new players. Dev activity:  launched recently; 10+ bug fixes deployed. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Sustained growth trajectory.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806706997" target="_blank" class="item-link">Store Update 9.11.0</a> — Feb 26, 2026<div class="news-preview">We’ve restocked the Store with a fresh new drop of content alongside a sale on some old favorites, so make sure to take a look! This is also the last week to play Bank It, so jump in, collect red envelopes, and don’t forget to cash them in!</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633184431" target="_blank" class="item-link">Store Update 9.10.0</a> — Feb 19, 2026<div class="news-preview">We have crafted a very cool high-tech Store update for you all featuring the Longwei Prime Pack as well as some extra goodies, courtesy of IVADA!</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824644522847694" target="_blank" class="item-link">Hotfix 9.9.1</a> — Feb 17, 2026<div class="news-preview">Hello Contestants! We’re pushing an update through now that will fix the broken text strings that some players have been seeing in-game since Update 9.9.0. This issue was caused by an update to the system we use for text strings.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMifEFVX3lxTE9hb2gxOXBjaG1QQkhvdzhrdW9EZUhJNm16X3lOTmFDeExMbEJNXzYwV0tLSVRQTENBN0N0VnZmQ1puS1E1bTdsZVRCZlhGZmE3d2VaOWJVS1BYWkVld3hjTEV0WFNmZF9lWmpmUWVWVlRHaXBreG9OX3I5dm4?oc=5" target="_blank" class="item-link">Arc Raiders&#x27; use of AI voices is The Finals controversy all over again - Po</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 31, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMi5gJBVV95cUxOclZEOGliV1l1cl9sX1AwUG45SXQtWWxzbk15Q1pCY0hJRnoxRVVMSDhnaFZIT0JyU2ZOa0dqdnZkdkZXYm90S0pKbDctbzZHbTBPdk5TSU1iWTRrRmFOQ3U2UmRLRWNmdFp4VjNzaVZEU21wTzVZbGxZNEJVTDZOYWFhanpkWFZmV3pqZDVtRkVRTEhsOHBWQjdhYUx6d1JPc3NvYTZPa2kzdzRrSGJMdHMxc1FaeWd1alhsckl5enNMaTBDSUhTSk9QYVUtZDluSFQyeUhmeXJrb2dZTUtscXJSMVZzMksxOE92dm1XRVgtRW9kUThNLW5uMVFhSFlqeWRhTEFYa0dHR0tmTVc4QlJyZTB3VGpPRVlReGZLaXR4S0sza2QzQURoaWw1NGJseGlfTndWdktFNHFRNzVsaTVYT0lKN1dnemRONTBkYk54WGNJMGhnc1E3a19DTUJiZVpJRnRB?oc=5" target="_blank" class="item-link">The Finals is still going strong and Arc Raiders is about to release, but E</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 29, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#f87171" title="Service Issue">●</span> <a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxQVVVFUXJqdC1uVUJycG5NQ3BEdGxzNGJib00yaVFpY2Y1eVNJVUNNWUpBME1fdWIyMldORGxiSnctc3NHNkdIQkFjUkdWSlBHMkttNHg2VWoxVVVRZnk1c2ZlVUJuN0oxYjJJeDM2aGRCQUR6b3N6T2Y5VThPeXk3Ukx5TkVBZHJnMEg2dzlydElnY1ZHdF9zbzBRYVRVNjhlMTh5bE5yLWI?oc=5" target="_blank" class="item-link">Embark Studios confirm rollout of Denuvo Anti-Cheat for THE FINALS - Gaming</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 23, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE9QXy1JMTRDTzR6UzdSTGFLQnFtNzU0Y2lqQmwwT2p6WGFXV1dPUmdzWWRoeEFfbDZVeHdnZndMajF4TU11MkVoWmgwWVZLcVNoZ2s3TGxFeDBwNlhSR0lLWkx0T21uVFJSWTBtRmJPaW40ZWdw?oc=5" target="_blank" class="item-link">Embark unleashes The Finals Season 8 - GamingTrend</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 11, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Looter Shooter">
+      <div class="card-header">
+        <h3>Destiny 2 <span class="lifecycle-badge" style="color:#fbbf24;background:#3a3520">Maintenance</span> <span class="genre-badge" style="color:#f472b6;background:#3b0a2e">Looter</span> <span class="trend-badge flat">▶ +1.0% MoM</span></h3>
+        <div class="event-annotation">-23.7% ← Continued structural decline pre-Marathon (Mar 5)</div>
+        <div class="card-stats">
+          24h Peak: <strong>11,841</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">33,831</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (35%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (35% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">904,717</strong> <small style="color:#556b7d">(est. all platforms)</small> (3.7% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,10.0 84.0,28.8 156.0,37.0 228.0,36.9 228.0,37 12.0,37" fill="rgba(251,191,36,0.12)" />
+  <polyline points="12.0,10.0 84.0,28.8 156.0,37.0 228.0,36.9" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="10.0" r="3" fill="#fbbf24" />
+<circle cx="84.0" cy="28.8" r="3" fill="#fbbf24" />
+<circle cx="156.0" cy="37.0" r="3" fill="#fbbf24" />
+<circle cx="228.0" cy="36.9" r="3" fill="#fbbf24" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="30.9" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold" font-family="sans-serif">10K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#fbbf24">State:</span> Destiny 2 is holding steady (+1.0%, averaging 10K players over the last 30 days), accelerating vs. last run. At just 4% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: This week in Destiny, we’ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlord&#x27;s Ruin.</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Destiny 2 is dropping sharply (-26.3% MoM, averaging 12K players over the last 30 days). At just 5% of all-time peak — well below historical levels. Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: This week in Destiny, we’ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlord&#x27;s Ruin. | This Week in Destiny, we are getting ready for Arms Week and a very special Game2Give livestream. Continued decline from last period — watch for content response.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806708643" target="_blank" class="item-link">This Week In Destiny - 02/26/2026</a> — Feb 26, 2026<div class="news-preview">This week in Destiny, we’re collecting data for our Praxic Time Trials community challenge. We also wanted to highlight a few videos that are either useful if you are still working on your speedruns or that show some impressive feats.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633186002" target="_blank" class="item-link">This Week in Destiny - 02/19/2026</a> — Feb 19, 2026<div class="news-preview">Before jumping into this week&#x27;s topics, we wanted to share again the news about Shadow and Order from yesterday:Our next Major Update, Destiny 2: Shadow and Order, is undergoing large revisions and will be delayed.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501607970" target="_blank" class="item-link">This Week In Destiny - 02/12/2026</a> — Feb 12, 2026<div class="news-preview">This week in Destiny, we’re celebrating the season of love with some free in-game cosmetics, kicking off a new Community Challenge, and chatting a bit about a new character naming convention.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxNZndfU1p2WGY4d1FuNU1RQnBTX3BwTllzNWFmOUs4ajlfcnN6ZXNHZlJXWUdoZnVUYmJ1YTlDSnZjQXIzLVpBVlpUQ3JLa0F5SHNKaWVXMENSUGlta0I4R0F1SXJqalgwTHQwdi1rLWU4OUFvSVRhOXBoRF9TbXVyOHNvYjFzYXU1VWNQSTJhUXNfN2sxYS1ReFRxcEgxY3ZrNEEwSEg2cTg5ckhfejZaejVZZlBIUQ?oc=5" target="_blank" class="item-link">&#x27;We Don’t Want To Be a Dead Game&#x27; – Destiny 2’s Directors on Reassessing th</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 28, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxPaWQ0WUZQdDBNT2ZWODJMX05ydW8yek1sdFNDWVpqbU1DOXJZRFhCS2Zpc3Q3QkxPalpGdkNERW55NjJYNHB4SDJJMUpMeW1rc2VPVmxPYmpwZ1h3NHZhOWVGYnJxLUtqaTlWQ3ZSUjZOWm14QXNoOGk3RGhZVEdmQlU1NmNLNER5OXdVUDVpd0JuazNNWV9YR0JSLS1SeUdPckJF?oc=5" target="_blank" class="item-link">I Am Trying To Play ‘Destiny 2,’ It Is Not Going Well - Forbes</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 25, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxPVk5SR05FLXRPd01HMWx5eXJ3dGhlNm5tcGV6MVpLSzg3M0lZRmZVN2JYNDM3WThzZG02QmhqWU16dlNfbmhMZnYzQWluOXFYM2o5TEdNTkNzbEpvLWFQanV5UlRDdG5IeFRxSEJEdGt6STVwV01oT3dyc01FazdBU1NYeVdiR0thazZJeU9BR3RXdExxVVZLT0FGXy05bm8xclMtQ0ltek9TRnFHRFM2WDFJcnpFeVVFZ19jMVhWWGYyOFFiQUFhbQ?oc=5" target="_blank" class="item-link">Boring, grindy and vindictive to veteran players: Destiny 2&#x27;s Portal is a c</a> <span style="color:#8f98a0;font-size:0.7rem">Sep 03, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxONGs0MmZSOXJLMnF6Uzg0SzFudExQQjhoZmRuYWc4RnlIeWVrMlJtdjA4Rk1WZHNkRE9UZl9SeXltMzVUMVIzSlFtZ2ktenVaUDNXZHpZYmpXT19vSThZNWNKcF9IbFkybi1TRm03OFpoRV9sZWFvRUc1a2Jyc2VseA?oc=5" target="_blank" class="item-link">Destiny 2: The Edge of Fate Review - Missing The Mark - Game Informer</a> <span style="color:#8f98a0;font-size:0.7rem">Aug 05, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Arena">
+      <div class="card-header">
+        <h3>Halo: MCC <span class="lifecycle-badge" style="color:#94a3b8;background:#2a2e35">Legacy</span> <span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span> <span class="trend-badge up">▲ +4.4% MoM</span></h3>
+        <div class="event-annotation">-21.3% ← Legacy title, Halo 2 Digsite content drop had limited impact</div>
+        <div class="card-stats">
+          24h Peak: <strong>9,415</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">31,383</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (30%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (30% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">311,016</strong> <small style="color:#556b7d">(est. all platforms)</small> (10.1% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,10.0 84.0,11.7 156.0,37.0 228.0,33.8 228.0,37 12.0,37" fill="rgba(74,222,128,0.12)" />
+  <polyline points="12.0,10.0 84.0,11.7 156.0,37.0 228.0,33.8" fill="none" stroke="#4ade80" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="10.0" r="3" fill="#4ade80" />
+<circle cx="84.0" cy="11.7" r="3" fill="#4ade80" />
+<circle cx="156.0" cy="37.0" r="3" fill="#4ade80" />
+<circle cx="228.0" cy="33.8" r="3" fill="#4ade80" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="27.799999999999997" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold" font-family="sans-serif">4K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Halo: MCC is growing (+4.4% MoM, averaging 4K players over the last 30 days), accelerating vs. last run. At just 10% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> Growth likely driven by season launch bringing returning and new players. Dev activity: launched recently.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Recovery signal — reversed previous decline.</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Halo: MCC is dropping sharply (-21.9% MoM, averaging 4K players over the last 30 days). At just 7% of all-time peak — well below historical levels. Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: In celebration of Halo 2’s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 game. Continued decline from last period — watch for content response.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806709187" target="_blank" class="item-link">Exchange Update – 2026</a> — Feb 26, 2026<div class="news-preview">The Exchange is getting an upgrade! The implementation of the Exchange gave players a new way to unlock gear. Play the game, earn Spartan Points, redeem said points for sweet unlocks.</div></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1824459501604789" target="_blank" class="item-link">Mod Minute: Warthog Rally</a> — Feb 11, 2026<div class="news-preview">Welcome to the MCC Mod Minute, a focused look at a creative mod for Halo: The Master Chief Collection, with details on how to try it out yourself through the Steam Workshop. Start your engines!</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1792751526054511" target="_blank" class="item-link">February 2025 Update Patch Notes</a> — Feb 28, 2025 <span class="badge patch">PATCH</span><div class="news-preview">A small patch for MCC has been released today, February 28. Resolved Issues
+
+This update includes maintenance for the Easy Anti-Cheat implementation in Halo: The Master Chief Collection.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE9XT2dZUW1iYzlkb1lTeHFhQldWdnlQYTliTjEtNTZCYmhOODB5SUtzdmdwUlpvUU1nQXNqZ09BRzNrVDk2QnBrVUhnMzBfVTdwdkRST3dCdGJWNXcwZF93ank2OEhUTHJKaGc?oc=5" target="_blank" class="item-link">2026 MCC Exchange Update and Log-In Unlocks - Halo Waypoint</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 26, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxPcGFIUnJ1S1FYWDNpRzVUMDZPeUVvd0dPQ1UyVVpwRVo3V2pOMkttNTFzc3EyNnlWbnZMZmtBZTVHeFV6d3J3b3RMN2E0Q3BMbzdwZkdXUVVXaFJxYUNPUXl3eF9xTkhMOU1CV3BZaGwxZUs2c3hwWW5iRmx5NHg2dnNTUUJiRWFSU1VKc3c3QjFfaEdiaVFNeVQ5M2JmejhFbWszUHpFdDJMZw?oc=5" target="_blank" class="item-link">Halo: The Master Chief Collection Gets Surprise Update On Xbox &amp; PC - Pure</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 23, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMifkFVX3lxTE5fYk9TdGZtT05PcnRCQWRyZVY3SmJUZzlNREFpYUN4TEdRcHRNbG1CZ1BicnljWE9XMGJHMjZiajRBVWRVVUozbGgwMmtsVlNVWGh2Q0I1WnRCQWV5WWx6cjNsSVZOV0t0d2hmbFZId2lMZVlzYW53cEI0RHA0dw?oc=5" target="_blank" class="item-link">[SOLVED] Halo 4 UE4 Fatal Error Crash - Driver Easy</a> <span style="color:#8f98a0;font-size:0.7rem">Jan 20, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMiigJBVV95cUxOcVJ6ZzNGbEZhOUFYTV9kamxZN3hvUUdEelBkNUZsQWJma1RJNWtRUG9FcFVCZDBZX3pTUHM3Vko1dzlfYWR3VktlYWk0ekVtVzFHX0lmUnBITHJVOVZTQXFadm1wMVpxTWJLNG5IWHdfeEdKdENpbUtRN0M5aWl0VzdaOTZpam5TV0ZtSGRfUFhRN2FSTVVrLVFWaFd3Qkk4Yzc1T0FPZ2ZLSFhieHFraDdVS3NvQmZHZXNLdThEVmdCV1VGUUVrQUZ3eGl0ZlBWRFA3TjRwM2pfWUljUWFKZFNJYlpSRzZ5eVRRM3UtZ0pQYzU1VWItYkl2aENPc2QtNUZBT1dnX2stUQ?oc=5" target="_blank" class="item-link">Replaying Halo: The Master Chief Collection has become my annual tradition,</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 13, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="card" data-genre="Arena">
+      <div class="card-header">
+        <h3>Halo Infinite <span class="lifecycle-badge" style="color:#f87171;background:#3a1a1a">Sunset</span> <span class="genre-badge" style="color:#34d399;background:#0a3b2b">Arena</span> <span class="trend-badge up">▲ +2.2% MoM</span></h3>
+        <div class="event-annotation">-9.3% ← Post-final update (Nov 2025). Expected attrition curve.</div>
+        <div class="card-stats">
+          24h Peak: <strong>3,144</strong> (Steam)
+          &nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">26,200</strong> <a href="#methodology" class="info-tip" data-tip="Estimated all-platform total = Steam 24h peak ÷ Steam share (12%). This is a directional estimate, not validated first-party data.">ⓘ Est.</a> (12% Steam)
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">2,138,491</strong> <small style="color:#556b7d">(est. all platforms)</small> (1.2% current)
+        </div>
+        <div class='card-trend'><svg width="240" height="55" viewBox="0 0 240 55" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+  <polygon points="12.0,24.3 84.0,10.0 156.0,37.0 228.0,32.4 228.0,37 12.0,37" fill="rgba(74,222,128,0.12)" />
+  <polyline points="12.0,24.3 84.0,10.0 156.0,37.0 228.0,32.4" fill="none" stroke="#4ade80" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12.0" cy="24.3" r="3" fill="#4ade80" />
+<circle cx="84.0" cy="10.0" r="3" fill="#4ade80" />
+<circle cx="156.0" cy="37.0" r="3" fill="#4ade80" />
+<circle cx="228.0" cy="32.4" r="3" fill="#4ade80" />
+
+  <text x="12.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Dec</text>
+<text x="84.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Jan</text>
+<text x="156.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Feb</text>
+<text x="228.0" y="53" text-anchor="middle" fill="#8f98a0" font-size="8" font-family="sans-serif">Mar</text>
+
+  <text x="228.0" y="26.4" text-anchor="middle" fill="#4ade80" font-size="9" font-weight="bold" font-family="sans-serif">2K</text>
+
+</svg></div>
+      </div>
+      <div class="card-takeaway">
+        <h4>Takeaway</h4>
+        <div class="takeaway-part"><span class="takeaway-label" style="color:#4ade80">State:</span> Halo Infinite is growing (+2.2% MoM, averaging 2K players over the last 30 days), accelerating vs. last run. At just 1% of all-time peak — well below historical levels.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> New content appears to be driving engagement. Player interest tends to spike around major content drops.</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Reaction:</span> Active press coverage from multiple outlets (5 articles from gaming press in the past week).</div><div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Outlook:</span> Looking ahead: The future is Infinite. OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we’d like to thank our community for your steadfast support. Recovery signal — reversed previous decline.</div>
+        <div class="prev-takeaway"><strong>Previous:</strong> Halo Infinite is declining (-8.5% MoM, averaging 2K players over the last 30 days). At just 1% of all-time peak — well below historical levels. Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle. Active press coverage from multiple outlets (5 articles from gaming press in the past week). Looking ahead: The future is Infinite.OPERATION PASSThe missions may change, but these Operation Passes are here to stay. | As we look back on four years of evolution and updates in Halo Infinite, we’d like to thank our community for your steadfast support. Continued decline from last period — watch for content response.</div>
+      </div>
+      <div class="card-body-2col">
+        <div class="card-section">
+          <h4>Developer Updates</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1823191198617744" target="_blank" class="item-link">Forge Features</a> — Feb 03, 2026<div class="news-preview">Welcome to another edition of Forge Features! This series highlights notable maps, modes, and other creations from our talented Forge community. Bookmark your favorites using the links below for your next custom game.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1816307528974578" target="_blank" class="item-link">Operation: Infinite Out Now</a> — Nov 18, 2025<div class="news-preview">To celebrate all the Spartans in our Halo Infinite Fireteam, Operation: Infinite introduces a 100-tier free Operation Pass featuring three full armor sets and a 100-tier Premium Pass offering five more sets, six weapon models, and over 30 exclusive Spartan customizations.</div></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1815580768306863" target="_blank" class="item-link">Operation: Infinite Out Now</a> — Nov 07, 2025<div class="news-preview">To celebrate all the Spartans in our Halo Infinite Fireteam, Operation: Infinite introduces a 100-tier free Operation Pass featuring three full armor sets and a 100-tier Premium Pass offering five more sets, six weapon models, and over 30 exclusive Spartan customizations.</div></li>
+</ul>
+        </div>
+        <div class="card-section">
+          <h4>Press Coverage</h4>
+          <div class="sentiment-legend">
+            <span>🟢 New Content</span>
+            <span>🔴 Service Issue</span>
+            <span>⚪ Update/Other</span>
+          </div>
+          <ul><li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE9XT2dZUW1iYzlkb1lTeHFhQldWdnlQYTliTjEtNTZCYmhOODB5SUtzdmdwUlpvUU1nQXNqZ09BRzNrVDk2QnBrVUhnMzBfVTdwdkRST3dCdGJWNXcwZF93ank2OEhUTHJKaGc?oc=5" target="_blank" class="item-link">2026 MCC Exchange Update and Log-In Unlocks - Halo Waypoint</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 26, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMingFBVV95cUxNZ1ZBODVhRFFvTnp1dEg5QzNkMW8zYWQyendjY25WMS1rQl9CczdWc1VpbkkzUHJlcDgtMzMxYldsbktseHJDRnI2TXBCRWJpd2xUdzdPYzBEUmRHZWNLaXk3cXEyRlBLQ1hWdS1KSFJJLV9vVU1WRWxLd3htTHl1Q1ItVDllNWUxU2VQN1Vnd0FWTmZ1cWZxV29kOC1FQQ?oc=5" target="_blank" class="item-link">After 25 Years, It Might Be Time to Admit Halo Was Just Okay - ComicBook.co</a> <span style="color:#8f98a0;font-size:0.7rem">Feb 02, 2026</span></li>
+<li><span class="sentiment-dot" style="color:#4ade80" title="New Content">●</span> <a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQYWs4b29hU3NqUXRuamZYWEZOUm1MRlN4OUFUSmQ0OE45NlByNUJiMTFiVDNUeS1ndUpLTzE2bjNKZlZBUWFMMDhmdGZybHRwZ0tzNVIwY0hiVzlHbXlqVlJaNEt2OFM1QTFXYm5DN2xkb3ZvY1NGRnNQLVBUSkpXNzlRcm56WGVzZE9OdlZSTFV2YkRUdW5SV2hWdUdBSDkw?oc=5" target="_blank" class="item-link">Halo Infinite to receive final major update after four years - Game Develop</a> <span style="color:#8f98a0;font-size:0.7rem">Nov 10, 2025</span></li>
+<li><span class="sentiment-dot" style="color:#94a3b8" title="Update">●</span> <a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxOeEVSRkRmTUF2TEJkYzdvWWpmQjA4RjJUdVU2VExlV0xJXzBrTDNTcjJKOS1WQXRPTW1sMzV5eXQ3N0ZSdjZXNHFHTjJZV0Z5OVZvVGVDeEdhREYwdkdRYUQ3d2ZPZXhCenBOY3BmTy1DYVliWFBNclhtRFpsUUNZakFEcVh5RFM0SlFFYTEzM3N1TDIxZ0hhbXJB?oc=5" target="_blank" class="item-link">But Where Is The Next, Actual ‘Halo’ Game, Xbox? - Forbes</a> <span style="color:#8f98a0;font-size:0.7rem">Oct 25, 2025</span></li>
+</ul>
+        </div>
+      </div>
+      
+    </div>
+
+
+  <div class="calendar-section">
+    <h2 class="section-title">Release &amp; Patch Calendar</h2>
+    <div class="cal-section">
+      <h3 class="cal-section-header past">This Week</h3>
+      <div class="cal-entry">
+        <span class="cal-date">Feb 24, 2026</span>
+        <span class="cal-game">Arc Raiders</span>
+        <span class="calendar-type patch">Patch</span>
+        <span class="cal-desc"><a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825093633197017" target="_blank" class="item-link">SHROUDED SKY - Patch Notes 1.17.0</a></span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Feb 25, 2026</span>
+        <span class="cal-game">Counter-Strike 2</span>
+        <span class="calendar-type patch">Patch</span>
+        <span class="cal-desc"><a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806706141" target="_blank" class="item-link">Counter-Strike 2 Update</a></span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Feb 25, 2026</span>
+        <span class="cal-game">Team Fortress 2</span>
+        <span class="calendar-type content">Content</span>
+        <span class="cal-desc"><a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806705842" target="_blank" class="item-link">poLANd.tf 2026</a></span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Feb 26, 2026</span>
+        <span class="cal-game">Apex Legends</span>
+        <span class="calendar-type content">Content</span>
+        <span class="cal-desc"><a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806708416" target="_blank" class="item-link">Apex Legends: Game Stability Update - 2/26/2026</a></span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Feb 26, 2026</span>
+        <span class="cal-game">Destiny 2</span>
+        <span class="calendar-type content">Content</span>
+        <span class="cal-desc"><a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806708643" target="_blank" class="item-link">This Week In Destiny - 02/26/2026</a></span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Feb 26, 2026</span>
+        <span class="cal-game">Halo: MCC</span>
+        <span class="calendar-type content">Content</span>
+        <span class="cal-desc"><a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806709187" target="_blank" class="item-link">Exchange Update – 2026</a></span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Feb 28, 2026</span>
+        <span class="cal-game">Battlefield 6</span>
+        <span class="calendar-type content">Content</span>
+        <span class="cal-desc"><a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806712315" target="_blank" class="item-link">Battlefield 6 - Anticheat Metrics - January</a></span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Mar 02, 2026</span>
+        <span class="cal-game">Delta Force</span>
+        <span class="calendar-type content">Content</span>
+        <span class="cal-desc"><a href="https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1825727806717012" target="_blank" class="item-link">G. T. I. Security | Notice of penalties for violations</a></span>
+      </div>
+    </div>
+
+    <div class="cal-today-divider">
+      <span>TODAY — Mar 02</span>
+    </div>
+
+    <div class="cal-section">
+      <h3 class="cal-section-header upcoming">Coming Up (Next 2 Weeks)</h3>
+      <div class="cal-entry">
+        <span class="cal-date">Mar 05</span>
+        <span class="cal-game">Marathon</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Bungie&#x27;s extraction shooter reboot. PC/PS5/Xbox. Cross-play, $40.</span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Mar 12</span>
+        <span class="cal-game">John Carpenter&#x27;s Toxic Commando</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Co-op zombie FPS. Saber Interactive. PC/PS5/Xbox.</span>
+      </div>
+    </div>
+
+    <div class="cal-section">
+      <h3 class="cal-section-header future">April 2026</h3>
+      <div class="cal-empty">No tracked events yet — check back as announcements come in.</div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">May 2026</h3>
+      <div class="cal-entry">
+        <span class="cal-date">May 27</span>
+        <span class="cal-game">007 First Light</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">IO Interactive (Hitman devs) James Bond origin story. Third-person action-shooter. PC/PS5/Xbox/Switch 2.</span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">June 2026 <span class="cal-count">3 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Jun</span>
+        <span class="cal-game">Warhammer 40K: Boltgun 2</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Retro-style FPS sequel. Auroch Digital. PC/PS5/Xbox. Targeting 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Jun</span>
+        <span class="cal-game">Halo: Campaign Evolved</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Full remake of Halo: Combat Evolved, rebuilt from the ground up. PC/PS5/Xbox. Targeting Summer 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+      <div class="cal-entry estimated">
+        <span class="cal-date">Jun</span>
+        <span class="cal-game">Industry</span>
+        <span class="calendar-type industry">Industry</span>
+        <span class="cal-desc">Summer Game Fest window — expect major shooter reveals and announcements <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">July 2026 <span class="cal-count">1 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">Jul</span>
+        <span class="cal-game">Industry</span>
+        <span class="calendar-type industry">Industry</span>
+        <span class="cal-desc">Summer Game Fest window — expect major shooter reveals and announcements <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">August 2026</h3>
+      <div class="cal-empty">No tracked events yet — check back as announcements come in.</div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">September 2026 <span class="cal-count">1 confirmed, 2 estimated</span></h3>
+      <div class="cal-entry">
+        <span class="cal-date">Sep 08</span>
+        <span class="cal-game">Halloween: The Game</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Horror shooter based on the film franchise. PC/PS5/Xbox.</span>
+      </div>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Sep</span>
+        <span class="cal-game">Hell Let Loose: Vietnam</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">50v50 multiplayer set in Vietnam. Sequel to Hell Let Loose. PC/PS5/Xbox. Targeting 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Sep</span>
+        <span class="cal-game">Borderlands 4</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Looter-shooter FPS sequel. Gearbox Software. Multi-platform. Targeting 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">October 2026 <span class="cal-count">1 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Oct</span>
+        <span class="cal-game">Turok Origins</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">FPS franchise revival/reboot. PC/PS5/Switch 2/Xbox. Targeting Fall 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">November 2026 <span class="cal-count">1 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Nov</span>
+        <span class="cal-game">Gears of War: E-Day</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Prequel to the original Gears of War. The Coalition + People Can Fly. PC/Xbox. TBA per IGN. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">December 2026 <span class="cal-count">1 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Dec</span>
+        <span class="cal-game">Judas</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">FPS from Ken Levine (BioShock creator). Ghost Story Games. PC/PS5/Xbox. TBA per IGN. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">January 2027</h3>
+      <div class="cal-empty">No tracked events yet — check back as announcements come in.</div>
+    </div>
+  </div>
+
+  <div class="methodology" id="methodology">
+    <details>
+      <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
+      <div class="methodology-content">
+        <p class="methodology-disclaimer">Steam share % represents our estimate of what fraction of total cross-platform players are captured by Steam concurrent data. Sources vary by game: some are derived from publisher earnings disclosures, others are modeled from platform mix ratios. These are estimates, not validated first-party data. Treat all-platform figures as directional.</p>
+        <table>
+          <thead><tr>
+            <th>Game</th>
+            <th style="text-align:right">Steam 24h Peak</th>
+            <th style="text-align:center">Multiplier</th>
+            <th style="text-align:right">Est. All Platforms</th>
+            <th>Source / Notes</th>
+          </tr></thead>
+          <tbody>
+<tr><td>Counter-Strike 2</td><td class="num">1,519,117</td><td style="text-align:center">1.0x</td><td class="num" style="color:#60a5fa">1,519,117</td><td class="meth-note">Steam-only title. 1.0x multiplier.</td></tr>
+<tr><td>PUBG: BATTLEGROUNDS</td><td class="num">666,099</td><td style="text-align:center">1.2x</td><td class="num" style="color:#60a5fa">832,623</td><td class="meth-note">Est. 80% Steam. Krafton earnings confirm PC-dominant (~80%) playerbase. Mobile counted separately.</td></tr>
+<tr><td>Arc Raiders</td><td class="num">235,773</td><td style="text-align:center">2.0x</td><td class="num" style="color:#60a5fa">471,546</td><td class="meth-note">Est. 50% Steam. Steam + Epic Games Store split; based on Embark Studios platform distribution data.</td></tr>
+<tr><td>Apex Legends</td><td class="num">183,542</td><td style="text-align:center">4.0x</td><td class="num" style="color:#60a5fa">734,168</td><td class="meth-note">Est. 25% Steam. EA earnings cite ~60% console; remainder split between Origin/EA App and Steam.</td></tr>
+<tr><td>Delta Force</td><td class="num">155,467</td><td style="text-align:center">1.4x</td><td class="num" style="color:#60a5fa">222,095</td><td class="meth-note">Est. 70% Steam. NetEase PC-primary title; remainder on proprietary launcher. Console share unconfirmed.</td></tr>
+<tr><td>Overwatch</td><td class="num">112,793</td><td style="text-align:center">5.0x</td><td class="num" style="color:#60a5fa">563,965</td><td class="meth-note">Est. 20% Steam. Battle.net-primary; Steam version launched 2022. Blizzard has not disclosed platform split.</td></tr>
+<tr><td>Rainbow Six Siege</td><td class="num">107,095</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">305,985</td><td class="meth-note">Est. 35% Steam. Ubisoft earnings cite console ~65% historically across franchise.</td></tr>
+<tr><td>Marvel Rivals</td><td class="num">95,735</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">273,528</td><td class="meth-note">Est. 35% Steam. NetEase; PS/Xbox ~65% based on launch-week platform split reported in press.</td></tr>
+<tr><td>Battlefield 6</td><td class="num">72,531</td><td style="text-align:center">1.8x</td><td class="num" style="color:#60a5fa">131,874</td><td class="meth-note">Est. 55% Steam. EA earnings; console ~45% for BF franchise historically.</td></tr>
+<tr><td>Team Fortress 2</td><td class="num">61,421</td><td style="text-align:center">1.0x</td><td class="num" style="color:#60a5fa">61,421</td><td class="meth-note">Steam-only title. 1.0x multiplier (legacy title).</td></tr>
+<tr><td>Call of Duty</td><td class="num">52,847</td><td style="text-align:center">6.7x</td><td class="num" style="color:#60a5fa">352,313</td><td class="meth-note">Est. 15% Steam. Activision Blizzard earnings (2023) cited ~70% console split; remainder split between Battle.net and Steam.</td></tr>
+<tr><td>The Finals</td><td class="num">16,379</td><td style="text-align:center">2.0x</td><td class="num" style="color:#60a5fa">32,758</td><td class="meth-note">Est. 50% Steam. Embark Studios data; remainder PS/Xbox.</td></tr>
+<tr><td>Destiny 2</td><td class="num">11,841</td><td style="text-align:center">2.9x</td><td class="num" style="color:#60a5fa">33,831</td><td class="meth-note">Est. 35% Steam. Bungie data; console ~65% (PS dominant historically).</td></tr>
+<tr><td>Halo: MCC</td><td class="num">9,415</td><td style="text-align:center">3.3x</td><td class="num" style="color:#60a5fa">31,383</td><td class="meth-note">Est. 30% Steam. Xbox Game Studios; Steam added 2019. Xbox ~70% based on platform MAU ratio.</td></tr>
+<tr><td>Halo Infinite</td><td class="num">3,144</td><td style="text-align:center">8.3x</td><td class="num" style="color:#60a5fa">26,200</td><td class="meth-note">Est. 12% Steam. Xbox-first franchise; Steam added 2021. Based on Xbox MAU disclosures vs. SteamDB concurrent ratio.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+
+  <div class="footer">
+    Generated: 2026-03-02 14:35:12<br>
+    Data: SteamCharts, Steam News API, Reddit, Google News<br>
+    <small>
+      <strong>Color key:</strong>
+      White = raw Steam data &nbsp;|&nbsp;
+      <span style="color:#60a5fa">Blue</span> = estimated total across all platforms (current) &nbsp;|&nbsp;
+      <span style="color:#fbbf24">Gold</span> = estimated total across all platforms (all-time)<br>
+      Est. Total = Steam peak &divide; Steam share. Trend = month-over-month from SteamCharts.<br>
+      Platform splits from EA, Krafton, NetEase earnings, Alinea Analytics, and community trackers. Extrapolated where official data unavailable.
+    </small>
+  </div>
+
+  <script>
+  // Genre filter tabs
+  document.querySelectorAll('.genre-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      document.querySelectorAll('.genre-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const genre = btn.dataset.genre;
+
+      // Filter table rows
+      document.querySelectorAll('table tbody tr[data-genre]').forEach(row => {
+        row.style.display = (genre === 'All' || row.dataset.genre === genre) ? '' : 'none';
+      });
+
+      // Filter cards
+      document.querySelectorAll('.card[data-genre]').forEach(card => {
+        card.style.display = (genre === 'All' || card.dataset.genre === genre) ? '' : 'none';
+      });
+    });
+  });
+
+  // Sortable table columns
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const table = th.closest('table');
+      const tbody = table.querySelector('tbody');
+      const col = parseInt(th.dataset.col);
+      const type = th.dataset.sort;
+      const isAsc = th.classList.contains('asc');
+      const dir = isAsc ? -1 : 1;
+
+      // Update header classes
+      table.querySelectorAll('th[data-sort]').forEach(h => h.classList.remove('asc', 'desc'));
+      th.classList.add(isAsc ? 'desc' : 'asc');
+
+      // Get sortable rows (skip failed rows)
+      const rows = Array.from(tbody.querySelectorAll('tr[data-genre]'));
+
+      rows.sort((a, b) => {
+        const cellA = a.children[col];
+        const cellB = b.children[col];
+
+        if (type === 'num') {
+          const vA = parseFloat(cellA.dataset.value || '0');
+          const vB = parseFloat(cellB.dataset.value || '0');
+          return (vA - vB) * dir;
+        } else {
+          const vA = cellA.textContent.trim().toLowerCase();
+          const vB = cellB.textContent.trim().toLowerCase();
+          return vA.localeCompare(vB) * dir;
+        }
+      });
+
+      rows.forEach(row => tbody.appendChild(row));
+    });
+  });
+
+  // Back-to-top button
+  const btt = document.getElementById('back-to-top');
+  if (btt) {
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > 600);
+    });
+  }
+  </script>
+  <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Top</a>
+</body>
+</html>

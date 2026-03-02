@@ -103,11 +103,18 @@ PROBLEM_SIGNALS = re.compile(
     r'servers down|ban wave|issue affecting|broken|unplayable|emergency|hotfix required|'
     r'service disruption|critical bug|data breach|end of service|closing)\b', re.I)
 
-# Human-readable labels for each intent category
+# Human-readable labels for developer update items (Steam News)
 SENTIMENT_LABELS = {
     "positive": "New Content",
     "negative": "Service Issue",
     "neutral":  "Update",
+}
+
+# Human-readable labels for press coverage (external news)
+PRESS_SENTIMENT_LABELS = {
+    "positive": "Positive",
+    "negative": "Negative",
+    "neutral":  "Neutral",
 }
 
 
@@ -218,13 +225,13 @@ def _lifecycle_badge_html(name: str) -> str:
 # ---------------------------------------------------------------------------
 
 EVENT_ANNOTATIONS = {
-    "Overwatch": "+76.4% \u2190 Loverwatch event + OWCS S2 kickoff + sub-role passives patch",
-    "Arc Raiders": "-18.6% \u2190 Post-launch decay. Second Expedition season announced Mar 1.",
-    "Delta Force": "+14.0% \u2190 RED DAY event + Season Morphosis live",
-    "Battlefield 6": "-22.6% \u2190 Season 2 launched Feb 17 but failing to retain",
-    "Halo: MCC": "-21.3% \u2190 Legacy title, Halo 2 Digsite content drop had limited impact",
-    "Halo Infinite": "-9.3% \u2190 Post-final update (Nov 2025). Expected attrition curve.",
-    "Destiny 2": "-23.7% \u2190 Continued structural decline pre-Marathon (Mar 5)",
+    "Overwatch": "Loverwatch event + OWCS S2 kickoff + sub-role passives patch drove the recent spike.",
+    "Arc Raiders": "Post-launch decay following launch window. Second Expedition season may stabilize floor.",
+    "Delta Force": "RED DAY event + Season Morphosis live — content cadence driving growth.",
+    "Battlefield 6": "Season 2 launched recently but struggling to retain new players.",
+    "Halo: MCC": "Legacy title — Halo 2 Digsite content drop had limited impact on long-term retention.",
+    "Halo Infinite": "Post-final update (Nov 2025). Managed sunset ahead of Campaign Evolved.",
+    "Destiny 2": "Structural decline continues pre-Marathon. Player base contracting into core audience.",
 }
 
 
@@ -2308,7 +2315,7 @@ def generate_html(results: list[dict], failed_names: list[str],
             sentiment = _analyze_sentiment(a.get("title", ""))
             s_fg, s_bg = _sentiment_css(sentiment)
             source_badge = f' <span class="source-tag" style="color:{s_fg};background:{s_bg}">{source}</span>' if source else ""
-            sent_label = SENTIMENT_LABELS.get(sentiment, sentiment)
+            sent_label = PRESS_SENTIMENT_LABELS.get(sentiment, sentiment)
             sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span> '
             date_span = f' <span style="color:#8f98a0;font-size:0.7rem">{date}</span>' if date else ""
             press_html += f'<li>{sent_dot}{title}{source_badge}{date_span}</li>\n'
@@ -2459,9 +2466,9 @@ def generate_html(results: list[dict], failed_names: list[str],
         <div class="card-section">
           <h4>Press Coverage</h4>
           <div class="sentiment-legend">
-            <span>\U0001f7e2 New Content</span>
-            <span>\U0001f534 Service Issue</span>
-            <span>\u26aa Update/Other</span>
+            <span>\U0001f7e2 Positive</span>
+            <span>\U0001f534 Negative</span>
+            <span>\u26aa Neutral</span>
           </div>
           <ul>{press_html}</ul>
         </div>

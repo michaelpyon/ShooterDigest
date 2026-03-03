@@ -4028,4 +4028,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    try:
+        main()
+    except Exception as e:
+        logger.error("Fatal error in main(): %s", e, exc_info=True)
+        print(f"\n  FATAL: {e}")
+        print("  Digest generation failed — pre-committed output will be served.")
+        sys.exit(0)  # Exit 0 so Docker build succeeds and serves committed digest

@@ -1,6 +1,7 @@
 """Scraping and API functions for Shooter Digest."""
 
 import re
+import time
 import html as html_module
 import logging
 import urllib.parse
@@ -94,6 +95,37 @@ GAMES = [
     # Est. 30% Steam. Xbox Game Studios; Steam added 2019. Xbox ~70% based on platform MAU ratio.
     {"name": "Halo: MCC", "app_id": 976730, "subreddit": "halo",
      "steam_share": 0.30, "genre": "Arena"},
+]
+
+# ---------------------------------------------------------------------------
+# Emerging titles watchlist — growth phase titles tracked for traction signals.
+# Growth rate is the headline metric here, not absolute player count.
+# All steam_share values are 1.0 (Steam-only) unless noted.
+# ---------------------------------------------------------------------------
+EMERGING_GAMES = [
+    # Est. 70% Steam. PC-primary; console version (PS5/Xbox) has lower adoption.
+    {"name": "Hunt: Showdown 1896", "app_id": 594650, "subreddit": "HuntShowdown",
+     "steam_share": 0.7, "genre": "Extraction"},
+
+    # Steam-only. 1.0x multiplier.
+    {"name": "Ready or Not", "app_id": 1144200, "subreddit": "ReadyOrNotGame",
+     "steam_share": 1.0, "genre": "Tactical"},
+
+    # Steam-only. 1.0x multiplier.
+    {"name": "Dark and Darker", "app_id": 2016590, "subreddit": "DarkAndDarker",
+     "steam_share": 1.0, "genre": "Extraction"},
+
+    # Steam-only. 1.0x multiplier.
+    {"name": "Gray Zone Warfare", "app_id": 2479810, "subreddit": "GrayZoneWarfare",
+     "steam_share": 1.0, "genre": "Extraction"},
+
+    # Steam-only. 1.0x multiplier.
+    {"name": "Bodycam", "app_id": 2406770, "subreddit": "bodycam",
+     "steam_share": 1.0, "genre": "Tactical"},
+
+    # Steam-only. 1.0x multiplier.
+    {"name": "Marauders", "app_id": 1789480, "subreddit": "Marauders",
+     "steam_share": 1.0, "genre": "Extraction"},
 ]
 
 

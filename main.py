@@ -11,6 +11,7 @@ from datetime import datetime
 
 from scraper import (
     GAMES,
+    EMERGING_GAMES,
     get_steam_data,
     get_steam_news,
     get_reddit_posts,
@@ -948,15 +949,16 @@ def _analyze_dev_comms(news: list[dict]) -> dict:
 # Data collection
 # ---------------------------------------------------------------------------
 
-def scrape_all() -> list[dict]:
-    """Scrape all game data: player counts, trends, news, reddit (week+month), comments."""
+def scrape_games(games_list: list[dict], label: str = "") -> list[dict]:
+    """Core scraping logic for any games list: player counts, trends, news, reddit, comments."""
     results = []
-    total = len(GAMES)
+    total = len(games_list)
+    prefix = f"[{label}] " if label else ""
 
-    for i, game in enumerate(GAMES, 1):
+    for i, game in enumerate(games_list, 1):
         name = game["name"]
         sub = game["subreddit"]
-        print(f"  [{i}/{total}] {name}...")
+        print(f"  {prefix}[{i}/{total}] {name}...")
 
         # SteamCharts
         data = get_steam_data(game)
@@ -1016,6 +1018,16 @@ def scrape_all() -> list[dict]:
             time.sleep(DELAY_BETWEEN_REQUESTS)
 
     return results
+
+
+def scrape_all() -> list[dict]:
+    """Scrape all main game data: player counts, trends, news, reddit (week+month), comments."""
+    return scrape_games(GAMES)
+
+
+def scrape_emerging() -> list[dict]:
+    """Scrape emerging/indie titles using the same pipeline as main games."""
+    return scrape_games(EMERGING_GAMES, label="emerging")
 
 
 # ---------------------------------------------------------------------------
@@ -2154,7 +2166,9 @@ def _build_methodology_html(results: list[dict]) -> str:
 # ---------------------------------------------------------------------------
 
 def generate_html(results: list[dict], failed_names: list[str],
-                  overall_takeaways: list[str]) -> str:
+                  overall_takeaways: list[str],
+                  emerging_results: list[dict] | None = None,
+                  radar_results: list[dict] | None = None) -> str:
     today = datetime.now()
     date_str = today.strftime("%B %d, %Y")
     timestamp = today.strftime("%Y-%m-%d %H:%M:%S")
@@ -3219,6 +3233,10 @@ def generate_html(results: list[dict], failed_names: list[str],
   <h2 class="section-title">Game Details</h2>
 {cards_html}
 
+{generate_emerging_html(emerging_results) if emerging_results else ""}
+
+{generate_radar_html(radar_results) if radar_results else ""}
+
 {_render_calendar_html(_build_release_calendar(results))}
 
 {methodology_html}
@@ -3306,6 +3324,186 @@ def generate_html(results: list[dict], failed_names: list[str],
 </body>
 </html>
 """
+
+
+# ---------------------------------------------------------------------------
+# Emerging Titles HTML section
+# ---------------------------------------------------------------------------
+
+def generate_emerging_html(emerging_results: list[dict]) -> str:
+    """Generate the Emerging Titles section HTML.
+
+    Highlights growth rate (MoM trend) as the primary signal, not absolute players.
+    Uses purple (#a78bfa) accent to visually distinguish from the main tracker.
+    """
+    if not emerging_results:
+        return ""
+
+    # Build summary table rows
+    table_rows = ""
+    for r in emerging_results:
+        trend_pct = r.get("trend_pct")
+        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "?"
+        trend_val = trend_pct if trend_pct is not None else 0
+        bar_w = min(r.get("pct_all", 0), 100)
+        genre = r.get("genre", "Other")
+
+        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"))
+        trend_arrow = r.get("trend_arrow", "▶")
+
+        table_rows += f"""        <tr>
+          <td class="rank" style="color:#a78bfa">#{r['rank']}</td>
+          <td class="game" style="font-weight:600;color:#e5e5e5"><a href="#{_card_id(r['name'])}-emerging" class="game-link">{_esc(r['name'])}</a></td>
+          <td>{_genre_badge_html(genre)}</td>
+          <td class="num" style="font-variant-numeric:tabular-nums;text-align:right">{_fmt(r['peak_24h'])}</td>
+          <td class="trend {r['trend_css']}" style="text-align:center;font-weight:700">{trend_arrow} {trend_str} {mini_spark}</td>
+          <td class="num" style="text-align:right;color:#fbbf24">{_fmt(r['peak_all'])}</td>
+          <td class="pct-cell" style="width:100px">
+            <div class="bar-bg"><div class="bar" style="width:{bar_w}%;background:linear-gradient(90deg,#a78bfa,#7c3aed)"></div></div>
+            <span>{r.get('pct_all', 0):.1f}%</span>
+          </td>
+        </tr>\n"""
+
+    # Build detail cards (simplified vs main cards)
+    cards_html = ""
+    for r in emerging_results:
+        trend_pct = r.get("trend_pct")
+        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "no data"
+        sparkline = _generate_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"))
+        genre = r.get("genre", "Other")
+
+        # Takeaway — state + context
+        ts = r.get("takeaway_structured", {})
+        takeaway_html = ""
+        if ts.get("state"):
+            state_color = {"up": "#4ade80", "down": "#f87171", "flat": "#fbbf24"}.get(r.get("trend_css", "neutral"), "#94a3b8")
+            takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:{state_color}">State:</span> {_esc(_sanitize_text(ts["state"]))}</div>'
+        if ts.get("context"):
+            takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:#a78bfa">Context:</span> {_esc(_sanitize_text(ts["context"]))}</div>'
+        if not takeaway_html:
+            takeaway_html = f'<p style="color:#c7d5e0;font-size:0.85rem;font-style:italic">{_esc(_sanitize_text(r.get("takeaway", "")))}</p>'
+
+        # Recent news (2 items max for compact cards)
+        news_html = ""
+        for n in r.get("news", [])[:2]:
+            title_text = _esc(_sanitize_text(n["title"][:80]))
+            news_url = n.get("url", "")
+            title = f'<a href="{_esc(news_url)}" target="_blank" class="item-link">{title_text}</a>' if news_url else title_text
+            sentiment = _analyze_sentiment(n.get("title", "") + " " + (n.get("contents", "") or "")[:200])
+            s_fg, _ = _sentiment_css(sentiment)
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}">\u25cf</span> '
+            news_html += f'<li>{sent_dot}{title} \u2014 {n["date"]}</li>\n'
+        if not news_html:
+            news_html = "<li>No recent news</li>\n"
+
+        cards_html += f"""
+    <div class="card emerging-card" id="{_card_id(r['name'])}-emerging" data-genre="{genre}" style="border-left-color:#a78bfa">
+      <div class="card-header">
+        <h3 style="color:#e5e5e5">{_esc(r['name'])} {_genre_badge_html(genre)} <span class="trend-badge {r['trend_css']}">{r.get('trend_arrow','▶')} {trend_str} MoM</span></h3>
+        <div class="card-stats" style="color:#8f98a0;font-size:0.82rem">
+          Steam 24h Peak: <strong style="color:#c7d5e0">{_fmt(r['peak_24h'])}</strong>
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">{_fmt(r['peak_all'])}</strong>
+          &nbsp;|&nbsp; <span style="color:#a78bfa;font-size:0.75rem;font-style:italic">Growth phase — compare trend direction, not absolute scale.</span>
+        </div>
+        {"<div class='card-trend'>" + sparkline + "</div>" if sparkline else ""}
+      </div>
+      <div class="card-takeaway">
+        <h4 style="color:#a78bfa">Takeaway</h4>
+        {takeaway_html}
+      </div>
+      <div class="card-section" style="padding:0.7rem 1rem">
+        <h4 style="color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.4rem">Developer Updates</h4>
+        <ul style="list-style:none">{news_html}</ul>
+      </div>
+    </div>
+"""
+
+    return f"""  <div class="emerging-section">
+    <h2 class="section-title" style="color:#a78bfa;border-bottom-color:#a78bfa">&#x1F52D; Emerging Titles</h2>
+    <p style="color:#8f98a0;font-size:0.85rem;margin-bottom:1rem">Curated watchlist tracking concept traction before mainstream adoption &mdash; growth rate is the signal, not absolute players.</p>
+
+    <table style="width:100%;border-collapse:collapse;margin-bottom:1.5rem">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">Rank</th>
+          <th style="text-align:left;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">Game</th>
+          <th style="text-align:left;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">Genre</th>
+          <th style="text-align:right;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">Steam CCU</th>
+          <th style="text-align:center;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">MoM Trend &#x2605;</th>
+          <th style="text-align:right;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">All-Time Peak</th>
+          <th style="padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">% of Peak</th>
+        </tr>
+      </thead>
+      <tbody>
+{table_rows}      </tbody>
+    </table>
+
+{cards_html}  </div>"""
+
+
+# ---------------------------------------------------------------------------
+# On Our Radar HTML section
+# ---------------------------------------------------------------------------
+
+def generate_radar_html(radar_results: list[dict]) -> str:
+    """Generate the 'On Our Radar' auto-discovery section HTML.
+
+    Shows algorithm-surfaced titles from SteamSpy tag data with recency_ratio signal.
+    """
+    if not radar_results:
+        return ""
+
+    rows_html = ""
+    for r in radar_results:
+        ratio = r.get("recency_ratio", 0)
+        ratio_str = f"{ratio:.1f}x recent vs. lifetime avg"
+        signal = r.get("signal", "Watch")
+        signal_color = {"Strong": "#4ade80", "Moderate": "#fbbf24", "Watch": "#94a3b8"}.get(signal, "#94a3b8")
+
+        # Why it surfaced
+        why_parts = []
+        if ratio > 1.2:
+            why_parts.append("Elevated recent playtime vs. lifetime average")
+        if r.get("ccu", 0) >= 500:
+            why_parts.append(f"Active CCU: {_fmt(r['ccu'])}")
+        pos = r.get("positive", 0)
+        neg = r.get("negative", 0)
+        total_rev = pos + neg
+        if total_rev > 0:
+            pct_pos = pos / total_rev * 100
+            why_parts.append(f"{pct_pos:.0f}% positive reviews ({_fmt(total_rev)} total)")
+        why_str = "; ".join(why_parts) if why_parts else "SteamSpy tag match"
+
+        rows_html += f"""      <tr>
+        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#e5e5e5;font-size:0.83rem">{_esc(r.get('name', ''))}</td>
+        <td style="padding:0.4rem 0.6rem;color:#8f98a0;font-size:0.8rem">{_esc(r.get('developer', ''))}</td>
+        <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">{_fmt(r.get('ccu', 0))}</td>
+        <td style="padding:0.4rem 0.6rem;text-align:center">
+          <span style="color:{signal_color};font-weight:700;font-size:0.8rem">{signal}</span>
+          <div style="color:#556b7d;font-size:0.68rem;margin-top:2px">{_esc(ratio_str)}</div>
+        </td>
+        <td style="padding:0.4rem 0.6rem;color:#8f98a0;font-size:0.75rem">{_esc(why_str)}</td>
+      </tr>\n"""
+
+    return f"""  <div class="radar-section" style="margin-top:2rem">
+    <h2 class="section-title" style="color:#38bdf8;border-bottom-color:#38bdf8">&#x1F4E1; On Our Radar</h2>
+    <p style="color:#8f98a0;font-size:0.85rem;margin-bottom:1rem">Algorithm-surfaced titles showing growth signals this week. Candidates for our emerging watchlist.</p>
+
+    <table style="width:100%;border-collapse:collapse;margin-bottom:0.5rem">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Game</th>
+          <th style="text-align:left;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Developer</th>
+          <th style="text-align:right;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Steam CCU</th>
+          <th style="text-align:center;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Signal Strength</th>
+          <th style="text-align:left;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Why It Surfaced</th>
+        </tr>
+      </thead>
+      <tbody>
+{rows_html}      </tbody>
+    </table>
+    <p style="color:#556b7d;font-size:0.72rem;font-style:italic;margin-top:0.5rem">These surface automatically from SteamSpy tag data. No editorial curation.</p>
+  </div>"""
 
 
 def _build_insights_html(results: list[dict]) -> str:
@@ -3765,6 +3963,37 @@ def main():
     overall_takeaways = _generate_overall_takeaways(results)
     print(f"  Generated takeaways for {len(results)} games + overall")
 
+    # --- Emerging Titles ---
+    print()
+    print("  Scraping Emerging Titles (6 watchlist games)...")
+    print("  (Adds ~3-4 minutes)")
+    emerging_results = []
+    try:
+        emerging_raw = scrape_emerging()
+        if emerging_raw:
+            emerging_results = _enrich(emerging_raw)
+            for r in emerging_results:
+                _generate_game_takeaway(r)
+            print(f"  Emerging: scraped + enriched {len(emerging_results)} titles")
+        else:
+            print("  Emerging: no data returned")
+    except Exception as e:
+        logger.error("Emerging scrape failed: %s", e)
+        print(f"  Emerging: FAILED ({e})")
+
+    # --- Auto-Discovery: On Our Radar ---
+    radar_results = []
+    try:
+        from discovery import discover_breakout_titles
+        known_app_ids = {g["app_id"] for g in GAMES} | {g["app_id"] for g in EMERGING_GAMES}
+        print()
+        print("  Running auto-discovery (SteamSpy tag scan)...")
+        radar_results = discover_breakout_titles(known_app_ids)
+        print(f"  Radar: found {len(radar_results)} candidates")
+    except Exception as e:
+        logger.error("Discovery failed: %s", e)
+        print(f"  Radar: FAILED ({e}) — continuing without")
+
     # Save outputs
     date_str = datetime.now().strftime("%Y-%m-%d")
 
@@ -3774,7 +4003,9 @@ def main():
 
     html_path = os.path.join(out_dir, f"digest_{date_str}.html")
     with open(html_path, "w") as f:
-        f.write(generate_html(results, failed_names, overall_takeaways))
+        f.write(generate_html(results, failed_names, overall_takeaways,
+                              emerging_results=emerging_results or None,
+                              radar_results=radar_results or None))
 
 
     # Write index.html

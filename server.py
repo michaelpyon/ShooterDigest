@@ -123,8 +123,8 @@ class DigestHandler(SimpleHTTPRequestHandler):
 <body>
 <div class="about-section">
   <div class="about-title">ShooterDigest</div>
-  <div class="about-subtitle">Weekly intelligence on the live FPS landscape. Steam player counts, Reddit sentiment, and press coverage — synthesized every Monday.</div>
-  <div class="stats-bar">{digest_count} digests published &middot; Tracking 16 games &middot; Since {since_str}</div>
+  <div class="about-subtitle">Steam concurrents, Reddit sentiment, and press coverage for 16 competitive shooters. One digest, every Monday.</div>
+  <div class="stats-bar">{digest_count} digests published &middot; 16 games tracked &middot; Since {since_str}</div>
 </div>
 <div class="digests-section">
   <h2>Archive</h2>
@@ -144,7 +144,7 @@ class DigestHandler(SimpleHTTPRequestHandler):
                 return (text[:100] + "…") if len(text) > 100 else text
         except Exception:
             pass
-        return "Weekly FPS intelligence digest"
+        return "Steam concurrents, Reddit sentiment, press coverage."
 
 
 if __name__ == "__main__":

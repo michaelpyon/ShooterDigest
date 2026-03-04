@@ -4266,6 +4266,25 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
 
     previous = _load_previous_history(out_dir)
+
+    # --- Backfill from history when SteamCharts was blocked ---
+    # The Steam API fallback only returns current players (no all-time peak,
+    # no monthly trends). Pull those from the most recent good history file
+    # so the digest still shows meaningful trends and % of peak.
+    if previous:
+        backfill_count = 0
+        for r in results:
+            if r.get("_data_source") == "steam_api" and not r.get("months"):
+                prev = previous.get(r["name"])
+                if prev:
+                    if prev.get("peak_all") and prev["peak_all"] > r.get("peak_all", 0):
+                        r["peak_all"] = prev["peak_all"]
+                    if prev.get("months"):
+                        r["months"] = prev["months"]
+                    backfill_count += 1
+        if backfill_count:
+            print(f"  Backfilled {backfill_count} games with historical peak/trend data (SteamCharts was blocked)")
+
     _compute_deltas(results, previous)
     if previous:
         print(f"  Loaded previous data for comparison ({len(previous)} games)")

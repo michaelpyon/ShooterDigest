@@ -733,57 +733,60 @@ def _generate_trend_hypothesis(r: dict) -> str:
     if news:
         latest_date = news[0].get("date", "")
 
+    name = r.get("name", "This title")
+
     if surging and has_season:
         detail = f" ({season_name})" if season_name else ""
-        return f"Surge likely driven by new season launch{detail}. Fresh content typically triggers a player spike in the first 2-4 weeks."
+        return f"{name} is up {trend_pct:+.0f}% and the season launch{detail} is the obvious driver. First 2-4 weeks after a season drop typically look like this."
 
     if growing and has_season:
         detail = f" ({season_name})" if season_name else ""
-        return f"Growth likely driven by{detail} season launch bringing returning and new players."
+        return f"Season{detail} is keeping {name} growing at {trend_pct:+.1f}% MoM. Mix of returning players and curiosity from the new content cycle."
 
     if growing and has_content:
         detail = f" ({content_details})" if content_details else ""
-        return f"New content{detail} appears to be driving engagement. Player interest tends to spike around major content drops."
+        return f"{name} is up {trend_pct:+.1f}% with new content{detail} in the past month. Hard to isolate how much is content-driven vs. baseline retention."
 
     if growing and has_balance:
-        return "Growth coincides with recent balance changes — meta shifts often re-engage lapsed players curious about the new state of play."
+        if balance_details:
+            return f"Up {trend_pct:+.1f}%. Balance changes ({balance_details}) pulled back lapsed players to check the new meta — that's a consistent pattern after meaningful tuning."
+        return f"Up {trend_pct:+.1f}%. Recent balance changes likely re-engaged some players curious about the new state of play."
 
     if growing and has_bugs and not has_content and not has_season:
-        return "Growth despite no major content — bug fixes and quality-of-life patches may be improving player retention."
+        return f"Up {trend_pct:+.1f}% with no major content drop. Bug fixes and stability work may be improving baseline retention — small lift, real signal."
 
     if growing and not has_news:
-        return "Organic growth with no recent content updates — may indicate external factors such as streamer coverage, a sale, or issues with competing titles."
+        return f"{name} is up {trend_pct:+.1f}% with no obvious catalyst in developer updates. Probably a community moment (streamer, viral clip) or player migration from a title in decline."
 
     if growing:
-        return "Growth aligns with recent developer activity. Sustained engagement will depend on content cadence."
+        return f"Up {trend_pct:+.1f}% with some recent dev activity. Whether the content or organic retention is doing the work here isn't clear from the data."
 
     if sharply_declining and pct_all > 40:
-        return "Sharp decline from elevated levels — likely post-launch or post-season normalization as initial hype fades. This is a typical pattern."
+        return f"{name} is down {trend_pct:+.1f}% from still-elevated levels ({pct_all:.0f}% of ATH). Likely post-season normalization, not structural collapse — but needs watching."
 
     if sharply_declining and has_season:
-        return "Declining sharply despite new season content — may indicate content quality concerns or post-launch player churn exceeding new player acquisition."
+        return f"Down {trend_pct:+.1f}% despite active seasonal content. That's a bad sign — either the season isn't resonating or competition is actively pulling players. Worth tracking closely."
 
     if declining and not has_news:
-        date_str = f" since {latest_date}" if latest_date else ""
-        return f"Decline coincides with no developer updates{date_str} — possible content drought. Players may be migrating to competing titles with fresher content."
+        return f"{name} is down {trend_pct:+.1f}% with no developer updates in the recent window. Content drought. Players are migrating to wherever the pipeline is active."
 
     if declining and has_season:
-        return "Declining despite active season — may signal that the current content cycle is not resonating with the player base, or competition is pulling players away."
+        return f"Down {trend_pct:+.1f}% even with a season running. Either the content isn't hitting or the player base is in structural contraction. A season drop that doesn't move the needle is a data point."
 
     if declining and has_content:
-        return "Declining despite new content additions — the updates may not be addressing core player concerns, or the player base is in a natural contraction cycle."
+        return f"Down {trend_pct:+.1f}% despite new content. The updates aren't reversing the trend — whatever's driving player loss isn't being addressed by the content."
 
     if declining:
-        return "Decline aligns with typical end-of-content-cycle patterns. Watch for upcoming announcements that could reverse the trend."
+        return f"{name} is down {trend_pct:+.1f}%. End-of-content-cycle pattern. Needs a meaningful new drop to stabilize."
 
     if stable and has_season:
-        return "Stable player base despite new season — suggests the game has found its core audience. Season content is maintaining but not expanding the player pool."
+        return f"Flat at {trend_pct:+.1f}% through a season drop — {name} has found its core audience. The season is maintaining retention but not growing the pool."
 
     if stable and not has_news:
-        return "Stable without recent updates — indicates a loyal core player base. Growth will likely require fresh content or events."
+        return f"Flat at {trend_pct:+.1f}% with nothing notable from the developer. Core audience is sticky but growth isn't coming without a new hook."
 
     if stable:
-        return "Stable player base suggests healthy retention with existing content. The game is maintaining its audience effectively."
+        return f"Holding steady at {trend_pct:+.1f}% with modest developer activity. Stable, not collapsing, not growing."
 
     return "Mixed signals — insufficient data to determine a clear trend driver."
 
@@ -1340,23 +1343,45 @@ def _generate_game_takeaway(r: dict) -> dict:
             cat_desc = cat_descriptions.get(top_cat, "general discussion")
             community_parts.append(f"Limited community activity — one substantive post about {cat_desc}.")
 
-    # Press coverage — synthesize topics from sources, not raw titles
+    # Press coverage — synthesize actual topics from titles, not just count
     ext_news = r.get("external_news", [])
     if ext_news:
         sources = [a.get("source", "") for a in ext_news[:4] if a.get("source")]
-        unique_sources = list(dict.fromkeys(sources))[:3]  # deduplicate, keep order
+        unique_sources = list(dict.fromkeys(sources))[:3]
+        source_str = ", ".join(unique_sources) if unique_sources else "gaming press"
 
-        if len(ext_news) >= 3:
-            source_str = ", ".join(unique_sources) if unique_sources else "multiple outlets"
+        # Classify press topics from article titles
+        titles = [a.get("title", "") for a in ext_news[:5]]
+        topics = []
+        for t in titles:
+            tl = t.lower()
+            if any(w in tl for w in ["review", "rated", "score"]):
+                topics.append("review coverage")
+            elif any(w in tl for w in ["update", "patch", "season", "launch", "release"]):
+                topics.append("update coverage")
+            elif any(w in tl for w in ["guide", "tips", "how to", "best"]):
+                topics.append("guide content")
+            elif any(w in tl for w in ["controversy", "drama", "backlash", "criticism", "problem", "issue"]):
+                topics.append("controversy coverage")
+            elif any(w in tl for w in ["esports", "tournament", "competitive", "championship"]):
+                topics.append("esports coverage")
+
+        # Deduplicate topics
+        unique_topics = list(dict.fromkeys(topics))[:2]
+
+        if len(ext_news) >= 3 and unique_topics:
+            topic_str = " and ".join(unique_topics)
             community_parts.append(
-                f"Active press coverage from {source_str} "
-                f"({len(ext_news)} articles from gaming press in the past week)."
+                f"{len(ext_news)} press articles in the past week from {source_str}, mostly {topic_str}."
+            )
+        elif len(ext_news) >= 3:
+            community_parts.append(
+                f"{len(ext_news)} press articles in the past week from {source_str}."
             )
         elif ext_news:
-            source_str = unique_sources[0] if unique_sources else "press"
+            title_sample = _sanitize_text(ext_news[0].get("title", "")[:60])
             community_parts.append(
-                f"Press coverage from {source_str} "
-                f"({len(ext_news)} {'article' if len(ext_news) == 1 else 'articles'} from gaming press in the past week)."
+                f"Light press coverage ({len(ext_news)} {'article' if len(ext_news) == 1 else 'articles'}): \"{title_sample}\" via {source_str}."
             )
 
     community = " ".join(community_parts) if community_parts else ""
@@ -1365,9 +1390,24 @@ def _generate_game_takeaway(r: dict) -> dict:
     outlook_parts = []
 
     if dev.get("has_upcoming_event") and dev.get("upcoming_details"):
-        outlook_parts.append(f"Looking ahead: {dev['upcoming_details']}")
+        raw = dev["upcoming_details"]
+        # Strip line breaks, collapse whitespace, cut pipe-separated junk
+        raw = re.sub(r'[\r\n]+', ' ', raw)
+        raw = re.sub(r'\s{2,}', ' ', raw).strip()
+        raw = raw.split(" | ")[0].strip()  # take only the first segment if pipe-joined
+        # Drop obvious marketing copy and thank-you posts
+        if not re.search(r'\b(?:thank you|join us|click here|subscribe|discord|we look back|steadfast support|here to stay)\b', raw, re.I):
+            if len(raw) > 160:
+                raw = raw[:157] + "..."
+            if len(raw) > 20:
+                outlook_parts.append(f"Announced: {raw}")
     elif dev.get("has_upcoming_event") and dev.get("upcoming_summary"):
-        outlook_parts.append(f"Looking ahead: {dev['upcoming_summary']}")
+        raw = dev["upcoming_summary"]
+        raw = re.sub(r'[\r\n]+', ' ', raw).strip()
+        if len(raw) > 160:
+            raw = raw[:157] + "..."
+        if len(raw) > 20:
+            outlook_parts.append(f"Announced: {raw}")
 
     # Historical trajectory
     if r.get("prev") and r["prev"].get("trend_pct") is not None:

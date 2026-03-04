@@ -6,12 +6,19 @@ import html as html_module
 import logging
 import urllib.parse
 import requests
+import cloudscraper
 from bs4 import BeautifulSoup
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 logger = logging.getLogger(__name__)
+
+# cloudscraper session — handles Cloudflare JS challenges automatically.
+# Used for SteamCharts requests; regular requests used for Steam API / Reddit / RSS.
+_scraper = cloudscraper.create_scraper(
+    browser={"browser": "chrome", "platform": "windows", "mobile": False}
+)
 
 
 @retry(
@@ -25,6 +32,14 @@ def _http_get(url: str, headers: dict, timeout: int = 10) -> requests.Response:
     resp = requests.get(url, headers=headers, timeout=timeout)
     resp.raise_for_status()
     return resp
+
+
+def _steamcharts_get(url: str, timeout: int = 15) -> requests.Response:
+    """HTTP GET via cloudscraper for SteamCharts (bypasses Cloudflare challenges)."""
+    resp = _scraper.get(url, timeout=timeout)
+    resp.raise_for_status()
+    return resp
+
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; ShooterDigest/1.0)",
@@ -227,41 +242,86 @@ def _is_english(text: str) -> bool:
 # SteamCharts: player counts + monthly trends
 # ---------------------------------------------------------------------------
 
+def _get_steam_api_player_count(app_id: int) -> int | None:
+    """Fetch current player count from the official Steam Web API.
+
+    Returns current concurrent players, or None on failure.
+    This is the fallback when SteamCharts is unavailable (Cloudflare block).
+    """
+    url = f"https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid={app_id}"
+    try:
+        resp = _http_get(url, headers=HEADERS, timeout=10)
+        data = resp.json()
+        count = data.get("response", {}).get("player_count")
+        return int(count) if count else None
+    except Exception as e:
+        logger.error("Steam API player count failed for app %s: %s", app_id, e)
+        return None
+
+
 def get_steam_data(game: dict) -> dict | None:
-    """Scrape player data + monthly trends from steamcharts.com."""
+    """Fetch player data + monthly trends.
+
+    Primary: SteamCharts (24h peak, all-time peak, monthly trend table).
+    Fallback: Steam Web API (current player count only) when SteamCharts is blocked.
+    The fallback returns valid data with no monthly history — trend will build
+    from the history file over subsequent runs.
+    """
     app_id = game["app_id"]
     name = game["name"]
     url = f"https://steamcharts.com/app/{app_id}"
 
+    # --- Try SteamCharts first ---
+    soup = None
     try:
-        resp = _http_get(url, headers=HEADERS, timeout=10)
-    except requests.RequestException as e:
-        logger.error("Failed to fetch %s: %s", name, e)
-        return None
+        resp = _steamcharts_get(url, timeout=15)
+        soup = BeautifulSoup(resp.text, "html.parser")
+        # Validate we got a real page (not a Cloudflare challenge)
+        if not soup.find("div", class_="app-stat"):
+            logger.warning("SteamCharts returned no app-stat divs for %s — likely blocked", name)
+            soup = None
+    except Exception as e:
+        logger.warning("SteamCharts unavailable for %s: %s — falling back to Steam API", name, e)
+        soup = None
 
-    soup = BeautifulSoup(resp.text, "html.parser")
+    if soup is not None:
+        # Full SteamCharts path
+        peak_24h = None
+        peak_all = None
+        for stat in soup.find_all("div", class_="app-stat"):
+            num_span = stat.find("span", class_="num")
+            if not num_span:
+                continue
+            text = stat.get_text()
+            val = _parse_num(num_span.text)
+            if val is None:
+                continue
+            if "24-hour peak" in text:
+                peak_24h = int(val)
+            elif "all-time peak" in text:
+                peak_all = int(val)
 
-    # Header stats
-    peak_24h = None
-    peak_all = None
-    for stat in soup.find_all("div", class_="app-stat"):
-        num_span = stat.find("span", class_="num")
-        if not num_span:
-            continue
-        text = stat.get_text()
-        val = _parse_num(num_span.text)
-        if val is None:
-            continue
-        if "24-hour peak" in text:
-            peak_24h = int(val)
-        elif "all-time peak" in text:
-            peak_all = int(val)
+        if peak_24h is None and peak_all is None:
+            logger.warning("No player counts in SteamCharts page for %s — trying Steam API", name)
+            soup = None  # fall through to API path
 
-    if peak_24h is None and peak_all is None:
-        logger.error("No player counts found for %s", name)
-        return None
+    if soup is None:
+        # Fallback: Steam Web API (current players only)
+        current = _get_steam_api_player_count(app_id)
+        if current is None:
+            logger.error("Both SteamCharts and Steam API failed for %s", name)
+            return None
+        logger.info("Using Steam API fallback for %s: %d current players", name, current)
+        return {
+            "name": name,
+            "app_id": app_id,
+            "peak_24h": current,
+            "peak_all": current,   # no historical ATH available; will be replaced when SteamCharts is accessible
+            "months": [],
+            "_data_source": "steam_api",  # flag so UI can note the data source
+        }
 
-    # Monthly trend table
+    # SteamCharts monthly trend table
     months = []
     table = soup.find("table", class_="common-table")
     if table and table.find("tbody"):
@@ -290,6 +350,7 @@ def get_steam_data(game: dict) -> dict | None:
         "peak_24h": peak_24h or 0,
         "peak_all": peak_all or 0,
         "months": months[:12],
+        "_data_source": "steamcharts",
     }
 
 

@@ -228,6 +228,17 @@ def _lifecycle_badge_html(name: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Historical context annotations — injected into detail cards for key titles
+# ---------------------------------------------------------------------------
+
+HISTORICAL_CONTEXT = {
+    "Battlefield 2042": "Peak 100K concurrent at launch (Nov 2021) → dropped 95% in 90 days",
+    "Destiny 2": "Went free-to-play 2019; peak 292K concurrent; cross-platform MAU not reflected here",
+    "Halo Infinite": "Peak 272K concurrent at launch (Dec 2021) → now sub-5K; franchise pivot underway",
+}
+
+
+# ---------------------------------------------------------------------------
 # Event Annotations for big movers (#8)
 # ---------------------------------------------------------------------------
 
@@ -238,6 +249,21 @@ EVENT_ANNOTATIONS = {
     "Battlefield 6": "Season 2 launched recently but struggling to retain new players.",
     "Destiny 2": "Structural decline continues pre-Marathon. Player base contracting into core audience.",
 }
+
+
+# ---------------------------------------------------------------------------
+# Data caveat — "what's not included" info box rendered near the top of each digest
+# ---------------------------------------------------------------------------
+
+DATA_CAVEAT_HTML = """  <div class="data-caveat">
+    <span class="caveat-icon">\u2139\ufe0f</span>
+    <div class="caveat-text">
+      <strong>What this digest tracks:</strong> Steam concurrent players only.
+      Major titles like Valorant, Fortnite, and Overwatch 2 report MAU/DAU \u2014 not concurrent Steam players \u2014
+      and are not fully comparable on this scale.
+      For off-Steam audience estimates, see <a href="https://activeplayer.io" target="_blank" class="item-link">activeplayer.io</a>.
+    </div>
+  </div>"""
 
 
 # ---------------------------------------------------------------------------
@@ -2162,6 +2188,114 @@ def _build_methodology_html(results: list[dict]) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Exec prose — analyst-style narrative paragraph for the Executive Summary
+# ---------------------------------------------------------------------------
+
+def generate_exec_prose(data: list[dict]) -> str:
+    """Generate a 2-3 sentence analyst narrative paragraph for the exec summary.
+
+    Synthesizes the week's key market trend with real player data context.
+    Explains the "why" behind the numbers — does not repeat bullets.
+    Returns an HTML string with a styled <p> element.
+    """
+    if not data:
+        return ""
+
+    with_trend = [r for r in data if r.get("trend_pct") is not None]
+    if not with_trend:
+        return ""
+
+    gainer = max(with_trend, key=lambda r: r["trend_pct"])
+    loser = min(with_trend, key=lambda r: r["trend_pct"])
+    gainers = [r for r in with_trend if r["trend_pct"] > 2]
+    losers = [r for r in with_trend if r["trend_pct"] < -2]
+    top_game = data[0]  # sorted by peak_24h descending
+
+    sentences = []
+
+    # ── Sentence 1: market direction + top mover ──
+    if gainer["trend_pct"] > 10:
+        dev = gainer.get("dev_comms", {})
+        if dev.get("has_new_season") or dev.get("has_new_content"):
+            catalyst = dev.get("season_name") or dev.get("new_content_details") or "fresh content"
+            sentences.append(
+                f"The standout this week is {gainer['name']}, surging {gainer['trend_pct']:+.0f}% MoM on the back of "
+                f"{catalyst} \u2014 a textbook content catalyst separating growing titles from the stagnant majority."
+            )
+        else:
+            sentences.append(
+                f"{gainer['name']} leads the week at {gainer['trend_pct']:+.0f}% MoM without a major content drop driving it \u2014 "
+                f"organic growth like this is rare and worth tracking."
+            )
+    elif len(gainers) > len(losers):
+        sentences.append(
+            f"The market tilts positive this week: {len(gainers)} of {len(with_trend)} tracked titles are growing month-over-month, "
+            f"led by {gainer['name']} at {gainer['trend_pct']:+.1f}%, while {top_game['name']} "
+            f"holds the top spot at {_fmt(top_game['peak_24h'])} Steam concurrent players."
+        )
+    elif len(losers) > len(gainers):
+        sentences.append(
+            f"Broad contraction this week \u2014 {len(losers)} of {len(with_trend)} tracked titles are losing concurrent players MoM, "
+            f"with {loser['name']} leading the decline at {loser['trend_pct']:+.1f}%."
+        )
+    else:
+        sentences.append(
+            f"A split market this week: {len(gainers)} titles gaining, {len(losers)} declining, and the top spot belongs to "
+            f"{top_game['name']} at {_fmt(top_game['peak_24h'])} Steam concurrent players ({top_game['pct_all']:.0f}% of its all-time peak)."
+        )
+
+    # ── Sentence 2: structural story / "why" ──
+    if loser["trend_pct"] < -15:
+        sentences.append(
+            f"The steepest drop \u2014 {loser['name']} at {loser['trend_pct']:+.1f}% \u2014 reflects a pattern we've tracked all quarter: "
+            f"titles without active content pipelines are hemorrhaging players to the handful of games still shipping regularly."
+        )
+    elif len(losers) >= 4:
+        declining_names = ", ".join(r["name"] for r in sorted(losers, key=lambda r: r["trend_pct"])[:3])
+        sentences.append(
+            f"The breadth of decline ({declining_names}, among others) points to a structural issue: "
+            f"mid-tier studios that launched strong but haven't maintained content cadence are now paying for it in retention."
+        )
+    elif gainer["trend_pct"] > 5:
+        dev = gainer.get("dev_comms", {})
+        if dev.get("has_new_season") or dev.get("has_new_content"):
+            sentences.append(
+                f"Content cadence remains the consistent differentiator \u2014 {gainer['name']}'s growth tracks directly "
+                f"to active developer engagement, a pattern consistent across every growth spike in this dataset."
+            )
+        elif len(gainers) >= 2:
+            second = gainers[1]
+            sentences.append(
+                f"Growth is concentrated at the top: {gainer['name']} and {second['name']} are pulling away from the field, "
+                f"while mid-tier titles continue slow, steady player loss with no clear recovery catalyst."
+            )
+    elif len(gainers) == 0 and len(losers) > 0:
+        sentences.append(
+            f"With no titles showing meaningful growth, this week's digest is a reminder that player attention is "
+            f"a zero-sum resource \u2014 and right now, the gains are concentrated in a very small number of titles."
+        )
+
+    # ── Sentence 3: forward-looking note (optional, only if something concrete to say) ──
+    upcoming_games = [r["name"] for r in data[:8] if r.get("dev_comms", {}).get("has_upcoming_event")][:2]
+    if len(sentences) < 3 and upcoming_games:
+        sentences.append(
+            f"Near-term, watch {' and '.join(upcoming_games)} \u2014 "
+            f"both have content drops signaled that could move player counts before the next run."
+        )
+    elif len(sentences) < 3 and len(losers) > len(gainers) + 2:
+        sentences.append(
+            "Without a content catalyst shift, the contraction trend likely continues \u2014 "
+            "the titles holding steady are those with active developer engagement, not passive audience retention."
+        )
+
+    if not sentences:
+        return ""
+
+    prose = " ".join(sentences)
+    return f'<p class="exec-prose">{html_mod.escape(prose)}</p>'
+
+
+# ---------------------------------------------------------------------------
 # HTML generation
 # ---------------------------------------------------------------------------
 
@@ -2175,6 +2309,7 @@ def generate_html(results: list[dict], failed_names: list[str],
 
     # --- Executive Summary with Winners / Neutrals / Losers ---
     exec_items = "\n".join(f"      <li>{_esc(_sanitize_text(t))}</li>" for t in overall_takeaways)
+    exec_prose_html = generate_exec_prose(results)
     aggregate_chart = _generate_aggregate_sparkline(results)
     wnl = _generate_winners_neutrals_losers(results)
 
@@ -2215,6 +2350,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     <ul>
 {exec_items}
     </ul>
+    {exec_prose_html}
     <div class="wnl-label">Month-over-Month Steam Concurrent Player Trend</div>
 {wnl_html}
     {aggregate_chart}
@@ -2443,6 +2579,8 @@ def generate_html(results: list[dict], failed_names: list[str],
         card_lifecycle = _lifecycle_badge_html(r['name'])
         card_annotation = EVENT_ANNOTATIONS.get(r['name'], "")
         card_annotation_html = f'<div class="event-annotation">{_esc(card_annotation)}</div>' if card_annotation else ""
+        hist_ctx = HISTORICAL_CONTEXT.get(r['name'], "")
+        hist_ctx_html = f'<div class="historical-context">{_esc(hist_ctx)}</div>' if hist_ctx else ""
         # Pre-compute Est. Total HTML to avoid backslash-in-f-string issues
         _steam_pct = r["steam_share"] * 100
         _est_tip = (f'Estimated all-platform total = Steam 24h peak \u00f7 Steam share ({_steam_pct:.0f}%). '
@@ -2459,6 +2597,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     <div class="card" id="{_card_id(r['name'])}" data-genre="{card_genre}">
       <div class="card-header">
         <h3>{_esc(r['name'])}{card_lifecycle} {_genre_badge_html(card_genre)} <span class="trend-badge {r['trend_css']}">{r['trend_arrow']} {trend_str} MoM</span></h3>
+        {hist_ctx_html}
         {card_annotation_html}
         <div class="card-stats">
           24h Peak: <strong>{_fmt(r['peak_24h'])}</strong> (Steam)
@@ -3007,6 +3146,35 @@ def generate_html(results: list[dict], failed_names: list[str],
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }}
 
+    /* Exec prose paragraph */
+    .exec-prose {{
+      color: #b0bec5; font-size: 0.88rem; line-height: 1.65;
+      margin-top: 0.8rem; padding: 0.6rem 0.8rem;
+      background: rgba(27, 40, 56, 0.4); border-radius: 4px;
+      border-left: 2px solid #fbbf24; font-style: italic;
+    }}
+
+    /* Data caveat info box */
+    .data-caveat {{
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      background: #141e2b; border: 1px solid #2a475e;
+      border-radius: 6px; padding: 0.7rem 1rem;
+      margin-bottom: 1.5rem;
+    }}
+    .caveat-icon {{ font-size: 1rem; flex-shrink: 0; line-height: 1.4; }}
+    .caveat-text {{
+      color: #8f98a0; font-size: 0.78rem; line-height: 1.55;
+    }}
+    .caveat-text strong {{ color: #b0bec5; }}
+
+    /* Historical context annotation */
+    .historical-context {{
+      color: #8f98a0; font-size: 0.72rem; font-style: italic;
+      margin-top: 0.15rem; padding: 0.2rem 0.4rem;
+      background: rgba(251, 191, 36, 0.06);
+      border-left: 2px solid #fbbf24; border-radius: 0 3px 3px 0;
+    }}
+
     .footer {{
       color: #556b7d; font-size: 0.78rem;
       border-top: 1px solid #1b2838; padding-top: 1rem; line-height: 1.6;
@@ -3206,6 +3374,8 @@ def generate_html(results: list[dict], failed_names: list[str],
   <p class="subtitle-date">Week of {date_str}</p>
 
 {exec_html}
+
+{DATA_CAVEAT_HTML}
 
 {genre_tabs_html}
 

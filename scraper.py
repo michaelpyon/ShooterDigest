@@ -474,7 +474,12 @@ def get_google_news_rss(game_name: str, limit: int = 5) -> list[dict]:
 
         # Relevance: at least one name token must appear in title
         title_lower = title.lower()
-        if not any(tok in title_lower for tok in name_tokens):
+        # Require the full game name OR all individual tokens to appear.
+        # "any token" matching was too loose — "Apex" alone matched unrelated articles.
+        game_name_lower = game_name.lower()
+        full_name_match = game_name_lower in title_lower
+        all_tokens_match = len(name_tokens) > 0 and all(tok in title_lower for tok in name_tokens)
+        if not (full_name_match or all_tokens_match):
             continue
 
         # Filter out non-gaming articles (sports, Olympics, etc.)

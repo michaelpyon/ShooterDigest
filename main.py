@@ -1403,24 +1403,69 @@ def _generate_game_takeaway(r: dict) -> dict:
 
 
 def _generate_overall_takeaways(results: list[dict]) -> list[str]:
-    """Generate concise executive summary bullets (no market direction — that's in the table)."""
+    """Generate substantive executive summary bullets with rationale, not just data points."""
     takeaways = []
     with_trend = [r for r in results if r.get("trend_pct") is not None]
 
     if not with_trend:
         return ["Insufficient trend data for market analysis."]
 
-    # 1. Biggest mover up
-    gainer = max(with_trend, key=lambda r: r["trend_pct"])
+    gainers = sorted([r for r in with_trend if r["trend_pct"] > 2], key=lambda r: r["trend_pct"], reverse=True)
+    losers = sorted([r for r in with_trend if r["trend_pct"] < -2], key=lambda r: r["trend_pct"])
+    gainer = gainers[0] if gainers else max(with_trend, key=lambda r: r["trend_pct"])
+    loser = losers[0] if losers else min(with_trend, key=lambda r: r["trend_pct"])
+    top_game = results[0]  # sorted by peak_24h descending
+
+    # 1. Market direction with count context
+    if len(gainers) > len(losers):
+        takeaways.append(
+            f"{len(gainers)} of {len(with_trend)} tracked titles are growing MoM. "
+            f"{top_game['name']} leads all titles at {_fmt(top_game['peak_24h'])} Steam concurrent players."
+        )
+    elif len(losers) > len(gainers):
+        takeaways.append(
+            f"{len(losers)} of {len(with_trend)} tracked titles are declining MoM. "
+            f"Growth is concentrated in {len(gainers)} title{'s' if len(gainers) != 1 else ''}: "
+            + (", ".join(g["name"] for g in gainers[:3]) if gainers else "none") + "."
+        )
+    else:
+        takeaways.append(
+            f"Split market: {len(gainers)} titles gaining, {len(losers)} declining. "
+            f"{top_game['name']} holds the top spot at {_fmt(top_game['peak_24h'])} Steam concurrent players."
+        )
+
+    # 2. Biggest mover with catalyst explanation
     if gainer["trend_pct"] > 5:
-        takeaways.append(f"Biggest mover: {gainer['name']} at {gainer['trend_pct']:+.1f}% month-over-month.")
+        dev = gainer.get("dev_comms", {})
+        if dev.get("has_new_season") or dev.get("has_new_content"):
+            catalyst = dev.get("season_name") or dev.get("new_content_details") or "new content"
+            takeaways.append(
+                f"Biggest mover: {gainer['name']} at {gainer['trend_pct']:+.1f}% MoM. "
+                f"Catalyst: {catalyst}. Active content pipeline is the common thread for every growing title in this dataset."
+            )
+        elif gainer["trend_pct"] > 10:
+            takeaways.append(
+                f"Biggest mover: {gainer['name']} at {gainer['trend_pct']:+.1f}% MoM with no obvious content catalyst. "
+                f"Watch for a community-driven moment (viral clip, streamer spike, controversy) as the likely driver."
+            )
+        else:
+            takeaways.append(
+                f"Biggest mover: {gainer['name']} at {gainer['trend_pct']:+.1f}% MoM."
+            )
 
-    # 2. Steepest decline
-    loser = min(with_trend, key=lambda r: r["trend_pct"])
+    # 3. Steepest decline with structural note
     if loser["trend_pct"] < -5:
-        takeaways.append(f"Steepest decline: {loser['name']} at {loser['trend_pct']:+.1f}% month-over-month.")
+        prev_peak = loser.get("peak_all", 0)
+        pct_of_ath = loser.get("pct_all", 0)
+        if pct_of_ath < 20:
+            note = f"Now at {pct_of_ath:.0f}% of its all-time peak. Late-stage decline."
+        elif loser["trend_pct"] < -20:
+            note = "Steep enough to flag as a structural problem, not just a slow week."
+        else:
+            note = "No content drops announced to reverse the trend."
+        takeaways.append(f"Steepest decline: {loser['name']} at {loser['trend_pct']:+.1f}% MoM. {note}")
 
-    # 3. Run-over-run delta (compares 24h peaks to previous snapshot)
+    # 4. Combined market delta vs. prior period
     prev_avail = [r for r in results if r.get("prev") and r["prev"].get("peak_24h")]
     if prev_avail:
         cur_total = sum(r["peak_24h"] for r in prev_avail)
@@ -1428,7 +1473,21 @@ def _generate_overall_takeaways(results: list[dict]) -> list[str]:
         if prev_total > 0:
             delta = (cur_total - prev_total) / prev_total * 100
             direction = "up" if delta > 0 else "down"
-            takeaways.append(f"Combined 24h peaks across all 15 titles are {direction} {abs(delta):.1f}% vs. last week.")
+            takeaways.append(
+                f"Combined 24h Steam peaks across all tracked titles: {direction} {abs(delta):.1f}% vs. prior period. "
+                f"{'Market-wide tailwind.' if delta > 3 else 'Market-wide headwind.' if delta < -3 else 'Flat overall.'}"
+            )
+
+    # 5. Content cadence observation (only if signal is clear)
+    with_content = [r for r in gainers if r.get("dev_comms", {}).get("has_new_season") or r.get("dev_comms", {}).get("has_new_content")]
+    without_content = [r for r in losers[:3]]
+    if len(with_content) >= 2 and len(without_content) >= 2:
+        content_names = ", ".join(r["name"] for r in with_content[:2])
+        decline_names = ", ".join(r["name"] for r in without_content[:2])
+        takeaways.append(
+            f"Content cadence is the clearest differentiator this week: {content_names} are growing "
+            f"while {decline_names} (no active content) are shrinking."
+        )
 
     if not takeaways:
         takeaways.append(f"Tracking {len(results)} competitive shooter titles this week.")
@@ -2192,11 +2251,11 @@ def _build_methodology_html(results: list[dict]) -> str:
 # ---------------------------------------------------------------------------
 
 def generate_exec_prose(data: list[dict]) -> str:
-    """Generate a 2-3 sentence analyst narrative paragraph for the exec summary.
+    """Generate a 2-3 sentence analyst narrative for the exec summary.
 
-    Synthesizes the week's key market trend with real player data context.
-    Explains the "why" behind the numbers — does not repeat bullets.
-    Returns an HTML string with a styled <p> element.
+    Synthesizes the week's key market story with real data context.
+    Does not repeat bullets. Uses plain direct language.
+    Returns an HTML string.
     """
     if not data:
         return ""
@@ -2209,83 +2268,84 @@ def generate_exec_prose(data: list[dict]) -> str:
     loser = min(with_trend, key=lambda r: r["trend_pct"])
     gainers = [r for r in with_trend if r["trend_pct"] > 2]
     losers = [r for r in with_trend if r["trend_pct"] < -2]
-    top_game = data[0]  # sorted by peak_24h descending
+    top_game = data[0]
 
     sentences = []
 
-    # ── Sentence 1: market direction + top mover ──
+    # Sentence 1: the market story this week
     if gainer["trend_pct"] > 10:
         dev = gainer.get("dev_comms", {})
         if dev.get("has_new_season") or dev.get("has_new_content"):
-            catalyst = dev.get("season_name") or dev.get("new_content_details") or "fresh content"
+            catalyst = dev.get("season_name") or dev.get("new_content_details") or "new content"
             sentences.append(
-                f"The standout this week is {gainer['name']}, surging {gainer['trend_pct']:+.0f}% MoM on the back of "
-                f"{catalyst} \u2014 a textbook content catalyst separating growing titles from the stagnant majority."
+                f"{gainer['name']} is the story this week, up {gainer['trend_pct']:+.0f}% MoM on the back of {catalyst}. "
+                f"It's a clean example of what active content does to concurrent player counts."
             )
         else:
             sentences.append(
-                f"{gainer['name']} leads the week at {gainer['trend_pct']:+.0f}% MoM without a major content drop driving it \u2014 "
-                f"organic growth like this is rare and worth tracking."
+                f"{gainer['name']} leads the week at {gainer['trend_pct']:+.0f}% MoM with no obvious content catalyst. "
+                f"Organic growth like this is rare and worth watching closely."
             )
     elif len(gainers) > len(losers):
         sentences.append(
-            f"The market tilts positive this week: {len(gainers)} of {len(with_trend)} tracked titles are growing month-over-month, "
-            f"led by {gainer['name']} at {gainer['trend_pct']:+.1f}%, while {top_game['name']} "
-            f"holds the top spot at {_fmt(top_game['peak_24h'])} Steam concurrent players."
+            f"The market is positive this week: {len(gainers)} of {len(with_trend)} titles are growing MoM, "
+            f"led by {gainer['name']} at {gainer['trend_pct']:+.1f}%. "
+            f"{top_game['name']} holds the top spot at {_fmt(top_game['peak_24h'])} Steam concurrent players."
         )
     elif len(losers) > len(gainers):
         sentences.append(
-            f"Broad contraction this week \u2014 {len(losers)} of {len(with_trend)} tracked titles are losing concurrent players MoM, "
-            f"with {loser['name']} leading the decline at {loser['trend_pct']:+.1f}%."
+            f"Broad contraction this week: {len(losers)} of {len(with_trend)} tracked titles are losing concurrent players MoM. "
+            f"{loser['name']} leads the decline at {loser['trend_pct']:+.1f}%."
         )
     else:
         sentences.append(
-            f"A split market this week: {len(gainers)} titles gaining, {len(losers)} declining, and the top spot belongs to "
-            f"{top_game['name']} at {_fmt(top_game['peak_24h'])} Steam concurrent players ({top_game['pct_all']:.0f}% of its all-time peak)."
+            f"Split market: {len(gainers)} titles gaining, {len(losers)} declining. "
+            f"{top_game['name']} holds the top spot at {_fmt(top_game['peak_24h'])} Steam concurrent players "
+            f"({top_game['pct_all']:.0f}% of its all-time peak)."
         )
 
-    # ── Sentence 2: structural story / "why" ──
+    # Sentence 2: the structural "why"
     if loser["trend_pct"] < -15:
         sentences.append(
-            f"The steepest drop \u2014 {loser['name']} at {loser['trend_pct']:+.1f}% \u2014 reflects a pattern we've tracked all quarter: "
-            f"titles without active content pipelines are hemorrhaging players to the handful of games still shipping regularly."
+            f"{loser['name']} at {loser['trend_pct']:+.1f}% is the clearest signal: "
+            f"titles without active content pipelines are losing players to the handful of games still shipping regularly."
         )
     elif len(losers) >= 4:
         declining_names = ", ".join(r["name"] for r in sorted(losers, key=lambda r: r["trend_pct"])[:3])
         sentences.append(
-            f"The breadth of decline ({declining_names}, among others) points to a structural issue: "
-            f"mid-tier studios that launched strong but haven't maintained content cadence are now paying for it in retention."
+            f"The breadth of decline ({declining_names}) points to a structural problem: "
+            f"studios that launched strong but haven't maintained content cadence are paying for it in retention."
         )
     elif gainer["trend_pct"] > 5:
         dev = gainer.get("dev_comms", {})
         if dev.get("has_new_season") or dev.get("has_new_content"):
             sentences.append(
-                f"Content cadence remains the consistent differentiator \u2014 {gainer['name']}'s growth tracks directly "
-                f"to active developer engagement, a pattern consistent across every growth spike in this dataset."
+                f"Content cadence is the consistent differentiator: {gainer['name']}'s growth tracks directly "
+                f"to active developer engagement, a pattern that holds across every growth spike in this dataset."
             )
         elif len(gainers) >= 2:
             second = gainers[1]
             sentences.append(
-                f"Growth is concentrated at the top: {gainer['name']} and {second['name']} are pulling away from the field, "
-                f"while mid-tier titles continue slow, steady player loss with no clear recovery catalyst."
+                f"Growth is concentrated at the top: {gainer['name']} and {second['name']} are pulling away from the field "
+                f"while mid-tier titles continue slow, steady player loss."
             )
     elif len(gainers) == 0 and len(losers) > 0:
         sentences.append(
-            f"With no titles showing meaningful growth, this week's digest is a reminder that player attention is "
-            f"a zero-sum resource \u2014 and right now, the gains are concentrated in a very small number of titles."
+            f"No titles showing meaningful growth this week. "
+            f"Player attention is a fixed resource and right now it's consolidating into fewer titles."
         )
 
-    # ── Sentence 3: forward-looking note (optional, only if something concrete to say) ──
+    # Sentence 3: forward-looking (only if concrete)
     upcoming_games = [r["name"] for r in data[:8] if r.get("dev_comms", {}).get("has_upcoming_event")][:2]
     if len(sentences) < 3 and upcoming_games:
+        names = " and ".join(upcoming_games)
         sentences.append(
-            f"Near-term, watch {' and '.join(upcoming_games)} \u2014 "
-            f"both have content drops signaled that could move player counts before the next run."
+            f"Watch {names} before the next digest: both have content drops signaled that could move the numbers."
         )
     elif len(sentences) < 3 and len(losers) > len(gainers) + 2:
         sentences.append(
-            "Without a content catalyst shift, the contraction trend likely continues \u2014 "
-            "the titles holding steady are those with active developer engagement, not passive audience retention."
+            "Without a content catalyst, the contraction trend probably continues. "
+            "The titles holding steady are those with active developer engagement."
         )
 
     if not sentences:

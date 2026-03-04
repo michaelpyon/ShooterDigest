@@ -1,0 +1,320 @@
+{
+  "date": "2026-03-04",
+  "games": [
+    {
+      "name": "Counter-Strike 2",
+      "app_id": 730,
+      "rank": 1,
+      "peak_24h": 1351954,
+      "peak_all": 1351954,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Counter-Strike 2 Update",
+        "Counter-Strike 2 Update",
+        "Counter-Strike 2 Update",
+        "Counter-Strike 2 Update",
+        "Counter-Strike 2 Update"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. 3 press articles in the past week from gaming press, mostly update coverage.",
+      "steam_share": 1.0,
+      "est_total_24h": 1351954
+    },
+    {
+      "name": "PUBG: BATTLEGROUNDS",
+      "app_id": 578080,
+      "rank": 2,
+      "peak_24h": 381054,
+      "peak_all": 381054,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "PUBG: BATTLEGROUNDS Weekly Bans Notice (02/23~03/01)",
+        "PUBG: BATTLEGROUNDS Weekly Bans Notice (02/09~02/22)",
+        "[Dev Letter] Anti-Cheat Action Plan Based on Community Feedback",
+        "PUBG: BATTLEGROUNDS Weekly Bans Notice (02/02~02/08)",
+        "PUBG: BATTLEGROUNDS Weekly Bans Notice (01/26~02/01)"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. 5 press articles in the past week from gaming press, mostly update coverage.",
+      "steam_share": 0.8,
+      "est_total_24h": 476317
+    },
+    {
+      "name": "Arc Raiders",
+      "app_id": 1808500,
+      "rank": 3,
+      "peak_24h": 134137,
+      "peak_all": 134137,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Patch Notes 1.18.0",
+        "SHROUDED SKY - Patch Notes 1.17.0",
+        "Headwinds January Update Feedback Survey",
+        "Preparing for your Second Expedition",
+        "Hotfix 1.13.1"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity: 37+ bug fixes deployed. 5 press articles in the past week from gaming press, mostly update coverage and guide content.",
+      "steam_share": 0.5,
+      "est_total_24h": 268274
+    },
+    {
+      "name": "Apex Legends",
+      "app_id": 1172470,
+      "rank": 4,
+      "peak_24h": 109505,
+      "peak_all": 109505,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Apex Legends x Gundam Event",
+        "Apex Legends: Game Stability Update - 2/26/2026",
+        "An Update from the Anti Cheat Team - 02/25/2026",
+        "Apex Legends: Latest Update 2/23/26",
+        "An Update from the Anti Cheat Team 02/18/2026"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity:  launched recently. 5 press articles in the past week from gaming press.",
+      "steam_share": 0.25,
+      "est_total_24h": 438020
+    },
+    {
+      "name": "Delta Force",
+      "app_id": 2507950,
+      "rank": 5,
+      "peak_24h": 92912,
+      "peak_all": 92912,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "G.T.I. Security | Notice of penalties for violations",
+        "Update | New Year Koi Fortune, Spring Steed Appearance Lucky Draw",
+        "G.T.I. Security | Notice of penalties for violations",
+        "RED DAY Special Update",
+        "Delta Force | Vyron's Ultimate Appearance \"Cosmic Guardian\" Now Available"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity:  launched recently. 5 press articles in the past week from gaming press, mostly update coverage. Announced: The main highlights of this update include: RED DAY Event \u25cf Vyron's New Year Restaurant Event Time: 2/13\u20133/5 Details: Take a break from the gunfire and chaos...",
+      "steam_share": 0.7,
+      "est_total_24h": 132731
+    },
+    {
+      "name": "Rainbow Six Siege",
+      "app_id": 359550,
+      "rank": 6,
+      "peak_24h": 75835,
+      "peak_all": 75835,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "OPERATION SILENT HUNT BEGINS NOW",
+        "Y11S1 PATCH NOTES ADDENDUM",
+        "Y11S1 DESIGNER'S NOTES",
+        "Solid Snake joins Rainbow!",
+        "PLAYER PROTECTION IN YEAR 11"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity:  launched recently; 31+ bug fixes deployed. 5 press articles in the past week from gaming press, mostly guide content. Announced: DISCOVER OPERATION SILENT HUNT Aside from Solid Snake, this new season brings tons of new features, including balancing updates, a 1v1 Arcade mode later in t...",
+      "steam_share": 0.35,
+      "est_total_24h": 216671
+    },
+    {
+      "name": "Overwatch",
+      "app_id": 2357570,
+      "rank": 7,
+      "peak_24h": 74032,
+      "peak_all": 74032,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Double XP Weekend, Thanks for Playing Week 1!",
+        "Roles Refined\u00a0",
+        "Loverwatch",
+        "New Rosters. New Rivalries.",
+        "Choose Your Side"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity:  launched recently. 5 press articles in the past week from gaming press, mostly update coverage.",
+      "steam_share": 0.2,
+      "est_total_24h": 370160
+    },
+    {
+      "name": "Marvel Rivals",
+      "app_id": 2767030,
+      "rank": 8,
+      "peak_24h": 45065,
+      "peak_all": 45065,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Marvel Rivals Version 20260219 Patch Notes",
+        "Marvel Rivals Version 20260213 Patch Notes: Season 6.5 Arrives",
+        "Marvel Rivals: What's new in Season 6.5 // Dev Vision Vol. 14",
+        "Marvel Rivals Version 20260213 Balance Post",
+        "Marvel Rivals Version 20260205 Patch Notes"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity: Season 6.5 launched recently. 5 press articles in the past week from gaming press, mostly update coverage. Announced: Here's what's coming your way:\u00a0All-New ContentNew Events \u2014\u2014 Faulty Dream & Twisted NightmareThis week will see the launch of two brand new events: Complete t...",
+      "steam_share": 0.35,
+      "est_total_24h": 128757
+    },
+    {
+      "name": "Team Fortress 2",
+      "app_id": 440,
+      "rank": 9,
+      "peak_24h": 42936,
+      "peak_all": 42936,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "poLANd.tf 2026",
+        "United Dodgeball League Season 1 2026",
+        "Seasonalander Winter 2026",
+        "TF2 Painter's Workshop War Paint Contest",
+        "Fruit Mixes Season 4"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity: Season 4 launched recently. 5 press articles in the past week from gaming press, mostly update coverage and esports coverage.",
+      "steam_share": 1.0,
+      "est_total_24h": 42936
+    },
+    {
+      "name": "Battlefield 6",
+      "app_id": 2807960,
+      "rank": 10,
+      "peak_24h": 36352,
+      "peak_all": 36352,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Battlefield 6 - Community Update - Season 2 Reactions and BR Solos Testing",
+        "Battlefield 6 - Anticheat Metrics - January",
+        "BATTLEFIELD 6 GAME UPDATE 1.2.1.5",
+        "Year of the Horse in Battlefield 6 | REDSEC",
+        "Battlefield 6 | REDSEC Season 2 Live Now"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity: Season 2 launched recently. 5 press articles in the past week from gaming press, mostly update coverage and review coverage.",
+      "steam_share": 0.55,
+      "est_total_24h": 66094
+    },
+    {
+      "name": "Call of Duty",
+      "app_id": 1938090,
+      "rank": 11,
+      "peak_24h": 27267,
+      "peak_all": 27267,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Announcing Black Ops Royale: Deep Dive into the Blackout-inspired Battle Royale",
+        "Black Ops Royale: A Tactical Tour of Avalon",
+        "Power Unleashed \u2014 Fighting with Wei Lin!",
+        "Call of Duty: Black Ops 7 and Warzone - Season 2 - Live Now",
+        "Introducing the Season 02 Battle Pass, BlackCell, and New Store Bundles"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity: Season 02 launched recently; 6+ bug fixes deployed. 5 press articles in the past week from gaming press, mostly update coverage.",
+      "steam_share": 0.15,
+      "est_total_24h": 181780
+    },
+    {
+      "name": "The Finals",
+      "app_id": 2073850,
+      "rank": 12,
+      "peak_24h": 9075,
+      "peak_all": 9075,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Store Update 9.11.0\u00a0",
+        "Store Update 9.10.0\u00a0",
+        "Hotfix 9.9.1",
+        "Update 9.9.0",
+        "Update 9.8.0"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity:  launched recently. 4 press articles in the past week from gaming press, mostly controversy coverage and update coverage. Announced: We\u2019ve restocked the Store with a fresh new drop of content alongside a sale on some old favorites, so make sure to take a look!",
+      "steam_share": 0.5,
+      "est_total_24h": 18150
+    },
+    {
+      "name": "Destiny 2",
+      "app_id": 1085660,
+      "rank": 13,
+      "peak_24h": 6885,
+      "peak_all": 6885,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "This Week In Destiny - 02/26/2026",
+        "This Week in Destiny - 02/19/2026",
+        "This Week In Destiny - 02/12/2026",
+        "This Week\u00a0in\u00a0Destiny \u2013 02/05/2026",
+        "This Week in Destiny \u2013 01/29/2026"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. 5 press articles in the past week from gaming press, mostly review coverage. Announced: This week in Destiny, we\u2019ve been marveling at the many (thousands!) of video submissions to the Dark Age Hunt, our first Community Challenge featuring Warlor...",
+      "steam_share": 0.35,
+      "est_total_24h": 19671
+    },
+    {
+      "name": "Halo: MCC",
+      "app_id": 976730,
+      "rank": 14,
+      "peak_24h": 3370,
+      "peak_all": 3370,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Halo Franchise Sale & Halo: Campaign Evolved Wishlist",
+        "Exchange Update \u2013 2026",
+        "Mod Minute: Warthog Rally",
+        "February 2025 Update Patch Notes",
+        "Digsite Demos: Halo 2"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. Dev activity:  launched recently. Light press coverage (2 articles): \"2026 MCC Exchange Update and Log-In Unlocks - Halo Waypoint\" via gaming press. Announced: In celebration of Halo 2\u2019s twentieth birthday, the Digsite modding crew has released their latest content drop which includes two cut missions from the 2004 ...",
+      "steam_share": 0.3,
+      "est_total_24h": 11233
+    },
+    {
+      "name": "Halo Infinite",
+      "app_id": 1240440,
+      "rank": 15,
+      "peak_24h": 1054,
+      "peak_all": 1054,
+      "pct_all": 100.0,
+      "trend_pct": null,
+      "months": [],
+      "news_titles": [
+        "Halo Franchise Sale & Halo: Campaign Evolved Wishlist",
+        "Forge Features",
+        "Operation: Infinite Out Now",
+        "Operation: Infinite Out Now",
+        "Operation: Infinite Update Preview"
+      ],
+      "reddit_week_top_score": null,
+      "takeaway": "Currently at 100% of all-time peak \u2014 near historical highs. Insufficient data to determine trend drivers. 4 press articles in the past week from gaming press, mostly review coverage and update coverage.",
+      "steam_share": 0.12,
+      "est_total_24h": 8783
+    }
+  ]
+}

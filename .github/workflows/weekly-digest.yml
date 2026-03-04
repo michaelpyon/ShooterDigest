@@ -109,3 +109,11 @@ jobs:
           git add output/ docs/
           git diff --cached --quiet || git commit -m "chore: auto-generate weekly digest [skip ci]"
           git push
+
+      - name: Trigger Railway redeploy
+        if: ${{ secrets.RAILWAY_TOKEN != '' }}
+        run: |
+          npm install -g @railway/cli --silent
+          railway up --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

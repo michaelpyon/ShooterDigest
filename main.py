@@ -4267,23 +4267,30 @@ def main():
 
     previous = _load_previous_history(out_dir)
 
-    # --- Backfill from history when SteamCharts was blocked ---
-    # The Steam API fallback only returns current players (no all-time peak,
-    # no monthly trends). Pull those from the most recent good history file
-    # so the digest still shows meaningful trends and % of peak.
+    # --- Backfill from history when current data is incomplete ---
+    # SteamCharts may be fully blocked (Steam API fallback: no peaks, no months)
+    # or partially blocked (gets peak values but no monthly table).
+    # In either case, pull missing data from the most recent good history file.
     if previous:
         backfill_count = 0
         for r in results:
-            if r.get("_data_source") == "steam_api" and not r.get("months"):
-                prev = previous.get(r["name"])
-                if prev:
-                    if prev.get("peak_all") and prev["peak_all"] > r.get("peak_all", 0):
-                        r["peak_all"] = prev["peak_all"]
-                    if prev.get("months"):
-                        r["months"] = prev["months"]
-                    backfill_count += 1
+            prev = previous.get(r["name"])
+            if not prev:
+                continue
+            changed = False
+            # Backfill all-time peak if current value looks wrong
+            # (i.e., peak_all == peak_24h, which means no real ATH was found)
+            if prev.get("peak_all") and prev["peak_all"] > r.get("peak_all", 0):
+                r["peak_all"] = prev["peak_all"]
+                changed = True
+            # Backfill monthly trends if missing
+            if not r.get("months") and prev.get("months"):
+                r["months"] = prev["months"]
+                changed = True
+            if changed:
+                backfill_count += 1
         if backfill_count:
-            print(f"  Backfilled {backfill_count} games with historical peak/trend data (SteamCharts was blocked)")
+            print(f"  Backfilled {backfill_count} games with historical peak/trend data")
 
     _compute_deltas(results, previous)
     if previous:

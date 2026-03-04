@@ -1442,8 +1442,27 @@ def _generate_game_takeaway(r: dict) -> dict:
     return takeaway_dict
 
 
+def _find_notable_event_url(r: dict) -> tuple[str, str]:
+    """Return (event_label, url) for the most notable dev event in a result, or ('', '')."""
+    for n in r.get("news", []):
+        title = n.get("title", "")
+        url = n.get("url", "")
+        if url and any(kw in title.lower() for kw in ("x ", "collab", "crossover", "event", "season", "update")):
+            # Truncate long titles to a clean label
+            label = title[:60].rstrip() + ("…" if len(title) > 60 else "")
+            return label, url
+    return "", ""
+
+
+def _linked(text: str, url: str) -> str:
+    """Wrap text in a hyperlink if url is non-empty, else return plain text."""
+    if url:
+        return f'<a href="{_esc(url)}" target="_blank" rel="noopener" class="exec-link">{_esc(text)}</a>'
+    return _esc(text)
+
+
 def _generate_overall_takeaways(results: list[dict]) -> list[str]:
-    """Generate substantive executive summary bullets with rationale, not just data points."""
+    """Generate HTML executive summary bullets with rationale and inline hyperlinks."""
     takeaways = []
     with_trend = [r for r in results if r.get("trend_pct") is not None]
 
@@ -1459,53 +1478,73 @@ def _generate_overall_takeaways(results: list[dict]) -> list[str]:
     # 1. Market direction with count context
     if len(gainers) > len(losers):
         takeaways.append(
-            f"{len(gainers)} of {len(with_trend)} tracked titles are growing MoM. "
-            f"{top_game['name']} leads all titles at {_fmt(top_game['peak_24h'])} Steam concurrent players."
+            f"{len(gainers)} of {len(with_trend)} titles growing MoM. "
+            f"{_esc(top_game['name'])} leads at {_fmt(top_game['peak_24h'])} Steam concurrent."
         )
     elif len(losers) > len(gainers):
+        gainer_names = ", ".join(_esc(g["name"]) for g in gainers[:3]) if gainers else "none"
         takeaways.append(
-            f"{len(losers)} of {len(with_trend)} tracked titles are declining MoM. "
-            f"Growth is concentrated in {len(gainers)} title{'s' if len(gainers) != 1 else ''}: "
-            + (", ".join(g["name"] for g in gainers[:3]) if gainers else "none") + "."
+            f"{len(losers)} of {len(with_trend)} titles declining MoM. "
+            f"Growth leaders: {gainer_names}."
         )
     else:
         takeaways.append(
-            f"Split market: {len(gainers)} titles gaining, {len(losers)} declining. "
-            f"{top_game['name']} holds the top spot at {_fmt(top_game['peak_24h'])} Steam concurrent players."
+            f"Split market: {len(gainers)} gaining, {len(losers)} declining. "
+            f"{_esc(top_game['name'])} leads at {_fmt(top_game['peak_24h'])} Steam concurrent."
         )
 
-    # 2. Biggest mover with catalyst explanation
+    # 2. Notable events/collabs — hyperlinked (shown for any game with a notable event this cycle)
+    for r in results:
+        dev = r.get("dev_comms", {})
+        event_label, event_url = _find_notable_event_url(r)
+        # Look for crossover/collab events specifically (higher signal)
+        for n in r.get("news", []):
+            title = n.get("title", "")
+            url = n.get("url", "")
+            if url and any(kw in title.lower() for kw in (" x ", "collab", "crossover", "gundam", "marvel", "x gundam")):
+                short = title[:70].rstrip() + ("…" if len(title) > 70 else "")
+                link = f'<a href="{_esc(url)}" target="_blank" rel="noopener" class="exec-link">{_esc(short)}</a>'
+                takeaways.append(f"Notable: {link} ({_esc(r['name'])})")
+                break  # one per game
+
+    # 3. Biggest mover with catalyst explanation
     if gainer["trend_pct"] > 5:
         dev = gainer.get("dev_comms", {})
         if dev.get("has_new_season") or dev.get("has_new_content"):
-            catalyst = dev.get("season_name") or dev.get("new_content_details") or "new content"
+            catalyst_text = dev.get("season_name") or dev.get("new_content_details") or "new content"
+            # Try to find a URL for this catalyst
+            cat_url = ""
+            for n in gainer.get("news", []):
+                if any(kw in n.get("title", "").lower() for kw in ("season", "update", "patch", "event")):
+                    cat_url = n.get("url", "")
+                    break
+            cat_link = _linked(catalyst_text, cat_url)
             takeaways.append(
-                f"Biggest mover: {gainer['name']} at {gainer['trend_pct']:+.1f}% MoM. "
-                f"Catalyst: {catalyst}. Active content pipeline is the common thread for every growing title in this dataset."
+                f"Biggest mover: {_esc(gainer['name'])} {gainer['trend_pct']:+.1f}% MoM — "
+                f"catalyst: {cat_link}."
             )
         elif gainer["trend_pct"] > 10:
             takeaways.append(
-                f"Biggest mover: {gainer['name']} at {gainer['trend_pct']:+.1f}% MoM with no obvious content catalyst. "
-                f"Watch for a community-driven moment (viral clip, streamer spike, controversy) as the likely driver."
+                f"Biggest mover: {_esc(gainer['name'])} {gainer['trend_pct']:+.1f}% MoM, no obvious content catalyst — "
+                f"likely a community moment (streamer spike, viral clip)."
             )
         else:
             takeaways.append(
-                f"Biggest mover: {gainer['name']} at {gainer['trend_pct']:+.1f}% MoM."
+                f"Biggest mover: {_esc(gainer['name'])} {gainer['trend_pct']:+.1f}% MoM."
             )
 
-    # 3. Steepest decline with structural note
+    # 4. Steepest decline with structural note
     if loser["trend_pct"] < -5:
-        prev_peak = loser.get("peak_all", 0)
         pct_of_ath = loser.get("pct_all", 0)
         if pct_of_ath < 20:
-            note = f"Now at {pct_of_ath:.0f}% of its all-time peak. Late-stage decline."
+            note = f"Now at {pct_of_ath:.0f}% of ATH — late-stage decline."
         elif loser["trend_pct"] < -20:
-            note = "Steep enough to flag as a structural problem, not just a slow week."
+            note = "Structural problem, not just a slow week."
         else:
-            note = "No content drops announced to reverse the trend."
-        takeaways.append(f"Steepest decline: {loser['name']} at {loser['trend_pct']:+.1f}% MoM. {note}")
+            note = "No upcoming content drops to reverse the trend."
+        takeaways.append(f"Steepest decline: {_esc(loser['name'])} {loser['trend_pct']:+.1f}% MoM. {_esc(note)}")
 
-    # 4. Combined market delta vs. prior period
+    # 5. Combined market delta vs. prior period
     prev_avail = [r for r in results if r.get("prev") and r["prev"].get("peak_24h")]
     if prev_avail:
         cur_total = sum(r["peak_24h"] for r in prev_avail)
@@ -1513,20 +1552,20 @@ def _generate_overall_takeaways(results: list[dict]) -> list[str]:
         if prev_total > 0:
             delta = (cur_total - prev_total) / prev_total * 100
             direction = "up" if delta > 0 else "down"
+            signal = "Market-wide tailwind." if delta > 3 else "Market-wide headwind." if delta < -3 else "Flat overall."
             takeaways.append(
-                f"Combined 24h Steam peaks across all tracked titles: {direction} {abs(delta):.1f}% vs. prior period. "
-                f"{'Market-wide tailwind.' if delta > 3 else 'Market-wide headwind.' if delta < -3 else 'Flat overall.'}"
+                f"Combined 24h Steam peaks: {direction} {abs(delta):.1f}% vs. prior period. {_esc(signal)}"
             )
 
-    # 5. Content cadence observation (only if signal is clear)
+    # 6. Content cadence observation (only if signal is clear)
     with_content = [r for r in gainers if r.get("dev_comms", {}).get("has_new_season") or r.get("dev_comms", {}).get("has_new_content")]
     without_content = [r for r in losers[:3]]
     if len(with_content) >= 2 and len(without_content) >= 2:
-        content_names = ", ".join(r["name"] for r in with_content[:2])
-        decline_names = ", ".join(r["name"] for r in without_content[:2])
+        content_names = ", ".join(_esc(r["name"]) for r in with_content[:2])
+        decline_names = ", ".join(_esc(r["name"]) for r in without_content[:2])
         takeaways.append(
-            f"Content cadence is the clearest differentiator this week: {content_names} are growing "
-            f"while {decline_names} (no active content) are shrinking."
+            f"Content cadence is the differentiator: {content_names} growing "
+            f"while {decline_names} (no active content) shrink."
         )
 
     if not takeaways:
@@ -2408,7 +2447,8 @@ def generate_html(results: list[dict], failed_names: list[str],
     timestamp = today.strftime("%Y-%m-%d %H:%M:%S")
 
     # --- Executive Summary with Winners / Neutrals / Losers ---
-    exec_items = "\n".join(f"      <li>{_esc(_sanitize_text(t))}</li>" for t in overall_takeaways)
+    # Takeaways are pre-sanitized HTML (may contain <a> links) — do not re-escape
+    exec_items = "\n".join(f"      <li>{t}</li>" for t in overall_takeaways)
     exec_prose_html = generate_exec_prose(results)
     aggregate_chart = _generate_aggregate_sparkline(results)
     wnl = _generate_winners_neutrals_losers(results)
@@ -2785,6 +2825,11 @@ def generate_html(results: list[dict], failed_names: list[str],
       margin-bottom: 0.4rem; margin-left: 1rem;
       color: #c7d5e0; font-size: 0.9rem; line-height: 1.6;
     }}
+    .exec-link {{
+      color: #60a5fa; text-decoration: underline; text-underline-offset: 2px;
+      text-decoration-color: rgba(96,165,250,0.4);
+    }}
+    .exec-link:hover {{ color: #93c5fd; text-decoration-color: #93c5fd; }}
     .aggregate-chart {{
       margin-top: 1rem; padding-top: 0.8rem;
       border-top: 1px solid #2a475e;

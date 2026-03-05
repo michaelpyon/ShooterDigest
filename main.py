@@ -1146,10 +1146,11 @@ def _save_history(results: list[dict], out_dir: str) -> None:
 
 
 def _load_previous_history(out_dir: str, min_games: int = 10) -> dict | None:
-    """Load the most recent history file that has at least min_games entries.
+    """Load the most recent COMPLETE history file for comparison + backfill.
 
-    Searches backward through history files, skipping today's and any
-    incomplete runs (e.g., partial scrapes that only got 5 of 15 games).
+    A "complete" file has >= min_games entries where the majority have
+    monthly trend data (months list is non-empty). This skips files from
+    runs where SteamCharts was blocked (all games have months=[]).
     """
     history_dir = os.path.join(out_dir, "history")
     if not os.path.isdir(history_dir):
@@ -1169,19 +1170,23 @@ def _load_previous_history(out_dir: str, min_games: int = 10) -> dict | None:
         except (json.JSONDecodeError, OSError):
             continue
         games = data.get("games", [])
-        if len(games) >= min_games:
-            print(f"  Using history from {fname} ({len(games)} games)")
+        games_with_months = sum(1 for g in games if g.get("months"))
+        if len(games) >= min_games and games_with_months >= min_games:
+            print(f"  Using history from {fname} ({len(games)} games, {games_with_months} with trends)")
             return {g["name"]: g for g in games}
         else:
-            print(f"  Skipping incomplete history {fname} ({len(games)} games, need {min_games})")
+            print(f"  Skipping {fname} ({len(games)} games, {games_with_months} with trends — need {min_games})")
 
-    # Fallback: if no file meets the threshold, use the most recent one anyway
+    # Fallback: use the most recent file with any data
     for fname in files:
         path = os.path.join(history_dir, fname)
         try:
             with open(path) as f:
                 data = json.load(f)
-            return {g["name"]: g for g in data.get("games", [])}
+            games = data.get("games", [])
+            if games:
+                print(f"  Fallback: using {fname} ({len(games)} games)")
+                return {g["name"]: g for g in games}
         except (json.JSONDecodeError, OSError):
             continue
 

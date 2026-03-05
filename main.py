@@ -4313,6 +4313,32 @@ def main():
                 r["months"] = prev["months"]
                 changed = True
             if changed:
+                # Recompute derived fields that depend on months/peak_all
+                months = r.get("months", [])
+                if months and months[0].get("pct_gain") is not None:
+                    r["trend_pct"] = months[0]["pct_gain"]
+                elif len(months) >= 2 and months[1].get("pct_gain") is not None:
+                    r["trend_pct"] = months[1]["pct_gain"]
+
+                arrow, css = _trend_arrow(r.get("trend_pct"))
+                r["trend_arrow"] = arrow
+                r["trend_css"] = css
+
+                avg_trend = [m for m in months[:4] if m.get("avg") is not None]
+                r["avg_trend"] = list(reversed(avg_trend))
+
+                r["pct_all"] = (
+                    (r["peak_24h"] / r["peak_all"] * 100) if r.get("peak_all", 0) > 0 else 0.0
+                )
+
+                def _max_peak(month_slice):
+                    peaks = [m.get("peak") for m in month_slice if m.get("peak") is not None]
+                    return max(peaks) if peaks else None
+
+                r["peak_30d"] = months[0].get("peak") if months else None
+                r["peak_3m"] = _max_peak(months[:3])
+                r["peak_6m"] = _max_peak(months[:6])
+
                 backfill_count += 1
         if backfill_count:
             print(f"  Backfilled {backfill_count} games with historical peak/trend data")

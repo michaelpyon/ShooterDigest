@@ -1145,7 +1145,12 @@ def _save_history(results: list[dict], out_dir: str) -> None:
     print(f"  History saved: {path}")
 
 
-def _load_previous_history(out_dir: str) -> dict | None:
+def _load_previous_history(out_dir: str, min_games: int = 10) -> dict | None:
+    """Load the most recent history file that has at least min_games entries.
+
+    Searches backward through history files, skipping today's and any
+    incomplete runs (e.g., partial scrapes that only got 5 of 15 games).
+    """
     history_dir = os.path.join(out_dir, "history")
     if not os.path.isdir(history_dir):
         return None
@@ -1155,17 +1160,32 @@ def _load_previous_history(out_dir: str) -> dict | None:
         [f for f in os.listdir(history_dir) if f.endswith(".json") and f[:-5] != today],
         reverse=True,
     )
-    if not files:
-        return None
 
-    path = os.path.join(history_dir, files[0])
-    try:
-        with open(path) as f:
-            data = json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return None
+    for fname in files:
+        path = os.path.join(history_dir, fname)
+        try:
+            with open(path) as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            continue
+        games = data.get("games", [])
+        if len(games) >= min_games:
+            print(f"  Using history from {fname} ({len(games)} games)")
+            return {g["name"]: g for g in games}
+        else:
+            print(f"  Skipping incomplete history {fname} ({len(games)} games, need {min_games})")
 
-    return {g["name"]: g for g in data.get("games", [])}
+    # Fallback: if no file meets the threshold, use the most recent one anyway
+    for fname in files:
+        path = os.path.join(history_dir, fname)
+        try:
+            with open(path) as f:
+                data = json.load(f)
+            return {g["name"]: g for g in data.get("games", [])}
+        except (json.JSONDecodeError, OSError):
+            continue
+
+    return None
 
 
 def _compute_deltas(results: list[dict], previous: dict | None) -> None:

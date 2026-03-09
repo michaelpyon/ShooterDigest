@@ -2463,6 +2463,31 @@ def generate_exec_prose(data: list[dict]) -> str:
 # HTML generation
 # ---------------------------------------------------------------------------
 
+def _build_digest_json(results: list[dict]) -> str:
+    """Build a JSON block of core game data for embedding in HTML.
+
+    Included fields: name, peak_24h, peak_all, pct_all, trend_pct, trend_arrow,
+    months (full list), avg_trend, app_id.
+
+    This block is consumed by the PROMPT.md coverage scoring script and can
+    also power client-side sort/filter without a server round-trip.
+    """
+    import json as _json
+    slim = []
+    for r in results:
+        slim.append({
+            "name": r.get("name", ""),
+            "app_id": r.get("app_id"),
+            "peak_24h": r.get("peak_24h", 0),
+            "peak_all": r.get("peak_all", 0),
+            "pct_all": r.get("pct_all", 0),
+            "trend_pct": r.get("trend_pct"),
+            "trend_arrow": r.get("trend_arrow"),
+            "months": r.get("months", []),
+        })
+    return _json.dumps(slim, separators=(",", ":"))
+
+
 def generate_html(results: list[dict], failed_names: list[str],
                   overall_takeaways: list[str],
                   emerging_results: list[dict] | None = None,
@@ -3661,6 +3686,7 @@ def generate_html(results: list[dict], failed_names: list[str],
   }}
   </script>
   <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">↑ Top</a>
+  <script type="application/json" id="digest-data">{_build_digest_json(results)}</script>
 </body>
 </html>
 """

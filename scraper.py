@@ -272,13 +272,19 @@ def get_steam_data(game: dict) -> dict | None:
     url = f"https://steamcharts.com/app/{app_id}"
 
     # --- Try SteamCharts first ---
+    # Use a reduced 8s timeout so that a full CF block (which times out every request)
+    # fails quickly rather than burning 15s × N games before the Steam API fallback kicks in.
     soup = None
     try:
-        resp = _steamcharts_get(url, timeout=15)
+        resp = _steamcharts_get(url, timeout=8)
         soup = BeautifulSoup(resp.text, "html.parser")
-        # Validate we got a real page (not a Cloudflare challenge)
+        # Validate we got a real page (not a Cloudflare challenge or maintenance page)
         if not soup.find("div", class_="app-stat"):
-            logger.warning("SteamCharts returned no app-stat divs for %s — likely blocked", name)
+            title_text = (soup.title.text if soup.title else "").lower()
+            if "just a moment" in title_text or "cloudflare" in title_text:
+                logger.warning("SteamCharts CF challenge page for %s — skipping", name)
+            else:
+                logger.warning("SteamCharts returned no app-stat divs for %s — likely blocked", name)
             soup = None
     except Exception as e:
         logger.warning("SteamCharts unavailable for %s: %s — falling back to Steam API", name, e)

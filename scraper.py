@@ -63,6 +63,10 @@ GAMES = [
     {"name": "Marvel Rivals", "app_id": 2767030, "subreddit": "marvelrivals",
      "steam_share": 0.35, "genre": "Hero Shooter"},
 
+    # Est. 35% Steam. Bungie; PS5/Xbox ~65% based on Destiny 2 historical platform split. Launched March 5, 2026.
+    {"name": "Marathon", "app_id": 3065800, "subreddit": "MarathonTheGame",
+     "steam_share": 0.35, "genre": "Extraction"},
+
     # Est. 70% Steam. NetEase PC-primary title; remainder on proprietary launcher. Console share unconfirmed.
     {"name": "Delta Force", "app_id": 2507950, "subreddit": "DeltaForce",
      "steam_share": 0.70, "genre": "Extraction"},

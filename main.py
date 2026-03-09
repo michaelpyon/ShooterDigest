@@ -247,7 +247,8 @@ EVENT_ANNOTATIONS = {
     "Arc Raiders": "Post-launch decay following launch window. Second Expedition season may stabilize floor.",
     "Delta Force": "RED DAY event + Season Morphosis live — content cadence driving growth.",
     "Battlefield 6": "Season 2 launched recently but struggling to retain new players.",
-    "Destiny 2": "Structural decline continues pre-Marathon. Player base contracting into core audience.",
+    "Destiny 2": "Structural decline continues post-Marathon launch. Player base contracting into core audience.",
+    "Marathon": "Launch week (March 5, 2026). Bungie's first new IP since Destiny. Extraction shooter — watch retention curve closely after launch window closes.",
 }
 
 
@@ -284,6 +285,7 @@ PLATFORM_NOTES = {
     "Call of Duty": "Est. 15% Steam. Activision Blizzard earnings (2023) cited ~70% console split; remainder split between Battle.net and Steam.",
     "The Finals": "Est. 50% Steam. Embark Studios data; remainder PS/Xbox.",
     "Destiny 2": "Est. 35% Steam. Bungie data; console ~65% (PS dominant historically).",
+    "Marathon": "Est. 35% Steam. Bungie; PS5/Xbox ~65% based on Destiny 2 historical platform split. Launched March 5, 2026.",
     "Halo: MCC": "Est. 30% Steam. Xbox Game Studios; Steam added 2019. Xbox ~70% based on platform MAU ratio.",
     "Halo Infinite": "Est. 12% Steam. Xbox-first franchise; Steam added 2021. Based on Xbox MAU disclosures vs. SteamDB concurrent ratio.",
 }

@@ -55,7 +55,7 @@ def _fmt_k(n: float | None) -> str:
 
 def _trend_arrow(pct: float | None) -> tuple[str, str]:
     if pct is None:
-        return ("?", "neutral")
+        return ("", "neutral")
     if pct > 2:
         return ("\u25b2", "up")
     if pct < -2:
@@ -2545,7 +2545,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     table_rows = ""
     for r in results:
         trend_pct = r.get("trend_pct")
-        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "?"
+        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else ""
         bar_w = min(r["pct_all"], 100)
 
         est_total = _fmt(r.get('est_total_24h', r['peak_24h']))
@@ -2573,13 +2573,19 @@ def generate_html(results: list[dict], failed_names: list[str],
         # Sentiment dot merged into game name cell
         sent_dot = f' <span class="sent-inline" style="color:{sent_color}" title="Sentiment: {game_sentiment}">\u25cf</span>'
 
+        # Trend cell: LAUNCH badge for new games with no MoM data
+        if trend_pct is None:
+            trend_cell = '<span class="launch-badge">LAUNCH</span>'
+        else:
+            trend_cell = f"{r['trend_arrow']} {trend_str}"
+
         table_rows += f"""        <tr data-genre="{genre}">
           <td class="rank" data-value="{r['rank']}">#{r['rank']}</td>
           <td class="game" data-value="{sent_val}"><a href="#{_card_id(r['name'])}" class="game-link">{_esc(r['name'])}</a>{lifecycle}{sent_dot}</td>
           <td>{_genre_badge_html(genre)}</td>
           <td class="num" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
           <td class="num" data-value="{r.get('est_total_24h', r['peak_24h'])}" style="color:#60a5fa;font-weight:600">{est_total}</td>
-          <td class="trend {r['trend_css']}" data-value="{trend_val}"{trend_title}>{r['trend_arrow']} {trend_str} {mini_spark}{annotation_icon}</td>
+          <td class="trend {r['trend_css']}" data-value="{trend_val}"{trend_title}>{trend_cell}{annotation_icon}</td>
           <td class="num" data-value="{r.get('est_total_all', r['peak_all'])}" style="color:#fbbf24;font-weight:600">{est_all_time}</td>
           <td class="pct-cell" data-value="{r['pct_all']:.2f}">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%"></div></div>
@@ -2697,7 +2703,7 @@ def generate_html(results: list[dict], failed_names: list[str],
             reddit_month_html += f'<li>{cat_badge} {sent_dot} {title} ({score} upvotes)</li>\n'
 
         trend_pct = r.get("trend_pct")
-        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "no data"
+        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "launch week"
         sub = r.get("subreddit", "")
 
         # Structured takeaway — sentiment-colored labels
@@ -2986,6 +2992,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     .trend-badge.down {{ background: rgba(248,113,113,0.15); color: #f87171; }}
     .trend-badge.flat {{ background: rgba(251,191,36,0.15); color: #fbbf24; }}
     .trend-badge.neutral {{ background: rgba(143,152,160,0.15); color: #8f98a0; }}
+    .launch-badge {{ display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #f97316; border: 1px solid #f97316; border-radius: 4px; padding: 1px 5px; }}
     .card-stats {{ color: #8f98a0; font-size: 0.82rem; }}
     .card-stats strong {{ color: #c7d5e0; }}
     .card-trend {{ color: #8f98a0; font-size: 0.8rem; margin-top: 0.2rem; }}
@@ -3710,7 +3717,7 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
     cards_html = ""
     for r in emerging_results:
         trend_pct = r.get("trend_pct")
-        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "no data"
+        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "launch week"
         sparkline = _generate_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"))
         genre = r.get("genre", "Other")
 
@@ -3980,7 +3987,7 @@ def generate_markdown(results: list[dict], failed_names: list[str],
     # Detail sections
     for r in results:
         trend_pct = r.get("trend_pct")
-        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "no data"
+        trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "launch week"
         md_genre = r.get('genre', 'Other')
         lines.append(f"### {r['name']} [{md_genre}] ({r['trend_arrow']} {trend_str})")
         lines.append("")

@@ -322,7 +322,7 @@ def _compute_game_sentiment(r: dict) -> str:
 # Inline mini-sparkline for trend column (#6)
 # ---------------------------------------------------------------------------
 
-def _inline_sparkline_svg(months_data: list[dict], css_class: str = "neutral") -> str:
+def _inline_sparkline_svg(months_data: list[dict], css_class: str = "neutral", label: str = "") -> str:
     """Generate a tiny inline SVG sparkline (~60x16px) from monthly avg data."""
     avgs = [m.get("avg") for m in months_data if m.get("avg") is not None]
     if len(avgs) < 2:
@@ -340,8 +340,9 @@ def _inline_sparkline_svg(months_data: list[dict], css_class: str = "neutral") -
         y = h - 1 - ((v - mn) / rng) * (h - 2)
         pts.append(f"{x:.1f},{y:.1f}")
     color = {"up": "#4ade80", "down": "#f87171", "flat": "#fbbf24"}.get(css_class, "#94a3b8")
+    tooltip = label if label else "Monthly avg player trend (last 4 months)"
     return (
-        f'<svg class="inline-spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'
+        f'<svg class="inline-spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" title="{tooltip}" aria-label="{tooltip}">'
         f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
         f'</svg>'
     )
@@ -2563,7 +2564,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         sent_val = {"positive": 1, "mixed": 0, "negative": -1}.get(game_sentiment, 0)
 
         # Inline sparkline (#6)
-        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"))
+        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"), label=f"{r["name"]}: monthly avg players, last 4 months")
 
         # Event annotation (#8) — shown as tooltip on trend value
         annotation = EVENT_ANNOTATIONS.get(r['name'], "")
@@ -3697,7 +3698,7 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
         bar_w = min(r.get("pct_all", 0), 100)
         genre = r.get("genre", "Other")
 
-        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"))
+        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"), label=f"{r["name"]}: monthly avg players, last 4 months")
         trend_arrow = r.get("trend_arrow", "▶")
 
         table_rows += f"""        <tr>
@@ -3705,7 +3706,7 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
           <td class="game" style="font-weight:600;color:#e5e5e5"><a href="#{_card_id(r['name'])}-emerging" class="game-link">{_esc(r['name'])}</a></td>
           <td>{_genre_badge_html(genre)}</td>
           <td class="num" style="font-variant-numeric:tabular-nums;text-align:right">{_fmt(r['peak_24h'])}</td>
-          <td class="trend {r['trend_css']}" style="text-align:center;font-weight:700">{trend_arrow} {trend_str} {mini_spark}</td>
+          <td class="trend {r['trend_css']}" style="text-align:center;font-weight:700">{trend_arrow} {trend_str}</td>
           <td class="num" style="text-align:right;color:#fbbf24">{_fmt(r['peak_all'])}</td>
           <td class="pct-cell" style="width:100px">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%;background:linear-gradient(90deg,#a78bfa,#7c3aed)"></div></div>

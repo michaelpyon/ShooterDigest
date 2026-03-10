@@ -1276,7 +1276,7 @@ def _generate_game_takeaway(r: dict) -> dict:
     elif pct_all < 15:
         state_parts.append(f"At just {pct_all:.0f}% of all-time peak — well below historical levels.")
 
-    state = " ".join(state_parts) if state_parts else f"{name}: insufficient trend data."
+    state = " ".join(state_parts) if state_parts else f"{name} launched this week — first MoM data available next digest."
 
     # === PART 2: CONTEXT (WHY — trend hypothesis) ===
     # Generate an AI hypothesis explaining what's driving the player trend
@@ -1417,30 +1417,39 @@ def _generate_game_takeaway(r: dict) -> dict:
     # === PART 4: OUTLOOK ===
     outlook_parts = []
 
-    if dev.get("has_upcoming_event") and dev.get("upcoming_details"):
-        raw = dev["upcoming_details"]
-        # Strip line breaks, collapse whitespace, cut pipe-separated junk
-        raw = re.sub(r'[\r\n]+', ' ', raw)
-        raw = re.sub(r'\s{2,}', ' ', raw).strip()
-        raw = raw.split(" | ")[0].strip()  # take only the first segment if pipe-joined
-        # Drop obvious marketing copy and thank-you posts
-        if not re.search(r'\b(?:thank you|join us|click here|subscribe|discord|we look back|steadfast support|here to stay)\b', raw, re.I):
+    # For launch-week games (no MoM data yet), write an analyst note — don't paste announcements
+    if trend_pct is None:
+        outlook_parts.append(
+            f"Launch week — no MoM baseline yet. "
+            f"Extraction shooters typically see 60-80% player drop-off in weeks 2-3 after launch. "
+            f"Watch the day-7 and day-30 peaks; sustained ~20K+ Steam daily avg would signal a healthy retention floor. "
+            f"Next digest will have the first real trend read."
+        )
+    else:
+        if dev.get("has_upcoming_event") and dev.get("upcoming_details"):
+            raw = dev["upcoming_details"]
+            # Strip line breaks, collapse whitespace, cut pipe-separated junk
+            raw = re.sub(r'[\r\n]+', ' ', raw)
+            raw = re.sub(r'\s{2,}', ' ', raw).strip()
+            raw = raw.split(" | ")[0].strip()  # take only the first segment if pipe-joined
+            # Drop obvious marketing copy, patch notes, and thank-you posts
+            skip_patterns = r'\b(?:thank you|join us|click here|subscribe|discord|we look back|steadfast support|here to stay|quick recap|missed some|in case you missed|now available|deluxe edition|edition items|patch notes|bug fix|known issues)\b'
+            if not re.search(skip_patterns, raw, re.I):
+                if len(raw) > 160:
+                    raw = raw[:157] + "..."
+                if len(raw) > 20:
+                    outlook_parts.append(f"Upcoming: {raw}")
+        elif dev.get("has_upcoming_event") and dev.get("upcoming_summary"):
+            raw = dev["upcoming_summary"]
+            raw = re.sub(r'[\r\n]+', ' ', raw).strip()
             if len(raw) > 160:
                 raw = raw[:157] + "..."
             if len(raw) > 20:
-                outlook_parts.append(f"Announced: {raw}")
-    elif dev.get("has_upcoming_event") and dev.get("upcoming_summary"):
-        raw = dev["upcoming_summary"]
-        raw = re.sub(r'[\r\n]+', ' ', raw).strip()
-        if len(raw) > 160:
-            raw = raw[:157] + "..."
-        if len(raw) > 20:
-            outlook_parts.append(f"Announced: {raw}")
+                outlook_parts.append(f"Upcoming: {raw}")
 
-    # Historical trajectory
-    if r.get("prev") and r["prev"].get("trend_pct") is not None:
-        prev_t = r["prev"]["trend_pct"]
-        if trend_pct is not None:
+        # Historical trajectory
+        if r.get("prev") and r["prev"].get("trend_pct") is not None:
+            prev_t = r["prev"]["trend_pct"]
             if prev_t < -2 and trend_pct < -2:
                 outlook_parts.append("Continued decline from last period — watch for content response.")
             elif prev_t > 2 and trend_pct > 2:

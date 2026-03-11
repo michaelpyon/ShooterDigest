@@ -4358,6 +4358,13 @@ def main():
                 r["peak_3m"] = _max_peak(months[:3])
                 r["peak_6m"] = _max_peak(months[:6])
 
+                # Recompute est_total_all now that peak_all is corrected
+                _steam_share = r.get("steam_share", 1.0)
+                if _steam_share > 0:
+                    r["est_total_all"] = int(r["peak_all"] / _steam_share)
+                else:
+                    r["est_total_all"] = r["peak_all"]
+
                 backfill_count += 1
         if backfill_count:
             print(f"  Backfilled {backfill_count} games with historical peak/trend data")

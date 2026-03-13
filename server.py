@@ -157,6 +157,15 @@ OG_META_HTML = """
 """
 
 
+def _strip_activeplayer_link(html: str) -> str:
+    """Remove activeplayer.io link from old digest HTML."""
+    return re.sub(
+        r'For off-Steam audience estimates, see <a[^>]*>activeplayer\.io</a>\.',
+        'Off-Steam audience estimates are not included in this digest.',
+        html,
+    )
+
+
 def _inject_og_tags(html: str) -> str:
     """Inject OG meta tags into any digest HTML that doesn't already have them."""
     if 'og:title' in html:
@@ -245,6 +254,7 @@ class DigestHandler(SimpleHTTPRequestHandler):
                 try:
                     with open(filepath, "r", encoding="utf-8") as fh:
                         content = fh.read()
+                    content = _strip_activeplayer_link(content)
                     content = _inject_og_tags(content)
                     content = _inject_newsletter_into_digest(content)
                     encoded = content.encode("utf-8")

@@ -262,7 +262,7 @@ DATA_CAVEAT_HTML = """  <div class="data-caveat">
       <strong>What this digest tracks:</strong> Steam concurrent players only.
       Major titles like Valorant, Fortnite, and Overwatch 2 report MAU/DAU \u2014 not concurrent Steam players \u2014
       and are not fully comparable on this scale.
-      For off-Steam audience estimates, see <a href="https://activeplayer.io" target="_blank" class="item-link">activeplayer.io</a>.
+      Off-Steam audience estimates are not included in this digest.
     </div>
   </div>"""
 

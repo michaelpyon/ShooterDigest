@@ -676,7 +676,7 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
     )
 
     return f'''<div class="aggregate-chart">
-  <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)<br><span style="font-size:0.6rem;font-weight:400;color:#556b7d">Steam Concurrent Players (Source: SteamDB)</span></div>
+  <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)<br><span style="font-size:0.6rem;font-weight:400;color:#7a8fa3">Steam Concurrent Players (Source: SteamDB)</span></div>
   <svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg">
     <polygon points="{polygon_pts}" fill="{fill_color}" />
     <polyline points="{polyline_pts}" fill="none" stroke="{stroke}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
@@ -2528,7 +2528,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     # Build winners / neutrals / losers mini-table
     def _wnl_rows(items, color, arrow_class):
         if not items:
-            return f'<tr><td colspan="3" style="color:#556b7d;font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr>'
+            return f'<tr><td colspan="3" style="color:#7a8fa3;font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr>'
         rows = ""
         for g in items:
             t = g["trend_pct"]
@@ -2537,7 +2537,7 @@ def generate_html(results: list[dict], failed_names: list[str],
                 f'<tr>'
                 f'<td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">{_esc(g["name"])}</td>'
                 f'<td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:{color};font-weight:600">{t_str}</td>'
-                f'<td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">{_fmt(g["peak_24h"])}<div style="font-size:0.55rem;color:#556b7d;font-weight:400">Steam 24h</div></td>'
+                f'<td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">{_fmt(g["peak_24h"])}<div style="font-size:0.55rem;color:#7a8fa3;font-weight:400">Steam 24h</div></td>'
                 f'</tr>'
             )
         return rows
@@ -2820,7 +2820,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         <div class="card-stats">
           24h Peak: <strong>{_fmt(r['peak_24h'])}</strong> (Steam)
           {_est_total_html}
-          &nbsp;|&nbsp; All-Time Peak: {f'<strong style="color:#fbbf24">{_fmt(r.get("est_total_all", r["peak_all"]))}</strong> <small style="color:#556b7d">(est. all platforms)</small>' if not r.get('is_steam_only') else f'<strong>{_fmt(r["peak_all"])}</strong> <small style="color:#556b7d">(100% Steam)</small>'} ({r['pct_all']:.1f}% current)
+          &nbsp;|&nbsp; All-Time Peak: {f'<strong style="color:#fbbf24">{_fmt(r.get("est_total_all", r["peak_all"]))}</strong> <small style="color:#7a8fa3">(est. all platforms)</small>' if not r.get('is_steam_only') else f'<strong>{_fmt(r["peak_all"])}</strong> <small style="color:#7a8fa3">(100% Steam)</small>'} ({r['pct_all']:.1f}% current)
         </div>
         {"<div class='card-trend'>" + sparkline + "</div>" if sparkline else ""}
       </div>
@@ -3885,7 +3885,7 @@ def generate_radar_html(radar_results: list[dict]) -> str:
         <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">{_fmt(r.get('ccu', 0))}</td>
         <td style="padding:0.4rem 0.6rem;text-align:center">
           <span style="color:{signal_color};font-weight:700;font-size:0.8rem">{signal}</span>
-          <div style="color:#556b7d;font-size:0.68rem;margin-top:2px">{_esc(ratio_str)}</div>
+          <div style="color:#7a8fa3;font-size:0.68rem;margin-top:2px">{_esc(ratio_str)}</div>
         </td>
         <td style="padding:0.4rem 0.6rem;color:#8f98a0;font-size:0.75rem">{_esc(why_str)}</td>
       </tr>\n"""
@@ -3907,7 +3907,7 @@ def generate_radar_html(radar_results: list[dict]) -> str:
       <tbody>
 {rows_html}      </tbody>
     </table>
-    <p style="color:#556b7d;font-size:0.72rem;font-style:italic;margin-top:0.5rem">These surface automatically from SteamSpy tag data. No editorial curation.</p>
+    <p style="color:#7a8fa3;font-size:0.72rem;font-style:italic;margin-top:0.5rem">These surface automatically from SteamSpy tag data. No editorial curation.</p>
   </div>"""
 
 

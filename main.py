@@ -1407,9 +1407,8 @@ def _generate_game_takeaway(r: dict) -> dict:
                 f"{len(ext_news)} press articles in the past week from {source_str}."
             )
         elif ext_news:
-            title_sample = _sanitize_text(ext_news[0].get("title", "")[:60])
             community_parts.append(
-                f"Light press coverage ({len(ext_news)} {'article' if len(ext_news) == 1 else 'articles'}): \"{title_sample}\" via {source_str}."
+                f"Light press coverage ({len(ext_news)} {'article' if len(ext_news) == 1 else 'articles'}) via {source_str}."
             )
 
     community = " ".join(community_parts) if community_parts else ""

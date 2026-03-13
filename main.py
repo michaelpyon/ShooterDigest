@@ -2346,7 +2346,7 @@ def _build_genre_rollup_html(results: list[dict]) -> str:
       <thead><tr>
         <th>Genre</th>
         <th style="text-align:right">Combined Est. Daily Players</th>
-        <th style="text-align:center">MoM Trend</th>
+        <th style="text-align:center" title="Month-over-Month trend in average concurrent players">MoM Trend</th>
         <th>Dominant Title</th>
         <th style="text-align:center"># Titles</th>
       </tr></thead>
@@ -2557,7 +2557,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       </div>
     </div>"""
 
-    exec_html = f"""  <div class="exec-summary">
+    exec_html = f"""  <div class="exec-summary" id="exec-summary">
     <h2>Executive Summary</h2>
     <ul>
 {exec_items}
@@ -3599,6 +3599,7 @@ def generate_html(results: list[dict], failed_names: list[str],
   </style>
 </head>
 <body>
+  <a href="#exec-summary" style="position:absolute;left:-9999px;top:0;padding:8px 16px;background:#f97316;color:#fff;z-index:9999;font-size:0.9rem;text-decoration:none;" onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Skip to Executive Summary</a>
   <nav class="site-nav">
     <a href="index.html" class="nav-back">&#8592; All Digests</a>
     <a href="index.html" class="nav-logo">Shooter<span>Digest</span></a>
@@ -3621,7 +3622,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         <th data-sort="str" data-col="2">Genre</th>
         <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
         <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak &divide; Steam share. Click for methodology.">\u24d8</a></th>
-        <th data-sort="num" data-col="5">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="5" title="Month-over-Month trend">Trend<br><small>(MoM)</small></th>
         <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
         <th data-sort="num" data-col="7">% of Peak</th>
       </tr>
@@ -3833,7 +3834,7 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
           <th style="text-align:left;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">Game</th>
           <th style="text-align:left;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">Genre</th>
           <th style="text-align:right;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">Steam CCU</th>
-          <th style="text-align:center;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">MoM Trend &#x2605;</th>
+          <th style="text-align:center;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em" title="Month-over-Month trend in average concurrent players">MoM Trend &#x2605;</th>
           <th style="text-align:right;padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">All-Time Peak</th>
           <th style="padding:0.5rem 0.6rem;border-bottom:2px solid #a78bfa;color:#a78bfa;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.04em">% of Peak</th>
         </tr>

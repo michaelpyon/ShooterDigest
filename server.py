@@ -257,6 +257,19 @@ class DigestHandler(SimpleHTTPRequestHandler):
                 except Exception:
                     pass  # fall through to default handler
 
+        # Serve OG image
+        if self.path == "/og.png":
+            og_path = os.path.join(BASE_DIR, "og.png")
+            if os.path.isfile(og_path):
+                self.send_response(200)
+                self.send_header("Content-Type", "image/png")
+                with open(og_path, "rb") as f:
+                    data = f.read()
+                self.send_header("Content-Length", str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+                return
+
         super().do_GET()
 
     def _build_index_page(self) -> str:

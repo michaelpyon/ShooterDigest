@@ -1371,44 +1371,80 @@ def _generate_game_takeaway(r: dict) -> dict:
             cat_desc = cat_descriptions.get(top_cat, "general discussion")
             community_parts.append(f"Limited community activity — one substantive post about {cat_desc}.")
 
-    # Press coverage — synthesize actual topics from titles, not just count
+    # Press coverage — synthesize sentiment and key angle from titles, not counts
     ext_news = r.get("external_news", [])
     if ext_news:
-        sources = [a.get("source", "") for a in ext_news[:4] if a.get("source")]
-        unique_sources = list(dict.fromkeys(sources))[:3]
-        source_str = ", ".join(unique_sources) if unique_sources else "gaming press"
+        titles = [a.get("title", "") for a in ext_news[:6]]
 
-        # Classify press topics from article titles
-        titles = [a.get("title", "") for a in ext_news[:5]]
-        topics = []
+        # Detect primary topic angle
+        topic = None
         for t in titles:
             tl = t.lower()
-            if any(w in tl for w in ["review", "rated", "score"]):
-                topics.append("review coverage")
-            elif any(w in tl for w in ["update", "patch", "season", "launch", "release"]):
-                topics.append("update coverage")
-            elif any(w in tl for w in ["guide", "tips", "how to", "best"]):
-                topics.append("guide content")
-            elif any(w in tl for w in ["controversy", "drama", "backlash", "criticism", "problem", "issue"]):
-                topics.append("controversy coverage")
-            elif any(w in tl for w in ["esports", "tournament", "competitive", "championship"]):
-                topics.append("esports coverage")
+            if any(w in tl for w in ["review", "rated", "score", "verdict"]):
+                topic = "review coverage"
+                break
+            elif any(w in tl for w in ["controversy", "drama", "backlash", "criticism", "problem", "issue", "concern", "outrage", "disappoints", "fails"]):
+                topic = "controversy"
+                break
+            elif any(w in tl for w in ["esports", "tournament", "competitive", "championship", "pro league"]):
+                topic = "esports"
+                break
+            elif any(w in tl for w in ["update", "patch", "season", "launch", "release", "announced", "returns", "coming"]):
+                topic = "new content or update"
+                break
+            elif any(w in tl for w in ["guide", "tips", "how to", "best", "loadout", "build"]):
+                topic = "player guides and tips"
+                break
 
-        # Deduplicate topics
-        unique_topics = list(dict.fromkeys(topics))[:2]
+        # Detect sentiment signal from titles
+        positive_signals = ["impressive", "delivers", "returns", "strong", "best", "love", "great",
+                            "success", "wins", "thriving", "growth", "record", "popular", "hit",
+                            "praised", "celebrates", "milestone"]
+        negative_signals = ["disappoints", "fails", "backlash", "criticism", "concern", "problem",
+                            "issue", "outrage", "controversy", "drops", "decline", "loses", "frustrated",
+                            "wrong", "broken", "bad", "poor", "worst", "disaster"]
 
-        if len(ext_news) >= 3 and unique_topics:
-            topic_str = " and ".join(unique_topics)
+        all_title_text = " ".join(titles).lower()
+        pos_hits = sum(1 for w in positive_signals if w in all_title_text)
+        neg_hits = sum(1 for w in negative_signals if w in all_title_text)
+
+        if pos_hits > neg_hits:
+            sentiment = "largely positive"
+        elif neg_hits > pos_hits:
+            sentiment = "largely critical"
+        else:
+            sentiment = "neutral to mixed"
+
+        # Build the press sentence — lead with angle and tone, not count
+        if topic == "controversy":
             community_parts.append(
-                f"{len(ext_news)} press articles in the past week from {source_str}, mostly {topic_str}."
+                f"Press coverage is {sentiment}, focused on ongoing controversy — "
+                f"outlets are amplifying community concerns rather than celebrating the game."
             )
-        elif len(ext_news) >= 3:
+        elif topic == "review coverage":
             community_parts.append(
-                f"{len(ext_news)} press articles in the past week from {source_str}."
+                f"Press coverage is {sentiment}, centered on reviews — "
+                f"critics are actively weighing in on the current state of the game."
             )
-        elif ext_news:
+        elif topic == "esports":
             community_parts.append(
-                f"Light press coverage ({len(ext_news)} {'article' if len(ext_news) == 1 else 'articles'}) via {source_str}."
+                f"Press coverage is {sentiment}, concentrated on competitive play — "
+                f"the esports and tournament scene is driving most of the media attention this week."
+            )
+        elif topic == "new content or update":
+            community_parts.append(
+                f"Press coverage is {sentiment}, driven by new content and updates — "
+                f"outlets are covering the latest releases and what they mean for players."
+            )
+        elif topic == "player guides and tips":
+            community_parts.append(
+                f"Press coverage is {sentiment} and informational — "
+                f"most coverage this week is guides and tips rather than news or analysis."
+            )
+        else:
+            community_parts.append(
+                f"Press coverage is {sentiment} — "
+                f"no single dominant story this week."
             )
 
     community = " ".join(community_parts) if community_parts else ""

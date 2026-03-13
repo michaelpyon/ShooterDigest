@@ -143,6 +143,37 @@ function sdSubscribe(e) {
 """.replace("NEWSLETTER_SUBSCRIBE_EMAIL", NEWSLETTER_SUBSCRIBE_EMAIL)
 
 
+OG_META_HTML = """
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://shooter.michaelpyon.com" />
+  <meta property="og:title" content="ShooterDigest — Weekly Competitive Shooter Intelligence" />
+  <meta property="og:description" content="SteamDB shows you the numbers. ShooterDigest tells you what they mean. Weekly analysis of the PC competitive FPS market." />
+  <meta property="og:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ShooterDigest — Weekly Shooter Intelligence" />
+  <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
+  <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+"""
+
+
+def _inject_og_tags(html: str) -> str:
+    """Inject OG meta tags into any digest HTML that doesn't already have them."""
+    if 'og:title' in html:
+        return html  # Already has OG tags, skip
+    # Inject after the viewport meta tag
+    injected = re.sub(
+        r'(<meta name="viewport"[^>]*>)',
+        r'\1' + OG_META_HTML,
+        html,
+        count=1,
+    )
+    if injected == html:
+        # Fallback: inject before </head>
+        injected = html.replace("</head>", OG_META_HTML + "</head>", 1)
+    return injected
+
+
 def _inject_newsletter_into_digest(html: str) -> str:
     """Inject the newsletter signup before the footer div in a digest HTML."""
     # Try to inject before the .footer div
@@ -214,6 +245,7 @@ class DigestHandler(SimpleHTTPRequestHandler):
                 try:
                     with open(filepath, "r", encoding="utf-8") as fh:
                         content = fh.read()
+                    content = _inject_og_tags(content)
                     content = _inject_newsletter_into_digest(content)
                     encoded = content.encode("utf-8")
                     self.send_response(200)

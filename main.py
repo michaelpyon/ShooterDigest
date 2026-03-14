@@ -256,15 +256,7 @@ EVENT_ANNOTATIONS = {
 # Data caveat — "what's not included" info box rendered near the top of each digest
 # ---------------------------------------------------------------------------
 
-DATA_CAVEAT_HTML = """  <div class="data-caveat">
-    <span class="caveat-icon">\u2139\ufe0f</span>
-    <div class="caveat-text">
-      <strong>What this digest tracks:</strong> Steam concurrent players only.
-      Major titles like Valorant, Fortnite, and Overwatch 2 report MAU/DAU \u2014 not concurrent Steam players \u2014
-      and are not fully comparable on this scale.
-      Off-Steam audience estimates are not included in this digest.
-    </div>
-  </div>"""
+DATA_CAVEAT_HTML = """  <p class="data-caveat-inline"><em>Steam concurrent players only. Console/MAU titles (Valorant, Fortnite, Overwatch 2) tracked separately.</em></p>"""
 
 
 # ---------------------------------------------------------------------------

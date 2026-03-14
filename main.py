@@ -2566,6 +2566,12 @@ def generate_html(results: list[dict], failed_names: list[str],
     <div class="wnl-label">Month-over-Month Steam Concurrent Player Trend</div>
 {wnl_html}
     {aggregate_chart}
+    <div style="display:flex;justify-content:flex-end;margin-top:1rem;">
+      <a href="https://twitter.com/intent/tweet?text=This%20week%27s%20competitive%20shooter%20intelligence%20briefing%20is%20out.%20Steam%20concurrents%2C%20trends%2C%20and%20analysis.%0A%0A&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="exec-share-btn" aria-label="Share on X">
+        <svg viewBox="0 0 24 24" width="14" height="14" style="fill:currentColor;margin-right:5px;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Share
+      </a>
+    </div>
   </div>"""
 
     # --- Genre filter tabs ---
@@ -2868,11 +2874,14 @@ def generate_html(results: list[dict], failed_names: list[str],
   <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
   <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <title>Shooter Digest - {date_str}</title>
   <style>
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     body {{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: #0f1923; color: #c7d5e0;
       padding: 2rem; max-width: 1100px; margin: 0 auto;
     }}
@@ -2918,6 +2927,22 @@ def generate_html(results: list[dict], failed_names: list[str],
       text-decoration-color: rgba(96,165,250,0.4);
     }}
     .exec-link:hover {{ color: #93c5fd; text-decoration-color: #93c5fd; }}
+    .exec-share-btn {{
+      display: inline-flex; align-items: center; padding: 5px 12px;
+      font-size: 0.75rem; color: #94a3b8; background: transparent;
+      border: 1px solid #2a475e; border-radius: 4px; text-decoration: none;
+      transition: all 0.2s; cursor: pointer;
+    }}
+    .exec-share-btn:hover {{ color: #ffffff; border-color: #f97316; background: rgba(249,115,22,0.1); }}
+    .share-fab {{
+      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
+      border-radius: 50%; background: #1a1a2e; border: 1px solid #2a475e;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s; z-index: 50; text-decoration: none;
+    }}
+    .share-fab:hover {{ background: #f97316; border-color: #f97316; }}
+    .share-fab svg {{ width: 20px; height: 20px; fill: #c7d5e0; }}
+    .share-fab:hover svg {{ fill: #ffffff; }}
     .aggregate-chart {{
       margin-top: 1rem; padding-top: 0.8rem;
       border-top: 1px solid #2a475e;
@@ -3726,6 +3751,9 @@ def generate_html(results: list[dict], failed_names: list[str],
   }}
   </script>
   <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">↑ Top</a>
+  <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-fab" aria-label="Share on X">
+    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  </a>
 </body>
 </html>
 """

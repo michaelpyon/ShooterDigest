@@ -153,6 +153,8 @@ OG_META_HTML = """
   <meta name="twitter:title" content="ShooterDigest — Weekly Shooter Intelligence" />
   <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
   <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta name="twitter:site" content="@michaelpyon" />
+  <meta name="twitter:creator" content="@michaelpyon" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 """
 
@@ -322,9 +324,13 @@ class DigestHandler(SimpleHTTPRequestHandler):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Weekly FPS intelligence digest — Steam concurrents, Reddit sentiment, press coverage">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>ShooterDigest — Archive</title>
 <style>
-  body {{ font-family: system-ui, sans-serif; background: #0f1923; color: #c7d5e0; max-width: 640px; margin: 60px auto; padding: 0 20px; }}
+  body {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f1923; color: #c7d5e0; max-width: 640px; margin: 60px auto; padding: 0 20px; }}
+  h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
   .about-section {{ padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 1px solid #2a475e; }}
   .about-title {{ color: #66c0f4; font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; }}
   .about-subtitle {{ color: #8f98a0; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem; }}

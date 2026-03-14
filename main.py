@@ -2873,6 +2873,8 @@ def generate_html(results: list[dict], failed_names: list[str],
   <meta name="twitter:title" content="ShooterDigest — Weekly Shooter Intelligence" />
   <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
   <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta name="twitter:site" content="@michaelpyon" />
+  <meta name="twitter:creator" content="@michaelpyon" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2885,6 +2887,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       background: #0f1923; color: #c7d5e0;
       padding: 2rem; max-width: 1100px; margin: 0 auto;
     }}
+    h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
     h1 {{ font-size: 1.8rem; margin-bottom: 0.2rem; }}
     h1 .brand-shooter {{ color: #ffffff; }}
     h1 .brand-digest {{ color: #f97316; }}
@@ -4312,15 +4315,21 @@ def generate_index(docs_dir: str) -> str:
   <meta name="twitter:title" content="ShooterDigest — Weekly Shooter Intelligence" />
   <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
   <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta name="twitter:site" content="@michaelpyon" />
+  <meta name="twitter:creator" content="@michaelpyon" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <title>ShooterDigest &mdash; Archive</title>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
       background: #0f0f0f; color: #e8e8e8;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh; padding: 60px 24px;
     }}
+    h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
     .container {{ max-width: 640px; margin: 0 auto; }}
     header {{ margin-bottom: 48px; }}
     h1 {{ font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; }}

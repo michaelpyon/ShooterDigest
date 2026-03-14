@@ -471,7 +471,7 @@ def _generate_sparkline_svg(avg_trend: list[dict], trend_css: str) -> str:
                 label = month_text[:3]
         labels_svg += (
             f'<text x="{x}" y="{h - 2}" text-anchor="middle" '
-            f'fill="#8f98a0" font-size="8" font-family="sans-serif">{label}</text>\n'
+            f'fill="#8f98a0" font-size="8" font-family="JetBrains Mono, monospace">{label}</text>\n'
         )
 
     # Data point dots
@@ -485,7 +485,7 @@ def _generate_sparkline_svg(avg_trend: list[dict], trend_css: str) -> str:
     label_y = max(last_y - 6, 8)  # ensure label stays in view
     value_label = (
         f'<text x="{last_x}" y="{label_y}" text-anchor="middle" '
-        f'fill="{stroke}" font-size="9" font-weight="bold" font-family="sans-serif">'
+        f'fill="{stroke}" font-size="9" font-weight="bold" font-family="JetBrains Mono, monospace">'
         f'{last_val}</text>\n'
     )
 
@@ -646,7 +646,7 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
                 label = month_text[:3]
         labels_svg += (
             f'<text x="{x}" y="{h - 2}" text-anchor="middle" '
-            f'fill="#8f98a0" font-size="8" font-family="sans-serif">{label}</text>\n'
+            f'fill="#8f98a0" font-size="8" font-family="JetBrains Mono, monospace">{label}</text>\n'
         )
 
     # Dots
@@ -662,9 +662,9 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
     last_y = max(coords[-1][1] - 6, 8)
     value_labels = (
         f'<text x="{coords[0][0]}" y="{first_y}" text-anchor="start" '
-        f'fill="#8f98a0" font-size="8" font-family="sans-serif">{first_val}</text>\n'
+        f'fill="#8f98a0" font-size="8" font-family="JetBrains Mono, monospace">{first_val}</text>\n'
         f'<text x="{coords[-1][0]}" y="{last_y}" text-anchor="end" '
-        f'fill="{stroke}" font-size="9" font-weight="bold" font-family="sans-serif">{last_val}</text>\n'
+        f'fill="{stroke}" font-size="9" font-weight="bold" font-family="JetBrains Mono, monospace">{last_val}</text>\n'
     )
 
     return f'''<div class="aggregate-chart">
@@ -2870,7 +2870,7 @@ def generate_html(results: list[dict], failed_names: list[str],
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <title>Shooter Digest - {date_str}</title>
   <style>
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
@@ -2989,7 +2989,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       transition: color 0.15s, border-color 0.15s;
     }}
     .game-link:hover {{ color: #66c0f4; border-bottom-color: #66c0f4; }}
-    .num {{ font-variant-numeric: tabular-nums; text-align: right; }}
+    .num {{ font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; text-align: right; }}
     .trend {{ text-align: center; font-weight: 600; white-space: nowrap; }}
     .trend.up {{ color: #4ade80; }}
     .trend.down {{ color: #f87171; }}
@@ -4312,7 +4312,7 @@ def generate_index(docs_dir: str) -> str:
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <title>ShooterDigest &mdash; Archive</title>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}

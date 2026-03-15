@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
+from source_cache import cached_get
+
 logger = logging.getLogger(__name__)
 
 # cloudscraper session — handles Cloudflare JS challenges automatically.
@@ -27,18 +29,50 @@ _scraper = cloudscraper.create_scraper(
     wait=wait_exponential(multiplier=1, min=2, max=10),
     reraise=True,
 )
-def _http_get(url: str, headers: dict, timeout: int = 10) -> requests.Response:
-    """HTTP GET with automatic retry on transient failures."""
+def _network_http_get(url: str, headers: dict, timeout: int = 10) -> requests.Response:
+    """Network-only HTTP GET with automatic retry on transient failures."""
     resp = requests.get(url, headers=headers, timeout=timeout)
     resp.raise_for_status()
     return resp
 
 
+def _http_get(url: str, headers: dict, timeout: int = 10) -> requests.Response:
+    """HTTP GET backed by a persistent cache."""
+    return cached_get(
+        url,
+        source=_source_for_url(url),
+        fetcher=lambda: _network_http_get(url, headers=headers, timeout=timeout),
+    )
+
+
 def _steamcharts_get(url: str, timeout: int = 15) -> requests.Response:
-    """HTTP GET via cloudscraper for SteamCharts (bypasses Cloudflare challenges)."""
+    """HTTP GET via cloudscraper with a persistent cache."""
+    return cached_get(
+        url,
+        source="steamcharts",
+        fetcher=lambda: _network_steamcharts_get(url, timeout=timeout),
+    )
+
+
+def _network_steamcharts_get(url: str, timeout: int = 15) -> requests.Response:
+    """Network-only HTTP GET via cloudscraper for SteamCharts."""
     resp = _scraper.get(url, timeout=timeout)
     resp.raise_for_status()
     return resp
+
+
+def _source_for_url(url: str) -> str:
+    if "steamcharts.com" in url:
+        return "steamcharts"
+    if "ISteamNews" in url:
+        return "steam_news"
+    if "GetNumberOfCurrentPlayers" in url:
+        return "steam_api"
+    if "reddit.com" in url:
+        return "reddit"
+    if "news.google.com" in url:
+        return "google_news"
+    return "default"
 
 
 HEADERS = {

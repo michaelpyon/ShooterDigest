@@ -4,25 +4,46 @@ import os
 import re
 import json
 import time
+import shutil
 import html as html_mod
 import logging
 import calendar as cal_mod
 from datetime import datetime
 
-from scraper import (
-    GAMES,
-    EMERGING_GAMES,
-    get_steam_data,
-    get_steam_news,
-    get_reddit_posts,
-    get_reddit_comments,
-    get_google_news_rss,
-)
-
 logging.basicConfig(level=logging.WARNING, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 DELAY_BETWEEN_REQUESTS = 2  # seconds
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(BASE_DIR, "output")
+DOCS_DIR = os.path.join(BASE_DIR, "docs")
+_SCRAPER_COMPONENTS = None
+
+
+def _scraper_components() -> dict:
+    """Import scraper dependencies lazily so render-only flows stay lightweight."""
+    global _SCRAPER_COMPONENTS
+    if _SCRAPER_COMPONENTS is None:
+        from scraper import (
+            GAMES,
+            EMERGING_GAMES,
+            get_steam_data,
+            get_steam_news,
+            get_reddit_posts,
+            get_reddit_comments,
+            get_google_news_rss,
+        )
+
+        _SCRAPER_COMPONENTS = {
+            "GAMES": GAMES,
+            "EMERGING_GAMES": EMERGING_GAMES,
+            "get_steam_data": get_steam_data,
+            "get_steam_news": get_steam_news,
+            "get_reddit_posts": get_reddit_posts,
+            "get_reddit_comments": get_reddit_comments,
+            "get_google_news_rss": get_google_news_rss,
+        }
+    return _SCRAPER_COMPONENTS
 
 
 # ---------------------------------------------------------------------------
@@ -975,6 +996,13 @@ def _analyze_dev_comms(news: list[dict]) -> dict:
 
 def scrape_games(games_list: list[dict], label: str = "") -> list[dict]:
     """Core scraping logic for any games list: player counts, trends, news, reddit, comments."""
+    components = _scraper_components()
+    get_steam_data = components["get_steam_data"]
+    get_steam_news = components["get_steam_news"]
+    get_reddit_posts = components["get_reddit_posts"]
+    get_reddit_comments = components["get_reddit_comments"]
+    get_google_news_rss = components["get_google_news_rss"]
+
     results = []
     total = len(games_list)
     prefix = f"[{label}] " if label else ""
@@ -1046,12 +1074,12 @@ def scrape_games(games_list: list[dict], label: str = "") -> list[dict]:
 
 def scrape_all() -> list[dict]:
     """Scrape all main game data: player counts, trends, news, reddit (week+month), comments."""
-    return scrape_games(GAMES)
+    return scrape_games(_scraper_components()["GAMES"])
 
 
 def scrape_emerging() -> list[dict]:
     """Scrape emerging/indie titles using the same pipeline as main games."""
-    return scrape_games(EMERGING_GAMES, label="emerging")
+    return scrape_games(_scraper_components()["EMERGING_GAMES"], label="emerging")
 
 
 # ---------------------------------------------------------------------------
@@ -1109,10 +1137,11 @@ def _enrich(results: list[dict]) -> list[dict]:
 # History persistence
 # ---------------------------------------------------------------------------
 
-def _save_history(results: list[dict], out_dir: str) -> None:
+def _save_history(results: list[dict], out_dir: str, date_str: str | None = None) -> None:
     history_dir = os.path.join(out_dir, "history")
     os.makedirs(history_dir, exist_ok=True)
-    date_str = datetime.now().strftime("%Y-%m-%d")
+    if not date_str:
+        date_str = datetime.now().strftime("%Y-%m-%d")
     path = os.path.join(history_dir, f"{date_str}.json")
 
     snapshot = {"date": date_str, "games": []}
@@ -1140,7 +1169,11 @@ def _save_history(results: list[dict], out_dir: str) -> None:
     print(f"  History saved: {path}")
 
 
-def _load_previous_history(out_dir: str, min_games: int = 10) -> dict | None:
+def _load_previous_history(
+    out_dir: str,
+    min_games: int = 10,
+    current_date: str | None = None,
+) -> dict | None:
     """Load the most recent COMPLETE history file for comparison + backfill.
 
     A "complete" file has >= min_games entries where the majority have
@@ -1151,7 +1184,7 @@ def _load_previous_history(out_dir: str, min_games: int = 10) -> dict | None:
     if not os.path.isdir(history_dir):
         return None
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = current_date or datetime.now().strftime("%Y-%m-%d")
     files = sorted(
         [f for f in os.listdir(history_dir) if f.endswith(".json") and f[:-5] != today],
         reverse=True,
@@ -4368,7 +4401,21 @@ def generate_index(docs_dir: str) -> str:
 # Main
 # ---------------------------------------------------------------------------
 
-def main():
+def collect_pipeline_snapshot(
+    *,
+    out_dir: str | None = None,
+    run_date: str | None = None,
+    include_emerging: bool = True,
+    include_radar: bool = True,
+) -> dict:
+    components = _scraper_components()
+    games = components["GAMES"]
+    emerging_games = components["EMERGING_GAMES"]
+
+    out_dir = out_dir or OUTPUT_DIR
+    os.makedirs(out_dir, exist_ok=True)
+    snapshot_date = run_date or datetime.now().strftime("%Y-%m-%d")
+
     print()
     print("  Shooter Digest - Fetching player data + context...")
     print("  (This takes about 3-4 minutes for 15 titles)")
@@ -4377,10 +4424,10 @@ def main():
     results = scrape_all()
 
     scraped_names = {r["name"] for r in results}
-    failed_names = [g["name"] for g in GAMES if g["name"] not in scraped_names]
+    failed_names = [g["name"] for g in games if g["name"] not in scraped_names]
 
     success = len(results)
-    total = len(GAMES)
+    total = len(games)
     print()
     print(f"  Done! Got data for {success}/{total} games.")
 
@@ -4391,10 +4438,7 @@ def main():
     results = _enrich(results)
 
     # History comparison
-    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
-    os.makedirs(out_dir, exist_ok=True)
-
-    previous = _load_previous_history(out_dir)
+    previous = _load_previous_history(out_dir, current_date=snapshot_date)
 
     # --- Backfill from history when current data is incomplete ---
     # SteamCharts may be fully blocked (Steam API fallback: no peaks, no months)
@@ -4467,66 +4511,136 @@ def main():
     print(f"  Generated takeaways for {len(results)} games + overall")
 
     # --- Emerging Titles ---
-    print()
-    print("  Scraping Emerging Titles (6 watchlist games)...")
-    print("  (Adds ~3-4 minutes)")
     emerging_results = []
-    try:
-        emerging_raw = scrape_emerging()
-        if emerging_raw:
-            emerging_results = _enrich(emerging_raw)
-            for r in emerging_results:
-                _generate_game_takeaway(r)
-            print(f"  Emerging: scraped + enriched {len(emerging_results)} titles")
-        else:
-            print("  Emerging: no data returned")
-    except Exception as e:
-        logger.error("Emerging scrape failed: %s", e)
-        print(f"  Emerging: FAILED ({e})")
+    if include_emerging:
+        print()
+        print("  Scraping Emerging Titles (6 watchlist games)...")
+        print("  (Adds ~3-4 minutes)")
+        try:
+            emerging_raw = scrape_emerging()
+            if emerging_raw:
+                emerging_results = _enrich(emerging_raw)
+                for r in emerging_results:
+                    _generate_game_takeaway(r)
+                print(f"  Emerging: scraped + enriched {len(emerging_results)} titles")
+            else:
+                print("  Emerging: no data returned")
+        except Exception as e:
+            logger.error("Emerging scrape failed: %s", e)
+            print(f"  Emerging: FAILED ({e})")
 
     # --- Auto-Discovery: On Our Radar ---
     radar_results = []
-    try:
-        from discovery import discover_breakout_titles
-        known_app_ids = {g["app_id"] for g in GAMES} | {g["app_id"] for g in EMERGING_GAMES}
-        print()
-        print("  Running auto-discovery (SteamSpy tag scan)...")
-        radar_results = discover_breakout_titles(known_app_ids)
-        print(f"  Radar: found {len(radar_results)} candidates")
-    except Exception as e:
-        logger.error("Discovery failed: %s", e)
-        print(f"  Radar: FAILED ({e}) — continuing without")
+    if include_radar:
+        try:
+            from discovery import discover_breakout_titles
+            known_app_ids = {g["app_id"] for g in games} | {g["app_id"] for g in emerging_games}
+            print()
+            print("  Running auto-discovery (SteamSpy tag scan)...")
+            radar_results = discover_breakout_titles(known_app_ids)
+            print(f"  Radar: found {len(radar_results)} candidates")
+        except Exception as e:
+            logger.error("Discovery failed: %s", e)
+            print(f"  Radar: FAILED ({e}) — continuing without")
 
-    # Save outputs
-    date_str = datetime.now().strftime("%Y-%m-%d")
+    return {
+        "schema_version": 1,
+        "pipeline": "weekly-digest",
+        "date": snapshot_date,
+        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "results": results,
+        "failed_names": failed_names,
+        "overall_takeaways": overall_takeaways,
+        "emerging_results": emerging_results,
+        "radar_results": radar_results,
+        "summary": {
+            "games_scraped": len(results),
+            "games_expected": len(games),
+            "emerging_scraped": len(emerging_results),
+            "radar_candidates": len(radar_results),
+        },
+    }
+
+
+def write_pipeline_snapshot(snapshot: dict, out_dir: str | None = None) -> str:
+    out_dir = out_dir or OUTPUT_DIR
+    snapshot_date = snapshot.get("date") or datetime.now().strftime("%Y-%m-%d")
+    pipeline_dir = os.path.join(out_dir, "pipeline")
+    os.makedirs(pipeline_dir, exist_ok=True)
+    path = os.path.join(pipeline_dir, f"{snapshot_date}.json")
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(snapshot, f, indent=2)
+
+    print(f"  Pipeline snapshot saved: {path}")
+    return path
+
+
+def render_snapshot(
+    snapshot: dict,
+    *,
+    out_dir: str | None = None,
+    docs_dir: str | None = None,
+) -> dict[str, str]:
+    out_dir = out_dir or OUTPUT_DIR
+    docs_dir = docs_dir or DOCS_DIR
+    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(docs_dir, exist_ok=True)
+
+    date_str = snapshot.get("date") or datetime.now().strftime("%Y-%m-%d")
+    results = snapshot.get("results", [])
+    failed_names = snapshot.get("failed_names", [])
+    overall_takeaways = snapshot.get("overall_takeaways", [])
+    emerging_results = snapshot.get("emerging_results") or None
+    radar_results = snapshot.get("radar_results") or None
 
     md_path = os.path.join(out_dir, f"digest_{date_str}.md")
-    with open(md_path, "w") as f:
+    with open(md_path, "w", encoding="utf-8") as f:
         f.write(generate_markdown(results, failed_names, overall_takeaways))
 
     html_path = os.path.join(out_dir, f"digest_{date_str}.html")
-    with open(html_path, "w") as f:
-        f.write(generate_html(results, failed_names, overall_takeaways,
-                              emerging_results=emerging_results or None,
-                              radar_results=radar_results or None))
+    with open(html_path, "w", encoding="utf-8") as f:
+        f.write(
+            generate_html(
+                results,
+                failed_names,
+                overall_takeaways,
+                emerging_results=emerging_results,
+                radar_results=radar_results,
+            )
+        )
 
+    docs_digest_path = os.path.join(docs_dir, f"digest_{date_str}.html")
+    shutil.copyfile(html_path, docs_digest_path)
 
-    # Write index.html
-    docs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs")
-    os.makedirs(docs_dir, exist_ok=True)
-    # Copy new digest to docs/ (optional step — usually done manually)
     index_path = os.path.join(docs_dir, "index.html")
-    with open(index_path, "w") as f:
+    with open(index_path, "w", encoding="utf-8") as f:
         f.write(generate_index(docs_dir))
+
+    _save_history(results, out_dir, date_str=date_str)
     print(f"  Updated: {index_path}")
 
-    # Save history
-    _save_history(results, out_dir)
+    return {
+        "markdown": md_path,
+        "html": html_path,
+        "docs_html": docs_digest_path,
+        "index": index_path,
+    }
 
-    print(f"  Saved to: {out_dir}/")
+
+def main():
+    from pipeline_store import save_snapshot
+
+    snapshot = collect_pipeline_snapshot()
+    run_key = save_snapshot(snapshot, pipeline="weekly-digest", overwrite=True)
+    write_pipeline_snapshot(snapshot)
+    print(f"  Stored pipeline snapshot: {run_key}")
+    outputs = render_snapshot(snapshot)
+
+    print(f"  Saved to: {OUTPUT_DIR}/")
     print()
     print(f"  Open this in your browser:")
-    print(f"  {html_path}")
+    print(f"  {outputs['html']}")
     print()
 
 

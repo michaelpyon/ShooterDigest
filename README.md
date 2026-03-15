@@ -1,6 +1,6 @@
 # Shooter Digest
 
-Weekly competitive shooter player tracker. Scrapes Steam concurrent player data and generates a formatted markdown digest.
+Weekly competitive shooter player tracker. Scrapes Steam concurrent player data, persists a reusable ingest snapshot, and renders formatted digest artifacts from stored data.
 
 ## Tracked Games
 
@@ -26,10 +26,17 @@ pip install -r requirements.txt
 ## Usage
 
 ```bash
-python main.py
+python ingest.py
+python render_from_store.py
 ```
 
-Output is saved to `output/digest_YYYY-MM-DD.md`.
+For one-shot local runs, `python main.py` still works and now performs both steps.
+
+Output is saved to:
+
+- `output/digest_YYYY-MM-DD.md`
+- `output/digest_YYYY-MM-DD.html`
+- `output/pipeline/YYYY-MM-DD.json`
 
 ## Data Source
 
@@ -39,10 +46,16 @@ Player data is sourced from [SteamCharts](https://steamcharts.com), which tracks
 
 ```
 shooter-digest/
-├── scraper.py          # SteamCharts scraping functions
-├── main.py             # Main script
-├── requirements.txt    # Dependencies
-├── README.md           # This file
+├── scraper.py             # Source fetchers with HTTP caching
+├── ingest.py              # Scrape once and store a pipeline snapshot
+├── render_from_store.py   # Render digest artifacts from stored snapshot
+├── pipeline_store.py      # SQLite-backed snapshot registry
+├── main.py                # Shared collection/render helpers + one-shot entrypoint
+├── requirements.txt       # Dependencies
+├── README.md              # This file
 └── output/
-    └── digest_YYYY-MM-DD.md
+    ├── digest_YYYY-MM-DD.md
+    ├── digest_YYYY-MM-DD.html
+    └── pipeline/
+        └── YYYY-MM-DD.json
 ```

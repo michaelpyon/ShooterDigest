@@ -1,46 +1,22 @@
-"""Persistent storage for ingest-once / render-many digest snapshots."""
+"""Persistent storage for ingest-once / render-many digest snapshots.
+
+Backed by Postgres via db.py. Replaces the previous SQLite implementation.
+"""
 
 from __future__ import annotations
 
 import hashlib
 import json
-import os
-import sqlite3
+import re
 import time
 from datetime import datetime
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
-DEFAULT_OUTPUT_DIR = os.path.join(BASE_DIR, "output")
-PIPELINE_DB = os.environ.get(
-    "SHOOTERDIGEST_PIPELINE_DB",
-    os.path.join(DATA_DIR, "pipeline.sqlite3"),
-)
+import db
 
 
-def _ensure_schema() -> None:
-    os.makedirs(DATA_DIR, exist_ok=True)
-    with sqlite3.connect(PIPELINE_DB) as conn:
-        conn.execute(
-            """
-            CREATE TABLE IF NOT EXISTS pipeline_runs (
-                run_key TEXT PRIMARY KEY,
-                pipeline TEXT NOT NULL,
-                run_date TEXT NOT NULL,
-                payload_json TEXT NOT NULL,
-                content_hash TEXT NOT NULL,
-                created_at INTEGER NOT NULL,
-                updated_at INTEGER NOT NULL
-            )
-            """
-        )
-        conn.execute(
-            """
-            CREATE INDEX IF NOT EXISTS idx_pipeline_runs_pipeline_date
-            ON pipeline_runs(pipeline, run_date DESC)
-            """
-        )
-
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 
 def _serialize_payload(snapshot: dict) -> str:
     return json.dumps(snapshot, sort_keys=True)
@@ -50,45 +26,41 @@ def _content_hash(payload_json: str) -> str:
     return hashlib.sha256(payload_json.encode("utf-8")).hexdigest()
 
 
+def _extract_teaser(html: str) -> str:
+    """Pull the first <li> text from digest HTML as a one-line teaser."""
+    match = re.search(r"<li>(.*?)</li>", html, re.DOTALL)
+    if match:
+        text = re.sub(r"<[^>]+>", "", match.group(1)).strip()
+        return (text[:100] + "\u2026") if len(text) > 100 else text
+    return "Steam concurrents, Reddit sentiment, press coverage."
+
+
+# ---------------------------------------------------------------------------
+# Snapshot CRUD
+# ---------------------------------------------------------------------------
+
 def save_snapshot(
     snapshot: dict,
     *,
     pipeline: str = "weekly-digest",
     overwrite: bool = True,
 ) -> str:
-    _ensure_schema()
+    """Save a pipeline snapshot to Postgres. Returns the run_key."""
     run_date = snapshot.get("date") or datetime.utcnow().strftime("%Y-%m-%d")
     run_key = f"{pipeline}:{run_date}"
     payload_json = _serialize_payload(snapshot)
     content_hash = _content_hash(payload_json)
     now = int(time.time())
 
-    with sqlite3.connect(PIPELINE_DB) as conn:
-        if overwrite:
-            conn.execute(
-                """
-                INSERT INTO pipeline_runs (
-                    run_key, pipeline, run_date, payload_json, content_hash, created_at, updated_at
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(run_key) DO UPDATE SET
-                    payload_json = excluded.payload_json,
-                    content_hash = excluded.content_hash,
-                    updated_at = excluded.updated_at
-                """,
-                (run_key, pipeline, run_date, payload_json, content_hash, now, now),
-            )
-        else:
-            conn.execute(
-                """
-                INSERT OR IGNORE INTO pipeline_runs (
-                    run_key, pipeline, run_date, payload_json, content_hash, created_at, updated_at
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """,
-                (run_key, pipeline, run_date, payload_json, content_hash, now, now),
-            )
-
+    db.upsert_pipeline_run(
+        run_key=run_key,
+        pipeline=pipeline,
+        run_date=run_date,
+        payload_json=payload_json,
+        content_hash=content_hash,
+        now=now,
+        overwrite=overwrite,
+    )
     return run_key
 
 
@@ -98,89 +70,53 @@ def load_snapshot(
     run_date: str | None = None,
     run_key: str | None = None,
 ) -> dict | None:
-    _ensure_schema()
-    query = None
-    params = None
-
-    if run_key:
-        query = "SELECT payload_json FROM pipeline_runs WHERE run_key = ?"
-        params = (run_key,)
-    elif run_date:
-        query = """
-            SELECT payload_json
-            FROM pipeline_runs
-            WHERE pipeline = ? AND run_date = ?
-            ORDER BY updated_at DESC
-            LIMIT 1
-        """
-        params = (pipeline, run_date)
-    else:
+    """Load a pipeline snapshot by run_key or by pipeline+date."""
+    payload_json = db.load_pipeline_run(
+        run_key=run_key,
+        pipeline=pipeline,
+        run_date=run_date,
+    )
+    if payload_json is None:
         return None
-
-    with sqlite3.connect(PIPELINE_DB) as conn:
-        row = conn.execute(query, params).fetchone()
-    if not row:
-        return None
-    return json.loads(row[0])
+    return json.loads(payload_json)
 
 
 def load_latest_snapshot(*, pipeline: str = "weekly-digest") -> dict | None:
-    _ensure_schema()
-    with sqlite3.connect(PIPELINE_DB) as conn:
-        row = conn.execute(
-            """
-            SELECT payload_json
-            FROM pipeline_runs
-            WHERE pipeline = ?
-            ORDER BY run_date DESC, updated_at DESC
-            LIMIT 1
-            """,
-            (pipeline,),
-        ).fetchone()
-    if not row:
+    """Load the most recent snapshot for a pipeline."""
+    payload_json = db.load_latest_pipeline_run(pipeline=pipeline)
+    if payload_json is None:
         return None
-    return json.loads(row[0])
+    return json.loads(payload_json)
 
+
+# ---------------------------------------------------------------------------
+# Digest HTML storage (replaces filesystem export)
+# ---------------------------------------------------------------------------
+
+def store_digest_html(run_date: str, html: str) -> None:
+    """Store rendered digest HTML in Postgres."""
+    teaser = _extract_teaser(html)
+    now = int(time.time())
+    db.write_digest_html(run_date, html, teaser, now)
+
+
+# ---------------------------------------------------------------------------
+# Backward compatibility shims
+# ---------------------------------------------------------------------------
+# These functions previously wrote/read JSON to the filesystem.
+# They now redirect to Postgres. Code that called export_snapshot()
+# or load_exported_snapshot() keeps working without changes.
 
 def export_snapshot(snapshot: dict, *, out_dir: str | None = None) -> str:
+    """Store snapshot in Postgres. Returns a virtual path for logging."""
     run_date = snapshot.get("date") or datetime.utcnow().strftime("%Y-%m-%d")
-    export_dir = os.path.join(out_dir or DEFAULT_OUTPUT_DIR, "pipeline")
-    os.makedirs(export_dir, exist_ok=True)
-    path = os.path.join(export_dir, f"{run_date}.json")
-
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(snapshot, f, indent=2)
-
-    return path
+    save_snapshot(snapshot, pipeline="weekly-digest", overwrite=True)
+    return f"pg://pipeline_runs/weekly-digest:{run_date}"
 
 
 def load_exported_snapshot(run_date: str, *, out_dir: str | None = None) -> dict | None:
-    path = os.path.join(out_dir or DEFAULT_OUTPUT_DIR, "pipeline", f"{run_date}.json")
-    if not os.path.exists(path):
-        return None
-
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return load_snapshot(pipeline="weekly-digest", run_date=run_date)
 
 
 def load_latest_exported_snapshot(*, out_dir: str | None = None) -> dict | None:
-    export_dir = os.path.join(out_dir or DEFAULT_OUTPUT_DIR, "pipeline")
-    if not os.path.isdir(export_dir):
-        return None
-
-    files = sorted(
-        [
-            name
-            for name in os.listdir(export_dir)
-            if name.endswith(".json") and len(name) >= 15
-        ],
-        reverse=True,
-    )
-    for name in files:
-        path = os.path.join(export_dir, name)
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except (OSError, json.JSONDecodeError):
-            continue
-    return None
+    return load_latest_snapshot(pipeline="weekly-digest")

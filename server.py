@@ -1,14 +1,14 @@
-"""Tiny server that serves the latest Shooter Digest HTML."""
+"""Tiny server that serves the latest Shooter Digest HTML from Postgres."""
 
 import os
 import re
-import glob
 from datetime import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
+import db
+
 PORT = int(os.environ.get("PORT", 8080))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 NEIGHBORHOODS_FILE = os.path.join(BASE_DIR, "nyc-neighborhoods.html")
 NYCGUY_FILE = os.path.join(BASE_DIR, "nycguy.html")
 
@@ -171,8 +171,7 @@ def _strip_activeplayer_link(html: str) -> str:
 def _inject_og_tags(html: str) -> str:
     """Inject OG meta tags into any digest HTML that doesn't already have them."""
     if 'og:title' in html:
-        return html  # Already has OG tags, skip
-    # Inject after the viewport meta tag
+        return html
     injected = re.sub(
         r'(<meta name="viewport"[^>]*>)',
         r'\1' + OG_META_HTML,
@@ -180,14 +179,12 @@ def _inject_og_tags(html: str) -> str:
         count=1,
     )
     if injected == html:
-        # Fallback: inject before </head>
         injected = html.replace("</head>", OG_META_HTML + "</head>", 1)
     return injected
 
 
 def _inject_newsletter_into_digest(html: str) -> str:
     """Inject the newsletter signup before the footer div in a digest HTML."""
-    # Try to inject before the .footer div
     injected = re.sub(
         r'(<div class="footer">)',
         NEWSLETTER_HTML + r"\1",
@@ -195,17 +192,24 @@ def _inject_newsletter_into_digest(html: str) -> str:
         count=1,
     )
     if injected == html:
-        # Fallback: inject before </body>
         injected = html.replace("</body>", NEWSLETTER_HTML + "</body>", 1)
     return injected
 
 
+def _prepare_digest(html: str) -> str:
+    """Apply all transformations to a digest HTML string."""
+    html = _strip_activeplayer_link(html)
+    html = _inject_og_tags(html)
+    html = _inject_newsletter_into_digest(html)
+    return html
+
+
 class DigestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=OUTPUT_DIR, **kwargs)
+        # Still serve static assets (og.png, etc.) from BASE_DIR
+        super().__init__(*args, directory=BASE_DIR, **kwargs)
 
     def end_headers(self):
-        # Prevent aggressive caching so new deploys are seen immediately
         self.send_header("Cache-Control", "no-cache, max-age=0")
         super().end_headers()
 
@@ -228,46 +232,32 @@ class DigestHandler(SimpleHTTPRequestHandler):
 
         # Serve the NYC guy diagnostic
         if self.path in ("/nyc", "/nyc/"):
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.end_headers()
-            with open(NYCGUY_FILE, "rb") as f:
-                self.wfile.write(f.read())
+            self._serve_static_file(NYCGUY_FILE)
             return
 
         # Serve the NYC neighborhood ranker
         if self.path in ("/neighborhoods", "/neighborhoods/"):
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.end_headers()
-            with open(NEIGHBORHOODS_FILE, "rb") as f:
-                self.wfile.write(f.read())
+            self._serve_static_file(NEIGHBORHOODS_FILE)
             return
 
-        # Serve digest HTML files with newsletter injection
+        # Latest digest (root)
         if self.path == "/" or self.path == "/index.html":
-            files = sorted(glob.glob(os.path.join(OUTPUT_DIR, "digest_*.html")))
-            if files:
-                self.path = "/" + os.path.basename(files[-1])
+            result = db.read_latest_digest_html()
+            if result:
+                _, html = result
+                self._serve_html(_prepare_digest(html))
+                return
+            # Fallback: no digests in DB yet
+            self._serve_html("<html><body><h1>No digests yet.</h1></body></html>")
+            return
 
+        # Specific digest by date: /digest_2026-03-10.html
         if self.path.startswith("/digest_") and self.path.endswith(".html"):
-            filepath = os.path.join(OUTPUT_DIR, self.path.lstrip("/"))
-            if os.path.isfile(filepath):
-                try:
-                    with open(filepath, "r", encoding="utf-8") as fh:
-                        content = fh.read()
-                    content = _strip_activeplayer_link(content)
-                    content = _inject_og_tags(content)
-                    content = _inject_newsletter_into_digest(content)
-                    encoded = content.encode("utf-8")
-                    self.send_response(200)
-                    self.send_header("Content-Type", "text/html; charset=utf-8")
-                    self.send_header("Content-Length", str(len(encoded)))
-                    self.end_headers()
-                    self.wfile.write(encoded)
-                    return
-                except Exception:
-                    pass  # fall through to default handler
+            date_str = self.path.replace("/digest_", "").replace(".html", "")
+            html = db.read_digest_html(date_str)
+            if html:
+                self._serve_html(_prepare_digest(html))
+                return
 
         # Serve OG image
         if self.path == "/og.png":
@@ -282,39 +272,60 @@ class DigestHandler(SimpleHTTPRequestHandler):
                 self.wfile.write(data)
                 return
 
+        # Fallback for any other static files
         super().do_GET()
 
+    # ------------------------------------------------------------------
+    # Helpers
+    # ------------------------------------------------------------------
+
+    def _serve_html(self, html: str) -> None:
+        encoded = html.encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(encoded)))
+        self.end_headers()
+        self.wfile.write(encoded)
+
+    def _serve_static_file(self, filepath: str) -> None:
+        if os.path.isfile(filepath):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            with open(filepath, "rb") as f:
+                self.wfile.write(f.read())
+        else:
+            self.send_response(404)
+            self.end_headers()
+
     def _build_index_page(self) -> str:
-        files = sorted(glob.glob(os.path.join(OUTPUT_DIR, "digest_*.html")), reverse=True)
-        if not files:
+        rows = db.list_digest_dates()
+        if not rows:
             return "<html><body><h1>No digests yet.</h1></body></html>"
 
-        # Stats bar values
-        digest_count = len(files)
-        earliest_name = os.path.basename(files[-1])  # files sorted newest-first
-        earliest_date_str = earliest_name.replace("digest_", "").replace(".html", "")
+        digest_count = len(rows)
+        earliest_date = rows[-1][0]
         try:
-            since_str = datetime.strptime(earliest_date_str, "%Y-%m-%d").strftime("%B %Y")
+            since_str = datetime.strptime(earliest_date, "%Y-%m-%d").strftime("%B %Y")
         except ValueError:
-            since_str = earliest_date_str
+            since_str = earliest_date
 
-        # Build digest cards
         cards = []
-        for f in files:
-            name = os.path.basename(f)
-            date_str = name.replace("digest_", "").replace(".html", "")
+        for run_date, teaser in rows:
             try:
-                dt = datetime.strptime(date_str, "%Y-%m-%d")
+                dt = datetime.strptime(run_date, "%Y-%m-%d")
                 formatted_date = dt.strftime("Week of %B %-d, %Y")
             except ValueError:
-                formatted_date = date_str
+                formatted_date = run_date
 
-            teaser = self._extract_teaser(f)
+            if not teaser:
+                teaser = "Steam concurrents, Reddit sentiment, press coverage."
+
             cards.append(f"""
   <div class="digest-card">
     <div class="digest-date">{formatted_date}</div>
     <div class="digest-teaser">{teaser}</div>
-    <a class="digest-link" href="/{name}">→ Read digest</a>
+    <a class="digest-link" href="/digest_{run_date}.html">\u2192 Read digest</a>
   </div>""")
 
         items = "\n".join(cards)
@@ -323,11 +334,11 @@ class DigestHandler(SimpleHTTPRequestHandler):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Weekly FPS intelligence digest — Steam concurrents, Reddit sentiment, press coverage">
+<meta name="description" content="Weekly FPS intelligence digest \u2014 Steam concurrents, Reddit sentiment, press coverage">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<title>ShooterDigest — Archive</title>
+<title>ShooterDigest \u2014 Archive</title>
 <style>
   body {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f1923; color: #c7d5e0; max-width: 640px; margin: 60px auto; padding: 0 20px; }}
   h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
@@ -342,8 +353,6 @@ class DigestHandler(SimpleHTTPRequestHandler):
   .digest-teaser {{ color: #6b7280; font-size: 0.82rem; line-height: 1.5; margin-bottom: 0.4rem; }}
   .digest-link {{ color: #66c0f4; font-size: 0.85rem; text-decoration: none; }}
   .digest-link:hover {{ text-decoration: underline; }}
-
-  /* Newsletter signup */
   .newsletter-cta {{
     background: #1b2838;
     border: 1px solid #2a475e;
@@ -422,7 +431,7 @@ class DigestHandler(SimpleHTTPRequestHandler):
     <input class="newsletter-input" type="email" placeholder="your@email.com" required id="index-email" autocomplete="email" />
     <button class="newsletter-btn" type="submit">Subscribe</button>
   </form>
-  <div class="newsletter-confirm" id="index-confirm">✓ Check your inbox — one email away from being subscribed.</div>
+  <div class="newsletter-confirm" id="index-confirm">\u2713 Check your inbox \u2014 one email away from being subscribed.</div>
 </div>
 <script>
 function indexSubscribe(e) {{
@@ -443,25 +452,13 @@ function indexSubscribe(e) {{
 </body>
 </html>"""
 
-    def _extract_teaser(self, filepath: str) -> str:
-        """Pull the first <li> text from a digest file as a one-line teaser."""
-        try:
-            with open(filepath, "r", encoding="utf-8") as fh:
-                content = fh.read(40000)
-            match = re.search(r"<li>(.*?)</li>", content, re.DOTALL)
-            if match:
-                text = re.sub(r"<[^>]+>", "", match.group(1)).strip()
-                return (text[:100] + "…") if len(text) > 100 else text
-        except Exception:
-            pass
-        return "Steam concurrents, Reddit sentiment, press coverage."
-
 
 if __name__ == "__main__":
+    db.init_db()
     server = HTTPServer(("0.0.0.0", PORT), DigestHandler)
     print(f"Serving Shooter Digest on port {PORT}")
-    print(f"  /              → latest digest")
-    print(f"  /digests       → archive index")
-    print(f"  /neighborhoods → NYC neighborhood ranker")
-    print(f"  /nyc           → The Jawnz Diagnostic")
+    print(f"  /              \u2192 latest digest (from Postgres)")
+    print(f"  /digests       \u2192 archive index")
+    print(f"  /neighborhoods \u2192 NYC neighborhood ranker")
+    print(f"  /nyc           \u2192 The Jawnz Diagnostic")
     server.serve_forever()

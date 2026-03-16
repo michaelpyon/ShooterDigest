@@ -8,11 +8,13 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   generate:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - uses: actions/checkout@v4
 
@@ -26,16 +28,8 @@ jobs:
       - name: Ingest digest snapshot
         run: python ingest.py
 
-      - name: Render digest from stored snapshot
+      - name: Render digest and store in Postgres
         run: python render_from_store.py
 
-      - name: Commit and push digest + docs
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add output/ docs/
-          git diff --cached --quiet || git commit -m "chore: auto-generate weekly digest [skip ci]"
-          git push
-
-      # Railway auto-deploys when this workflow pushes to main (connected via GitHub source).
-      # No manual trigger needed here.
+      # No git commit/push step — digest HTML is now stored in Postgres.
+      # The Railway server reads from Postgres directly.

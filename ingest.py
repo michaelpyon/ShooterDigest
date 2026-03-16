@@ -1,10 +1,11 @@
-"""Ingest digest data into a local pipeline store."""
+"""Ingest digest data into the pipeline store (Postgres)."""
 
 from __future__ import annotations
 
 import argparse
 from datetime import datetime
 
+import db
 from main import collect_pipeline_snapshot
 from pipeline_store import export_snapshot, load_snapshot, save_snapshot
 
@@ -19,7 +20,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--out-dir",
-        help="Output directory for exported snapshot JSON.",
+        help="Output directory for exported snapshot JSON (local only).",
     )
     parser.add_argument(
         "--force",
@@ -31,6 +32,9 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = _build_parser().parse_args()
+
+    db.init_db()
+
     target_date = args.run_date or datetime.now().strftime("%Y-%m-%d")
     existing = load_snapshot(pipeline=args.pipeline, run_date=target_date)
 

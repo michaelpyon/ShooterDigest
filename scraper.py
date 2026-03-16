@@ -636,4 +636,9 @@ def get_google_news_rss(game_name: str, limit: int = 5) -> list[dict]:
     # Sort by publication date descending (newest first), articles with no date go last
     results.sort(key=lambda x: x["date_dt"] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
 
+    # Convert datetime objects to ISO strings for JSON serialization
+    for item in results:
+        dt = item.get("date_dt")
+        item["date_dt"] = dt.isoformat() if dt else None
+
     return results

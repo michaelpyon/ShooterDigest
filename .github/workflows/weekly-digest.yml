@@ -5,7 +5,13 @@ on:
     # Every Monday at noon UTC (7am ET / 4am PT)
     - cron: '0 12 * * 1'
   # Allow manual trigger from GitHub Actions UI
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_rescrape:
+        description: 'Force re-scrape even if snapshot exists'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -26,7 +32,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Ingest digest snapshot
-        run: python ingest.py
+        run: python ingest.py ${{ github.event.inputs.force_rescrape == 'true' && '--force' || '' }}
 
       - name: Render digest and store in Postgres
         run: python render_from_store.py

@@ -18,8 +18,15 @@ import db
 # Helpers
 # ---------------------------------------------------------------------------
 
+class _DatetimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
+
+
 def _serialize_payload(snapshot: dict) -> str:
-    return json.dumps(snapshot, sort_keys=True)
+    return json.dumps(snapshot, sort_keys=True, cls=_DatetimeEncoder)
 
 
 def _content_hash(payload_json: str) -> str:

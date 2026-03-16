@@ -2639,7 +2639,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         sent_val = {"positive": 1, "mixed": 0, "negative": -1}.get(game_sentiment, 0)
 
         # Inline sparkline (#6)
-        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"), label=f"{r["name"]}: monthly avg players, last 4 months")
+        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"), label=f"{r['name']}: monthly avg players, last 4 months")
 
         # Event annotation (#8) — shown as tooltip on trend value
         annotation = EVENT_ANNOTATIONS.get(r['name'], "")
@@ -3809,7 +3809,7 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
         bar_w = min(r.get("pct_all", 0), 100)
         genre = r.get("genre", "Other")
 
-        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"), label=f"{r["name"]}: monthly avg players, last 4 months")
+        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"), label=f"{r['name']}: monthly avg players, last 4 months")
         trend_arrow = r.get("trend_arrow", "▶")
 
         table_rows += f"""        <tr>

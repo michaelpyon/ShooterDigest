@@ -743,6 +743,7 @@ def _generate_trend_hypothesis(r: dict) -> str:
     has_news = bool(news)
     season_name = dev.get("season_name", "")
     content_details = dev.get("new_content_details", "")
+    balance_details = dev.get("balance_details", "")
 
     # Compute days since latest news
     latest_date = ""
@@ -750,18 +751,28 @@ def _generate_trend_hypothesis(r: dict) -> str:
         latest_date = news[0].get("date", "")
 
     name = r.get("name", "This title")
+    catalyst = r.get("headline_catalyst", {}).get("phrase", "")
 
     if surging and has_season:
-        detail = f" ({season_name})" if season_name else ""
-        return f"{name} is up {trend_pct:+.0f}% and the season launch{detail} is the obvious driver. First 2-4 weeks after a season drop typically look like this."
+        detail = catalyst or season_name
+        if detail:
+            return f"{name} is up {trend_pct:+.0f}% and {detail} is the obvious driver. First 2-4 weeks after a major content drop typically look like this."
+        return f"{name} is up {trend_pct:+.0f}% and the season launch is the obvious driver. First 2-4 weeks after a season drop typically look like this."
+
+    if surging and catalyst:
+        return f"{name} is up {trend_pct:+.0f}% — {catalyst} is driving the surge. Content drops of this magnitude consistently produce 2-4 week spikes from returning and new players."
 
     if growing and has_season:
-        detail = f" ({season_name})" if season_name else ""
-        return f"Season{detail} is keeping {name} growing at {trend_pct:+.1f}% MoM. Mix of returning players and curiosity from the new content cycle."
+        detail = catalyst or season_name
+        if detail:
+            return f"{detail} is keeping {name} growing at {trend_pct:+.1f}% MoM. Mix of returning players and curiosity from the launch."
+        return f"Active season is keeping {name} growing at {trend_pct:+.1f}% MoM. Mix of returning players and curiosity from the new content cycle."
 
     if growing and has_content:
+        if catalyst:
+            return f"{name} is up {trend_pct:+.1f}% — {catalyst} is the catalyst. This is the pattern: named content drops pull lapsed players back."
         detail = f" ({content_details})" if content_details else ""
-        return f"{name} is up {trend_pct:+.1f}% with new content{detail} in the past month. Hard to isolate how much is content-driven vs. baseline retention."
+        return f"{name} is up {trend_pct:+.1f}% with new content{detail} in the past month."
 
     if growing and has_balance:
         if balance_details:
@@ -773,6 +784,9 @@ def _generate_trend_hypothesis(r: dict) -> str:
 
     if growing and not has_news:
         return f"{name} is up {trend_pct:+.1f}% with no obvious catalyst in developer updates. Probably a community moment (streamer, viral clip) or player migration from a title in decline."
+
+    if growing and catalyst:
+        return f"Up {trend_pct:+.1f}% — {catalyst} appears to be the driver."
 
     if growing:
         return f"Up {trend_pct:+.1f}% with some recent dev activity. Whether the content or organic retention is doing the work here isn't clear from the data."
@@ -929,15 +943,35 @@ def _analyze_dev_comms(news: list[dict]) -> dict:
             r'specialist|ability|item)\b',
             combined
         )
-        if content_match or re.search(r'\bintroducing\b', combined):
+        # Also detect character arrivals / crossovers / launches
+        arrival_match = re.search(
+            r'\b(?:introducing|arrives?|is here|joins|meets?|crossover|collab)\b',
+            combined
+        )
+        if content_match or arrival_match:
             result["has_new_content"] = True
-            # Extract what was introduced — capture proper-noun-style names only
-            # (up to 4 capitalized words), not full sentences
-            new_items = re.findall(
-                r'(?:introducing|new (?:hero|operator|weapon|map|mode|character|legend|agent))'
-                r'\s*[:\-–]?\s*([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,3})',
-                contents_orig[:1500]
+            # Extract what was introduced — search TITLES first (most descriptive),
+            # then fall back to body text
+            extraction_re = re.compile(
+                r'(?:introducing|new (?:hero|operator|weapon|map|mode|character|legend|agent|specialist))'
+                r'\s*[:\-–]?\s*([A-Z][A-Za-z0-9]+(?:\s+[A-Z][A-Za-z0-9]+){0,3})'
             )
+            # Extended patterns for character arrivals/crossovers
+            arrival_re = re.compile(
+                r'([A-Z][A-Za-z0-9]+(?:\s+[A-Z][A-Za-z0-9]+){0,3})'
+                r'\s+(?:joins|arrives|is here|now available)'
+            )
+            meet_re = re.compile(
+                r'[Mm]eet\s+([A-Z][A-Za-z0-9]+(?:\s+[A-Z][A-Za-z0-9]+){0,3})'
+            )
+            new_items = []
+            # Search title first
+            for pattern in (extraction_re, arrival_re, meet_re):
+                title_matches = pattern.findall(title_orig)
+                new_items.extend(title_matches)
+            # Then search body
+            if not new_items:
+                new_items = extraction_re.findall(contents_orig[:1500])
             if new_items:
                 result["new_content_details"] = ", ".join(
                     item.strip() for item in new_items[:3]
@@ -988,6 +1022,157 @@ def _analyze_dev_comms(news: list[dict]) -> dict:
         result["content_summary"] = ", ".join(dict.fromkeys(content_parts))
 
     return result
+
+
+# ---------------------------------------------------------------------------
+# Headline catalyst extraction
+# ---------------------------------------------------------------------------
+
+# Titles that are too generic to serve as a catalyst phrase
+_GENERIC_TITLE_WORDS = {
+    "patch", "notes", "update", "hotfix", "bug", "fixes", "fix",
+    "maintenance", "server", "status", "known", "issues", "changelog",
+    "community", "weekly", "newsletter", "announcement",
+}
+
+
+def _is_generic_title(title: str) -> bool:
+    """Return True if a news title is too generic to be a useful catalyst."""
+    words = set(re.sub(r'[^a-z\s]', '', title.lower()).split())
+    # If every meaningful word is generic, skip it
+    meaningful = words - {"the", "a", "an", "and", "or", "for", "is", "in", "of", "to", "on", "v", ""}
+    if not meaningful:
+        return True
+    return meaningful.issubset(_GENERIC_TITLE_WORDS)
+
+
+def _clean_catalyst_phrase(phrase: str, max_len: int = 80) -> str:
+    """Truncate a catalyst phrase at a word boundary, stripping trailing punctuation."""
+    phrase = phrase.strip()
+    if len(phrase) <= max_len:
+        return phrase
+    truncated = phrase[:max_len].rsplit(" ", 1)[0]
+    return truncated.rstrip(":-–— ,") + "…"
+
+
+def _extract_headline_catalyst(r: dict) -> dict:
+    """Extract the single most specific catalyst driving player movement.
+
+    Mines news titles, external press, and dev_comms for the headline-worthy
+    explanation a game studio leader needs.  Returns a dict:
+        {"phrase": str, "url": str, "type": str}
+    """
+    empty = {"phrase": "", "url": "", "type": ""}
+    news = r.get("news", [])
+    ext_news = r.get("external_news", [])
+    dev = r.get("dev_comms", {})
+
+    # --- Priority 1: Crossover / collaboration (highest signal) ---
+    crossover_kws = (
+        r"\bcrossover\b", r"\bcollab(?:oration)?\b", r"\bx\s+[A-Z]",
+        r"\bjoins\b", r"\bmeets?\b", r"\barrives?\b",
+    )
+    for n in news:
+        title = n.get("title", "")
+        title_lower = title.lower()
+        for kw in crossover_kws:
+            if re.search(kw, title, re.IGNORECASE):
+                # Extra check: "joins" should be about a character, not "joins early access"
+                if "joins" in title_lower and any(
+                    skip in title_lower for skip in ("early access", "joins the", "joins our", "joins steam")
+                ):
+                    continue
+                return {
+                    "phrase": _clean_catalyst_phrase(title),
+                    "url": n.get("url", ""),
+                    "type": "crossover",
+                }
+
+    # --- Priority 2: Named operation / season from titles ---
+    op_pattern = re.compile(
+        r'(Operation|Chapter|Act|Episode|Season)\s*[:\-–]?\s*'
+        r'([A-Z][A-Za-z0-9\s&\':]+)',
+        re.IGNORECASE,
+    )
+    for n in news:
+        title = n.get("title", "")
+        m = op_pattern.search(title)
+        if m and not _is_generic_title(title):
+            phrase = m.group(0).strip().rstrip(":-–— ,")
+            return {
+                "phrase": _clean_catalyst_phrase(phrase),
+                "url": n.get("url", ""),
+                "type": "season",
+            }
+
+    # --- Priority 3: Character / content addition from titles ---
+    content_patterns = [
+        # "New Operator: Solid Snake", "New Hero - Kiriko"
+        re.compile(
+            r'[Nn]ew\s+(?:operator|hero|character|agent|legend|weapon|map|mode|specialist)'
+            r'\s*[:\-–]\s*([A-Z][A-Za-z0-9\s]+)',
+        ),
+        # "Introducing Solid Snake"
+        re.compile(r'[Ii]ntroducing\s+([A-Z][A-Za-z0-9\s&]+)'),
+        # "X is here", "X arrives", "X now available"
+        re.compile(r'([A-Z][A-Za-z0-9]+(?:\s+[A-Z][A-Za-z0-9]+){0,3})\s+(?:is here|arrives?|now available)'),
+        # "Meet X"
+        re.compile(r'[Mm]eet\s+([A-Z][A-Za-z0-9\s]+)'),
+    ]
+    for n in news:
+        title = n.get("title", "")
+        if _is_generic_title(title):
+            continue
+        for pat in content_patterns:
+            m = pat.search(title)
+            if m:
+                extracted = m.group(1).strip().rstrip(":-–— ,") if m.lastindex else m.group(0).strip()
+                return {
+                    "phrase": _clean_catalyst_phrase(extracted),
+                    "url": n.get("url", ""),
+                    "type": "content",
+                }
+
+    # --- Priority 4: Structured dev_comms fields ---
+    if dev.get("season_name"):
+        detail = dev.get("new_content_details", "")
+        phrase = dev["season_name"]
+        if detail:
+            phrase += f" featuring {detail}"
+        return {"phrase": _clean_catalyst_phrase(phrase), "url": "", "type": "season"}
+
+    if dev.get("new_content_details"):
+        return {
+            "phrase": _clean_catalyst_phrase(dev["new_content_details"]),
+            "url": "",
+            "type": "content",
+        }
+
+    # --- Priority 5: Best non-generic Steam news title ---
+    for n in news:
+        title = n.get("title", "")
+        if title and not _is_generic_title(title):
+            return {
+                "phrase": _clean_catalyst_phrase(title),
+                "url": n.get("url", ""),
+                "type": "news",
+            }
+
+    # --- Priority 6: Best external news title ---
+    for n in ext_news:
+        title = n.get("title", "")
+        if title and not _is_generic_title(title):
+            return {
+                "phrase": _clean_catalyst_phrase(title),
+                "url": n.get("link", n.get("url", "")),
+                "type": "press",
+            }
+
+    # --- Priority 7: Absolute fallback ---
+    if dev.get("has_new_season") or dev.get("has_new_content") or dev.get("has_balance_changes"):
+        return {"phrase": "recent developer activity", "url": "", "type": "unknown"}
+
+    return empty
 
 
 # ---------------------------------------------------------------------------
@@ -1063,6 +1248,9 @@ def scrape_games(games_list: list[dict], label: str = "") -> list[dict]:
 
         # Analyze developer comms
         data["dev_comms"] = _analyze_dev_comms(news)
+
+        # Extract headline catalyst (specific content driving player movement)
+        data["headline_catalyst"] = _extract_headline_catalyst(data)
 
         results.append(data)
 
@@ -1307,8 +1495,13 @@ def _generate_game_takeaway(r: dict) -> dict:
     # Generate an AI hypothesis explaining what's driving the player trend
     hypothesis = _generate_trend_hypothesis(r)
 
-    # Add developer activity details as supporting evidence
-    context_parts = [hypothesis]
+    # Lead with headline catalyst if available
+    hc = r.get("headline_catalyst", {})
+    catalyst_phrase = hc.get("phrase", "")
+    context_parts = []
+    if catalyst_phrase:
+        context_parts.append(f"Key catalyst: {catalyst_phrase}.")
+    context_parts.append(hypothesis)
 
     # Supplement with specific dev activity facts
     activity_facts = []
@@ -1317,6 +1510,8 @@ def _generate_game_takeaway(r: dict) -> dict:
         content_detail = dev.get("new_content_details", "")
         if content_detail:
             activity_facts.append(f"{season_str} launched with {content_detail}")
+        elif catalyst_phrase:
+            activity_facts.append(f"{season_str} launched ({catalyst_phrase})")
         else:
             activity_facts.append(f"{season_str} launched recently")
 
@@ -1608,13 +1803,20 @@ def _generate_overall_takeaways(results: list[dict]) -> list[str]:
     if gainer["trend_pct"] > 5:
         dev = gainer.get("dev_comms", {})
         if dev.get("has_new_season") or dev.get("has_new_content"):
-            catalyst_text = dev.get("season_name") or dev.get("new_content_details") or "new content"
-            # Try to find a URL for this catalyst
-            cat_url = ""
-            for n in gainer.get("news", []):
-                if any(kw in n.get("title", "").lower() for kw in ("season", "update", "patch", "event")):
-                    cat_url = n.get("url", "")
-                    break
+            hc = gainer.get("headline_catalyst", {})
+            catalyst_text = (
+                hc.get("phrase")
+                or dev.get("season_name")
+                or dev.get("new_content_details")
+                or "recent developer activity"
+            )
+            # Prefer catalyst-specific URL, then fall back to news scan
+            cat_url = hc.get("url", "")
+            if not cat_url:
+                for n in gainer.get("news", []):
+                    if any(kw in n.get("title", "").lower() for kw in ("season", "update", "patch", "event", "crossover", "collab")):
+                        cat_url = n.get("url", "")
+                        break
             cat_link = _linked(catalyst_text, cat_url)
             takeaways.append(
                 f"Biggest mover: {_esc(gainer['name'])} {gainer['trend_pct']:+.1f}% MoM — "
@@ -2451,8 +2653,14 @@ def generate_exec_prose(data: list[dict]) -> str:
     # Sentence 1: the market story this week
     if gainer["trend_pct"] > 10:
         dev = gainer.get("dev_comms", {})
-        if dev.get("has_new_season") or dev.get("has_new_content"):
-            catalyst = dev.get("season_name") or dev.get("new_content_details") or "new content"
+        hc = gainer.get("headline_catalyst", {})
+        catalyst = (
+            hc.get("phrase")
+            or dev.get("season_name")
+            or dev.get("new_content_details")
+            or ""
+        )
+        if catalyst:
             sentences.append(
                 f"{gainer['name']} is the story this week, up {gainer['trend_pct']:+.0f}% MoM on the back of {catalyst}. "
                 f"It's a clean example of what active content does to concurrent player counts."

@@ -32,6 +32,7 @@ def _scraper_components() -> dict:
             get_reddit_posts,
             get_reddit_comments,
             get_google_news_rss,
+            get_twitch_viewership,
         )
 
         _SCRAPER_COMPONENTS = {
@@ -42,6 +43,7 @@ def _scraper_components() -> dict:
             "get_reddit_posts": get_reddit_posts,
             "get_reddit_comments": get_reddit_comments,
             "get_google_news_rss": get_google_news_rss,
+            "get_twitch_viewership": get_twitch_viewership,
         }
     return _SCRAPER_COMPONENTS
 
@@ -167,6 +169,15 @@ SENTIMENT_COLORS = {
 def _sentiment_css(sentiment: str) -> tuple[str, str]:
     """Return (foreground_color, background_color) for a sentiment value."""
     return SENTIMENT_COLORS.get(sentiment, SENTIMENT_COLORS["neutral"])
+
+
+# Shape-based sentiment indicators (colorblind-safe dual encoding)
+SENTIMENT_SHAPES = {
+    "positive": "\u25b2",  # ▲ triangle up
+    "negative": "\u25a0",  # ■ square
+    "neutral":  "\u25c6",  # ◆ diamond
+    "mixed":    "\u25c6",  # ◆ diamond
+}
 
 
 # Genre colors: (text_color, background_color)
@@ -355,7 +366,7 @@ def _inline_sparkline_svg(months_data: list[dict], css_class: str = "neutral", l
     color = {"up": "#4ade80", "down": "#f87171", "flat": "#fbbf24"}.get(css_class, "#94a3b8")
     tooltip = label if label else "Monthly avg player trend (last 4 months)"
     return (
-        f'<svg class="inline-spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" title="{tooltip}" aria-label="{tooltip}">'
+        f'<svg class="inline-spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" title="{tooltip}" aria-label="{tooltip}">'
         f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
         f'</svg>'
     )
@@ -510,7 +521,14 @@ def _generate_sparkline_svg(avg_trend: list[dict], trend_css: str) -> str:
         f'{last_val}</text>\n'
     )
 
-    return f'''<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+    # Build accessible text summary of the trend data
+    trend_parts = []
+    for month_text, v in points:
+        trend_parts.append(f"{month_text}: {_fmt_k(v)}")
+    trend_direction = {"up": "upward", "down": "downward", "flat": "flat", "neutral": "no clear"}.get(trend_css, "no clear")
+    aria_text = f"Monthly player trend ({trend_direction}). {'; '.join(trend_parts)}."
+
+    return f'''<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{aria_text}" style="display:inline-block;vertical-align:middle;">
   <polygon points="{polygon_pts}" fill="{fill}" />
   <polyline points="{polyline_pts}" fill="none" stroke="{stroke}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   {dots_svg}
@@ -688,9 +706,13 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
         f'fill="{stroke}" font-size="9" font-weight="bold" font-family="JetBrains Mono, monospace">{last_val}</text>\n'
     )
 
+    # Build accessible text for aggregate chart
+    agg_parts = [f"{m['month']}: {_fmt_k(m['avg'])}" for m in month_sums]
+    agg_aria = f"Total market trend, average concurrent players. {'; '.join(agg_parts)}."
+
     return f'''<div class="aggregate-chart">
   <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)<br><span style="font-size:0.6rem;font-weight:400;color:#7a8fa3">Steam Concurrent Players (Source: SteamDB)</span></div>
-  <svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg">
+  <svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{agg_aria}">
     <polygon points="{polygon_pts}" fill="{fill_color}" />
     <polyline points="{polyline_pts}" fill="none" stroke="{stroke}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
     {dots_svg}
@@ -1246,6 +1268,15 @@ def scrape_games(games_list: list[dict], label: str = "") -> list[dict]:
         print(f"           press... {len(ext_news)} articles")
         time.sleep(1)
 
+        # Twitch live viewership snapshot
+        get_twitch_viewership = components["get_twitch_viewership"]
+        twitch = get_twitch_viewership(game)
+        data["twitch"] = twitch
+        if twitch:
+            print(f"           twitch... {twitch['total_viewers']:,} viewers / {twitch['stream_count']} streams")
+        else:
+            print("           twitch... skipped")
+
         # Analyze developer comms
         data["dev_comms"] = _analyze_dev_comms(news)
 
@@ -1317,6 +1348,30 @@ def _enrich(results: list[dict]) -> list[dict]:
         else:
             r["est_total_24h"] = r["peak_24h"]
             r["est_total_all"] = r["peak_all"]
+
+        # Twitch viewership enrichment
+        twitch = r.get("twitch")
+        if twitch and twitch.get("total_viewers", 0) > 0:
+            r["twitch_viewers"] = twitch["total_viewers"]
+            r["twitch_streams"] = twitch["stream_count"]
+            r["twitch_avg_viewers"] = (
+                twitch["total_viewers"] / twitch["stream_count"]
+                if twitch["stream_count"] > 0 else 0
+            )
+            r["twitch_top_streams"] = twitch.get("top_streams", [])
+        else:
+            r["twitch_viewers"] = 0
+            r["twitch_streams"] = 0
+            r["twitch_avg_viewers"] = 0
+            r["twitch_top_streams"] = []
+
+    # Compute Twitch mindshare (% of total Twitch viewers across all tracked games)
+    total_twitch = sum(r.get("twitch_viewers", 0) for r in results)
+    for r in results:
+        if total_twitch > 0 and r.get("twitch_viewers", 0) > 0:
+            r["twitch_share"] = r["twitch_viewers"] / total_twitch * 100
+        else:
+            r["twitch_share"] = 0.0
 
     return results
 
@@ -2461,7 +2516,7 @@ def _render_calendar_html(cal_data: dict) -> str:
       <div class="cal-empty">No tracked events yet — check back as announcements come in.</div>
     </div>\n'''
 
-    return f'''  <div class="calendar-section">
+    return f'''  <div class="calendar-section animate-in">
     <h2 class="section-title">Release &amp; Patch Calendar</h2>
 {tw_html}
 {today_divider}
@@ -2567,7 +2622,7 @@ def _build_genre_rollup_html(results: list[dict]) -> str:
             f'</tr>\n'
         )
 
-    return f'''  <div class="genre-rollup">
+    return f'''  <div class="genre-rollup animate-in">
     <h3>Genre Rollup</h3>
     <table>
       <thead><tr>
@@ -2603,7 +2658,7 @@ def _build_methodology_html(results: list[dict]) -> str:
             f'</tr>\n'
         )
 
-    return f'''  <div class="methodology" id="methodology">
+    return f'''  <div class="methodology animate-in" id="methodology">
     <details>
       <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
       <div class="methodology-content">
@@ -2790,7 +2845,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       </div>
     </div>"""
 
-    exec_html = f"""  <div class="exec-summary" id="exec-summary">
+    exec_html = f"""  <div class="exec-summary animate-in" id="exec-summary">
     <h2>Executive Summary</h2>
     <ul>
 {exec_items}
@@ -2817,7 +2872,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         if g in genre_counts:
             fg, bg = GENRE_COLORS.get(g, GENRE_COLORS["Other"])
             genre_btns += f'    <button class="genre-filter-btn" data-genre="{g}" style="--genre-active-bg:{bg};--genre-active-border:{fg};--genre-active-color:{fg}">{g} <span class="filter-count">{genre_counts[g]}</span></button>\n'
-    genre_tabs_html = f'  <div class="genre-filters">\n{genre_btns}  </div>'
+    genre_tabs_html = f'  <div class="genre-filters">\n{genre_btns}  </div>\n  <span class="genre-scroll-hint" id="genre-scroll-hint">scroll \u2192</span>'
 
     # --- Genre Rollup (#9) ---
     genre_rollup_html = _build_genre_rollup_html(results)
@@ -2855,7 +2910,8 @@ def generate_html(results: list[dict], failed_names: list[str],
         annotation_icon = ' <span class="annot-icon" title="' + _esc(annotation) + '">&#9432;</span>' if annotation and abs(trend_val) > 9 else ""
 
         # Sentiment dot merged into game name cell
-        sent_dot = f' <span class="sent-inline" style="color:{sent_color}" title="Sentiment: {game_sentiment}">\u25cf</span>'
+        sent_shape = SENTIMENT_SHAPES.get(game_sentiment, "\u25c6")
+        sent_dot = f' <span class="sent-inline" style="color:{sent_color}" title="Sentiment: {game_sentiment}">{sent_shape}</span>'
 
         # Trend cell: LAUNCH badge for new games with no MoM data
         if trend_pct is None:
@@ -2906,7 +2962,8 @@ def generate_html(results: list[dict], failed_names: list[str],
             sentiment = _analyze_sentiment(n.get("title", "") + " " + (n.get("contents", "") or "")[:200])
             s_fg, _ = _sentiment_css(sentiment)
             sent_label = SENTIMENT_LABELS.get(sentiment, sentiment)
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span> '
+            sent_shape = SENTIMENT_SHAPES.get(sentiment, "\u25c6")
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">{sent_shape}</span> '
             summary = _extract_news_summary(n)
             summary_div = f'<div class="news-preview">{_esc(_sanitize_text(summary))}</div>' if summary else ""
             news_html += f'<li>{sent_dot}{title} \u2014 {n["date"]}{badge}{summary_div}</li>\n'
@@ -2928,7 +2985,8 @@ def generate_html(results: list[dict], failed_names: list[str],
             s_fg, s_bg = _sentiment_css(sentiment)
             source_badge = f' <span class="source-tag" style="color:{s_fg};background:{s_bg}">{source}</span>' if source else ""
             sent_label = PRESS_SENTIMENT_LABELS.get(sentiment, sentiment)
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span> '
+            sent_shape = SENTIMENT_SHAPES.get(sentiment, "\u25c6")
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">{sent_shape}</span> '
             date_span = f' <span style="color:#8f98a0;font-size:0.7rem">{date}</span>' if date else ""
             press_html += f'<li>{sent_dot}{title}{source_badge}{date_span}</li>\n'
         if not press_html:
@@ -2956,7 +3014,8 @@ def generate_html(results: list[dict], failed_names: list[str],
             sentiment = _analyze_sentiment(p["title"])
             s_fg, _ = _sentiment_css(sentiment)
             sent_label = SENTIMENT_LABELS.get(sentiment, sentiment)
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span>'
+            sent_shape = SENTIMENT_SHAPES.get(sentiment, "\u25c6")
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">{sent_shape}</span>'
             comments_html = ""
             for c in p.get("top_comments", []):
                 body = _esc(_sanitize_text(c["body"][:150]))
@@ -2983,7 +3042,8 @@ def generate_html(results: list[dict], failed_names: list[str],
             sentiment = _analyze_sentiment(p["title"])
             s_fg, _ = _sentiment_css(sentiment)
             sent_label = SENTIMENT_LABELS.get(sentiment, sentiment)
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">\u25cf</span>'
+            sent_shape = SENTIMENT_SHAPES.get(sentiment, "\u25c6")
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">{sent_shape}</span>'
             reddit_month_html += f'<li>{cat_badge} {sent_dot} {title} ({score} upvotes)</li>\n'
 
         trend_pct = r.get("trend_pct")
@@ -3051,7 +3111,7 @@ def generate_html(results: list[dict], failed_names: list[str],
             f'&nbsp;|&nbsp; Est. Total: <strong>{_fmt(r["peak_24h"])}</strong> (100% Steam)'
         )
         cards_html += f"""
-    <div class="card" id="{_card_id(r['name'])}" data-genre="{card_genre}">
+    <div class="card animate-in" id="{_card_id(r['name'])}" data-genre="{card_genre}">
       <div class="card-header">
         <h3>{_esc(r['name'])}{card_lifecycle} {_genre_badge_html(card_genre)} <span class="trend-badge {r['trend_css']}">{r['trend_arrow']} {trend_str} MoM</span></h3>
         {hist_ctx_html}
@@ -3111,21 +3171,33 @@ def generate_html(results: list[dict], failed_names: list[str],
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <title>Shooter Digest - {date_str}</title>
   <style>
+    /* Text palette: primary #e5e5e5, secondary #a3b1bf, tertiary #7a8fa3, disabled #556b7d (decorative only) */
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     body {{
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background: #0f1923; color: #c7d5e0;
       padding: 2rem; max-width: 1100px; margin: 0 auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }}
     h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
+
+    /* Focus-visible styles */
+    *:focus-visible {{ outline: 2px solid #f97316; outline-offset: 2px; }}
+    button:focus-visible, .genre-filter-btn:focus-visible {{
+      box-shadow: 0 0 0 2px #0f1923, 0 0 0 4px #f97316; outline: none;
+    }}
+    a:focus-visible {{
+      outline: 2px solid #66c0f4; outline-offset: 2px;
+    }}
     h1 {{ font-size: 1.8rem; margin-bottom: 0.2rem; }}
     h1 .brand-shooter {{ color: #ffffff; }}
     h1 .brand-digest {{ color: #f97316; }}
     .subtitle {{ color: #8f98a0; font-size: 0.95rem; margin-bottom: 0.25rem; }}
-    .subtitle-date {{ color: #556b7d; font-size: 0.78rem; margin-bottom: 1.5rem; }}
+    .subtitle-date {{ color: #7a8fa3; font-size: 0.78rem; margin-bottom: 1.5rem; }}
 
     /* Sticky back-nav */
     .site-nav {{
@@ -3152,6 +3224,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     .exec-summary {{
       background: #1b2838; border-left: 3px solid #fbbf24;
       padding: 1rem 1.2rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 4px 12px rgba(0,0,0,0.4);
     }}
     .exec-summary h2 {{ color: #fbbf24; font-size: 1rem; margin-bottom: 0.6rem; }}
     .exec-summary li {{
@@ -3189,7 +3262,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     }}
     .wnl-label {{
       font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.06em; color: #556b7d;
+      letter-spacing: 0.06em; color: #7a8fa3;
       margin-top: 0.9rem; padding-top: 0.6rem;
       border-top: 1px solid #2a475e;
     }}
@@ -3208,7 +3281,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     table {{ width: 100%; border-collapse: collapse; margin-bottom: 2rem; }}
     th {{
       text-align: left; padding: 0.6rem 0.7rem;
-      border-bottom: 2px solid #2a475e; color: #66c0f4;
+      border-bottom: 2px solid rgba(255,255,255,0.08); color: #66c0f4;
       font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
     }}
     th[data-sort] {{
@@ -3220,7 +3293,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     }}
     th[data-sort].asc::after {{ content: '▲'; opacity: 0.8; }}
     th[data-sort].desc::after {{ content: '▼'; opacity: 0.8; }}
-    td {{ padding: 0.5rem 0.7rem; border-bottom: 1px solid #1b2838; }}
+    td {{ padding: 0.5rem 0.7rem; border-bottom: 1px solid rgba(255,255,255,0.04); }}
     tr:hover {{ background: #1b2838; }}
     .rank {{ color: #8f98a0; font-weight: 600; width: 40px; }}
     .game {{ font-weight: 600; color: #e5e5e5; white-space: nowrap; }}
@@ -3252,6 +3325,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     .insights {{
       background: #1b2838; border-left: 3px solid #66c0f4;
       padding: 1rem 1.2rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 1px 3px rgba(0,0,0,0.3);
     }}
     .insights h2 {{ color: #66c0f4; font-size: 0.9rem; margin-bottom: 0.5rem; }}
     .insights li {{
@@ -3266,8 +3340,8 @@ def generate_html(results: list[dict], failed_names: list[str],
     }}
     .card {{
       background: #1b2838; border-radius: 8px; margin-bottom: 1.2rem;
-      overflow: hidden; border: 1px solid #2a475e;
-      border-left-width: 3px;
+      overflow: hidden; border: none; border-left: 3px solid #2a475e;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 1px 3px rgba(0,0,0,0.3);
       scroll-margin-top: 60px;
     }}
     /* Trend-colored left border: scan the whole page for winners/losers */
@@ -3388,7 +3462,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       color: var(--genre-active-color, #e5e7eb);
     }}
     .genre-filter-btn .filter-count {{
-      font-size: 0.65rem; color: #556b7d; margin-left: 0.3rem;
+      font-size: 0.65rem; color: #7a8fa3; margin-left: 0.3rem;
     }}
     .genre-filter-btn.active .filter-count {{ color: #8bb9e0; }}
 
@@ -3399,7 +3473,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       background: #2d3748; color: #94a3b8;
     }}
     .sentiment-dot {{
-      font-size: 0.55rem; vertical-align: middle; margin-right: 0.15rem;
+      font-size: 0.65rem; vertical-align: middle; margin-right: 0.2rem;
     }}
     .sentiment-legend {{
       display: flex; gap: 0.75rem; margin-bottom: 4px;
@@ -3417,7 +3491,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     /* Clickable links */
     .item-link {{
       color: #c7d5e0; text-decoration: none;
-      border-bottom: 1px dotted #556b7d;
+      border-bottom: 1px dotted #7a8fa3;
       transition: color 0.15s, border-color 0.15s;
     }}
     .item-link:hover {{
@@ -3460,14 +3534,14 @@ def generate_html(results: list[dict], failed_names: list[str],
       padding: 0.1rem 0;
     }}
     .community-inner li::before {{
-      content: "\\2022"; color: #556b7d; margin-right: 0.3rem;
+      content: "\\2022"; color: #7a8fa3; margin-right: 0.3rem;
     }}
 
     /* Reddit comments */
     .comments {{
       margin-left: 0.8rem; margin-top: 0.25rem; margin-bottom: 0.3rem;
     }}
-    .comments li::before {{ content: "\\21B3"; color: #556b7d; margin-right: 0.3rem; }}
+    .comments li::before {{ content: "\\21B3"; color: #7a8fa3; margin-right: 0.3rem; }}
     .comments li {{ font-size: 0.72rem; color: #8f98a0; line-height: 1.35; }}
     .comment-author {{ color: #66c0f4; font-size: 0.68rem; }}
 
@@ -3484,7 +3558,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       padding: 0.4rem 0.8rem; border-radius: 0 4px 4px 0;
     }}
     .cal-section-header.past {{
-      color: #8f98a0; background: #141e2b; border-left: 3px solid #556b7d;
+      color: #a3b1bf; background: #141e2b; border-left: 3px solid #7a8fa3;
     }}
     .cal-section-header.upcoming {{
       color: #4ade80; background: #0f2818; border-left: 3px solid #4ade80;
@@ -3544,7 +3618,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       vertical-align: middle; margin-left: 0.3rem;
     }}
     .cal-empty {{
-      color: #556b7d; font-size: 0.78rem; font-style: italic;
+      color: #7a8fa3; font-size: 0.78rem; font-style: italic;
       padding: 0.4rem 0.8rem;
     }}
 
@@ -3652,9 +3726,10 @@ def generate_html(results: list[dict], failed_names: list[str],
     /* Data caveat info box */
     .data-caveat {{
       display: flex; align-items: flex-start; gap: 0.6rem;
-      background: #141e2b; border: 1px solid #2a475e;
+      background: #141e2b; border: none;
       border-radius: 6px; padding: 0.7rem 1rem;
       margin-bottom: 1.5rem;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
     }}
     .caveat-icon {{ font-size: 1rem; flex-shrink: 0; line-height: 1.4; }}
     .caveat-text {{
@@ -3671,7 +3746,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     }}
 
     .footer {{
-      color: #556b7d; font-size: 0.78rem;
+      color: #7a8fa3; font-size: 0.78rem;
       border-top: 1px solid #1b2838; padding-top: 1rem; line-height: 1.6;
     }}
 
@@ -3712,15 +3787,27 @@ def generate_html(results: list[dict], failed_names: list[str],
       .aggregate-chart {{ margin-top: 0.6rem; padding-top: 0.5rem; }}
       .aggregate-label {{ font-size: 0.68rem; }}
 
-      /* Genre filter pills — horizontal scroll */
+      /* Genre filter pills — horizontal scroll with fade hint */
       .genre-filters {{
         flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
         gap: 0.35rem; padding-bottom: 0.8rem;
         scrollbar-width: none;
+        position: relative;
+        -webkit-mask-image: linear-gradient(to right, black 80%, transparent);
+        mask-image: linear-gradient(to right, black 80%, transparent);
+      }}
+      .genre-filters.scrolled {{
+        -webkit-mask-image: none;
+        mask-image: none;
       }}
       .genre-filters::-webkit-scrollbar {{ display: none; }}
       .genre-filter-btn {{
         flex-shrink: 0; font-size: 0.72rem; padding: 0.3rem 0.6rem;
+      }}
+      .genre-scroll-hint {{
+        display: block;
+        font-size: 0.65rem; color: #7a8fa3;
+        text-align: right; margin-top: -0.4rem; margin-bottom: 0.3rem;
       }}
 
       /* ── Ranking table → labeled card layout ── */
@@ -3857,6 +3944,52 @@ def generate_html(results: list[dict], failed_names: list[str],
       .genre-rollup table {{ display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }}
       .genre-rollup th, .genre-rollup td {{ font-size: 0.78rem; padding: 0.3rem 0.5rem; }}
     }}
+
+    /* ── Dual-width: editorial sections narrower for readability ── */
+    .editorial-width {{
+      max-width: 740px;
+      margin-left: auto;
+      margin-right: auto;
+    }}
+
+    /* ── Entrance animations ── */
+    .animate-in {{
+      opacity: 0;
+      transform: translateY(12px);
+      filter: blur(4px);
+      transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
+    }}
+    .animate-in.visible {{
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }}
+    @media (prefers-reduced-motion: reduce) {{
+      .animate-in {{
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition: none;
+      }}
+    }}
+
+    /* ── Active/pressed states ── */
+    button:active, .genre-filter-btn:active {{
+      transform: scale(0.96);
+    }}
+    a.game-link:active {{
+      transform: scale(0.99);
+      color: #66c0f4;
+    }}
+    .exec-share-btn:active, .share-fab:active {{
+      transform: scale(0.94);
+    }}
+    .nav-back:active {{
+      transform: scale(0.97);
+    }}
+    .sd-newsletter-btn:active, .newsletter-btn:active {{
+      transform: scale(0.96);
+    }}
   </style>
 </head>
 <body>
@@ -3865,6 +3998,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     <a href="index.html" class="nav-back">&#8592; All Digests</a>
     <a href="index.html" class="nav-logo">Shooter<span>Digest</span></a>
   </nav>
+  <div class="editorial-width">
   <h1><span class="brand-shooter">Shooter</span><span class="brand-digest">Digest</span></h1>
   <p class="subtitle">PC competitive shooter market &mdash; Steam concurrent players, developer updates &amp; community pulse</p>
   <p class="subtitle-date">Week of {date_str}</p>
@@ -3872,6 +4006,7 @@ def generate_html(results: list[dict], failed_names: list[str],
 {exec_html}
 
 {DATA_CAVEAT_HTML}
+  </div>
 
 {genre_tabs_html}
 
@@ -3894,6 +4029,7 @@ def generate_html(results: list[dict], failed_names: list[str],
 
 {genre_rollup_html}
 
+  <div class="editorial-width">
 {_build_insights_html(results)}
 
   <h2 class="section-title">Game Details</h2>
@@ -3906,8 +4042,9 @@ def generate_html(results: list[dict], failed_names: list[str],
 {_render_calendar_html(_build_release_calendar(results))}
 
 {methodology_html}
+  </div>
 
-  <div class="footer">
+  <div class="editorial-width footer">
     Generated: {timestamp}<br>
     Data: SteamCharts, Steam News API, Reddit, Google News<br>
     <small>
@@ -3985,6 +4122,42 @@ def generate_html(results: list[dict], failed_names: list[str],
       btt.classList.toggle('visible', window.scrollY > 600);
     }});
   }}
+
+  // Genre filter scroll hint (mobile)
+  (function() {{
+    const filters = document.querySelector('.genre-filters');
+    const hint = document.getElementById('genre-scroll-hint');
+    if (!filters || !hint) return;
+    // Hide hint on desktop
+    if (window.innerWidth > 600) {{ hint.style.display = 'none'; return; }}
+    filters.addEventListener('scroll', function() {{
+      if (filters.scrollLeft > 20) {{
+        filters.classList.add('scrolled');
+        hint.style.display = 'none';
+      }}
+    }}, {{ passive: true }});
+  }})();
+
+  // Entrance animations via IntersectionObserver
+  (function() {{
+    const els = document.querySelectorAll('.animate-in');
+    if (!els.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let delay = 0;
+    const observer = new IntersectionObserver(function(entries) {{
+      entries.forEach(function(entry) {{
+        if (entry.isIntersecting) {{
+          const el = entry.target;
+          setTimeout(function() {{ el.classList.add('visible'); }}, delay);
+          delay += 80;
+          observer.unobserve(el);
+          // Reset stagger after a pause
+          clearTimeout(window._animResetTimer);
+          window._animResetTimer = setTimeout(function() {{ delay = 0; }}, 300);
+        }}
+      }});
+    }}, {{ threshold: 0.1 }});
+    els.forEach(function(el) {{ observer.observe(el); }});
+  }})();
   </script>
   <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">↑ Top</a>
   <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-fab" aria-label="Share on X">
@@ -4060,7 +4233,8 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
             title = f'<a href="{_esc(news_url)}" target="_blank" class="item-link">{title_text}</a>' if news_url else title_text
             sentiment = _analyze_sentiment(n.get("title", "") + " " + (n.get("contents", "") or "")[:200])
             s_fg, _ = _sentiment_css(sentiment)
-            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}">\u25cf</span> '
+            sent_shape = SENTIMENT_SHAPES.get(sentiment, "\u25c6")
+            sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}">{sent_shape}</span> '
             news_html += f'<li>{sent_dot}{title} \u2014 {n["date"]}</li>\n'
         if not news_html:
             news_html = "<li>No recent news</li>\n"
@@ -4206,7 +4380,7 @@ def _build_insights_html(results: list[dict]) -> str:
     )
 
     li = "\n".join(f"      <li>{i}</li>" for i in items)
-    return f"""  <div class="insights">
+    return f"""  <div class="insights animate-in">
     <h2>Key Insights</h2>
     <ul>
 {li}
@@ -4553,13 +4727,13 @@ def generate_index(docs_dir: str) -> str:
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <title>ShooterDigest &mdash; Archive</title>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
       background: #0f0f0f; color: #e8e8e8;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh; padding: 60px 24px;
     }}
     h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}

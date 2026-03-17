@@ -46,8 +46,8 @@ NEWSLETTER_HTML = """
 <style>
 .sd-newsletter {
   background: #1b2838;
-  border-top: 1px solid #2a475e;
-  border-bottom: 1px solid #2a475e;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
   padding: 2rem;
   margin: 2rem -2rem;
 }
@@ -65,7 +65,7 @@ NEWSLETTER_HTML = """
   line-height: 1.4;
 }
 .sd-newsletter-sub {
-  color: #8f98a0;
+  color: #a3b1bf;
   font-size: 0.85rem;
   margin-top: 0.2rem;
 }
@@ -90,7 +90,7 @@ NEWSLETTER_HTML = """
   border-color: #f97316;
 }
 .sd-newsletter-input::placeholder {
-  color: #4a5568;
+  color: #6b7280;
 }
 .sd-newsletter-btn {
   background: #f97316;
@@ -337,15 +337,18 @@ class DigestHandler(SimpleHTTPRequestHandler):
 <meta name="description" content="Weekly FPS intelligence digest \u2014 Steam concurrents, Reddit sentiment, press coverage">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>ShooterDigest \u2014 Archive</title>
 <style>
-  body {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f1923; color: #c7d5e0; max-width: 640px; margin: 60px auto; padding: 0 20px; }}
+  body {{ font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f1923; color: #c7d5e0; max-width: 640px; margin: 60px auto; padding: 0 20px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }}
+  *:focus-visible {{ outline: 2px solid #f97316; outline-offset: 2px; }}
+  button:focus-visible {{ box-shadow: 0 0 0 2px #0f1923, 0 0 0 4px #f97316; outline: none; }}
+  a:focus-visible {{ outline: 2px solid #66c0f4; outline-offset: 2px; }}
   h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
   .about-section {{ padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 1px solid #2a475e; }}
   .about-title {{ color: #66c0f4; font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; }}
   .about-subtitle {{ color: #8f98a0; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem; }}
-  .stats-bar {{ color: #4a5568; font-size: 0.78rem; letter-spacing: 0.01em; }}
+  .stats-bar {{ color: #6b7280; font-size: 0.78rem; letter-spacing: 0.01em; }}
   .digests-section h2 {{ color: #8f98a0; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }}
   .digest-card {{ padding: 1rem 0; border-bottom: 1px solid #1b2838; }}
   .digest-card:last-child {{ border-bottom: none; }}
@@ -355,8 +358,9 @@ class DigestHandler(SimpleHTTPRequestHandler):
   .digest-link:hover {{ text-decoration: underline; }}
   .newsletter-cta {{
     background: #1b2838;
-    border: 1px solid #2a475e;
+    border: none;
     border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 1px 3px rgba(0,0,0,0.3);
     padding: 1.5rem;
     margin: 2rem 0;
   }}
@@ -390,7 +394,7 @@ class DigestHandler(SimpleHTTPRequestHandler):
     transition: border-color 0.15s;
   }}
   .newsletter-input:focus {{ border-color: #f97316; }}
-  .newsletter-input::placeholder {{ color: #4a5568; }}
+  .newsletter-input::placeholder {{ color: #6b7280; }}
   .newsletter-btn {{
     background: #f97316;
     color: #fff;

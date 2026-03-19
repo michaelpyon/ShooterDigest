@@ -86,6 +86,25 @@ def _trend_arrow(pct: float | None) -> tuple[str, str]:
     return ("\u25b6", "flat")
 
 
+def _status_label(wow_pct: float | None, trend_pct: float | None) -> tuple[str, str]:
+    """Return (label, css_class) for a game's current status.
+
+    Uses WoW if available, falls back to MoM.
+    """
+    pct = wow_pct if wow_pct is not None else trend_pct
+    if pct is None:
+        return ("LAUNCH", "status-launch")
+    if pct > 10:
+        return ("SURGING", "status-up")
+    if pct > 2:
+        return ("GROWING", "status-up")
+    if pct > -2:
+        return ("STABLE", "status-flat")
+    if pct > -10:
+        return ("SLIDING", "status-down")
+    return ("FADING", "status-down")
+
+
 def _esc(text: str) -> str:
     # Decode HTML entities first, then escape for HTML output
     text = html_mod.unescape(text)
@@ -160,9 +179,9 @@ def _analyze_sentiment(text: str) -> str:
 
 
 SENTIMENT_COLORS = {
-    "positive": ("#4ade80", "#1e5f2e"),   # green
-    "negative": ("#f87171", "#5f1e1e"),   # red
-    "neutral":  ("#94a3b8", "#2d3748"),   # gray
+    "positive": ("#22C55E", "#1e5f2e"),   # green
+    "negative": ("#EF4444", "#5f1e1e"),   # red
+    "neutral":  ("#808088", "#2d3748"),   # gray
 }
 
 
@@ -182,14 +201,14 @@ SENTIMENT_SHAPES = {
 
 # Genre colors: (text_color, background_color)
 GENRE_COLORS = {
-    "Battle Royale":  ("#fbbf24", "#3b2f0a"),   # amber
-    "Hero Shooter":   ("#c084fc", "#2e1065"),    # purple
-    "Tactical":       ("#38bdf8", "#0c2d48"),    # sky blue
-    "Extraction":     ("#fb923c", "#3b1f0a"),    # orange
-    "Arena":          ("#34d399", "#0a3b2b"),    # emerald
-    "Large-Scale":    ("#4ade80", "#0a3b1f"),    # green
-    "Looter Shooter": ("#f472b6", "#3b0a2e"),    # pink
-    "Other":          ("#94a3b8", "#1e293b"),    # gray
+    "Battle Royale":  ("#F59E0B", "#1f1a0a"),   # amber
+    "Hero Shooter":   ("#c084fc", "#1a1028"),    # purple
+    "Tactical":       ("#6366F1", "#14142a"),    # indigo
+    "Extraction":     ("#fb923c", "#1f140a"),    # orange
+    "Arena":          ("#34d399", "#0a1f18"),    # emerald
+    "Large-Scale":    ("#22C55E", "#0a1f12"),    # green
+    "Looter Shooter": ("#f472b6", "#1f0a18"),    # pink
+    "Other":          ("#808088", "#1A1A1E"),    # gray
 }
 
 # Short labels for compact badges
@@ -235,11 +254,11 @@ LIFECYCLE_STATES = {
 }
 
 LIFECYCLE_COLORS = {
-    "Live": ("#4ade80", "#1a3a2a"),      # green
-    "Maintenance": ("#fbbf24", "#3a3520"),  # yellow
-    "Sunset": ("#f87171", "#3a1a1a"),      # red
-    "Legacy": ("#94a3b8", "#2a2e35"),      # gray
-    "Pre-Launch": ("#60a5fa", "#1a2a3a"),  # blue
+    "Live": ("#22C55E", "#0f2818"),      # green
+    "Maintenance": ("#F59E0B", "#2a2208"),  # amber
+    "Sunset": ("#EF4444", "#2a0f0f"),      # red
+    "Legacy": ("#808088", "#1e1e22"),      # gray
+    "Pre-Launch": ("#6366F1", "#1a1a2e"),  # indigo
 }
 
 LIFECYCLE_EMOJI = {
@@ -255,7 +274,7 @@ def _lifecycle_badge_html(name: str) -> str:
     state = LIFECYCLE_STATES.get(name)
     if not state:
         return ""
-    fg, bg = LIFECYCLE_COLORS.get(state, ("#94a3b8", "#2a2e35"))
+    fg, bg = LIFECYCLE_COLORS.get(state, ("#808088", "#1e1e22"))
     return f' <span class="lifecycle-badge" style="color:{fg};background:{bg}">{state}</span>'
 
 
@@ -363,7 +382,7 @@ def _inline_sparkline_svg(months_data: list[dict], css_class: str = "neutral", l
         x = i * w / (len(avgs) - 1)
         y = h - 1 - ((v - mn) / rng) * (h - 2)
         pts.append(f"{x:.1f},{y:.1f}")
-    color = {"up": "#4ade80", "down": "#f87171", "flat": "#fbbf24"}.get(css_class, "#94a3b8")
+    color = {"up": "#22C55E", "down": "#EF4444", "flat": "#F59E0B"}.get(css_class, "#808088")
     tooltip = label if label else "Monthly avg player trend (last 4 months)"
     return (
         f'<svg class="inline-spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" title="{tooltip}" aria-label="{tooltip}">'
@@ -437,10 +456,10 @@ def _extract_news_summary(news_item: dict) -> str:
 # ---------------------------------------------------------------------------
 
 _SPARKLINE_COLORS = {
-    "up": ("#4ade80", "rgba(74,222,128,0.12)"),
-    "down": ("#f87171", "rgba(248,113,113,0.12)"),
-    "flat": ("#fbbf24", "rgba(251,191,36,0.12)"),
-    "neutral": ("#8f98a0", "rgba(143,152,160,0.12)"),
+    "up": ("#22C55E", "rgba(34,197,94,0.12)"),
+    "down": ("#EF4444", "rgba(239,68,68,0.12)"),
+    "flat": ("#F59E0B", "rgba(245,158,11,0.12)"),
+    "neutral": ("#808088", "rgba(128,128,136,0.12)"),
 }
 
 
@@ -503,7 +522,7 @@ def _generate_sparkline_svg(avg_trend: list[dict], trend_css: str) -> str:
                 label = month_text[:3]
         labels_svg += (
             f'<text x="{x}" y="{h - 2}" text-anchor="middle" '
-            f'fill="#8f98a0" font-size="8" font-family="JetBrains Mono, monospace">{label}</text>\n'
+            f'fill="#808088" font-size="8" font-family="JetBrains Mono, monospace">{label}</text>\n'
         )
 
     # Data point dots
@@ -646,8 +665,8 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
     # Chart dimensions (larger than per-game sparklines)
     w, h = 350, 70
     pad_x, pad_top, pad_bot = 16, 12, 20
-    stroke = "#60a5fa"  # blue
-    fill_color = "rgba(96,165,250,0.12)"
+    stroke = "#6366F1"  # indigo
+    fill_color = "rgba(99,102,241,0.12)"
 
     values = [p["avg"] for p in month_sums]
     v_min = min(values)
@@ -685,7 +704,7 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
                 label = month_text[:3]
         labels_svg += (
             f'<text x="{x}" y="{h - 2}" text-anchor="middle" '
-            f'fill="#8f98a0" font-size="8" font-family="JetBrains Mono, monospace">{label}</text>\n'
+            f'fill="#808088" font-size="8" font-family="JetBrains Mono, monospace">{label}</text>\n'
         )
 
     # Dots
@@ -701,7 +720,7 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
     last_y = max(coords[-1][1] - 6, 8)
     value_labels = (
         f'<text x="{coords[0][0]}" y="{first_y}" text-anchor="start" '
-        f'fill="#8f98a0" font-size="8" font-family="JetBrains Mono, monospace">{first_val}</text>\n'
+        f'fill="#808088" font-size="8" font-family="JetBrains Mono, monospace">{first_val}</text>\n'
         f'<text x="{coords[-1][0]}" y="{last_y}" text-anchor="end" '
         f'fill="{stroke}" font-size="9" font-weight="bold" font-family="JetBrains Mono, monospace">{last_val}</text>\n'
     )
@@ -711,7 +730,7 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
     agg_aria = f"Total market trend, average concurrent players. {'; '.join(agg_parts)}."
 
     return f'''<div class="aggregate-chart">
-  <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)<br><span style="font-size:0.6rem;font-weight:400;color:#7a8fa3">Steam Concurrent Players (Source: SteamDB)</span></div>
+  <div class="aggregate-label">Total Market — Avg Concurrent Players on Steam (All Tracked Titles)<br><span style="font-size:0.6rem;font-weight:400;color:#44444C">Steam Concurrent Players (Source: SteamDB)</span></div>
   <svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{agg_aria}">
     <polygon points="{polygon_pts}" fill="{fill_color}" />
     <polyline points="{polyline_pts}" fill="none" stroke="{stroke}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
@@ -725,12 +744,12 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
 # Category display colors (for HTML rendering)
 CATEGORY_COLORS = {
     "NEWS": ("#3b82f6", "#1e3a5f"),         # blue
-    "CRITICISM": ("#f87171", "#5f1e1e"),     # red
-    "PRAISE": ("#4ade80", "#1e5f2e"),        # green
-    "HUMOR": ("#fbbf24", "#5f4b00"),         # yellow
+    "CRITICISM": ("#EF4444", "#5f1e1e"),     # red
+    "PRAISE": ("#22C55E", "#1e5f2e"),        # green
+    "HUMOR": ("#F59E0B", "#5f4b00"),         # yellow
     "CLIP": ("#a78bfa", "#3b1e5f"),          # purple
     "CREATIVE": ("#f472b6", "#5f1e4a"),      # pink
-    "DISCUSSION": ("#94a3b8", "#2d3748"),    # gray
+    "DISCUSSION": ("#808088", "#2d3748"),    # gray
     "OTHER": ("#64748b", "#1e293b"),         # dim gray
 }
 
@@ -1469,6 +1488,7 @@ def _compute_deltas(results: list[dict], previous: dict | None) -> None:
         if not previous:
             r["prev"] = None
             r["peak_24h_delta"] = None
+            r["wow_pct"] = None
             r["rank_delta"] = None
             continue
 
@@ -1476,6 +1496,7 @@ def _compute_deltas(results: list[dict], previous: dict | None) -> None:
         if not prev:
             r["prev"] = None
             r["peak_24h_delta"] = None
+            r["wow_pct"] = None
             r["rank_delta"] = None
             continue
 
@@ -1488,6 +1509,11 @@ def _compute_deltas(results: list[dict], previous: dict | None) -> None:
         r["peak_24h_delta"] = (
             r["peak_24h"] - prev["peak_24h"] if prev.get("peak_24h") else None
         )
+        # Week-over-week percentage change (primary trend signal)
+        if prev.get("peak_24h") and prev["peak_24h"] > 0 and r["peak_24h_delta"] is not None:
+            r["wow_pct"] = r["peak_24h_delta"] / prev["peak_24h"] * 100
+        else:
+            r["wow_pct"] = None
         r["rank_delta"] = (
             prev["rank"] - r["rank"] if prev.get("rank") else None  # positive = moved up
         )
@@ -2516,7 +2542,7 @@ def _render_calendar_html(cal_data: dict) -> str:
       <div class="cal-empty">No tracked events yet — check back as announcements come in.</div>
     </div>\n'''
 
-    return f'''  <div class="calendar-section animate-in">
+    return f'''  <div class="calendar-section" id="calendar">
     <h2 class="section-title">Release &amp; Patch Calendar</h2>
 {tw_html}
 {today_divider}
@@ -2538,17 +2564,17 @@ def _build_studio_alert_html(results: list[dict], date_str: str) -> str:
     inf_declining = halo_inf and (halo_inf.get("trend_pct") or 0) < -2
     mcc_declining = halo_mcc and (halo_mcc.get("trend_pct") or 0) < -2
     if inf_declining and mcc_declining:
-        status_color = "#f87171"
+        status_color = "#EF4444"
         status_emoji = "\U0001f534"
-        border_color = "#f87171"
+        border_color = "#EF4444"
     elif inf_declining or mcc_declining:
-        status_color = "#fbbf24"
+        status_color = "#F59E0B"
         status_emoji = "\U0001f7e1"
-        border_color = "#fbbf24"
+        border_color = "#F59E0B"
     else:
-        status_color = "#4ade80"
+        status_color = "#22C55E"
         status_emoji = "\U0001f7e2"
-        border_color = "#4ade80"
+        border_color = "#22C55E"
 
     def _halo_line(r, lifecycle_note):
         if not r:
@@ -2615,14 +2641,14 @@ def _build_genre_rollup_html(results: list[dict]) -> str:
         rows += (
             f'<tr>'
             f'<td><span class="genre-badge" style="color:{fg};background:{bg}">{GENRE_SHORT.get(genre, genre)}</span></td>'
-            f'<td class="num" style="color:#60a5fa;font-weight:600">{_fmt(data["total_est"])}</td>'
+            f'<td class="num" style="color:#6366F1;font-weight:600">{_fmt(data["total_est"])}</td>'
             f'<td class="trend {trend_css}" style="text-align:center">{avg_trend:+.1f}%</td>'
             f'<td>{_esc(dominant["name"])}</td>'
             f'<td style="text-align:center">{len(data["games"])}</td>'
             f'</tr>\n'
         )
 
-    return f'''  <div class="genre-rollup animate-in">
+    return f'''  <div class="genre-rollup">
     <h3>Genre Rollup</h3>
     <table>
       <thead><tr>
@@ -2653,12 +2679,12 @@ def _build_methodology_html(results: list[dict]) -> str:
             f'<td>{_esc(r["name"])}</td>'
             f'<td class="num">{_fmt(r["peak_24h"])}</td>'
             f'<td style="text-align:center">{multiplier}</td>'
-            f'<td class="num" style="color:#60a5fa">{_fmt(r.get("est_total_24h", r["peak_24h"]))}</td>'
+            f'<td class="num" style="color:#6366F1">{_fmt(r.get("est_total_24h", r["peak_24h"]))}</td>'
             f'<td class="meth-note">{_esc(note)}</td>'
             f'</tr>\n'
         )
 
-    return f'''  <div class="methodology animate-in" id="methodology">
+    return f'''  <div class="methodology" id="methodology">
     <details>
       <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
       <div class="methodology-content">
@@ -2804,7 +2830,22 @@ def generate_html(results: list[dict], failed_names: list[str],
                   radar_results: list[dict] | None = None) -> str:
     today = datetime.now()
     date_str = today.strftime("%B %d, %Y")
+    short_date = today.strftime("%b %d")
     timestamp = today.strftime("%Y-%m-%d %H:%M:%S")
+    # Issue number: weeks since first digest (2024-09-01)
+    _epoch = datetime(2024, 9, 1)
+    issue_number = max(1, (today - _epoch).days // 7)
+
+    # --- Top movers (WoW) ---
+    _with_wow = [r for r in results if r.get("wow_pct") is not None]
+    if _with_wow:
+        _gainer = max(_with_wow, key=lambda r: r["wow_pct"])
+        _loser = min(_with_wow, key=lambda r: r["wow_pct"])
+    else:
+        # Fall back to MoM if no WoW data
+        _with_trend = [r for r in results if r.get("trend_pct") is not None]
+        _gainer = max(_with_trend, key=lambda r: r["trend_pct"]) if _with_trend else None
+        _loser = min(_with_trend, key=lambda r: r["trend_pct"]) if _with_trend else None
 
     # --- Executive Summary with Winners / Neutrals / Losers ---
     # Takeaways are pre-sanitized HTML (may contain <a> links) — do not re-escape
@@ -2816,49 +2857,80 @@ def generate_html(results: list[dict], failed_names: list[str],
     # Build winners / neutrals / losers mini-table
     def _wnl_rows(items, color, arrow_class):
         if not items:
-            return f'<tr><td colspan="3" style="color:#7a8fa3;font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr>'
+            return f'<tr><td colspan="3" style="color:#44444C;font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr>'
         rows = ""
         for g in items:
             t = g["trend_pct"]
             t_str = f'{t:+.1f}%' if t is not None else "—"
             rows += (
                 f'<tr>'
-                f'<td style="color:#e5e5e5;font-weight:600;padding:0.2rem 0.5rem;font-size:0.82rem">{_esc(g["name"])}</td>'
-                f'<td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:{color};font-weight:600">{t_str}</td>'
-                f'<td style="text-align:right;padding:0.2rem 0.5rem;font-size:0.82rem;color:#8f98a0">{_fmt(g["peak_24h"])}<div style="font-size:0.55rem;color:#7a8fa3;font-weight:400">Steam 24h</div></td>'
+                f'<td style="color:#F0F0F2;font-weight:600;padding:0.35rem 0.4rem;font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{_esc(g["name"])}</td>'
+                f'<td style="text-align:right;padding:0.35rem 0.3rem;font-size:0.78rem;color:{color};font-weight:600;white-space:nowrap">{t_str}</td>'
+                f'<td style="text-align:right;padding:0.35rem 0;font-size:0.72rem;color:#808088;white-space:nowrap;font-family:JetBrains Mono,monospace">{_fmt_k(g["peak_24h"])}</td>'
                 f'</tr>'
             )
         return rows
 
     wnl_html = f"""    <div class="wnl-table">
       <div class="wnl-col">
-        <div class="wnl-header" style="color:#4ade80;border-bottom:2px solid #4ade80">&#9650; Winners ({len(wnl['winners'])})</div>
-        <table>{_wnl_rows(wnl['winners'], '#4ade80', 'up')}</table>
+        <div class="wnl-header" style="color:#22C55E;border-bottom:2px solid #22C55E">&#9650; Winners ({len(wnl['winners'])})</div>
+        <table>{_wnl_rows(wnl['winners'], '#22C55E', 'up')}</table>
       </div>
       <div class="wnl-col">
-        <div class="wnl-header" style="color:#fbbf24;border-bottom:2px solid #fbbf24">&#9654; Holding Steady ({len(wnl['neutrals'])})</div>
-        <table>{_wnl_rows(wnl['neutrals'], '#fbbf24', 'flat')}</table>
+        <div class="wnl-header" style="color:#F59E0B;border-bottom:2px solid #F59E0B">&#9654; Holding Steady ({len(wnl['neutrals'])})</div>
+        <table>{_wnl_rows(wnl['neutrals'], '#F59E0B', 'flat')}</table>
       </div>
       <div class="wnl-col">
-        <div class="wnl-header" style="color:#f87171;border-bottom:2px solid #f87171">&#9660; Losers ({len(wnl['losers'])})</div>
-        <table>{_wnl_rows(wnl['losers'], '#f87171', 'down')}</table>
+        <div class="wnl-header" style="color:#EF4444;border-bottom:2px solid #EF4444">&#9660; Losers ({len(wnl['losers'])})</div>
+        <table>{_wnl_rows(wnl['losers'], '#EF4444', 'down')}</table>
       </div>
     </div>"""
 
-    exec_html = f"""  <div class="exec-summary animate-in" id="exec-summary">
-    <h2>Executive Summary</h2>
+    exec_html = f"""  <div class="exec-summary" id="exec-summary">
+    <h2><span class="diamond">&#9670;</span> Weekly Executive Summary</h2>
+    {exec_prose_html}
     <ul>
 {exec_items}
     </ul>
-    {exec_prose_html}
     <div class="wnl-label">Month-over-Month Steam Concurrent Player Trend</div>
 {wnl_html}
     {aggregate_chart}
-    <div style="display:flex;justify-content:flex-end;margin-top:1rem;">
-      <a href="https://twitter.com/intent/tweet?text=This%20week%27s%20competitive%20shooter%20intelligence%20briefing%20is%20out.%20Steam%20concurrents%2C%20trends%2C%20and%20analysis.%0A%0A&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="exec-share-btn" aria-label="Share on X">
-        <svg viewBox="0 0 24 24" width="14" height="14" style="fill:currentColor;margin-right:5px;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        Share
+    <div class="share-card">
+      <div class="share-preview">
+        <div class="share-preview-title">ShooterDigest // Week of {short_date}</div>
+        <div class="share-preview-desc">Steam concurrents, trends, and analysis for {len(results)} competitive shooters.</div>
+        <div class="share-preview-url">shooter.pyon.dev</div>
+      </div>
+      <a href="https://twitter.com/intent/tweet?text=This%20week%27s%20competitive%20shooter%20intelligence%20briefing%20is%20out.%20Steam%20concurrents%2C%20trends%2C%20and%20analysis.%0A%0A&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-btn" aria-label="Share on X">
+        <svg viewBox="0 0 24 24" width="14" height="14" style="fill:currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Share on X
       </a>
+    </div>
+  </div>"""
+
+    # --- Top mover callouts ---
+    mover_html = ""
+    if _gainer and _loser:
+        _g_pct_key = "wow_pct" if _gainer.get("wow_pct") is not None else "trend_pct"
+        _l_pct_key = "wow_pct" if _loser.get("wow_pct") is not None else "trend_pct"
+        _g_pct = _gainer.get(_g_pct_key, 0)
+        _l_pct = _loser.get(_l_pct_key, 0)
+        _g_prev = _fmt(_gainer.get("prev", {}).get("peak_24h", 0)) if _gainer.get("prev") else "—"
+        _g_curr = _fmt(_gainer["peak_24h"])
+        _l_prev = _fmt(_loser.get("prev", {}).get("peak_24h", 0)) if _loser.get("prev") else "—"
+        _l_curr = _fmt(_loser["peak_24h"])
+        mover_html = f"""  <div class="mover-cards">
+    <div class="mover-card mover-up">
+      <div class="mover-label">This Week's Biggest Gainer</div>
+      <div class="mover-game">{_esc(_gainer['name'])}</div>
+      <div class="mover-value">+{abs(_g_pct):.1f}% concurrent players</div>
+      <div class="mover-detail">{_g_prev} &rarr; {_g_curr}</div>
+    </div>
+    <div class="mover-card mover-down">
+      <div class="mover-label">This Week's Biggest Decline</div>
+      <div class="mover-game">{_esc(_loser['name'])}</div>
+      <div class="mover-value">{_l_pct:.1f}% concurrent players</div>
+      <div class="mover-detail">{_l_prev} &rarr; {_l_curr}</div>
     </div>
   </div>"""
 
@@ -2898,7 +2970,7 @@ def generate_html(results: list[dict], failed_names: list[str],
 
         # Sentiment (#5)
         game_sentiment = _compute_game_sentiment(r)
-        sent_color = {"positive": "#4ade80", "negative": "#f87171", "mixed": "#fbbf24"}.get(game_sentiment, "#94a3b8")
+        sent_color = {"positive": "#22C55E", "negative": "#EF4444", "mixed": "#F59E0B"}.get(game_sentiment, "#808088")
         sent_val = {"positive": 1, "mixed": 0, "negative": -1}.get(game_sentiment, 0)
 
         # Inline sparkline (#6)
@@ -2913,24 +2985,42 @@ def generate_html(results: list[dict], failed_names: list[str],
         sent_shape = SENTIMENT_SHAPES.get(game_sentiment, "\u25c6")
         sent_dot = f' <span class="sent-inline" style="color:{sent_color}" title="Sentiment: {game_sentiment}">{sent_shape}</span>'
 
-        # Trend cell: LAUNCH badge for new games with no MoM data
-        if trend_pct is None:
-            trend_cell = '<span class="launch-badge">LAUNCH</span>'
-        else:
+        # WoW trend (primary) with MoM tooltip
+        wow_pct = r.get("wow_pct")
+        if wow_pct is not None:
+            wow_arrow, wow_css = _trend_arrow(wow_pct)
+            wow_str = f"{wow_pct:+.1f}%"
+            mom_tip = f' title="MoM: {trend_str}"' if trend_str else ""
+            trend_cell = f'{wow_arrow} {wow_str}'
+            trend_display_css = wow_css
+            trend_sort_val = wow_pct
+        elif trend_pct is not None:
             trend_cell = f"{r['trend_arrow']} {trend_str}"
+            trend_display_css = r['trend_css']
+            trend_sort_val = trend_val
+            mom_tip = ""
+        else:
+            trend_cell = '<span class="launch-badge">LAUNCH</span>'
+            trend_display_css = "neutral"
+            trend_sort_val = 0
+            mom_tip = ""
+
+        # Status label
+        status_text, status_css = _status_label(wow_pct, trend_pct)
 
         table_rows += f"""        <tr data-genre="{genre}">
           <td class="rank" data-value="{r['rank']}">#{r['rank']}</td>
           <td class="game" data-value="{sent_val}"><a href="#{_card_id(r['name'])}" class="game-link">{_esc(r['name'])}</a>{lifecycle}{sent_dot}</td>
           <td>{_genre_badge_html(genre)}</td>
           <td class="num" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
-          <td class="num" data-value="{r.get('est_total_24h', r['peak_24h'])}" style="color:#60a5fa;font-weight:600">{est_total}</td>
-          <td class="trend {r['trend_css']}" data-value="{trend_val}"{trend_title}>{trend_cell}{annotation_icon}</td>
-          <td class="num" data-value="{r.get('est_total_all', r['peak_all'])}" style="color:#fbbf24;font-weight:600">{est_all_time}</td>
+          <td class="num" data-value="{r.get('est_total_24h', r['peak_24h'])}" style="color:var(--accent);font-weight:600">{est_total}</td>
+          <td class="trend {trend_display_css}" data-value="{trend_sort_val}"{mom_tip}{trend_title}>{trend_cell}{annotation_icon}</td>
+          <td class="num" data-value="{r.get('est_total_all', r['peak_all'])}" style="color:var(--amber);font-weight:600">{est_all_time}</td>
           <td class="pct-cell" data-value="{r['pct_all']:.2f}">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%"></div></div>
             <span>{r['pct_all']:.1f}%</span>
           </td>
+          <td class="status-cell"><span class="status-tag {status_css}">{status_text}</span></td>
         </tr>\n"""
 
     for name in failed_names:
@@ -2941,6 +3031,7 @@ def generate_html(results: list[dict], failed_names: list[str],
           <td class="num">-</td><td class="num">-</td>
           <td class="trend neutral">-</td>
           <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
         </tr>\n"""
 
     # --- Detail cards ---
@@ -2987,7 +3078,7 @@ def generate_html(results: list[dict], failed_names: list[str],
             sent_label = PRESS_SENTIMENT_LABELS.get(sentiment, sentiment)
             sent_shape = SENTIMENT_SHAPES.get(sentiment, "\u25c6")
             sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">{sent_shape}</span> '
-            date_span = f' <span style="color:#8f98a0;font-size:0.7rem">{date}</span>' if date else ""
+            date_span = f' <span style="color:#808088;font-size:0.7rem">{date}</span>' if date else ""
             press_html += f'<li>{sent_dot}{title}{source_badge}{date_span}</li>\n'
         if not press_html:
             press_html = "<li>No recent press coverage</li>\n"
@@ -3054,10 +3145,10 @@ def generate_html(results: list[dict], failed_names: list[str],
         ts = r.get("takeaway_structured", {})
         takeaway_html = ""
         if ts.get("state"):
-            state_color = {"up": "#4ade80", "down": "#f87171", "flat": "#fbbf24"}.get(r.get("trend_css", "neutral"), "#94a3b8")
+            state_color = {"up": "#22C55E", "down": "#EF4444", "flat": "#F59E0B"}.get(r.get("trend_css", "neutral"), "#808088")
             takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:{state_color}">State:</span> {_esc(_sanitize_text(ts["state"]))}</div>'
         if ts.get("context"):
-            takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:#94a3b8">Context:</span> {_esc(_sanitize_text(ts["context"]))}</div>'
+            takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:#808088">Context:</span> {_esc(_sanitize_text(ts["context"]))}</div>'
         if ts.get("community"):
             r_fg, _ = _sentiment_css(_analyze_sentiment(ts["community"]))
             takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:{r_fg}">Reaction:</span> {_esc(_sanitize_text(ts["community"]))}</div>'
@@ -3103,7 +3194,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         _est_tip = (f'Estimated all-platform total = Steam 24h peak \u00f7 Steam share ({_steam_pct:.0f}%). '
                     f'This is a directional estimate, not validated first-party data.')
         _est_total_html = (
-            f'&nbsp;|&nbsp; Est. Total: <strong style="color:#60a5fa">'
+            f'&nbsp;|&nbsp; Est. Total: <strong style="color:#6366F1">'
             f'{_fmt(r.get("est_total_24h", r["peak_24h"]))}</strong>'
             f' <a href="#methodology" class="info-tip" data-tip="{_est_tip}">\u24d8 Est.</a>'
             f' ({_steam_pct:.0f}% Steam)'
@@ -3111,7 +3202,7 @@ def generate_html(results: list[dict], failed_names: list[str],
             f'&nbsp;|&nbsp; Est. Total: <strong>{_fmt(r["peak_24h"])}</strong> (100% Steam)'
         )
         cards_html += f"""
-    <div class="card animate-in" id="{_card_id(r['name'])}" data-genre="{card_genre}">
+    <div class="card" id="{_card_id(r['name'])}" data-genre="{card_genre}">
       <div class="card-header">
         <h3>{_esc(r['name'])}{card_lifecycle} {_genre_badge_html(card_genre)} <span class="trend-badge {r['trend_css']}">{r['trend_arrow']} {trend_str} MoM</span></h3>
         {hist_ctx_html}
@@ -3119,7 +3210,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         <div class="card-stats">
           24h Peak: <strong>{_fmt(r['peak_24h'])}</strong> (Steam)
           {_est_total_html}
-          &nbsp;|&nbsp; All-Time Peak: {f'<strong style="color:#fbbf24">{_fmt(r.get("est_total_all", r["peak_all"]))}</strong> <small style="color:#7a8fa3">(est. all platforms)</small>' if not r.get('is_steam_only') else f'<strong>{_fmt(r["peak_all"])}</strong> <small style="color:#7a8fa3">(100% Steam)</small>'} ({r['pct_all']:.1f}% current)
+          &nbsp;|&nbsp; All-Time Peak: {f'<strong style="color:#F59E0B">{_fmt(r.get("est_total_all", r["peak_all"]))}</strong> <small style="color:#44444C">(est. all platforms)</small>' if not r.get('is_steam_only') else f'<strong>{_fmt(r["peak_all"])}</strong> <small style="color:#44444C">(100% Steam)</small>'} ({r['pct_all']:.1f}% current)
         </div>
         {"<div class='card-trend'>" + sparkline + "</div>" if sparkline else ""}
       </div>
@@ -3171,107 +3262,123 @@ def generate_html(results: list[dict], failed_names: list[str],
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <title>Shooter Digest - {date_str}</title>
   <style>
-    /* Text palette: primary #e5e5e5, secondary #a3b1bf, tertiary #7a8fa3, disabled #556b7d (decorative only) */
+    :root {{
+      --bg: #0D0D0F;
+      --bg-surface: #141416;
+      --bg-card: #1A1A1E;
+      --bg-card-hover: #1E1E24;
+      --border: rgba(255,255,255,0.06);
+      --border-active: rgba(255,255,255,0.14);
+      --text: #F0F0F2;
+      --text-muted: #808088;
+      --text-dim: #44444C;
+      --green: #22C55E;
+      --red: #EF4444;
+      --amber: #F59E0B;
+      --accent: #6366F1;
+    }}
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     body {{
-      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0f1923; color: #c7d5e0;
-      padding: 2rem; max-width: 1100px; margin: 0 auto;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg); color: var(--text);
+      padding: 2rem; max-width: 1200px; margin: 0 auto;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }}
     h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
 
     /* Focus-visible styles */
-    *:focus-visible {{ outline: 2px solid #f97316; outline-offset: 2px; }}
+    *:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
     button:focus-visible, .genre-filter-btn:focus-visible {{
-      box-shadow: 0 0 0 2px #0f1923, 0 0 0 4px #f97316; outline: none;
+      box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); outline: none;
     }}
     a:focus-visible {{
-      outline: 2px solid #66c0f4; outline-offset: 2px;
+      outline: 2px solid var(--accent); outline-offset: 2px;
     }}
     h1 {{ font-size: 1.8rem; margin-bottom: 0.2rem; }}
     h1 .brand-shooter {{ color: #ffffff; }}
-    h1 .brand-digest {{ color: #f97316; }}
-    .subtitle {{ color: #8f98a0; font-size: 0.95rem; margin-bottom: 0.25rem; }}
-    .subtitle-date {{ color: #7a8fa3; font-size: 0.78rem; margin-bottom: 1.5rem; }}
+    h1 .brand-digest {{ color: var(--accent); }}
+    .subtitle {{ color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.25rem; }}
+    .subtitle-date {{ color: var(--text-dim); font-size: 0.78rem; margin-bottom: 1.5rem; }}
 
     /* Sticky back-nav */
     .site-nav {{
       position: sticky; top: 0; z-index: 100;
-      background: rgba(15, 25, 35, 0.96);
+      background: rgba(13, 13, 15, 0.96);
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border-bottom: 1px solid #2a475e;
+      border-bottom: 1px solid var(--border-active);
       margin: -2rem -2rem 1.5rem -2rem;
       padding: 0.65rem 2rem;
       display: flex; align-items: center; justify-content: space-between;
     }}
     .nav-back {{
-      font-size: 0.82rem; color: #8f98a0; text-decoration: none;
+      font-size: 0.82rem; color: var(--text-muted); text-decoration: none;
       transition: color 0.15s; display: flex; align-items: center; gap: 0.35rem;
     }}
-    .nav-back:hover {{ color: #f97316; }}
+    .nav-back:hover {{ color: var(--accent); }}
     .nav-logo {{
       font-size: 0.9rem; font-weight: 700; color: #ffffff;
       text-decoration: none; letter-spacing: -0.3px;
     }}
-    .nav-logo span {{ color: #f97316; }}
+    .nav-logo span {{ color: var(--accent); }}
 
     /* Executive Summary */
     .exec-summary {{
-      background: #1b2838; border-left: 3px solid #fbbf24;
-      padding: 1rem 1.2rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 4px 12px rgba(0,0,0,0.4);
+      background: var(--bg-card);
+      padding: 1.5rem 1.5rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
     }}
-    .exec-summary h2 {{ color: #fbbf24; font-size: 1rem; margin-bottom: 0.6rem; }}
+    .exec-summary h2 {{ color: var(--accent); font-size: 1rem; margin-bottom: 0.75rem; }}
+    .exec-summary ul {{ margin-top: 1rem; }}
     .exec-summary li {{
-      margin-bottom: 0.4rem; margin-left: 1rem;
-      color: #c7d5e0; font-size: 0.9rem; line-height: 1.6;
+      margin-bottom: 0.5rem; margin-left: 1rem;
+      color: var(--text); font-size: 0.9rem; line-height: 1.6;
     }}
     .exec-link {{
-      color: #60a5fa; text-decoration: underline; text-underline-offset: 2px;
-      text-decoration-color: rgba(96,165,250,0.4);
+      color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+      text-decoration-color: rgba(99,102,241,0.4);
     }}
-    .exec-link:hover {{ color: #93c5fd; text-decoration-color: #93c5fd; }}
+    .exec-link:hover {{ color: var(--text); text-decoration-color: var(--accent); }}
     .exec-share-btn {{
       display: inline-flex; align-items: center; padding: 5px 12px;
-      font-size: 0.75rem; color: #94a3b8; background: transparent;
-      border: 1px solid #2a475e; border-radius: 4px; text-decoration: none;
+      font-size: 0.75rem; color: var(--text-muted); background: transparent;
+      border: 1px solid var(--border-active); border-radius: 4px; text-decoration: none;
       transition: all 0.2s; cursor: pointer;
     }}
-    .exec-share-btn:hover {{ color: #ffffff; border-color: #f97316; background: rgba(249,115,22,0.1); }}
+    .exec-share-btn:hover {{ color: #ffffff; border-color: var(--accent); background: rgba(99,102,241,0.1); }}
     .share-fab {{
       position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
-      border-radius: 50%; background: #1a1a2e; border: 1px solid #2a475e;
+      border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-active);
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; transition: all 0.2s; z-index: 50; text-decoration: none;
     }}
-    .share-fab:hover {{ background: #f97316; border-color: #f97316; }}
-    .share-fab svg {{ width: 20px; height: 20px; fill: #c7d5e0; }}
+    .share-fab:hover {{ background: var(--accent); border-color: var(--accent); }}
+    .share-fab svg {{ width: 20px; height: 20px; fill: var(--text); }}
     .share-fab:hover svg {{ fill: #ffffff; }}
     .aggregate-chart {{
       margin-top: 1rem; padding-top: 0.8rem;
-      border-top: 1px solid #2a475e;
+      border-top: 1px solid var(--border-active);
     }}
     .aggregate-label {{
-      color: #60a5fa; font-size: 0.75rem; font-weight: 600;
+      color: var(--accent); font-size: 0.75rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem;
     }}
     .wnl-label {{
       font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.06em; color: #7a8fa3;
-      margin-top: 0.9rem; padding-top: 0.6rem;
-      border-top: 1px solid #2a475e;
+      letter-spacing: 0.06em; color: var(--text-dim);
+      margin-top: 1.25rem; padding-top: 0.75rem;
+      border-top: 1px solid var(--border-active);
     }}
     .wnl-table {{
-      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem;
-      margin-top: 0.4rem;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;
+      margin-top: 0.5rem;
     }}
-    .wnl-col {{ min-width: 0; }}
-    .wnl-col table {{ width: 100%; border-collapse: collapse; }}
+    .wnl-col {{ min-width: 0; overflow: hidden; }}
+    .wnl-col table {{ width: 100%; border-collapse: collapse; table-layout: fixed; }}
     .wnl-header {{
       font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.04em; padding-bottom: 0.35rem; margin-bottom: 0.3rem;
@@ -3281,203 +3388,222 @@ def generate_html(results: list[dict], failed_names: list[str],
     table {{ width: 100%; border-collapse: collapse; margin-bottom: 2rem; }}
     th {{
       text-align: left; padding: 0.6rem 0.7rem;
-      border-bottom: 2px solid rgba(255,255,255,0.08); color: #66c0f4;
+      border-bottom: 2px solid var(--border); color: var(--accent);
       font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
     }}
     th[data-sort] {{
       cursor: pointer; user-select: none; position: relative;
     }}
-    th[data-sort]:hover {{ color: #e5e5e5; }}
+    th[data-sort]:hover {{ color: var(--text); }}
     th[data-sort]::after {{
       content: '⇅'; opacity: 0.3; margin-left: 4px; font-size: 0.7rem;
     }}
     th[data-sort].asc::after {{ content: '▲'; opacity: 0.8; }}
     th[data-sort].desc::after {{ content: '▼'; opacity: 0.8; }}
-    td {{ padding: 0.5rem 0.7rem; border-bottom: 1px solid rgba(255,255,255,0.04); }}
-    tr:hover {{ background: #1b2838; }}
-    .rank {{ color: #8f98a0; font-weight: 600; width: 40px; }}
-    .game {{ font-weight: 600; color: #e5e5e5; white-space: nowrap; }}
+    td {{ padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); }}
+    tr {{
+      border-left: 2px solid transparent;
+      transition: background-color 0.15s ease, border-left-color 0.15s ease;
+    }}
+    tr:hover {{
+      background: var(--bg-card-hover);
+      border-left-color: var(--accent);
+    }}
+    .rank {{ color: var(--text-muted); font-weight: 600; width: 40px; }}
+    .game {{ font-weight: 600; color: var(--text); white-space: nowrap; }}
     .game-link {{
       color: inherit; text-decoration: none;
-      border-bottom: 1px dotted #3a5269;
+      border-bottom: 1px dotted var(--text-dim);
       transition: color 0.15s, border-color 0.15s;
     }}
-    .game-link:hover {{ color: #66c0f4; border-bottom-color: #66c0f4; }}
+    .game-link:hover {{ color: var(--accent); border-bottom-color: var(--accent); }}
     .num {{ font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; text-align: right; }}
     .trend {{ text-align: center; font-weight: 600; white-space: nowrap; }}
-    .trend.up {{ color: #4ade80; }}
-    .trend.down {{ color: #f87171; }}
-    .trend.flat {{ color: #fbbf24; }}
-    .trend.neutral {{ color: #8f98a0; }}
+    .trend.up {{ color: var(--green); }}
+    .trend.down {{ color: var(--red); }}
+    .trend.flat {{ color: var(--amber); }}
+    .trend.neutral {{ color: var(--text-muted); }}
     .pct-cell {{ width: 120px; }}
     .bar-bg {{
-      background: #1b2838; border-radius: 4px; height: 6px;
+      background: var(--bg-card); border-radius: 4px; height: 6px;
       margin-bottom: 2px; overflow: hidden;
     }}
     .bar {{
-      background: linear-gradient(90deg, #66c0f4, #4fa3d7);
+      background: linear-gradient(90deg, var(--accent), #4f46e5);
       height: 100%; border-radius: 4px;
     }}
-    .pct-cell span {{ font-size: 0.8rem; color: #8f98a0; }}
-    .failed td {{ color: #555; font-style: italic; }}
+    .pct-cell span {{ font-size: 0.8rem; color: var(--text-muted); }}
+    .status-cell {{ text-align: center; }}
+    .status-tag {{
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; padding: 2px 6px; border-radius: 3px;
+      white-space: nowrap;
+    }}
+    .status-up {{ color: var(--green); background: rgba(34,197,94,0.1); }}
+    .status-down {{ color: var(--red); background: rgba(239,68,68,0.1); }}
+    .status-flat {{ color: var(--text-muted); background: rgba(128,128,136,0.1); }}
+    .status-launch {{ color: var(--amber); background: rgba(245,158,11,0.1); }}
+    .failed td {{ color: var(--text-dim); font-style: italic; }}
 
     /* Key Insights */
     .insights {{
-      background: #1b2838; border-left: 3px solid #66c0f4;
+      background: var(--bg-card);
       padding: 1rem 1.2rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 1px 3px rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
     }}
-    .insights h2 {{ color: #66c0f4; font-size: 0.9rem; margin-bottom: 0.5rem; }}
+    .insights h2 {{ color: var(--accent); font-size: 0.9rem; margin-bottom: 0.5rem; }}
     .insights li {{
       margin-bottom: 0.3rem; margin-left: 1rem;
-      color: #b0bec5; font-size: 0.9rem; line-height: 1.5;
+      color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;
     }}
 
     /* Detail cards */
     .section-title {{
-      color: #66c0f4; font-size: 1.1rem; margin: 2rem 0 1rem;
-      border-bottom: 1px solid #2a475e; padding-bottom: 0.5rem;
+      color: var(--accent); font-size: 1.1rem; margin: 2rem 0 1rem;
+      border-bottom: 1px solid var(--border-active); padding-bottom: 0.5rem;
     }}
     .card {{
-      background: #1b2838; border-radius: 8px; margin-bottom: 1.2rem;
-      overflow: hidden; border: none; border-left: 3px solid #2a475e;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 1px 3px rgba(0,0,0,0.3);
+      background: var(--bg-card); border-radius: 8px; margin-bottom: 1.2rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border-active);
       scroll-margin-top: 60px;
     }}
     /* Trend-colored left border: scan the whole page for winners/losers */
-    .card:has(.trend-badge.up) {{ border-left-color: #4ade80; }}
-    .card:has(.trend-badge.down) {{ border-left-color: #f87171; }}
-    .card:has(.trend-badge.flat) {{ border-left-color: #fbbf24; }}
-    .card:has(.trend-badge.neutral) {{ border-left-color: #8f98a0; }}
+    .card:has(.trend-badge.up) {{ border-left-color: var(--green); }}
+    .card:has(.trend-badge.down) {{ border-left-color: var(--red); }}
+    .card:has(.trend-badge.flat) {{ border-left-color: var(--amber); }}
+    .card:has(.trend-badge.neutral) {{ border-left-color: var(--text-muted); }}
 
     /* Sticky ranking table header */
     .ranking-table thead th {{
       position: sticky; top: 44px;
-      background: #0f1923; z-index: 10;
+      background: var(--bg); z-index: 10;
     }}
 
     /* Floating back-to-top */
     .back-to-top {{
       position: fixed; bottom: 1.5rem; right: 1.5rem;
-      background: #1b2838; border: 1px solid #2a475e;
-      color: #66c0f4; border-radius: 6px;
+      background: var(--bg-card); border: 1px solid var(--border-active);
+      color: var(--accent); border-radius: 6px;
       padding: 0.5rem 0.85rem; font-size: 0.82rem;
       cursor: pointer; opacity: 0; transition: opacity 0.25s;
       z-index: 200; text-decoration: none; font-weight: 600;
     }}
     .back-to-top.visible {{ opacity: 1; }}
-    .back-to-top:hover {{ background: #2a475e; color: #e5e7eb; }}
+    .back-to-top:hover {{ background: var(--border-active); color: var(--text); }}
 
     .card-header {{
-      padding: 1rem 1.2rem 0.7rem; border-bottom: 1px solid #2a475e;
+      padding: 1.4rem 1.6rem 1rem; border-bottom: 1px solid var(--border-active);
     }}
     .card-header h3 {{
-      color: #e5e5e5; font-size: 1.1rem; margin-bottom: 0.3rem;
+      color: var(--text); font-size: 1.3rem; margin-bottom: 0.4rem;
       display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
     }}
     .trend-badge {{
       font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; font-weight: 600;
     }}
-    .trend-badge.up {{ background: rgba(74,222,128,0.15); color: #4ade80; }}
-    .trend-badge.down {{ background: rgba(248,113,113,0.15); color: #f87171; }}
-    .trend-badge.flat {{ background: rgba(251,191,36,0.15); color: #fbbf24; }}
-    .trend-badge.neutral {{ background: rgba(143,152,160,0.15); color: #8f98a0; }}
-    .launch-badge {{ display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #f97316; border: 1px solid #f97316; border-radius: 4px; padding: 1px 5px; }}
-    .card-stats {{ color: #8f98a0; font-size: 0.82rem; }}
-    .card-stats strong {{ color: #c7d5e0; }}
-    .card-trend {{ color: #8f98a0; font-size: 0.8rem; margin-top: 0.2rem; }}
+    .trend-badge.up {{ background: rgba(74,222,128,0.15); color: var(--green); }}
+    .trend-badge.down {{ background: rgba(248,113,113,0.15); color: var(--red); }}
+    .trend-badge.flat {{ background: rgba(251,191,36,0.15); color: var(--amber); }}
+    .trend-badge.neutral {{ background: rgba(143,152,160,0.15); color: var(--text-muted); }}
+    .launch-badge {{ display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 1px 5px; }}
+    .card-stats {{ color: var(--text-muted); font-size: 0.82rem; }}
+    .card-stats strong {{ color: var(--text); }}
+    .card-trend {{ color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem; }}
 
     /* Takeaway — structured 4-part */
     .card-takeaway {{
-      padding: 0.8rem 1.2rem; border-bottom: 1px solid #2a475e;
+      padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--border-active);
     }}
     .card-takeaway h4 {{
-      color: #fbbf24; font-size: 0.75rem; text-transform: uppercase;
+      color: var(--amber); font-size: 0.75rem; text-transform: uppercase;
       letter-spacing: 0.04em; margin-bottom: 0.5rem;
     }}
     .card-takeaway p {{
-      color: #c7d5e0; font-size: 0.85rem; line-height: 1.6; font-style: italic;
+      color: var(--text); font-size: 0.85rem; line-height: 1.6; font-style: italic;
     }}
     .takeaway-part {{
-      color: #c7d5e0; font-size: 0.83rem; line-height: 1.55;
+      color: var(--text); font-size: 0.83rem; line-height: 1.55;
       margin-bottom: 0.3rem;
     }}
     .takeaway-label {{
-      color: #66c0f4; font-weight: 700; font-size: 0.72rem;
+      color: var(--accent); font-weight: 700; font-size: 0.72rem;
       text-transform: uppercase; letter-spacing: 0.03em;
       margin-right: 0.3rem;
     }}
     .prev-takeaway {{
-      color: #8f98a0; font-size: 0.78rem; margin-top: 0.5rem;
-      padding-top: 0.4rem; border-top: 1px dashed #2a475e; line-height: 1.5;
+      color: var(--text-muted); font-size: 0.78rem; margin-top: 0.5rem;
+      padding-top: 0.4rem; border-top: 1px dashed var(--border-active); line-height: 1.5;
     }}
 
     /* Card body: 2 columns */
     .card-body-2col {{
       display: grid; grid-template-columns: 1fr 1fr; gap: 0;
     }}
-    .card-section {{ padding: 0.7rem 1rem; border-right: 1px solid #2a475e; }}
+    .card-section {{ padding: 0.7rem 1rem; border-right: 1px solid var(--border-active); }}
     .card-section:last-child {{ border-right: none; }}
     .card-section h4 {{
-      color: #66c0f4; font-size: 0.72rem; text-transform: uppercase;
+      color: var(--accent); font-size: 0.72rem; text-transform: uppercase;
       letter-spacing: 0.04em; margin-bottom: 0.4rem;
     }}
-    .card-section .sub {{ color: #8f98a0; font-size: 0.68rem; text-transform: none; }}
+    .card-section .sub {{ color: var(--text-muted); font-size: 0.68rem; text-transform: none; }}
     .card-section ul {{ list-style: none; }}
     .card-section li {{
-      color: #b0bec5; font-size: 0.8rem; line-height: 1.45;
+      color: var(--text-muted); font-size: 0.8rem; line-height: 1.45;
       padding: 0.15rem 0;
     }}
     .card-section li::before {{
-      content: "\\2022"; color: #66c0f4; margin-right: 0.4rem;
+      content: "\\2022"; color: var(--accent); margin-right: 0.4rem;
     }}
     .badge {{
       font-size: 0.6rem; padding: 1px 5px; border-radius: 3px;
       font-weight: 600; vertical-align: middle;
     }}
-    .badge.patch {{ background: #4a3b00; color: #fbbf24; }}
+    .badge.patch {{ background: rgba(245,158,11,0.12); color: var(--amber); }}
 
     /* Genre badges */
     .genre-badge {{
       font-size: 0.55rem; padding: 2px 6px; border-radius: 3px;
       font-weight: 700; vertical-align: middle; margin-left: 0.4rem;
       letter-spacing: 0.03em; text-transform: uppercase;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
     }}
 
     /* Genre filter tabs */
     .genre-filters {{
       display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0;
-      padding: 0.6rem 0; border-bottom: 1px solid #2a475e;
+      padding: 0.6rem 0; border-bottom: 1px solid var(--border-active);
     }}
     .genre-filter-btn {{
-      padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid #2a475e;
-      background: #1b2838; color: #8f98a0; font-size: 0.78rem; cursor: pointer;
+      padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-active);
+      background: var(--bg-card); color: var(--text-muted); font-size: 0.78rem; cursor: pointer;
       font-weight: 600; transition: all 0.15s ease;
     }}
-    .genre-filter-btn:hover {{ border-color: #4a90d9; color: #c6d4df; }}
+    .genre-filter-btn:hover {{ border-color: var(--accent); color: #c6d4df; }}
     .genre-filter-btn.active {{
-      background: var(--genre-active-bg, #1a3a5c);
-      border-color: var(--genre-active-border, #4a90d9);
-      color: var(--genre-active-color, #e5e7eb);
+      background: var(--genre-active-bg, rgba(99,102,241,0.12));
+      border-color: var(--genre-active-border, var(--accent));
+      color: var(--genre-active-color, var(--text));
     }}
     .genre-filter-btn .filter-count {{
-      font-size: 0.65rem; color: #7a8fa3; margin-left: 0.3rem;
+      font-size: 0.65rem; color: var(--text-dim); margin-left: 0.3rem;
     }}
-    .genre-filter-btn.active .filter-count {{ color: #8bb9e0; }}
+    .genre-filter-btn.active .filter-count {{ color: var(--accent); }}
 
     /* Source tags — colors set inline per-element based on sentiment */
     .source-tag {{
       font-size: 0.6rem; padding: 1px 5px; border-radius: 3px;
       font-weight: 600; vertical-align: middle;
-      background: #2d3748; color: #94a3b8;
+      background: var(--bg-surface); color: var(--text-muted);
     }}
     .sentiment-dot {{
       font-size: 0.65rem; vertical-align: middle; margin-right: 0.2rem;
     }}
     .sentiment-legend {{
       display: flex; gap: 0.75rem; margin-bottom: 4px;
-      font-size: 0.75rem; color: #94a3b8; text-align: left;
+      font-size: 0.75rem; color: var(--text-muted); text-align: left;
     }}
     .sentiment-legend span {{ display: inline-flex; align-items: center; gap: 0.2rem; }}
 
@@ -3490,60 +3616,60 @@ def generate_html(results: list[dict], failed_names: list[str],
 
     /* Clickable links */
     .item-link {{
-      color: #c7d5e0; text-decoration: none;
-      border-bottom: 1px dotted #7a8fa3;
+      color: var(--text); text-decoration: none;
+      border-bottom: 1px dotted var(--text-dim);
       transition: color 0.15s, border-color 0.15s;
     }}
     .item-link:hover {{
-      color: #66c0f4; border-bottom-color: #66c0f4;
+      color: var(--accent); border-bottom-color: var(--accent);
     }}
 
     /* News preview */
     .news-preview {{
-      color: #8f98a0; font-size: 0.72rem; line-height: 1.35;
+      color: var(--text-muted); font-size: 0.72rem; line-height: 1.35;
       margin-top: 0.15rem; max-height: 2.7em; overflow: hidden;
     }}
 
     /* Community pulse (collapsible) */
     .card-community {{
-      padding: 0; border-top: 1px solid #2a475e;
+      padding: 0; border-top: 1px solid var(--border-active);
     }}
     .card-community details {{
       padding: 0;
     }}
     .card-community summary {{
-      color: #66c0f4; font-size: 0.72rem; cursor: pointer;
+      color: var(--accent); font-size: 0.72rem; cursor: pointer;
       text-transform: uppercase; letter-spacing: 0.04em;
       padding: 0.6rem 1rem; user-select: none;
     }}
     .card-community summary:hover {{
       background: rgba(102,192,244,0.05);
     }}
-    .card-community .sub {{ color: #8f98a0; font-size: 0.68rem; text-transform: none; }}
+    .card-community .sub {{ color: var(--text-muted); font-size: 0.68rem; text-transform: none; }}
     .community-inner {{
       display: grid; grid-template-columns: 1fr 1fr; gap: 0;
       padding: 0 1rem 0.7rem;
     }}
     .community-inner h5 {{
-      color: #8f98a0; font-size: 0.68rem; text-transform: uppercase;
+      color: var(--text-muted); font-size: 0.68rem; text-transform: uppercase;
       letter-spacing: 0.03em; margin-bottom: 0.3rem;
     }}
     .community-inner ul {{ list-style: none; }}
     .community-inner li {{
-      color: #b0bec5; font-size: 0.78rem; line-height: 1.4;
+      color: var(--text-muted); font-size: 0.78rem; line-height: 1.4;
       padding: 0.1rem 0;
     }}
     .community-inner li::before {{
-      content: "\\2022"; color: #7a8fa3; margin-right: 0.3rem;
+      content: "\\2022"; color: var(--text-dim); margin-right: 0.3rem;
     }}
 
     /* Reddit comments */
     .comments {{
       margin-left: 0.8rem; margin-top: 0.25rem; margin-bottom: 0.3rem;
     }}
-    .comments li::before {{ content: "\\21B3"; color: #7a8fa3; margin-right: 0.3rem; }}
-    .comments li {{ font-size: 0.72rem; color: #8f98a0; line-height: 1.35; }}
-    .comment-author {{ color: #66c0f4; font-size: 0.68rem; }}
+    .comments li::before {{ content: "\\21B3"; color: var(--text-dim); margin-right: 0.3rem; }}
+    .comments li {{ font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; }}
+    .comment-author {{ color: var(--accent); font-size: 0.68rem; }}
 
     /* Sparkline chart */
     .card-trend {{ margin-top: 0.3rem; }}
@@ -3558,16 +3684,16 @@ def generate_html(results: list[dict], failed_names: list[str],
       padding: 0.4rem 0.8rem; border-radius: 0 4px 4px 0;
     }}
     .cal-section-header.past {{
-      color: #a3b1bf; background: #141e2b; border-left: 3px solid #7a8fa3;
+      color: var(--text-muted); background: var(--bg-surface); border-left: 3px solid var(--text-dim);
     }}
     .cal-section-header.upcoming {{
-      color: #4ade80; background: #0f2818; border-left: 3px solid #4ade80;
+      color: var(--green); background: rgba(34,197,94,0.08); border-left: 3px solid var(--green);
     }}
     .cal-section-header.future {{
-      color: #fbbf24; background: #1b2838; border-left: 3px solid #fbbf24;
+      color: var(--amber); background: var(--bg-card); border-left: 3px solid var(--amber);
     }}
     .cal-count {{
-      font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+      font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
       text-transform: none; letter-spacing: 0;
     }}
     .cal-today-divider {{
@@ -3576,24 +3702,24 @@ def generate_html(results: list[dict], failed_names: list[str],
     }}
     .cal-today-divider::before,
     .cal-today-divider::after {{
-      content: ""; flex: 1; height: 1px; background: #60a5fa;
+      content: ""; flex: 1; height: 1px; background: var(--accent);
     }}
     .cal-today-divider span {{
-      color: #60a5fa; font-size: 0.7rem; font-weight: 700;
+      color: var(--accent); font-size: 0.7rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
     }}
     .cal-entry {{
       display: flex; align-items: flex-start; gap: 0.6rem;
-      padding: 0.4rem 0.8rem; border-bottom: 1px solid #141e2b;
+      padding: 0.4rem 0.8rem; border-bottom: 1px solid var(--bg-surface);
     }}
     .cal-entry:hover {{ background: rgba(102,192,244,0.03); }}
     .cal-entry.estimated {{ opacity: 0.7; }}
     .cal-date {{
-      min-width: 50px; color: #8f98a0; font-size: 0.75rem;
+      min-width: 50px; color: var(--text-muted); font-size: 0.75rem;
       font-weight: 600; padding-top: 0.1rem;
     }}
     .cal-game {{
-      min-width: 130px; max-width: 130px; color: #e5e5e5;
+      min-width: 130px; max-width: 130px; color: var(--text);
       font-size: 0.8rem; font-weight: 600;
     }}
     .calendar-type {{
@@ -3601,24 +3727,24 @@ def generate_html(results: list[dict], failed_names: list[str],
       font-weight: 700; min-width: 70px; text-align: center;
       display: inline-block; white-space: nowrap; flex-shrink: 0;
     }}
-    .calendar-type.season {{ background: #1e3a5f; color: #3b82f6; }}
-    .calendar-type.patch {{ background: #4a3b00; color: #fbbf24; }}
-    .calendar-type.event {{ background: #3b1e5f; color: #a78bfa; }}
-    .calendar-type.content {{ background: #1e5f2e; color: #4ade80; }}
-    .calendar-type.roadmap {{ background: #1e4a5f; color: #38bdf8; }}
-    .calendar-type.industry {{ background: #4a3b00; color: #f59e0b; }}
-    .calendar-type.newrelease {{ background: #5f1e3a; color: #f472b6; font-weight: 800; }}
+    .calendar-type.season {{ background: rgba(99,102,241,0.12); color: var(--accent); }}
+    .calendar-type.patch {{ background: rgba(245,158,11,0.12); color: var(--amber); }}
+    .calendar-type.event {{ background: rgba(99,102,241,0.12); color: var(--accent); }}
+    .calendar-type.content {{ background: rgba(34,197,94,0.08); color: var(--green); }}
+    .calendar-type.roadmap {{ background: rgba(99,102,241,0.12); color: var(--accent); }}
+    .calendar-type.industry {{ background: rgba(245,158,11,0.12); color: var(--amber); }}
+    .calendar-type.newrelease {{ background: rgba(239,68,68,0.12); color: var(--red); font-weight: 800; }}
     .cal-desc {{
-      color: #b0bec5; font-size: 0.78rem; line-height: 1.5; flex: 1;
+      color: var(--text-muted); font-size: 0.78rem; line-height: 1.5; flex: 1;
       white-space: normal; word-wrap: break-word;
     }}
     .est-tag {{
-      font-size: 0.55rem; color: #8f98a0; background: #1e293b;
+      font-size: 0.55rem; color: var(--text-muted); background: var(--bg-surface);
       padding: 1px 4px; border-radius: 2px; font-weight: 600;
       vertical-align: middle; margin-left: 0.3rem;
     }}
     .cal-empty {{
-      color: #7a8fa3; font-size: 0.78rem; font-style: italic;
+      color: var(--text-dim); font-size: 0.78rem; font-style: italic;
       padding: 0.4rem 0.8rem;
     }}
 
@@ -3640,29 +3766,29 @@ def generate_html(results: list[dict], failed_names: list[str],
 
     /* Annotation info icon — hover to see context */
     .annot-icon {{
-      font-size: 0.7rem; color: #8f98a0; cursor: help;
+      font-size: 0.7rem; color: var(--text-muted); cursor: help;
       vertical-align: middle; margin-left: 0.2rem;
       opacity: 0.6; transition: opacity 0.15s;
     }}
-    .annot-icon:hover {{ opacity: 1; color: #66c0f4; }}
+    .annot-icon:hover {{ opacity: 1; color: var(--accent); }}
 
     /* Genre Rollup (#9) */
     .genre-rollup {{
       margin-bottom: 2rem;
     }}
     .genre-rollup h3 {{
-      color: #66c0f4; font-size: 0.9rem; margin-bottom: 0.5rem;
+      color: var(--accent); font-size: 0.9rem; margin-bottom: 0.5rem;
     }}
     .genre-rollup table {{
       width: 100%; border-collapse: collapse; font-size: 0.82rem;
     }}
     .genre-rollup th {{
       text-align: left; padding: 0.4rem 0.6rem;
-      border-bottom: 2px solid #2a475e; color: #66c0f4;
+      border-bottom: 2px solid var(--border-active); color: var(--accent);
       font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
     }}
     .genre-rollup td {{
-      padding: 0.35rem 0.6rem; border-bottom: 1px solid #1b2838;
+      padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--bg-card);
     }}
 
     /* Methodology (#7) */
@@ -3670,45 +3796,45 @@ def generate_html(results: list[dict], failed_names: list[str],
       margin-top: 2rem; margin-bottom: 1rem;
     }}
     .methodology summary {{
-      color: #66c0f4; font-size: 0.85rem; font-weight: 600;
+      color: var(--accent); font-size: 0.85rem; font-weight: 600;
       cursor: pointer; padding: 0.5rem 0;
     }}
     .methodology-content {{
       padding-top: 0.5rem;
     }}
     .methodology-disclaimer {{
-      font-size: 0.78rem; color: #8f98a0; line-height: 1.5;
+      font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;
       margin-bottom: 1rem; padding: 0.6rem 0.8rem;
       background: rgba(27, 40, 56, 0.5); border-radius: 4px;
-      border-left: 2px solid #fbbf24;
+      border-left: 2px solid var(--accent);
     }}
     .methodology table {{
       width: 100%; border-collapse: collapse; font-size: 0.78rem;
     }}
     .methodology th {{
       text-align: left; padding: 0.4rem 0.5rem;
-      border-bottom: 2px solid #2a475e; color: #66c0f4;
+      border-bottom: 2px solid var(--border-active); color: var(--accent);
       font-size: 0.68rem; text-transform: uppercase;
     }}
     .methodology td {{
-      padding: 0.35rem 0.5rem; border-bottom: 1px solid #1b2838;
+      padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--bg-card);
     }}
-    .meth-note {{ font-size: 0.72rem; color: #8f98a0; }}
+    .meth-note {{ font-size: 0.72rem; color: var(--text-muted); }}
 
     /* Info tooltip (#2) */
     .info-tip {{
       display: inline-block; cursor: help; position: relative;
-      font-size: 0.7rem; color: #8f98a0; margin-left: 0.2rem;
+      font-size: 0.7rem; color: var(--text-muted); margin-left: 0.2rem;
       text-decoration: none;
     }}
     .info-tip:hover {{
-      color: #66c0f4;
+      color: var(--accent);
     }}
     .info-tip:hover::after {{
       content: attr(data-tip);
       position: absolute; bottom: 120%; left: 50%;
       transform: translateX(-50%);
-      background: #1b2838; color: #c7d5e0; border: 1px solid #2a475e;
+      background: var(--bg-card); color: var(--text); border: 1px solid var(--border-active);
       padding: 0.4rem 0.6rem; border-radius: 4px;
       font-size: 0.7rem; white-space: normal; word-break: break-word;
       width: 220px; max-width: 220px; z-index: 10;
@@ -3717,48 +3843,50 @@ def generate_html(results: list[dict], failed_names: list[str],
 
     /* Exec prose paragraph */
     .exec-prose {{
-      color: #b0bec5; font-size: 0.88rem; line-height: 1.65;
+      color: var(--text-muted); font-size: 0.88rem; line-height: 1.65;
       margin-top: 0.8rem; padding: 0.6rem 0.8rem;
       background: rgba(27, 40, 56, 0.4); border-radius: 4px;
-      border-left: 2px solid #fbbf24; font-style: italic;
+      border-left: 2px solid var(--accent); font-style: italic;
     }}
 
     /* Data caveat info box */
     .data-caveat {{
       display: flex; align-items: flex-start; gap: 0.6rem;
-      background: #141e2b; border: none;
+      background: var(--bg-surface); border: 1px solid var(--border);
       border-radius: 6px; padding: 0.7rem 1rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
     }}
     .caveat-icon {{ font-size: 1rem; flex-shrink: 0; line-height: 1.4; }}
     .caveat-text {{
-      color: #8f98a0; font-size: 0.78rem; line-height: 1.55;
+      color: var(--text-muted); font-size: 0.78rem; line-height: 1.55;
     }}
-    .caveat-text strong {{ color: #b0bec5; }}
+    .caveat-text strong {{ color: var(--text-muted); }}
 
     /* Historical context annotation */
     .historical-context {{
-      color: #8f98a0; font-size: 0.72rem; font-style: italic;
+      color: var(--text-muted); font-size: 0.72rem; font-style: italic;
       margin-top: 0.15rem; padding: 0.2rem 0.4rem;
       background: rgba(251, 191, 36, 0.06);
-      border-left: 2px solid #fbbf24; border-radius: 0 3px 3px 0;
+      border-left: 2px solid var(--amber); border-radius: 0 3px 3px 0;
     }}
 
     .footer {{
-      color: #7a8fa3; font-size: 0.78rem;
-      border-top: 1px solid #1b2838; padding-top: 1rem; line-height: 1.6;
+      color: var(--text-dim); font-size: 0.78rem;
+      border-top: 1px solid var(--bg-card); padding-top: 1rem; line-height: 1.6;
     }}
 
-    @media (max-width: 800px) {{
+    @media (max-width: 1199px) {{
       .card-body-2col {{ grid-template-columns: 1fr; }}
       .community-inner {{ grid-template-columns: 1fr; }}
-      .card-section {{ border-right: none; border-bottom: 1px solid #2a475e; }}
+      .card-section {{ border-right: none; border-bottom: 1px solid var(--border-active); }}
       .card-section:last-child {{ border-bottom: none; }}
+      /* Hide genre column at tablet to prevent overflow */
+      .ranking-table th:nth-child(3),
+      .ranking-table td:nth-child(3) {{ display: none; }}
     }}
 
     /* ── Mobile-first responsive ── */
-    @media (max-width: 600px) {{
+    @media (max-width: 767px) {{
       body {{ padding: 0.8rem; }}
       h1 {{ font-size: 1.4rem; }}
       .subtitle {{ font-size: 0.82rem; margin-bottom: 1rem; }}
@@ -3806,7 +3934,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       }}
       .genre-scroll-hint {{
         display: block;
-        font-size: 0.65rem; color: #7a8fa3;
+        font-size: 0.65rem; color: var(--text-dim);
         text-align: right; margin-top: -0.4rem; margin-bottom: 0.3rem;
       }}
 
@@ -3818,18 +3946,18 @@ def generate_html(results: list[dict], failed_names: list[str],
         gap: 0.2rem 0.6rem;
         padding: 0.8rem 0.6rem;
         margin-bottom: 0.5rem;
-        border: 1px solid #1b2838;
+        border: 1px solid var(--border);
         border-radius: 8px;
-        background: rgba(27, 40, 56, 0.4);
+        background: var(--bg-card);
       }}
-      .ranking-table tbody tr:hover {{ background: rgba(27, 40, 56, 0.4); }}
+      .ranking-table tbody tr:hover {{ background: var(--bg-card-hover); }}
       .ranking-table tbody td {{
         padding: 0; border: none; text-align: left !important;
       }}
       /* Rank + Genre badge row */
       .ranking-table tbody td.rank {{
         grid-column: 1 / -1; grid-row: 1;
-        font-size: 0.75rem; color: #8f98a0;
+        font-size: 0.75rem; color: var(--text-muted);
         display: flex; align-items: center; gap: 0.4rem;
       }}
       /* Game name */
@@ -3837,7 +3965,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         grid-column: 1 / -1; grid-row: 2;
         white-space: normal; font-size: 1.05rem; font-weight: 600;
         padding-bottom: 0.35rem;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        border-bottom: 1px solid var(--border);
         margin-bottom: 0.2rem;
       }}
       /* Genre badge — right side of rank row (col 3) */
@@ -3856,7 +3984,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       }}
       .ranking-table tbody tr > td:nth-child(4)::before {{
         content: "24h Peak  "; display: block;
-        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* Est. Total (col 5) */
@@ -3865,7 +3993,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       }}
       .ranking-table tbody tr > td:nth-child(5)::before {{
         content: "Est. Total  "; display: block;
-        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* Trend (col 6) */
@@ -3875,8 +4003,8 @@ def generate_html(results: list[dict], failed_names: list[str],
         width: auto; padding-top: 0.15rem;
       }}
       .ranking-table tbody td.trend::before {{
-        content: "Trend (MoM)  "; display: block;
-        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        content: "Trend (WoW)  "; display: block;
+        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* All-Time Peak (col 7) */
@@ -3886,7 +4014,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       }}
       .ranking-table tbody tr > td:nth-child(7)::before {{
         content: "All-Time Peak  "; display: block;
-        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       /* % of Peak (col 8) */
@@ -3894,18 +4022,24 @@ def generate_html(results: list[dict], failed_names: list[str],
         grid-column: 1 / -1; grid-row: 5;
         width: auto; display: flex; align-items: center; gap: 0.4rem;
         padding-top: 0.3rem;
-        border-top: 1px solid rgba(255,255,255,0.06);
+        border-top: 1px solid var(--border);
         margin-top: 0.2rem;
       }}
       .ranking-table tbody td.pct-cell::before {{
         content: "% of Peak"; flex-shrink: 0;
-        font-size: 0.65rem; color: #8f98a0; font-weight: 400;
+        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
         text-transform: uppercase; letter-spacing: 0.03em;
       }}
       .ranking-table .pct-cell .bar-bg {{
         width: 50px; flex-shrink: 0;
       }}
       .ranking-table .pct-cell span {{ font-size: 0.8rem; }}
+      /* Status (col 9) */
+      .ranking-table tbody td.status-cell {{
+        grid-column: 2; grid-row: 4;
+        display: flex; align-items: flex-start; justify-content: flex-end;
+        padding-top: 0.15rem;
+      }}
       /* Genre rollup mobile */
       .genre-rollup table {{ font-size: 0.72rem; }}
       .genre-rollup th, .genre-rollup td {{ padding: 0.25rem 0.4rem; }}
@@ -3952,34 +4086,13 @@ def generate_html(results: list[dict], failed_names: list[str],
       margin-right: auto;
     }}
 
-    /* ── Entrance animations ── */
-    .animate-in {{
-      opacity: 0;
-      transform: translateY(12px);
-      filter: blur(4px);
-      transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;
-    }}
-    .animate-in.visible {{
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
-    }}
-    @media (prefers-reduced-motion: reduce) {{
-      .animate-in {{
-        opacity: 1;
-        transform: none;
-        filter: none;
-        transition: none;
-      }}
-    }}
-
     /* ── Active/pressed states ── */
     button:active, .genre-filter-btn:active {{
       transform: scale(0.96);
     }}
     a.game-link:active {{
       transform: scale(0.99);
-      color: #66c0f4;
+      color: var(--accent);
     }}
     .exec-share-btn:active, .share-fab:active {{
       transform: scale(0.94);
@@ -3990,26 +4103,308 @@ def generate_html(results: list[dict], failed_names: list[str],
     .sd-newsletter-btn:active, .newsletter-btn:active {{
       transform: scale(0.96);
     }}
+    .share-btn:active {{
+      transform: scale(0.94);
+    }}
+
+    /* ── Publication Masthead ── */
+    .masthead {{
+      margin-bottom: 2rem;
+      padding-bottom: 0;
+    }}
+    .masthead-top {{
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }}
+    .masthead-title {{
+      font-size: 2rem;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+      letter-spacing: -0.5px;
+    }}
+    .masthead-title span {{
+      color: var(--accent);
+    }}
+    .masthead-sub {{
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }}
+    .masthead-meta {{
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }}
+    .masthead-issue {{
+      display: block;
+      color: var(--text-muted);
+      font-weight: 500;
+    }}
+    .masthead-date {{
+      display: block;
+      margin-top: 0.15rem;
+    }}
+    .masthead-nav {{
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-top: 0.75rem;
+    }}
+    .masthead-tab {{
+      padding: 0.55rem 1rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }}
+    .masthead-tab:hover {{
+      color: var(--text);
+    }}
+    .masthead-tab.active {{
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }}
+    .masthead-share {{
+      margin-left: auto;
+      color: var(--text-dim);
+    }}
+    .masthead-share:hover {{
+      color: var(--text-muted);
+    }}
+
+    /* ── Data Freshness Indicator ── */
+    .data-freshness {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+    }}
+    .pulse-dot {{
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }}
+    @keyframes pulse {{
+      0%, 100% {{ opacity: 1; }}
+      50% {{ opacity: 0.3; }}
+    }}
+    .freshness-label {{
+      color: var(--green);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }}
+    .freshness-sep {{
+      color: var(--text-dim);
+    }}
+    .freshness-time {{
+      color: var(--text-dim);
+    }}
+
+    /* ── Diamond bullet ── */
+    .diamond {{
+      color: var(--accent);
+      margin-right: 0.3rem;
+      font-size: 0.8em;
+    }}
+
+    /* ── Exec prose: lede sentence styling ── */
+    .exec-prose {{
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.7;
+      margin-top: 0.5rem;
+      margin-bottom: 0.8rem;
+      padding: 0;
+      background: none;
+      border-left: none;
+      border-radius: 0;
+      font-style: normal;
+    }}
+
+    /* ── Share Card ── */
+    .share-card {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+      margin-top: 1.5rem;
+    }}
+    .share-preview-title {{
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text);
+    }}
+    .share-preview-desc {{
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }}
+    .share-preview-url {{
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-top: 0.1rem;
+    }}
+    .share-btn {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-decoration: none;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }}
+    .share-btn:hover {{
+      color: var(--text);
+      border-color: var(--border-active);
+    }}
+
+    /* ── Top Mover Callouts ── */
+    .mover-cards {{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin: 2rem 0;
+    }}
+    .mover-card {{
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.2rem 1.4rem;
+    }}
+    .mover-up {{
+      border-left: 3px solid var(--green);
+    }}
+    .mover-down {{
+      border-left: 3px solid var(--red);
+    }}
+    .mover-label {{
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      margin-bottom: 0.35rem;
+    }}
+    .mover-game {{
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 1.15rem;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }}
+    .mover-up .mover-value {{
+      color: var(--green);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }}
+    .mover-down .mover-value {{
+      color: var(--red);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }}
+    .mover-detail {{
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }}
+
+    @media (max-width: 767px) {{
+      .masthead-top {{
+        flex-direction: column;
+        gap: 0.5rem;
+      }}
+      .masthead-meta {{
+        text-align: left;
+      }}
+      .masthead-title {{
+        font-size: 1.6rem;
+      }}
+      .masthead-nav {{
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }}
+      .masthead-nav::-webkit-scrollbar {{
+        display: none;
+      }}
+      .mover-cards {{
+        grid-template-columns: 1fr;
+      }}
+      .share-card {{
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }}
+    }}
   </style>
 </head>
 <body>
-  <a href="#exec-summary" style="position:absolute;left:-9999px;top:0;padding:8px 16px;background:#f97316;color:#fff;z-index:9999;font-size:0.9rem;text-decoration:none;" onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Skip to Executive Summary</a>
+  <a href="#exec-summary" style="position:absolute;left:-9999px;top:0;padding:8px 16px;background:var(--accent);color:#fff;z-index:9999;font-size:0.9rem;text-decoration:none;" onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Skip to Executive Summary</a>
   <nav class="site-nav">
     <a href="index.html" class="nav-back">&#8592; All Digests</a>
     <a href="index.html" class="nav-logo">Shooter<span>Digest</span></a>
   </nav>
   <div class="editorial-width">
-  <h1><span class="brand-shooter">Shooter</span><span class="brand-digest">Digest</span></h1>
-  <p class="subtitle">PC competitive shooter market &mdash; Steam concurrent players, developer updates &amp; community pulse</p>
-  <p class="subtitle-date">Week of {date_str}</p>
+  <header class="masthead">
+    <div class="masthead-top">
+      <div class="masthead-brand">
+        <h1 class="masthead-title">Shooter<span>Digest</span></h1>
+        <p class="masthead-sub">Weekly intelligence for competitive shooter games</p>
+      </div>
+      <div class="masthead-meta">
+        <span class="masthead-issue">Issue #{issue_number}</span>
+        <span class="masthead-date">Week of {short_date}</span>
+      </div>
+    </div>
+    <div class="data-freshness">
+      <span class="pulse-dot"></span>
+      <span class="freshness-label">Live Data</span>
+      <span class="freshness-sep">&middot;</span>
+      <span class="freshness-time">Updated {date_str}</span>
+    </div>
+    <nav class="masthead-nav">
+      <a href="#exec-summary" class="masthead-tab active">Summary</a>
+      <a href="#ranking-section" class="masthead-tab">Rankings</a>
+      <a href="#game-details" class="masthead-tab">Game Details</a>
+      <a href="#calendar" class="masthead-tab">Calendar</a>
+      <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="masthead-tab masthead-share">Share on X &#8599;</a>
+    </nav>
+  </header>
 
 {exec_html}
+
+{mover_html}
 
 {DATA_CAVEAT_HTML}
   </div>
 
 {genre_tabs_html}
 
+  <div id="ranking-section"></div>
   <table class="ranking-table">
     <thead>
       <tr>
@@ -4018,9 +4413,10 @@ def generate_html(results: list[dict], failed_names: list[str],
         <th data-sort="str" data-col="2">Genre</th>
         <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
         <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak &divide; Steam share. Click for methodology.">\u24d8</a></th>
-        <th data-sort="num" data-col="5" title="Month-over-Month trend">Trend<br><small>(MoM)</small></th>
+        <th data-sort="num" data-col="5" title="Week-over-Week trend (hover for MoM)">Trend<br><small>(WoW)</small></th>
         <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
         <th data-sort="num" data-col="7">% of Peak</th>
+        <th data-sort="str" data-col="8">Status</th>
       </tr>
     </thead>
     <tbody>
@@ -4032,7 +4428,7 @@ def generate_html(results: list[dict], failed_names: list[str],
   <div class="editorial-width">
 {_build_insights_html(results)}
 
-  <h2 class="section-title">Game Details</h2>
+  <h2 class="section-title" id="game-details">Game Details</h2>
 {cards_html}
 
 {generate_emerging_html(emerging_results) if emerging_results else ""}
@@ -4050,8 +4446,8 @@ def generate_html(results: list[dict], failed_names: list[str],
     <small>
       <strong>Color key:</strong>
       White = raw Steam data &nbsp;|&nbsp;
-      <span style="color:#60a5fa">Blue</span> = estimated total across all platforms (current) &nbsp;|&nbsp;
-      <span style="color:#fbbf24">Gold</span> = estimated total across all platforms (all-time)<br>
+      <span style="color:#6366F1">Blue</span> = estimated total across all platforms (current) &nbsp;|&nbsp;
+      <span style="color:#F59E0B">Gold</span> = estimated total across all platforms (all-time)<br>
       Est. Total = Steam peak &divide; Steam share. Trend = month-over-month from SteamCharts.<br>
       Platform splits from EA, Krafton, NetEase earnings, Alinea Analytics, and community trackers. Extrapolated where official data unavailable.
     </small>
@@ -4138,26 +4534,6 @@ def generate_html(results: list[dict], failed_names: list[str],
     }}, {{ passive: true }});
   }})();
 
-  // Entrance animations via IntersectionObserver
-  (function() {{
-    const els = document.querySelectorAll('.animate-in');
-    if (!els.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let delay = 0;
-    const observer = new IntersectionObserver(function(entries) {{
-      entries.forEach(function(entry) {{
-        if (entry.isIntersecting) {{
-          const el = entry.target;
-          setTimeout(function() {{ el.classList.add('visible'); }}, delay);
-          delay += 80;
-          observer.unobserve(el);
-          // Reset stagger after a pause
-          clearTimeout(window._animResetTimer);
-          window._animResetTimer = setTimeout(function() {{ delay = 0; }}, 300);
-        }}
-      }});
-    }}, {{ threshold: 0.1 }});
-    els.forEach(function(el) {{ observer.observe(el); }});
-  }})();
   </script>
   <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">↑ Top</a>
   <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-fab" aria-label="Share on X">
@@ -4195,11 +4571,11 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
 
         table_rows += f"""        <tr>
           <td class="rank" style="color:#a78bfa">#{r['rank']}</td>
-          <td class="game" style="font-weight:600;color:#e5e5e5"><a href="#{_card_id(r['name'])}-emerging" class="game-link">{_esc(r['name'])}</a></td>
+          <td class="game" style="font-weight:600;color:#F0F0F2"><a href="#{_card_id(r['name'])}-emerging" class="game-link">{_esc(r['name'])}</a></td>
           <td>{_genre_badge_html(genre)}</td>
           <td class="num" style="font-variant-numeric:tabular-nums;text-align:right">{_fmt(r['peak_24h'])}</td>
           <td class="trend {r['trend_css']}" style="text-align:center;font-weight:700">{trend_arrow} {trend_str}</td>
-          <td class="num" style="text-align:right;color:#fbbf24">{_fmt(r['peak_all'])}</td>
+          <td class="num" style="text-align:right;color:#F59E0B">{_fmt(r['peak_all'])}</td>
           <td class="pct-cell" style="width:100px">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%;background:linear-gradient(90deg,#a78bfa,#7c3aed)"></div></div>
             <span>{r.get('pct_all', 0):.1f}%</span>
@@ -4218,12 +4594,12 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
         ts = r.get("takeaway_structured", {})
         takeaway_html = ""
         if ts.get("state"):
-            state_color = {"up": "#4ade80", "down": "#f87171", "flat": "#fbbf24"}.get(r.get("trend_css", "neutral"), "#94a3b8")
+            state_color = {"up": "#22C55E", "down": "#EF4444", "flat": "#F59E0B"}.get(r.get("trend_css", "neutral"), "#808088")
             takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:{state_color}">State:</span> {_esc(_sanitize_text(ts["state"]))}</div>'
         if ts.get("context"):
             takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:#a78bfa">Context:</span> {_esc(_sanitize_text(ts["context"]))}</div>'
         if not takeaway_html:
-            takeaway_html = f'<p style="color:#c7d5e0;font-size:0.85rem;font-style:italic">{_esc(_sanitize_text(r.get("takeaway", "")))}</p>'
+            takeaway_html = f'<p style="color:#F0F0F2;font-size:0.85rem;font-style:italic">{_esc(_sanitize_text(r.get("takeaway", "")))}</p>'
 
         # Recent news (2 items max for compact cards)
         news_html = ""
@@ -4242,10 +4618,10 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
         cards_html += f"""
     <div class="card emerging-card" id="{_card_id(r['name'])}-emerging" data-genre="{genre}" style="border-left-color:#a78bfa">
       <div class="card-header">
-        <h3 style="color:#e5e5e5">{_esc(r['name'])} {_genre_badge_html(genre)} <span class="trend-badge {r['trend_css']}">{r.get('trend_arrow','▶')} {trend_str} MoM</span></h3>
-        <div class="card-stats" style="color:#8f98a0;font-size:0.82rem">
-          Steam 24h Peak: <strong style="color:#c7d5e0">{_fmt(r['peak_24h'])}</strong>
-          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#fbbf24">{_fmt(r['peak_all'])}</strong>
+        <h3 style="color:#F0F0F2">{_esc(r['name'])} {_genre_badge_html(genre)} <span class="trend-badge {r['trend_css']}">{r.get('trend_arrow','▶')} {trend_str} MoM</span></h3>
+        <div class="card-stats" style="color:#808088;font-size:0.82rem">
+          Steam 24h Peak: <strong style="color:#F0F0F2">{_fmt(r['peak_24h'])}</strong>
+          &nbsp;|&nbsp; All-Time Peak: <strong style="color:#F59E0B">{_fmt(r['peak_all'])}</strong>
           &nbsp;|&nbsp; <span style="color:#a78bfa;font-size:0.75rem;font-style:italic">Growth phase — compare trend direction, not absolute scale.</span>
         </div>
         {"<div class='card-trend'>" + sparkline + "</div>" if sparkline else ""}
@@ -4263,7 +4639,7 @@ def generate_emerging_html(emerging_results: list[dict]) -> str:
 
     return f"""  <div class="emerging-section">
     <h2 class="section-title" style="color:#a78bfa;border-bottom-color:#a78bfa">&#x1F52D; Emerging Titles</h2>
-    <p style="color:#8f98a0;font-size:0.85rem;margin-bottom:1rem">Curated watchlist tracking concept traction before mainstream adoption &mdash; growth rate is the signal, not absolute players.</p>
+    <p style="color:#808088;font-size:0.85rem;margin-bottom:1rem">Curated watchlist tracking concept traction before mainstream adoption &mdash; growth rate is the signal, not absolute players.</p>
 
     <table style="width:100%;border-collapse:collapse;margin-bottom:1.5rem">
       <thead>
@@ -4301,7 +4677,7 @@ def generate_radar_html(radar_results: list[dict]) -> str:
         ratio = r.get("recency_ratio", 0)
         ratio_str = f"{ratio:.1f}x recent vs. lifetime avg"
         signal = r.get("signal", "Watch")
-        signal_color = {"Strong": "#4ade80", "Moderate": "#fbbf24", "Watch": "#94a3b8"}.get(signal, "#94a3b8")
+        signal_color = {"Strong": "#22C55E", "Moderate": "#F59E0B", "Watch": "#808088"}.get(signal, "#808088")
 
         # Why it surfaced
         why_parts = []
@@ -4318,19 +4694,19 @@ def generate_radar_html(radar_results: list[dict]) -> str:
         why_str = "; ".join(why_parts) if why_parts else "SteamSpy tag match"
 
         rows_html += f"""      <tr>
-        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#e5e5e5;font-size:0.83rem">{_esc(r.get('name', ''))}</td>
-        <td style="padding:0.4rem 0.6rem;color:#8f98a0;font-size:0.8rem">{_esc(r.get('developer', ''))}</td>
+        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#F0F0F2;font-size:0.83rem">{_esc(r.get('name', ''))}</td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.8rem">{_esc(r.get('developer', ''))}</td>
         <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">{_fmt(r.get('ccu', 0))}</td>
         <td style="padding:0.4rem 0.6rem;text-align:center">
           <span style="color:{signal_color};font-weight:700;font-size:0.8rem">{signal}</span>
-          <div style="color:#7a8fa3;font-size:0.68rem;margin-top:2px">{_esc(ratio_str)}</div>
+          <div style="color:#44444C;font-size:0.68rem;margin-top:2px">{_esc(ratio_str)}</div>
         </td>
-        <td style="padding:0.4rem 0.6rem;color:#8f98a0;font-size:0.75rem">{_esc(why_str)}</td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.75rem">{_esc(why_str)}</td>
       </tr>\n"""
 
     return f"""  <div class="radar-section" style="margin-top:2rem">
     <h2 class="section-title" style="color:#38bdf8;border-bottom-color:#38bdf8">&#x1F4E1; On Our Radar</h2>
-    <p style="color:#8f98a0;font-size:0.85rem;margin-bottom:1rem">Algorithm-surfaced titles showing growth signals this week. Candidates for our emerging watchlist.</p>
+    <p style="color:#808088;font-size:0.85rem;margin-bottom:1rem">Algorithm-surfaced titles showing growth signals this week. Candidates for our emerging watchlist.</p>
 
     <table style="width:100%;border-collapse:collapse;margin-bottom:0.5rem">
       <thead>
@@ -4345,7 +4721,7 @@ def generate_radar_html(radar_results: list[dict]) -> str:
       <tbody>
 {rows_html}      </tbody>
     </table>
-    <p style="color:#7a8fa3;font-size:0.72rem;font-style:italic;margin-top:0.5rem">These surface automatically from SteamSpy tag data. No editorial curation.</p>
+    <p style="color:#44444C;font-size:0.72rem;font-style:italic;margin-top:0.5rem">These surface automatically from SteamSpy tag data. No editorial curation.</p>
   </div>"""
 
 
@@ -4380,7 +4756,7 @@ def _build_insights_html(results: list[dict]) -> str:
     )
 
     li = "\n".join(f"      <li>{i}</li>" for i in items)
-    return f"""  <div class="insights animate-in">
+    return f"""  <div class="insights">
     <h2>Key Insights</h2>
     <ul>
 {li}
@@ -4727,20 +5103,20 @@ def generate_index(docs_dir: str) -> str:
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <title>ShooterDigest &mdash; Archive</title>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{
       background: #0f0f0f; color: #e8e8e8;
-      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh; padding: 60px 24px;
     }}
     h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
     .container {{ max-width: 640px; margin: 0 auto; }}
     header {{ margin-bottom: 48px; }}
     h1 {{ font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; }}
-    h1 span {{ color: #f97316; }}
+    h1 span {{ color: #6366F1; }}
     .subtitle {{ margin-top: 8px; font-size: 0.9rem; color: #666; }}
     ul {{ list-style: none; }}
     ul li {{ border-bottom: 1px solid #1e1e1e; }}
@@ -4750,16 +5126,16 @@ def generate_index(docs_dir: str) -> str:
       padding: 14px 4px; color: #e8e8e8; text-decoration: none;
       font-size: 1rem; transition: color 0.15s;
     }}
-    ul li a:hover {{ color: #f97316; }}
+    ul li a:hover {{ color: #6366F1; }}
     ul li a .date {{ font-weight: 600; }}
     .teaser {{ display: block; font-size: 0.72rem; font-weight: 400; color: #555; margin-top: 3px; }}
-    .t-up {{ color: #4ade80; }}
-    .t-down {{ color: #f87171; }}
+    .t-up {{ color: #22C55E; }}
+    .t-down {{ color: #EF4444; }}
     ul li a .arrow {{ color: #444; font-size: 0.85rem; transition: color 0.15s, transform 0.15s; }}
-    ul li a:hover .arrow {{ color: #f97316; transform: translateX(4px); }}
+    ul li a:hover .arrow {{ color: #6366F1; transform: translateX(4px); }}
     .badge-new {{
       font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px;
-      text-transform: uppercase; color: #f97316; border: 1px solid #f97316;
+      text-transform: uppercase; color: #6366F1; border: 1px solid #6366F1;
       border-radius: 4px; padding: 2px 6px; margin-left: 10px; vertical-align: middle;
     }}
     footer {{ margin-top: 56px; font-size: 0.78rem; color: #444; }}

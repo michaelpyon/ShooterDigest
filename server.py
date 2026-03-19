@@ -45,7 +45,7 @@ NEWSLETTER_HTML = """
 </div>
 <style>
 .sd-newsletter {
-  background: #1b2838;
+  background: #1A1A1E;
   border-top: 1px solid rgba(255,255,255,0.06);
   border-bottom: 1px solid rgba(255,255,255,0.06);
   padding: 2rem;
@@ -59,13 +59,13 @@ NEWSLETTER_HTML = """
   gap: 1rem;
 }
 .sd-newsletter-heading {
-  color: #e5e5e5;
+  color: #F0F0F2;
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.4;
 }
 .sd-newsletter-sub {
-  color: #a3b1bf;
+  color: #808088;
   font-size: 0.85rem;
   margin-top: 0.2rem;
 }
@@ -77,23 +77,23 @@ NEWSLETTER_HTML = """
 .sd-newsletter-input {
   flex: 1;
   min-width: 200px;
-  background: #0f1923;
-  border: 1px solid #2a475e;
+  background: #0D0D0F;
+  border: 1px solid rgba(255,255,255,0.14);
   border-radius: 5px;
-  color: #c7d5e0;
+  color: #F0F0F2;
   font-size: 0.9rem;
   padding: 0.6rem 0.85rem;
   outline: none;
   transition: border-color 0.15s;
 }
 .sd-newsletter-input:focus {
-  border-color: #f97316;
+  border-color: #6366F1;
 }
 .sd-newsletter-input::placeholder {
-  color: #6b7280;
+  color: #44444C;
 }
 .sd-newsletter-btn {
-  background: #f97316;
+  background: #6366F1;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -105,13 +105,13 @@ NEWSLETTER_HTML = """
   transition: background 0.15s, transform 0.1s;
 }
 .sd-newsletter-btn:hover {
-  background: #ea6f0f;
+  background: #4f46e5;
 }
 .sd-newsletter-btn:active {
   transform: scale(0.97);
 }
 .sd-newsletter-confirm {
-  color: #4ade80;
+  color: #22C55E;
   font-size: 0.85rem;
   margin-top: 0.25rem;
 }
@@ -337,42 +337,41 @@ class DigestHandler(SimpleHTTPRequestHandler):
 <meta name="description" content="Weekly FPS intelligence digest \u2014 Steam concurrents, Reddit sentiment, press coverage">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <title>ShooterDigest \u2014 Archive</title>
 <style>
-  body {{ font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f1923; color: #c7d5e0; max-width: 640px; margin: 60px auto; padding: 0 20px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }}
-  *:focus-visible {{ outline: 2px solid #f97316; outline-offset: 2px; }}
-  button:focus-visible {{ box-shadow: 0 0 0 2px #0f1923, 0 0 0 4px #f97316; outline: none; }}
-  a:focus-visible {{ outline: 2px solid #66c0f4; outline-offset: 2px; }}
+  body {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0D0D0F; color: #F0F0F2; max-width: 640px; margin: 60px auto; padding: 0 20px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }}
+  *:focus-visible {{ outline: 2px solid #6366F1; outline-offset: 2px; }}
+  button:focus-visible {{ box-shadow: 0 0 0 2px #0D0D0F, 0 0 0 4px #6366F1; outline: none; }}
+  a:focus-visible {{ outline: 2px solid #6366F1; outline-offset: 2px; }}
   h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
-  .about-section {{ padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 1px solid #2a475e; }}
-  .about-title {{ color: #66c0f4; font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; }}
-  .about-subtitle {{ color: #8f98a0; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem; }}
-  .stats-bar {{ color: #6b7280; font-size: 0.78rem; letter-spacing: 0.01em; }}
-  .digests-section h2 {{ color: #8f98a0; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }}
-  .digest-card {{ padding: 1rem 0; border-bottom: 1px solid #1b2838; }}
+  .about-section {{ padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.14); }}
+  .about-title {{ color: #6366F1; font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; }}
+  .about-subtitle {{ color: #808088; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem; }}
+  .stats-bar {{ color: #44444C; font-size: 0.78rem; letter-spacing: 0.01em; }}
+  .digests-section h2 {{ color: #808088; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }}
+  .digest-card {{ padding: 1rem 0; border-bottom: 1px solid #1A1A1E; }}
   .digest-card:last-child {{ border-bottom: none; }}
-  .digest-date {{ color: #c7d5e0; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }}
-  .digest-teaser {{ color: #6b7280; font-size: 0.82rem; line-height: 1.5; margin-bottom: 0.4rem; }}
-  .digest-link {{ color: #66c0f4; font-size: 0.85rem; text-decoration: none; }}
+  .digest-date {{ color: #F0F0F2; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }}
+  .digest-teaser {{ color: #44444C; font-size: 0.82rem; line-height: 1.5; margin-bottom: 0.4rem; }}
+  .digest-link {{ color: #6366F1; font-size: 0.85rem; text-decoration: none; }}
   .digest-link:hover {{ text-decoration: underline; }}
   .newsletter-cta {{
-    background: #1b2838;
-    border: none;
+    background: #1A1A1E;
+    border: 1px solid rgba(255,255,255,0.06);
     border-radius: 8px;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 1px 3px rgba(0,0,0,0.3);
     padding: 1.5rem;
     margin: 2rem 0;
   }}
   .newsletter-heading {{
-    color: #e5e5e5;
+    color: #F0F0F2;
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.4;
     margin-bottom: 0.3rem;
   }}
   .newsletter-sub {{
-    color: #8f98a0;
+    color: #808088;
     font-size: 0.82rem;
     margin-bottom: 1rem;
   }}
@@ -384,19 +383,19 @@ class DigestHandler(SimpleHTTPRequestHandler):
   .newsletter-input {{
     flex: 1;
     min-width: 180px;
-    background: #0f1923;
-    border: 1px solid #2a475e;
+    background: #0D0D0F;
+    border: 1px solid rgba(255,255,255,0.14);
     border-radius: 5px;
-    color: #c7d5e0;
+    color: #F0F0F2;
     font-size: 0.88rem;
     padding: 0.55rem 0.75rem;
     outline: none;
     transition: border-color 0.15s;
   }}
-  .newsletter-input:focus {{ border-color: #f97316; }}
-  .newsletter-input::placeholder {{ color: #6b7280; }}
+  .newsletter-input:focus {{ border-color: #6366F1; }}
+  .newsletter-input::placeholder {{ color: #44444C; }}
   .newsletter-btn {{
-    background: #f97316;
+    background: #6366F1;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -407,9 +406,9 @@ class DigestHandler(SimpleHTTPRequestHandler):
     white-space: nowrap;
     transition: background 0.15s;
   }}
-  .newsletter-btn:hover {{ background: #ea6f0f; }}
+  .newsletter-btn:hover {{ background: #4f46e5; }}
   .newsletter-confirm {{
-    color: #4ade80;
+    color: #22C55E;
     font-size: 0.82rem;
     margin-top: 0.5rem;
     display: none;

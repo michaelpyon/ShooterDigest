@@ -32,8 +32,11 @@ def _scraper_components() -> dict:
             get_reddit_posts,
             get_reddit_comments,
             get_google_news_rss,
-            get_twitch_viewership,
         )
+        try:
+            from scraper import get_twitch_viewership
+        except ImportError:
+            get_twitch_viewership = lambda game: None
 
         _SCRAPER_COMPONENTS = {
             "GAMES": GAMES,
@@ -201,14 +204,14 @@ SENTIMENT_SHAPES = {
 
 # Genre colors: (text_color, background_color)
 GENRE_COLORS = {
-    "Battle Royale":  ("#F59E0B", "#1f1a0a"),   # amber
-    "Hero Shooter":   ("#c084fc", "#1a1028"),    # purple
-    "Tactical":       ("#6366F1", "#14142a"),    # indigo
-    "Extraction":     ("#fb923c", "#1f140a"),    # orange
-    "Arena":          ("#34d399", "#0a1f18"),    # emerald
-    "Large-Scale":    ("#22C55E", "#0a1f12"),    # green
-    "Looter Shooter": ("#f472b6", "#1f0a18"),    # pink
-    "Other":          ("#808088", "#1A1A1E"),    # gray
+    "Battle Royale":  ("#3B82F6", "rgba(59,130,246,0.12)"),   # blue
+    "Hero Shooter":   ("#A855F7", "rgba(168,85,247,0.12)"),   # purple
+    "Tactical":       ("#4ADE80", "rgba(0,255,65,0.12)"),     # green
+    "Extraction":     ("#F97316", "rgba(249,115,22,0.12)"),   # orange
+    "Arena":          ("#06B6D4", "rgba(6,182,212,0.12)"),    # cyan
+    "Large-Scale":    ("#EAB308", "rgba(234,179,8,0.12)"),    # yellow
+    "Looter Shooter": ("#EC4899", "rgba(236,72,153,0.12)"),   # pink
+    "Other":          ("#808088", "rgba(128,128,136,0.12)"),   # gray
 }
 
 # Short labels for compact badges
@@ -228,7 +231,7 @@ def _genre_badge_html(genre: str) -> str:
     """Return a small colored badge for a genre."""
     fg, bg = GENRE_COLORS.get(genre, GENRE_COLORS["Other"])
     short = GENRE_SHORT.get(genre, genre)
-    return f'<span class="genre-badge" style="color:{fg};background:{bg}">{short}</span>'
+    return f'<span class="genre-badge" style="color:{fg};background:{bg};font-family:\'Space Grotesk\',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:2px 6px">{short}</span>'
 
 
 # ---------------------------------------------------------------------------
@@ -254,11 +257,11 @@ LIFECYCLE_STATES = {
 }
 
 LIFECYCLE_COLORS = {
-    "Live": ("#22C55E", "#0f2818"),      # green
-    "Maintenance": ("#F59E0B", "#2a2208"),  # amber
-    "Sunset": ("#EF4444", "#2a0f0f"),      # red
-    "Legacy": ("#808088", "#1e1e22"),      # gray
-    "Pre-Launch": ("#6366F1", "#1a1a2e"),  # indigo
+    "Live": ("#4ADE80", "transparent"),      # green outline
+    "Maintenance": ("#F59E0B", "transparent"),  # amber outline
+    "Sunset": ("#ff7162", "transparent"),      # red outline
+    "Legacy": ("#808088", "transparent"),      # gray outline
+    "Pre-Launch": ("#9cff93", "transparent"),  # green-light outline
 }
 
 LIFECYCLE_EMOJI = {
@@ -274,8 +277,8 @@ def _lifecycle_badge_html(name: str) -> str:
     state = LIFECYCLE_STATES.get(name)
     if not state:
         return ""
-    fg, bg = LIFECYCLE_COLORS.get(state, ("#808088", "#1e1e22"))
-    return f' <span class="lifecycle-badge" style="color:{fg};background:{bg}">{state}</span>'
+    fg, _ = LIFECYCLE_COLORS.get(state, ("#808088", "transparent"))
+    return f' <span class="lifecycle-badge" style="color:{fg};border:1px solid {fg};background:transparent">{state.upper()}</span>'
 
 
 # ---------------------------------------------------------------------------
@@ -382,7 +385,7 @@ def _inline_sparkline_svg(months_data: list[dict], css_class: str = "neutral", l
         x = i * w / (len(avgs) - 1)
         y = h - 1 - ((v - mn) / rng) * (h - 2)
         pts.append(f"{x:.1f},{y:.1f}")
-    color = {"up": "#22C55E", "down": "#EF4444", "flat": "#F59E0B"}.get(css_class, "#808088")
+    color = {"up": "#4ADE80", "down": "#ff7162", "flat": "#F59E0B"}.get(css_class, "#808088")
     tooltip = label if label else "Monthly avg player trend (last 4 months)"
     return (
         f'<svg class="inline-spark" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" title="{tooltip}" aria-label="{tooltip}">'
@@ -456,8 +459,8 @@ def _extract_news_summary(news_item: dict) -> str:
 # ---------------------------------------------------------------------------
 
 _SPARKLINE_COLORS = {
-    "up": ("#22C55E", "rgba(34,197,94,0.12)"),
-    "down": ("#EF4444", "rgba(239,68,68,0.12)"),
+    "up": ("#4ADE80", "rgba(0,255,65,0.12)"),
+    "down": ("#ff7162", "rgba(255,113,98,0.12)"),
     "flat": ("#F59E0B", "rgba(245,158,11,0.12)"),
     "neutral": ("#808088", "rgba(128,128,136,0.12)"),
 }
@@ -2849,63 +2852,54 @@ def generate_html(results: list[dict], failed_names: list[str],
 
     # --- Executive Summary with Winners / Neutrals / Losers ---
     # Takeaways are pre-sanitized HTML (may contain <a> links) — do not re-escape
-    exec_items = "\n".join(f"      <li>{t}</li>" for t in overall_takeaways)
+    exec_items = ""
+    for idx, t in enumerate(overall_takeaways):
+        num = f"{idx + 1:02d}"
+        exec_items += f'      <div class="exec-takeaway"><span class="exec-num">{num}</span><span class="exec-takeaway-text">{t}</span></div>\n'
     exec_prose_html = generate_exec_prose(results)
     aggregate_chart = _generate_aggregate_sparkline(results)
     wnl = _generate_winners_neutrals_losers(results)
 
     # Build winners / neutrals / losers mini-table
-    def _wnl_rows(items, color, arrow_class):
+    def _wnl_rows(items, color, arrow_class, max_rows=3):
         if not items:
-            return f'<tr><td colspan="3" style="color:#44444C;font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr>'
+            return f'<tr><td colspan="3" style="color:var(--text-dim);font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr>'
         rows = ""
-        for g in items:
+        for g in items[:max_rows]:
             t = g["trend_pct"]
-            t_str = f'{t:+.1f}%' if t is not None else "—"
+            t_str = f'{t:+.1f}%' if t is not None else "\u2014"
             rows += (
                 f'<tr>'
-                f'<td style="color:#F0F0F2;font-weight:600;padding:0.35rem 0.4rem;font-size:0.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{_esc(g["name"])}</td>'
-                f'<td style="text-align:right;padding:0.35rem 0.3rem;font-size:0.78rem;color:{color};font-weight:600;white-space:nowrap">{t_str}</td>'
-                f'<td style="text-align:right;padding:0.35rem 0;font-size:0.72rem;color:#808088;white-space:nowrap;font-family:JetBrains Mono,monospace">{_fmt_k(g["peak_24h"])}</td>'
+                f'<td style="color:#ffffff;font-weight:600;padding:0.35rem 0.4rem;font-size:0.85rem;font-family:Inter,sans-serif">{_esc(g["name"])}</td>'
+                f'<td style="text-align:right;padding:0.35rem 0.3rem;font-size:0.85rem;color:{color};font-weight:700;white-space:nowrap;font-family:\'Space Grotesk\',sans-serif">{t_str}</td>'
+                f'<td style="text-align:right;padding:0.35rem 0;font-size:0.75rem;color:var(--text-muted);white-space:nowrap;font-family:\'Space Grotesk\',sans-serif">{_fmt_k(g["peak_24h"])}</td>'
                 f'</tr>'
             )
         return rows
 
     wnl_html = f"""    <div class="wnl-table">
       <div class="wnl-col">
-        <div class="wnl-header" style="color:#22C55E;border-bottom:2px solid #22C55E">&#9650; Winners ({len(wnl['winners'])})</div>
-        <table>{_wnl_rows(wnl['winners'], '#22C55E', 'up')}</table>
+        <div class="wnl-header" style="color:#4ADE80;border-top:2px solid #4ADE80">WINNERS_DELTA ({len(wnl['winners'])})</div>
+        <table>{_wnl_rows(wnl['winners'], '#4ADE80', 'up')}</table>
       </div>
       <div class="wnl-col">
-        <div class="wnl-header" style="color:#F59E0B;border-bottom:2px solid #F59E0B">&#9654; Holding Steady ({len(wnl['neutrals'])})</div>
+        <div class="wnl-header" style="color:#F59E0B;border-top:2px solid #F59E0B">NEUTRALS_STABLE ({len(wnl['neutrals'])})</div>
         <table>{_wnl_rows(wnl['neutrals'], '#F59E0B', 'flat')}</table>
       </div>
       <div class="wnl-col">
-        <div class="wnl-header" style="color:#EF4444;border-bottom:2px solid #EF4444">&#9660; Losers ({len(wnl['losers'])})</div>
-        <table>{_wnl_rows(wnl['losers'], '#EF4444', 'down')}</table>
+        <div class="wnl-header" style="color:#ff7162;border-top:2px solid #ff7162">LOSERS_DECAY ({len(wnl['losers'])})</div>
+        <table>{_wnl_rows(wnl['losers'], '#ff7162', 'down')}</table>
       </div>
     </div>"""
 
     exec_html = f"""  <div class="exec-summary" id="exec-summary">
-    <h2><span class="diamond">&#9670;</span> Weekly Executive Summary</h2>
+    <div class="section-label">// EXECUTIVE_TAKEAWAYS</div>
     {exec_prose_html}
-    <ul>
-{exec_items}
-    </ul>
-    <div class="wnl-label">Month-over-Month Steam Concurrent Player Trend</div>
+    <div class="exec-takeaways-list">
+{exec_items}    </div>
+    <div class="wnl-label">// MONTH_OVER_MONTH_STEAM_CONCURRENT_TREND</div>
 {wnl_html}
     {aggregate_chart}
-    <div class="share-card">
-      <div class="share-preview">
-        <div class="share-preview-title">ShooterDigest // Week of {short_date}</div>
-        <div class="share-preview-desc">Steam concurrents, trends, and analysis for {len(results)} competitive shooters.</div>
-        <div class="share-preview-url">shooter.pyon.dev</div>
-      </div>
-      <a href="https://twitter.com/intent/tweet?text=This%20week%27s%20competitive%20shooter%20intelligence%20briefing%20is%20out.%20Steam%20concurrents%2C%20trends%2C%20and%20analysis.%0A%0A&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-btn" aria-label="Share on X">
-        <svg viewBox="0 0 24 24" width="14" height="14" style="fill:currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        Share on X
-      </a>
-    </div>
   </div>"""
 
     # --- Top mover callouts ---
@@ -2915,22 +2909,29 @@ def generate_html(results: list[dict], failed_names: list[str],
         _l_pct_key = "wow_pct" if _loser.get("wow_pct") is not None else "trend_pct"
         _g_pct = _gainer.get(_g_pct_key, 0)
         _l_pct = _loser.get(_l_pct_key, 0)
-        _g_prev = _fmt(_gainer.get("prev", {}).get("peak_24h", 0)) if _gainer.get("prev") else "—"
+        _g_prev = _fmt(_gainer.get("prev", {}).get("peak_24h", 0)) if _gainer.get("prev") else "\u2014"
         _g_curr = _fmt(_gainer["peak_24h"])
-        _l_prev = _fmt(_loser.get("prev", {}).get("peak_24h", 0)) if _loser.get("prev") else "—"
+        _l_prev = _fmt(_loser.get("prev", {}).get("peak_24h", 0)) if _loser.get("prev") else "\u2014"
         _l_curr = _fmt(_loser["peak_24h"])
+        # Catalyst text from takeaway
+        _g_catalyst = _esc(_sanitize_text(_gainer.get("takeaway_structured", {}).get("context", "")))
+        _l_catalyst = _esc(_sanitize_text(_loser.get("takeaway_structured", {}).get("context", "")))
+        _g_catalyst_html = f'<div class="mover-catalyst">{_g_catalyst}</div>' if _g_catalyst else ""
+        _l_catalyst_html = f'<div class="mover-catalyst">{_l_catalyst}</div>' if _l_catalyst else ""
         mover_html = f"""  <div class="mover-cards">
     <div class="mover-card mover-up">
-      <div class="mover-label">This Week's Biggest Gainer</div>
+      <div class="mover-label">BIGGEST_GAINER</div>
       <div class="mover-game">{_esc(_gainer['name'])}</div>
       <div class="mover-value">+{abs(_g_pct):.1f}% concurrent players</div>
       <div class="mover-detail">{_g_prev} &rarr; {_g_curr}</div>
+      {_g_catalyst_html}
     </div>
     <div class="mover-card mover-down">
-      <div class="mover-label">This Week's Biggest Decline</div>
+      <div class="mover-label">BIGGEST_DECLINE</div>
       <div class="mover-game">{_esc(_loser['name'])}</div>
       <div class="mover-value">{_l_pct:.1f}% concurrent players</div>
       <div class="mover-detail">{_l_prev} &rarr; {_l_curr}</div>
+      {_l_catalyst_html}
     </div>
   </div>"""
 
@@ -2944,6 +2945,19 @@ def generate_html(results: list[dict], failed_names: list[str],
         if g in genre_counts:
             fg, bg = GENRE_COLORS.get(g, GENRE_COLORS["Other"])
             genre_btns += f'    <button class="genre-filter-btn" data-genre="{g}" style="--genre-active-bg:{bg};--genre-active-border:{fg};--genre-active-color:{fg}">{g} <span class="filter-count">{genre_counts[g]}</span></button>\n'
+
+    # Status legend
+    status_legend_html = """  <div class="status-legend">
+    <div class="status-legend-label">// CLASSIFICATION_BASED_ON_WOW_DELTA</div>
+    <div class="status-legend-items">
+      <span class="status-legend-item"><span class="sl-dot" style="background:#4ADE80"></span>SURGING</span>
+      <span class="status-legend-item"><span class="sl-dot" style="background:#16A34A"></span>GROWING</span>
+      <span class="status-legend-item"><span class="sl-dot" style="background:#F59E0B"></span>STABLE</span>
+      <span class="status-legend-item"><span class="sl-dot" style="background:#ff7162"></span>SLIDING</span>
+      <span class="status-legend-item"><span class="sl-dot" style="background:#DC2626"></span>FADING</span>
+    </div>
+  </div>"""
+
     genre_tabs_html = f'  <div class="genre-filters">\n{genre_btns}  </div>\n  <span class="genre-scroll-hint" id="genre-scroll-hint">scroll \u2192</span>'
 
     # --- Genre Rollup (#9) ---
@@ -2970,11 +2984,25 @@ def generate_html(results: list[dict], failed_names: list[str],
 
         # Sentiment (#5)
         game_sentiment = _compute_game_sentiment(r)
-        sent_color = {"positive": "#22C55E", "negative": "#EF4444", "mixed": "#F59E0B"}.get(game_sentiment, "#808088")
+        sent_color = {"positive": "#4ADE80", "negative": "#ff7162", "mixed": "#F59E0B"}.get(game_sentiment, "#808088")
         sent_val = {"positive": 1, "mixed": 0, "negative": -1}.get(game_sentiment, 0)
 
-        # Inline sparkline (#6)
-        mini_spark = _inline_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"), label=f'{r["name"]}: monthly avg players, last 4 months')
+        # Inline sparkline (#6) — bar chart version
+        avg_trend = r.get("avg_trend", [])
+        trend_css_val = r.get("trend_css", "neutral")
+        bar_color = {"up": "#4ADE80", "down": "#ff7162", "flat": "#F59E0B"}.get(trend_css_val, "#adaaaa")
+        spark_bars = ""
+        if avg_trend and len(avg_trend) > 0:
+            avgs = [m.get("avg", 0) for m in avg_trend if isinstance(m, dict)]
+            if not avgs:
+                avgs = [0]
+            max_val = max(avgs) if max(avgs) > 0 else 1
+            for i, m in enumerate(avg_trend[-6:]):
+                v = m.get("avg", 0) if isinstance(m, dict) else (m if isinstance(m, (int, float)) else 0)
+                h = max(2, int((v / max_val) * 20))
+                opacity = 0.4 + (i / max(len(avg_trend[-6:]) - 1, 1)) * 0.6
+                spark_bars += f'<span class="spark-bar" style="height:{h}px;background:{bar_color};opacity:{opacity:.2f}"></span>'
+        mini_spark = f'<span class="spark-bars">{spark_bars}</span>' if spark_bars else ""
 
         # Event annotation (#8) — shown as tooltip on trend value
         annotation = EVENT_ANNOTATIONS.get(r['name'], "")
@@ -2985,13 +3013,19 @@ def generate_html(results: list[dict], failed_names: list[str],
         sent_shape = SENTIMENT_SHAPES.get(game_sentiment, "\u25c6")
         sent_dot = f' <span class="sent-inline" style="color:{sent_color}" title="Sentiment: {game_sentiment}">{sent_shape}</span>'
 
-        # WoW trend (primary) with MoM tooltip
+        # WoW trend (primary) with MoM tooltip + Material Symbols icon
         wow_pct = r.get("wow_pct")
         if wow_pct is not None:
             wow_arrow, wow_css = _trend_arrow(wow_pct)
             wow_str = f"{wow_pct:+.1f}%"
             mom_tip = f' title="MoM: {trend_str}"' if trend_str else ""
-            trend_cell = f'{wow_arrow} {wow_str}'
+            if wow_pct > 2:
+                mat_icon = '<span class="material-symbols-outlined trend-icon trend-icon-up">trending_up</span>'
+            elif wow_pct < -2:
+                mat_icon = '<span class="material-symbols-outlined trend-icon trend-icon-down">trending_down</span>'
+            else:
+                mat_icon = '<span class="material-symbols-outlined trend-icon trend-icon-flat">trending_flat</span>'
+            trend_cell = f'{mat_icon} {wow_str}'
             trend_display_css = wow_css
             trend_sort_val = wow_pct
         elif trend_pct is not None:
@@ -3005,33 +3039,36 @@ def generate_html(results: list[dict], failed_names: list[str],
             trend_sort_val = 0
             mom_tip = ""
 
-        # Status label
+        # Status label with new badge colors
         status_text, status_css = _status_label(wow_pct, trend_pct)
+
+        # Platform share muted text
+        steam_pct = r["steam_share"] * 100
+        platform_text = f'<span class="platform-share">{steam_pct:.0f}% Steam</span>' if not r.get('is_steam_only') else '<span class="platform-share">100% Steam</span>'
 
         table_rows += f"""        <tr data-genre="{genre}">
           <td class="rank" data-value="{r['rank']}">#{r['rank']}</td>
-          <td class="game" data-value="{sent_val}"><a href="#{_card_id(r['name'])}" class="game-link">{_esc(r['name'])}</a>{lifecycle}{sent_dot}</td>
-          <td>{_genre_badge_html(genre)}</td>
-          <td class="num" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
-          <td class="num" data-value="{r.get('est_total_24h', r['peak_24h'])}" style="color:var(--accent);font-weight:600">{est_total}</td>
+          <td class="game" data-value="{sent_val}">
+            <a href="#{_card_id(r['name'])}" class="game-link">{_esc(r['name'])}</a>
+            <div class="game-meta">{_genre_badge_html(genre)}{lifecycle}{sent_dot}</div>
+          </td>
+          <td class="num steam-ccu" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
+          <td class="num est-total" data-value="{r.get('est_total_24h', r['peak_24h'])}">{est_total}</td>
           <td class="trend {trend_display_css}" data-value="{trend_sort_val}"{mom_tip}{trend_title}>{trend_cell}{annotation_icon}</td>
-          <td class="num" data-value="{r.get('est_total_all', r['peak_all'])}" style="color:var(--amber);font-weight:600">{est_all_time}</td>
+          <td class="num alltime" data-value="{r.get('est_total_all', r['peak_all'])}">{est_all_time}</td>
           <td class="pct-cell" data-value="{r['pct_all']:.2f}">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%"></div></div>
             <span>{r['pct_all']:.1f}%</span>
           </td>
-          <td class="status-cell"><span class="status-tag {status_css}">{status_text}</span></td>
         </tr>\n"""
 
     for name in failed_names:
         table_rows += f"""        <tr class="failed">
           <td class="rank">-</td>
           <td class="game">{_esc(name)}</td>
-          <td>-</td>
           <td class="num">-</td><td class="num">-</td>
           <td class="trend neutral">-</td>
           <td class="num">-</td><td class="pct-cell">-</td>
-          <td class="status-cell">-</td>
         </tr>\n"""
 
     # --- Detail cards ---
@@ -3078,7 +3115,7 @@ def generate_html(results: list[dict], failed_names: list[str],
             sent_label = PRESS_SENTIMENT_LABELS.get(sentiment, sentiment)
             sent_shape = SENTIMENT_SHAPES.get(sentiment, "\u25c6")
             sent_dot = f'<span class="sentiment-dot" style="color:{s_fg}" title="{sent_label}">{sent_shape}</span> '
-            date_span = f' <span style="color:#808088;font-size:0.7rem">{date}</span>' if date else ""
+            date_span = f' <span style="color:var(--text-muted);font-size:0.7rem">{date}</span>' if date else ""
             press_html += f'<li>{sent_dot}{title}{source_badge}{date_span}</li>\n'
         if not press_html:
             press_html = "<li>No recent press coverage</li>\n"
@@ -3141,46 +3178,94 @@ def generate_html(results: list[dict], failed_names: list[str],
         trend_str = f"{trend_pct:+.1f}%" if trend_pct is not None else "launch week"
         sub = r.get("subreddit", "")
 
-        # Structured takeaway — sentiment-colored labels
+        # Structured takeaway — 4-column grid with colored top borders
         ts = r.get("takeaway_structured", {})
         takeaway_html = ""
-        if ts.get("state"):
-            state_color = {"up": "#22C55E", "down": "#EF4444", "flat": "#F59E0B"}.get(r.get("trend_css", "neutral"), "#808088")
-            takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:{state_color}">State:</span> {_esc(_sanitize_text(ts["state"]))}</div>'
-        if ts.get("context"):
-            takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:#808088">Context:</span> {_esc(_sanitize_text(ts["context"]))}</div>'
-        if ts.get("community"):
-            r_fg, _ = _sentiment_css(_analyze_sentiment(ts["community"]))
-            takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:{r_fg}">Reaction:</span> {_esc(_sanitize_text(ts["community"]))}</div>'
-        if ts.get("outlook"):
-            o_fg, _ = _sentiment_css(_analyze_sentiment(ts["outlook"]))
-            takeaway_html += f'<div class="takeaway-part"><span class="takeaway-label" style="color:{o_fg}">Outlook:</span> {_esc(_sanitize_text(ts["outlook"]))}</div>'
+        if ts.get("state") or ts.get("context") or ts.get("community") or ts.get("outlook"):
+            takeaway_html = '<div class="takeaway-grid">'
+            if ts.get("state"):
+                state_color = {"up": "#4ADE80", "down": "#ff7162", "flat": "#F59E0B"}.get(r.get("trend_css", "neutral"), "#808088")
+                takeaway_html += f'<div class="takeaway-cell" style="border-top:2px solid #F59E0B"><span class="takeaway-label" style="color:#F59E0B">STATE</span><span class="takeaway-text">{_esc(_sanitize_text(ts["state"]))}</span></div>'
+            if ts.get("context"):
+                takeaway_html += f'<div class="takeaway-cell" style="border-top:2px solid #808088"><span class="takeaway-label" style="color:#808088">CONTEXT</span><span class="takeaway-text">{_esc(_sanitize_text(ts["context"]))}</span></div>'
+            if ts.get("community"):
+                r_fg, _ = _sentiment_css(_analyze_sentiment(ts["community"]))
+                c_color = "#4ADE80" if "positive" in _analyze_sentiment(ts["community"]) else "#ff7162" if "negative" in _analyze_sentiment(ts["community"]) else "#4ADE80"
+                takeaway_html += f'<div class="takeaway-cell" style="border-top:2px solid {c_color}"><span class="takeaway-label" style="color:{c_color}">COMMUNITY</span><span class="takeaway-text">{_esc(_sanitize_text(ts["community"]))}</span></div>'
+            if ts.get("outlook"):
+                takeaway_html += f'<div class="takeaway-cell" style="border-top:2px solid #6366F1"><span class="takeaway-label" style="color:#6366F1">OUTLOOK</span><span class="takeaway-text">{_esc(_sanitize_text(ts["outlook"]))}</span></div>'
+            takeaway_html += '</div>'
         if not takeaway_html:
-            takeaway_html = f'<p>{_esc(_sanitize_text(r.get("takeaway", "")))}</p>'
+            takeaway_html = f'<p class="takeaway-fallback">{_esc(_sanitize_text(r.get("takeaway", "")))}</p>'
+
+        # Dev comms flags
+        dev_flags = []
+        for n in r.get("news", [])[:5]:
+            title_lower = (n.get("title", "") or "").lower()
+            if any(kw in title_lower for kw in ["season", "new season"]):
+                dev_flags.append(("NEW_SEASON", True))
+            elif any(kw in title_lower for kw in ["update", "patch", "hotfix"]):
+                dev_flags.append(("NEW_CONTENT", True))
+            elif any(kw in title_lower for kw in ["event", "limited"]):
+                dev_flags.append(("LIVE_EVENT", True))
+        # Ensure we have default flags
+        flag_names = {"NEW_SEASON", "NEW_CONTENT", "LIVE_EVENT", "MAJOR_PATCH", "RANKED_UPDATE"}
+        active_flag_names = {f[0] for f in dev_flags}
+        for fname in flag_names:
+            if fname not in active_flag_names:
+                dev_flags.append((fname, False))
+        dev_flags_html = '<div class="dev-flags">'
+        for fname, is_active in dev_flags:
+            dot_color = "#4ADE80" if is_active else "var(--text-dim)"
+            dev_flags_html += f'<span class="dev-flag"><span class="dev-flag-dot" style="background:{dot_color}"></span>{fname}</span>'
+        dev_flags_html += '</div>'
 
         # Previous takeaway comparison
         prev_takeaway_html = ""
         if r.get("prev") and r["prev"].get("takeaway"):
             prev_takeaway_html = (
                 f'<div class="prev-takeaway">'
-                f'<strong>Previous:</strong> {_esc(r["prev"]["takeaway"])}'
+                f'<span class="prev-label">PREV_WEEK:</span> <em>{_esc(r["prev"]["takeaway"])}</em>'
                 f'</div>'
             )
 
         # Community pulse collapsible
         community_html = ""
         if reddit_week_html or reddit_month_html:
-            week_section = f'<h5>This Week</h5><ul>{reddit_week_html}</ul>' if reddit_week_html else ""
-            month_section = f'<h5>This Month</h5><ul>{reddit_month_html}</ul>' if reddit_month_html else ""
+            week_section = f'<h5>// THIS_WEEK</h5><ul>{reddit_week_html}</ul>' if reddit_week_html else ""
+            month_section = f'<h5>// THIS_MONTH</h5><ul>{reddit_month_html}</ul>' if reddit_month_html else ""
             community_html = f"""
       <div class="card-community">
         <details>
-          <summary>Community Pulse <span class="sub">r/{_esc(sub)}</span> — {total_reddit} substantive posts</summary>
+          <summary>// COMMUNITY_PULSE <span class="sub">r/{_esc(sub)}</span> \u2014 {total_reddit} substantive posts</summary>
           <div class="community-inner">
             {week_section}
             {month_section}
           </div>
         </details>
+      </div>"""
+
+        # Twitch row
+        twitch_html = ""
+        twitch_viewers = r.get("twitch_viewers")
+        twitch_streams = r.get("twitch_streams")
+        twitch_share = r.get("twitch_share")
+        twitch_top = r.get("twitch_top_streams", [])
+        if twitch_viewers is not None or twitch_streams is not None:
+            top_streamers = ""
+            for ts_item in twitch_top[:3]:
+                s_name = _esc(ts_item.get("name", "Unknown"))
+                s_viewers = _fmt(ts_item.get("viewers", 0))
+                top_streamers += f'<span class="twitch-streamer">{s_name} ({s_viewers})</span>'
+            twitch_html = f"""
+      <div class="card-twitch">
+        <div class="section-label" style="margin-bottom:0.4rem">// TWITCH_INTEL</div>
+        <div class="twitch-stats">
+          <div class="twitch-stat"><span class="twitch-stat-label">VIEWERS</span><span class="twitch-stat-val">{_fmt(twitch_viewers or 0)}</span></div>
+          <div class="twitch-stat"><span class="twitch-stat-label">STREAMS</span><span class="twitch-stat-val">{_fmt(twitch_streams or 0)}</span></div>
+          <div class="twitch-stat"><span class="twitch-stat-label">SHARE</span><span class="twitch-stat-val">{twitch_share:.1f}%</span></div>
+          {f'<div class="twitch-stat twitch-top"><span class="twitch-stat-label">TOP_STREAMERS</span><div class="twitch-streamers">{top_streamers}</div></div>' if top_streamers else ''}
+        </div>
       </div>"""
 
         card_genre = r.get('genre', 'Other')
@@ -3194,7 +3279,7 @@ def generate_html(results: list[dict], failed_names: list[str],
         _est_tip = (f'Estimated all-platform total = Steam 24h peak \u00f7 Steam share ({_steam_pct:.0f}%). '
                     f'This is a directional estimate, not validated first-party data.')
         _est_total_html = (
-            f'&nbsp;|&nbsp; Est. Total: <strong style="color:#6366F1">'
+            f'&nbsp;|&nbsp; Est. Total: <strong style="color:var(--green)">'
             f'{_fmt(r.get("est_total_24h", r["peak_24h"]))}</strong>'
             f' <a href="#methodology" class="info-tip" data-tip="{_est_tip}">\u24d8 Est.</a>'
             f' ({_steam_pct:.0f}% Steam)'
@@ -3210,35 +3295,37 @@ def generate_html(results: list[dict], failed_names: list[str],
         <div class="card-stats">
           24h Peak: <strong>{_fmt(r['peak_24h'])}</strong> (Steam)
           {_est_total_html}
-          &nbsp;|&nbsp; All-Time Peak: {f'<strong style="color:#F59E0B">{_fmt(r.get("est_total_all", r["peak_all"]))}</strong> <small style="color:#44444C">(est. all platforms)</small>' if not r.get('is_steam_only') else f'<strong>{_fmt(r["peak_all"])}</strong> <small style="color:#44444C">(100% Steam)</small>'} ({r['pct_all']:.1f}% current)
+          &nbsp;|&nbsp; All-Time Peak: {f'<strong style="color:var(--amber)">{_fmt(r.get("est_total_all", r["peak_all"]))}</strong> <small style="color:var(--text-dim)">(est. all platforms)</small>' if not r.get('is_steam_only') else f'<strong>{_fmt(r["peak_all"])}</strong> <small style="color:var(--text-dim)">(100% Steam)</small>'} ({r['pct_all']:.1f}% current)
         </div>
         {"<div class='card-trend'>" + sparkline + "</div>" if sparkline else ""}
       </div>
+      {dev_flags_html}
       <div class="card-takeaway">
-        <h4>Takeaway</h4>
+        <div class="section-label">// ANALYSIS</div>
         {takeaway_html}
         {prev_takeaway_html}
       </div>
       <div class="card-body-2col">
         <div class="card-section">
-          <h4>Developer Updates</h4>
+          <h4>// DEV_UPDATES</h4>
           <div class="sentiment-legend">
-            <span>\U0001f7e2 New Content</span>
-            <span>\U0001f534 Service Issue</span>
-            <span>\u26aa Update/Other</span>
+            <span>\u25b2 New Content</span>
+            <span>\u25a0 Service Issue</span>
+            <span>\u25c6 Update/Other</span>
           </div>
           <ul>{news_html}</ul>
         </div>
         <div class="card-section">
-          <h4>Press Coverage</h4>
+          <h4>// PRESS_COVERAGE</h4>
           <div class="sentiment-legend">
-            <span>\U0001f7e2 Positive</span>
-            <span>\U0001f534 Negative</span>
-            <span>\u26aa Neutral</span>
+            <span>\u25b2 Positive</span>
+            <span>\u25a0 Negative</span>
+            <span>\u25c6 Neutral</span>
           </div>
           <ul>{press_html}</ul>
         </div>
       </div>
+      {twitch_html}
       {community_html}
     </div>
 """
@@ -3250,35 +3337,37 @@ def generate_html(results: list[dict], failed_names: list[str],
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://shooter.michaelpyon.com" />
-  <meta property="og:title" content="ShooterDigest — Weekly Competitive Shooter Intelligence" />
+  <meta property="og:title" content="Shooter Digest \u2014 Weekly Competitive Shooter Intelligence" />
   <meta property="og:description" content="SteamDB shows you the numbers. ShooterDigest tells you what they mean. Weekly analysis of the PC competitive FPS market." />
   <meta property="og:image" content="https://shooter.michaelpyon.com/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="ShooterDigest — Weekly Shooter Intelligence" />
+  <meta name="twitter:title" content="Shooter Digest \u2014 Weekly Shooter Intelligence" />
   <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
   <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
   <meta name="twitter:site" content="@michaelpyon" />
   <meta name="twitter:creator" content="@michaelpyon" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>\U0001f3af</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Space+Grotesk:wght@300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   <title>Shooter Digest - {date_str}</title>
   <style>
     :root {{
-      --bg: #0D0D0F;
-      --bg-surface: #141416;
-      --bg-card: #1A1A1E;
-      --bg-card-hover: #1E1E24;
-      --border: rgba(255,255,255,0.06);
-      --border-active: rgba(255,255,255,0.14);
-      --text: #F0F0F2;
-      --text-muted: #808088;
-      --text-dim: #44444C;
-      --green: #22C55E;
-      --red: #EF4444;
+      --bg: #0e0e0e;
+      --bg-surface: #131313;
+      --bg-card: #1a1a1a;
+      --bg-card-hover: #262626;
+      --border: #484847;
+      --border-active: rgba(0,255,65,0.2);
+      --text: #ffffff;
+      --text-muted: #adaaaa;
+      --text-dim: #484847;
+      --green: #4ADE80;
+      --green-light: #9cff93;
+      --red: #ff7162;
       --amber: #F59E0B;
-      --accent: #6366F1;
+      --accent: #4ADE80;
     }}
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     body {{
@@ -3288,7 +3377,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }}
-    h1, h2, h3 {{ font-family: 'DM Serif Display', Georgia, serif; }}
+    h1, h2, h3 {{ font-family: 'Newsreader', Georgia, serif; }}
 
     /* Focus-visible styles */
     *:focus-visible {{ outline: 2px solid var(--accent); outline-offset: 2px; }}
@@ -3298,18 +3387,28 @@ def generate_html(results: list[dict], failed_names: list[str],
     a:focus-visible {{
       outline: 2px solid var(--accent); outline-offset: 2px;
     }}
+
+    /* Section labels — universal */
+    .section-label {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+    }}
+
     h1 {{ font-size: 1.8rem; margin-bottom: 0.2rem; }}
-    h1 .brand-shooter {{ color: #ffffff; }}
-    h1 .brand-digest {{ color: var(--accent); }}
     .subtitle {{ color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.25rem; }}
     .subtitle-date {{ color: var(--text-dim); font-size: 0.78rem; margin-bottom: 1.5rem; }}
 
     /* Sticky back-nav */
     .site-nav {{
       position: sticky; top: 0; z-index: 100;
-      background: rgba(13, 13, 15, 0.96);
+      background: rgba(14, 14, 14, 0.96);
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border-active);
+      border-bottom: 1px solid var(--border);
       margin: -2rem -2rem 1.5rem -2rem;
       padding: 0.65rem 2rem;
       display: flex; align-items: center; justify-content: space-between;
@@ -3317,90 +3416,99 @@ def generate_html(results: list[dict], failed_names: list[str],
     .nav-back {{
       font-size: 0.82rem; color: var(--text-muted); text-decoration: none;
       transition: color 0.15s; display: flex; align-items: center; gap: 0.35rem;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.05em;
     }}
     .nav-back:hover {{ color: var(--accent); }}
     .nav-logo {{
-      font-size: 0.9rem; font-weight: 700; color: #ffffff;
-      text-decoration: none; letter-spacing: -0.3px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+      text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase;
     }}
     .nav-logo span {{ color: var(--accent); }}
 
     /* Executive Summary */
     .exec-summary {{
       background: var(--bg-card);
-      padding: 1.5rem 1.5rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
+      padding: 1.5rem 1.5rem; border-radius: 0; margin-bottom: 2rem;
       border: 1px solid var(--border);
       border-left: 3px solid var(--accent);
     }}
     .exec-summary h2 {{ color: var(--accent); font-size: 1rem; margin-bottom: 0.75rem; }}
-    .exec-summary ul {{ margin-top: 1rem; }}
-    .exec-summary li {{
-      margin-bottom: 0.5rem; margin-left: 1rem;
-      color: var(--text); font-size: 0.9rem; line-height: 1.6;
+    .exec-takeaways-list {{ margin-top: 1rem; }}
+    .exec-takeaway {{
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      margin-bottom: 0.6rem; font-size: 0.9rem; line-height: 1.6;
     }}
+    .exec-num {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--accent); flex-shrink: 0;
+      min-width: 1.5rem;
+      opacity: 0.7;
+    }}
+    .exec-takeaway-text {{
+      color: var(--text);
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: 0.92rem;
+    }}
+    .exec-takeaway-text a {{
+      color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+      text-decoration-color: rgba(0,255,65,0.4);
+    }}
+    .exec-takeaway-text a:hover {{ color: var(--text); text-decoration-color: var(--accent); }}
     .exec-link {{
       color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
-      text-decoration-color: rgba(99,102,241,0.4);
+      text-decoration-color: rgba(0,255,65,0.4);
     }}
     .exec-link:hover {{ color: var(--text); text-decoration-color: var(--accent); }}
-    .exec-share-btn {{
-      display: inline-flex; align-items: center; padding: 5px 12px;
-      font-size: 0.75rem; color: var(--text-muted); background: transparent;
-      border: 1px solid var(--border-active); border-radius: 4px; text-decoration: none;
-      transition: all 0.2s; cursor: pointer;
-    }}
-    .exec-share-btn:hover {{ color: #ffffff; border-color: var(--accent); background: rgba(99,102,241,0.1); }}
-    .share-fab {{
-      position: fixed; bottom: 24px; right: 24px; width: 48px; height: 48px;
-      border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-active);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.2s; z-index: 50; text-decoration: none;
-    }}
-    .share-fab:hover {{ background: var(--accent); border-color: var(--accent); }}
-    .share-fab svg {{ width: 20px; height: 20px; fill: var(--text); }}
-    .share-fab:hover svg {{ fill: #ffffff; }}
     .aggregate-chart {{
       margin-top: 1rem; padding-top: 0.8rem;
-      border-top: 1px solid var(--border-active);
+      border-top: 1px solid var(--border);
     }}
     .aggregate-label {{
-      color: var(--accent); font-size: 0.75rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 0.3rem;
     }}
     .wnl-label {{
-      font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.06em; color: var(--text-dim);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.2em; color: var(--text-dim);
       margin-top: 1.25rem; padding-top: 0.75rem;
-      border-top: 1px solid var(--border-active);
+      border-top: 1px solid var(--border);
     }}
     .wnl-table {{
       display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;
       margin-top: 0.5rem;
     }}
-    .wnl-col {{ min-width: 0; overflow: hidden; }}
-    .wnl-col table {{ width: 100%; border-collapse: collapse; table-layout: fixed; }}
+    .wnl-col {{ min-width: 0; }}
+    .wnl-col table {{ width: 100%; border-collapse: collapse; }}
     .wnl-header {{
-      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.04em; padding-bottom: 0.35rem; margin-bottom: 0.3rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.2em; padding-top: 0.35rem; padding-bottom: 0.35rem; margin-bottom: 0.3rem;
     }}
 
     /* Summary table */
     table {{ width: 100%; border-collapse: collapse; margin-bottom: 2rem; }}
     th {{
+      font-family: 'Space Grotesk', sans-serif;
       text-align: left; padding: 0.6rem 0.7rem;
-      border-bottom: 2px solid var(--border); color: var(--accent);
-      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border); color: var(--accent);
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
     }}
     th[data-sort] {{
       cursor: pointer; user-select: none; position: relative;
     }}
     th[data-sort]:hover {{ color: var(--text); }}
     th[data-sort]::after {{
-      content: '⇅'; opacity: 0.3; margin-left: 4px; font-size: 0.7rem;
+      content: '\u21C5'; opacity: 0.3; margin-left: 4px; font-size: 0.7rem;
     }}
-    th[data-sort].asc::after {{ content: '▲'; opacity: 0.8; }}
-    th[data-sort].desc::after {{ content: '▼'; opacity: 0.8; }}
-    td {{ padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); }}
+    th[data-sort].asc::after {{ content: '\u25B2'; opacity: 0.8; }}
+    th[data-sort].desc::after {{ content: '\u25BC'; opacity: 0.8; }}
+    td {{ padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(72,72,71,0.3); }}
     tr {{
       border-left: 2px solid transparent;
       transition: background-color 0.15s ease, border-left-color 0.15s ease;
@@ -3409,192 +3517,145 @@ def generate_html(results: list[dict], failed_names: list[str],
       background: var(--bg-card-hover);
       border-left-color: var(--accent);
     }}
-    .rank {{ color: var(--text-muted); font-weight: 600; width: 40px; }}
-    .game {{ font-weight: 600; color: var(--text); white-space: nowrap; }}
+    .rank {{
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-muted); font-weight: 500; width: 40px;
+      font-size: 1.1rem; font-style: italic;
+    }}
+    tr:hover .rank {{ color: var(--accent); }}
+    .game {{ font-weight: 600; color: var(--text); }}
     .game-link {{
       color: inherit; text-decoration: none;
       border-bottom: 1px dotted var(--text-dim);
       transition: color 0.15s, border-color 0.15s;
     }}
     .game-link:hover {{ color: var(--accent); border-bottom-color: var(--accent); }}
-    .num {{ font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; text-align: right; }}
+    .game-meta {{
+      display: flex; align-items: center; gap: 0.3rem;
+      margin-top: 0.2rem; flex-wrap: wrap;
+    }}
+    .num {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-variant-numeric: tabular-nums; text-align: right;
+    }}
+    .est-total {{ color: var(--green); font-weight: 600; font-size: 1rem; }}
+    .steam-ccu {{ color: var(--text); }}
+    .alltime {{ color: var(--text-muted); }}
     .trend {{ text-align: center; font-weight: 600; white-space: nowrap; }}
     .trend.up {{ color: var(--green); }}
     .trend.down {{ color: var(--red); }}
     .trend.flat {{ color: var(--amber); }}
     .trend.neutral {{ color: var(--text-muted); }}
+    .trend-icon {{
+      font-size: 18px; vertical-align: middle; margin-right: 2px;
+    }}
+    .trend-icon-up {{ color: var(--green); }}
+    .trend-icon-down {{ color: var(--red); }}
+    .trend-icon-flat {{ color: var(--amber); }}
     .pct-cell {{ width: 120px; }}
     .bar-bg {{
-      background: var(--bg-card); border-radius: 4px; height: 6px;
+      background: var(--bg-surface); border-radius: 0; height: 6px;
       margin-bottom: 2px; overflow: hidden;
     }}
     .bar {{
-      background: linear-gradient(90deg, var(--accent), #4f46e5);
-      height: 100%; border-radius: 4px;
+      background: var(--accent);
+      height: 100%; border-radius: 0;
     }}
-    .pct-cell span {{ font-size: 0.8rem; color: var(--text-muted); }}
+    .pct-cell span {{ font-size: 0.8rem; color: var(--text-muted); font-family: 'Space Grotesk', sans-serif; }}
     .status-cell {{ text-align: center; }}
     .status-tag {{
-      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.04em; padding: 2px 6px; border-radius: 3px;
-      white-space: nowrap;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; padding: 3px 8px; border-radius: 0;
+      white-space: nowrap; border: 1px solid;
     }}
-    .status-up {{ color: var(--green); background: rgba(34,197,94,0.1); }}
-    .status-down {{ color: var(--red); background: rgba(239,68,68,0.1); }}
-    .status-flat {{ color: var(--text-muted); background: rgba(128,128,136,0.1); }}
-    .status-launch {{ color: var(--amber); background: rgba(245,158,11,0.1); }}
+    .status-up {{
+      color: #0e0e0e; background: #4ADE80; border-color: #4ADE80;
+    }}
+    .status-up[data-label="GROWING"] {{
+      color: #ffffff; background: #16A34A; border-color: #16A34A;
+    }}
+    .status-down {{
+      color: #ffffff; background: #ff7162; border-color: #ff7162;
+    }}
+    .status-down[data-label="FADING"] {{
+      color: #ffffff; background: #DC2626; border-color: #DC2626;
+    }}
+    .status-flat {{ color: #0e0e0e; background: #F59E0B; border-color: #F59E0B; }}
+    .status-launch {{ color: #0e0e0e; background: var(--amber); border-color: var(--amber); }}
     .failed td {{ color: var(--text-dim); font-style: italic; }}
 
-    /* Key Insights */
-    .insights {{
-      background: var(--bg-card);
-      padding: 1rem 1.2rem; border-radius: 0 6px 6px 0; margin-bottom: 2rem;
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
+    /* Sparkline bars (inline) */
+    .spark-bars {{
+      display: inline-flex; align-items: flex-end; gap: 2px;
+      height: 20px; vertical-align: middle;
     }}
-    .insights h2 {{ color: var(--accent); font-size: 0.9rem; margin-bottom: 0.5rem; }}
-    .insights li {{
-      margin-bottom: 0.3rem; margin-left: 1rem;
-      color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;
+    .spark-bar {{
+      width: 4px; display: inline-block; border-radius: 0;
     }}
+    .sparkline-cell {{ text-align: center; }}
 
-    /* Detail cards */
-    .section-title {{
-      color: var(--accent); font-size: 1.1rem; margin: 2rem 0 1rem;
-      border-bottom: 1px solid var(--border-active); padding-bottom: 0.5rem;
+    /* Platform share */
+    .platform-share {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem; color: var(--text-muted);
+      letter-spacing: 0.05em;
     }}
-    .card {{
-      background: var(--bg-card); border-radius: 8px; margin-bottom: 1.2rem;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--border-active);
-      scroll-margin-top: 60px;
-    }}
-    /* Trend-colored left border: scan the whole page for winners/losers */
-    .card:has(.trend-badge.up) {{ border-left-color: var(--green); }}
-    .card:has(.trend-badge.down) {{ border-left-color: var(--red); }}
-    .card:has(.trend-badge.flat) {{ border-left-color: var(--amber); }}
-    .card:has(.trend-badge.neutral) {{ border-left-color: var(--text-muted); }}
+    .platform-cell {{ text-align: center; }}
 
-    /* Sticky ranking table header */
-    .ranking-table thead th {{
-      position: sticky; top: 44px;
-      background: var(--bg); z-index: 10;
+    /* Status legend */
+    .status-legend {{
+      margin: 0.5rem 0 1rem 0;
+      padding: 0.6rem 0;
     }}
-
-    /* Floating back-to-top */
-    .back-to-top {{
-      position: fixed; bottom: 1.5rem; right: 1.5rem;
-      background: var(--bg-card); border: 1px solid var(--border-active);
-      color: var(--accent); border-radius: 6px;
-      padding: 0.5rem 0.85rem; font-size: 0.82rem;
-      cursor: pointer; opacity: 0; transition: opacity 0.25s;
-      z-index: 200; text-decoration: none; font-weight: 600;
+    .status-legend-label {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--text-dim); margin-bottom: 0.4rem;
     }}
-    .back-to-top.visible {{ opacity: 1; }}
-    .back-to-top:hover {{ background: var(--border-active); color: var(--text); }}
-
-    .card-header {{
-      padding: 1.4rem 1.6rem 1rem; border-bottom: 1px solid var(--border-active);
+    .status-legend-items {{
+      display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
     }}
-    .card-header h3 {{
-      color: var(--text); font-size: 1.3rem; margin-bottom: 0.4rem;
-      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    .status-legend-item {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.3rem;
     }}
-    .trend-badge {{
-      font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; font-weight: 600;
-    }}
-    .trend-badge.up {{ background: rgba(74,222,128,0.15); color: var(--green); }}
-    .trend-badge.down {{ background: rgba(248,113,113,0.15); color: var(--red); }}
-    .trend-badge.flat {{ background: rgba(251,191,36,0.15); color: var(--amber); }}
-    .trend-badge.neutral {{ background: rgba(143,152,160,0.15); color: var(--text-muted); }}
-    .launch-badge {{ display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 1px 5px; }}
-    .card-stats {{ color: var(--text-muted); font-size: 0.82rem; }}
-    .card-stats strong {{ color: var(--text); }}
-    .card-trend {{ color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem; }}
-
-    /* Takeaway — structured 4-part */
-    .card-takeaway {{
-      padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--border-active);
-    }}
-    .card-takeaway h4 {{
-      color: var(--amber); font-size: 0.75rem; text-transform: uppercase;
-      letter-spacing: 0.04em; margin-bottom: 0.5rem;
-    }}
-    .card-takeaway p {{
-      color: var(--text); font-size: 0.85rem; line-height: 1.6; font-style: italic;
-    }}
-    .takeaway-part {{
-      color: var(--text); font-size: 0.83rem; line-height: 1.55;
-      margin-bottom: 0.3rem;
-    }}
-    .takeaway-label {{
-      color: var(--accent); font-weight: 700; font-size: 0.72rem;
-      text-transform: uppercase; letter-spacing: 0.03em;
-      margin-right: 0.3rem;
-    }}
-    .prev-takeaway {{
-      color: var(--text-muted); font-size: 0.78rem; margin-top: 0.5rem;
-      padding-top: 0.4rem; border-top: 1px dashed var(--border-active); line-height: 1.5;
-    }}
-
-    /* Card body: 2 columns */
-    .card-body-2col {{
-      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
-    }}
-    .card-section {{ padding: 0.7rem 1rem; border-right: 1px solid var(--border-active); }}
-    .card-section:last-child {{ border-right: none; }}
-    .card-section h4 {{
-      color: var(--accent); font-size: 0.72rem; text-transform: uppercase;
-      letter-spacing: 0.04em; margin-bottom: 0.4rem;
-    }}
-    .card-section .sub {{ color: var(--text-muted); font-size: 0.68rem; text-transform: none; }}
-    .card-section ul {{ list-style: none; }}
-    .card-section li {{
-      color: var(--text-muted); font-size: 0.8rem; line-height: 1.45;
-      padding: 0.15rem 0;
-    }}
-    .card-section li::before {{
-      content: "\\2022"; color: var(--accent); margin-right: 0.4rem;
-    }}
-    .badge {{
-      font-size: 0.6rem; padding: 1px 5px; border-radius: 3px;
-      font-weight: 600; vertical-align: middle;
-    }}
-    .badge.patch {{ background: rgba(245,158,11,0.12); color: var(--amber); }}
-
-    /* Genre badges */
-    .genre-badge {{
-      font-size: 0.55rem; padding: 2px 6px; border-radius: 3px;
-      font-weight: 700; vertical-align: middle; margin-left: 0.4rem;
-      letter-spacing: 0.03em; text-transform: uppercase;
-      border: 1px solid var(--border);
+    .sl-dot {{
+      width: 8px; height: 8px; border-radius: 0; display: inline-block;
     }}
 
     /* Genre filter tabs */
     .genre-filters {{
       display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0;
-      padding: 0.6rem 0; border-bottom: 1px solid var(--border-active);
+      padding: 0.6rem 0; border-bottom: 1px solid var(--border);
     }}
     .genre-filter-btn {{
-      padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-active);
-      background: var(--bg-card); color: var(--text-muted); font-size: 0.78rem; cursor: pointer;
-      font-weight: 600; transition: all 0.15s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 0.35rem 0.75rem; border-radius: 100px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-muted); font-size: 0.72rem; cursor: pointer;
+      font-weight: 500; transition: all 0.15s ease;
+      letter-spacing: 0.05em; text-transform: uppercase;
     }}
-    .genre-filter-btn:hover {{ border-color: var(--accent); color: #c6d4df; }}
+    .genre-filter-btn:hover {{ border-color: var(--accent); color: var(--text); }}
     .genre-filter-btn.active {{
-      background: var(--genre-active-bg, rgba(99,102,241,0.12));
-      border-color: var(--genre-active-border, var(--accent));
-      color: var(--genre-active-color, var(--text));
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0e0e0e;
+      font-weight: 700;
     }}
     .genre-filter-btn .filter-count {{
-      font-size: 0.65rem; color: var(--text-dim); margin-left: 0.3rem;
+      font-size: 0.6rem; color: var(--text-dim); margin-left: 0.3rem;
     }}
-    .genre-filter-btn.active .filter-count {{ color: var(--accent); }}
+    .genre-filter-btn.active .filter-count {{ color: rgba(14,14,14,0.6); }}
 
-    /* Source tags — colors set inline per-element based on sentiment */
+    /* Source tags */
     .source-tag {{
-      font-size: 0.6rem; padding: 1px 5px; border-radius: 3px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.6rem; padding: 1px 5px; border-radius: 0;
       font-weight: 600; vertical-align: middle;
       background: var(--bg-surface); color: var(--text-muted);
     }}
@@ -3603,15 +3664,17 @@ def generate_html(results: list[dict], failed_names: list[str],
     }}
     .sentiment-legend {{
       display: flex; gap: 0.75rem; margin-bottom: 4px;
-      font-size: 0.75rem; color: var(--text-muted); text-align: left;
+      font-size: 0.72rem; color: var(--text-muted); text-align: left;
     }}
     .sentiment-legend span {{ display: inline-flex; align-items: center; gap: 0.2rem; }}
 
     /* Category tags */
     .cat-tag {{
-      font-size: 0.58rem; padding: 1px 5px; border-radius: 3px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem; padding: 1px 5px; border-radius: 0;
       font-weight: 700; vertical-align: middle; margin-right: 0.3rem;
-      letter-spacing: 0.03em; display: inline-block;
+      letter-spacing: 0.05em; display: inline-block;
+      text-transform: uppercase;
     }}
 
     /* Clickable links */
@@ -3630,29 +3693,229 @@ def generate_html(results: list[dict], failed_names: list[str],
       margin-top: 0.15rem; max-height: 2.7em; overflow: hidden;
     }}
 
+    /* Detail cards */
+    .section-title {{
+      font-family: 'Newsreader', Georgia, serif;
+      color: var(--accent); font-size: 1.1rem; margin: 2rem 0 1rem;
+      border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;
+      font-style: italic;
+    }}
+    .card {{
+      background: var(--bg-card); border-radius: 0; margin-bottom: 1.2rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border);
+      scroll-margin-top: 60px;
+    }}
+    .card:has(.trend-badge.up) {{ border-left-color: var(--green); }}
+    .card:has(.trend-badge.down) {{ border-left-color: var(--red); }}
+    .card:has(.trend-badge.flat) {{ border-left-color: var(--amber); }}
+    .card:has(.trend-badge.neutral) {{ border-left-color: var(--text-muted); }}
+
+    /* Sticky ranking table header */
+    .ranking-table thead th {{
+      position: sticky; top: 44px;
+      background: var(--bg); z-index: 10;
+    }}
+
+    /* Floating back-to-top */
+    .back-to-top {{
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--accent); border-radius: 0;
+      padding: 0.5rem 0.85rem; font-size: 0.82rem;
+      cursor: pointer; opacity: 0; transition: opacity 0.25s;
+      z-index: 200; text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+      letter-spacing: 0.05em;
+    }}
+    .back-to-top.visible {{ opacity: 1; }}
+    .back-to-top:hover {{ background: var(--accent); color: var(--bg); }}
+
+    .card-header {{
+      padding: 1.4rem 1.6rem 1rem; border-bottom: 1px solid var(--border);
+    }}
+    .card-header h3 {{
+      font-family: 'Newsreader', Georgia, serif;
+      color: var(--text); font-size: 1.3rem; margin-bottom: 0.4rem;
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    }}
+    .trend-badge {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem; padding: 2px 8px; border-radius: 0; font-weight: 600;
+      letter-spacing: 0.05em;
+    }}
+    .trend-badge.up {{ background: rgba(0,255,65,0.15); color: var(--green); }}
+    .trend-badge.down {{ background: rgba(255,113,98,0.15); color: var(--red); }}
+    .trend-badge.flat {{ background: rgba(251,191,36,0.15); color: var(--amber); }}
+    .trend-badge.neutral {{ background: rgba(143,152,160,0.15); color: var(--text-muted); }}
+    .launch-badge {{
+      font-family: 'Space Grotesk', sans-serif;
+      display: inline-block; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid var(--accent);
+      border-radius: 0; padding: 1px 6px;
+    }}
+    .card-stats {{ color: var(--text-muted); font-size: 0.82rem; }}
+    .card-stats strong {{ color: var(--text); }}
+    .card-trend {{ color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem; }}
+
+    /* Dev communication flags */
+    .dev-flags {{
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      padding: 0.6rem 1.6rem;
+      border-bottom: 1px solid var(--border);
+    }}
+    .dev-flag {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.3rem;
+    }}
+    .dev-flag-dot {{
+      width: 6px; height: 6px; border-radius: 50%; display: inline-block;
+    }}
+
+    /* Takeaway — structured 4-part grid */
+    .card-takeaway {{
+      padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--border);
+    }}
+    .card-takeaway h4, .card-takeaway .section-label {{
+      margin-bottom: 0.5rem;
+    }}
+    .takeaway-grid {{
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.6rem;
+    }}
+    .takeaway-cell {{
+      padding: 0.5rem 0.6rem;
+      background: var(--bg-surface);
+    }}
+    .takeaway-cell .takeaway-label {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.15em;
+      display: block; margin-bottom: 0.3rem;
+    }}
+    .takeaway-cell .takeaway-text {{
+      color: var(--text); font-size: 0.82rem; line-height: 1.5;
+      display: block;
+    }}
+    .takeaway-fallback {{
+      color: var(--text); font-size: 0.85rem; line-height: 1.6;
+      font-style: italic; font-family: 'Newsreader', Georgia, serif;
+    }}
+    .prev-takeaway {{
+      color: var(--text-muted); font-size: 0.78rem; margin-top: 0.5rem;
+      padding-top: 0.4rem; border-top: 1px dashed var(--border); line-height: 1.5;
+      font-family: 'Newsreader', Georgia, serif;
+    }}
+    .prev-label {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 700; color: var(--text-dim);
+      letter-spacing: 0.15em; margin-right: 0.4rem;
+    }}
+
+    /* Card body: 2 columns */
+    .card-body-2col {{
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }}
+    .card-section {{ padding: 0.7rem 1rem; border-right: 1px solid var(--border); }}
+    .card-section:last-child {{ border-right: none; }}
+    .card-section h4 {{
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.2em; margin-bottom: 0.4rem;
+      font-weight: 500;
+    }}
+    .card-section .sub {{ color: var(--text-muted); font-size: 0.68rem; text-transform: none; }}
+    .card-section ul {{ list-style: none; }}
+    .card-section li {{
+      color: var(--text-muted); font-size: 0.8rem; line-height: 1.45;
+      padding: 0.15rem 0;
+    }}
+    .card-section li::before {{
+      content: "\\2022"; color: var(--accent); margin-right: 0.4rem;
+    }}
+    .badge {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem; padding: 1px 5px; border-radius: 0;
+      font-weight: 600; vertical-align: middle;
+      letter-spacing: 0.05em;
+    }}
+    .badge.patch {{ background: rgba(245,158,11,0.12); color: var(--amber); }}
+
+    /* Genre badges */
+    .genre-badge {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; padding: 2px 6px; border-radius: 0;
+      font-weight: 700; vertical-align: middle;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      border: 1px solid var(--border);
+    }}
+
+    /* Twitch section */
+    .card-twitch {{
+      padding: 0.7rem 1.6rem;
+      border-top: 1px solid var(--border);
+    }}
+    .twitch-stats {{
+      display: flex; flex-wrap: wrap; gap: 1.2rem; align-items: flex-start;
+    }}
+    .twitch-stat {{
+      display: flex; flex-direction: column; gap: 0.1rem;
+    }}
+    .twitch-stat-label {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--text-dim);
+    }}
+    .twitch-stat-val {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--text);
+    }}
+    .twitch-top {{
+      flex: 1;
+    }}
+    .twitch-streamers {{
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+    }}
+    .twitch-streamer {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem; color: var(--text-muted);
+      padding: 2px 6px; background: var(--bg-surface);
+      border: 1px solid var(--border);
+    }}
+
     /* Community pulse (collapsible) */
     .card-community {{
-      padding: 0; border-top: 1px solid var(--border-active);
+      padding: 0; border-top: 1px solid var(--border);
     }}
     .card-community details {{
       padding: 0;
     }}
     .card-community summary {{
-      color: var(--accent); font-size: 0.72rem; cursor: pointer;
-      text-transform: uppercase; letter-spacing: 0.04em;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.2em;
       padding: 0.6rem 1rem; user-select: none;
+      font-weight: 500;
     }}
     .card-community summary:hover {{
-      background: rgba(102,192,244,0.05);
+      background: rgba(0,255,65,0.03);
     }}
-    .card-community .sub {{ color: var(--text-muted); font-size: 0.68rem; text-transform: none; }}
+    .card-community .sub {{ color: var(--text-muted); font-size: 0.68rem; text-transform: none; letter-spacing: 0; }}
     .community-inner {{
       display: grid; grid-template-columns: 1fr 1fr; gap: 0;
       padding: 0 1rem 0.7rem;
     }}
     .community-inner h5 {{
-      color: var(--text-muted); font-size: 0.68rem; text-transform: uppercase;
-      letter-spacing: 0.03em; margin-bottom: 0.3rem;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-muted); font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.15em; margin-bottom: 0.3rem;
+      font-weight: 500;
     }}
     .community-inner ul {{ list-style: none; }}
     .community-inner li {{
@@ -3679,15 +3942,17 @@ def generate_html(results: list[dict], failed_names: list[str],
     .calendar-section {{ margin-top: 2rem; }}
     .cal-section {{ margin-bottom: 1rem; }}
     .cal-section-header {{
-      font-size: 0.82rem; text-transform: uppercase;
-      letter-spacing: 0.05em; margin-bottom: 0.4rem;
-      padding: 0.4rem 0.8rem; border-radius: 0 4px 4px 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.2em; margin-bottom: 0.4rem;
+      padding: 0.4rem 0.8rem; border-radius: 0;
+      font-weight: 500;
     }}
     .cal-section-header.past {{
       color: var(--text-muted); background: var(--bg-surface); border-left: 3px solid var(--text-dim);
     }}
     .cal-section-header.upcoming {{
-      color: var(--green); background: rgba(34,197,94,0.08); border-left: 3px solid var(--green);
+      color: var(--green); background: rgba(0,255,65,0.05); border-left: 3px solid var(--green);
     }}
     .cal-section-header.future {{
       color: var(--amber); background: var(--bg-card); border-left: 3px solid var(--amber);
@@ -3705,16 +3970,18 @@ def generate_html(results: list[dict], failed_names: list[str],
       content: ""; flex: 1; height: 1px; background: var(--accent);
     }}
     .cal-today-divider span {{
-      color: var(--accent); font-size: 0.7rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.15em; white-space: nowrap;
     }}
     .cal-entry {{
       display: flex; align-items: flex-start; gap: 0.6rem;
-      padding: 0.4rem 0.8rem; border-bottom: 1px solid var(--bg-surface);
+      padding: 0.4rem 0.8rem; border-bottom: 1px solid rgba(72,72,71,0.3);
     }}
-    .cal-entry:hover {{ background: rgba(102,192,244,0.03); }}
+    .cal-entry:hover {{ background: rgba(0,255,65,0.02); }}
     .cal-entry.estimated {{ opacity: 0.7; }}
     .cal-date {{
+      font-family: 'Space Grotesk', sans-serif;
       min-width: 50px; color: var(--text-muted); font-size: 0.75rem;
       font-weight: 600; padding-top: 0.1rem;
     }}
@@ -3723,25 +3990,29 @@ def generate_html(results: list[dict], failed_names: list[str],
       font-size: 0.8rem; font-weight: 600;
     }}
     .calendar-type {{
-      font-size: 0.58rem; padding: 1px 6px; border-radius: 3px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; padding: 1px 6px; border-radius: 0;
       font-weight: 700; min-width: 70px; text-align: center;
       display: inline-block; white-space: nowrap; flex-shrink: 0;
+      letter-spacing: 0.05em; text-transform: uppercase;
     }}
-    .calendar-type.season {{ background: rgba(99,102,241,0.12); color: var(--accent); }}
+    .calendar-type.season {{ background: rgba(0,255,65,0.08); color: var(--accent); }}
     .calendar-type.patch {{ background: rgba(245,158,11,0.12); color: var(--amber); }}
-    .calendar-type.event {{ background: rgba(99,102,241,0.12); color: var(--accent); }}
-    .calendar-type.content {{ background: rgba(34,197,94,0.08); color: var(--green); }}
-    .calendar-type.roadmap {{ background: rgba(99,102,241,0.12); color: var(--accent); }}
+    .calendar-type.event {{ background: rgba(0,255,65,0.08); color: var(--accent); }}
+    .calendar-type.content {{ background: rgba(0,255,65,0.08); color: var(--green); }}
+    .calendar-type.roadmap {{ background: rgba(0,255,65,0.08); color: var(--accent); }}
     .calendar-type.industry {{ background: rgba(245,158,11,0.12); color: var(--amber); }}
-    .calendar-type.newrelease {{ background: rgba(239,68,68,0.12); color: var(--red); font-weight: 800; }}
+    .calendar-type.newrelease {{ background: rgba(255,113,98,0.12); color: var(--red); font-weight: 800; }}
     .cal-desc {{
       color: var(--text-muted); font-size: 0.78rem; line-height: 1.5; flex: 1;
       white-space: normal; word-wrap: break-word;
     }}
     .est-tag {{
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.55rem; color: var(--text-muted); background: var(--bg-surface);
-      padding: 1px 4px; border-radius: 2px; font-weight: 600;
+      padding: 1px 4px; border-radius: 0; font-weight: 600;
       vertical-align: middle; margin-left: 0.3rem;
+      letter-spacing: 0.05em;
     }}
     .cal-empty {{
       color: var(--text-dim); font-size: 0.78rem; font-style: italic;
@@ -3750,9 +4021,10 @@ def generate_html(results: list[dict], failed_names: list[str],
 
     /* Lifecycle badge (#4) */
     .lifecycle-badge {{
-      font-size: 0.55rem; padding: 1px 5px; border-radius: 3px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; padding: 1px 5px; border-radius: 0;
       font-weight: 600; vertical-align: middle; margin-left: 0.3rem;
-      text-transform: uppercase; letter-spacing: 0.03em;
+      text-transform: uppercase; letter-spacing: 0.05em;
     }}
 
     /* Sentiment dot inline in game name */
@@ -3764,7 +4036,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     /* Inline sparkline (#6) */
     .inline-spark {{ vertical-align: middle; margin-left: 0.4rem; }}
 
-    /* Annotation info icon — hover to see context */
+    /* Annotation info icon */
     .annot-icon {{
       font-size: 0.7rem; color: var(--text-muted); cursor: help;
       vertical-align: middle; margin-left: 0.2rem;
@@ -3777,18 +4049,22 @@ def generate_html(results: list[dict], failed_names: list[str],
       margin-bottom: 2rem;
     }}
     .genre-rollup h3 {{
-      color: var(--accent); font-size: 0.9rem; margin-bottom: 0.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; margin-bottom: 0.5rem;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      font-weight: 500;
     }}
     .genre-rollup table {{
       width: 100%; border-collapse: collapse; font-size: 0.82rem;
     }}
     .genre-rollup th {{
+      font-family: 'Space Grotesk', sans-serif;
       text-align: left; padding: 0.4rem 0.6rem;
-      border-bottom: 2px solid var(--border-active); color: var(--accent);
-      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border); color: var(--accent);
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
     }}
     .genre-rollup td {{
-      padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--bg-card);
+      padding: 0.35rem 0.6rem; border-bottom: 1px solid rgba(72,72,71,0.3);
     }}
 
     /* Methodology (#7) */
@@ -3796,8 +4072,10 @@ def generate_html(results: list[dict], failed_names: list[str],
       margin-top: 2rem; margin-bottom: 1rem;
     }}
     .methodology summary {{
-      color: var(--accent); font-size: 0.85rem; font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; font-weight: 500;
       cursor: pointer; padding: 0.5rem 0;
+      text-transform: uppercase; letter-spacing: 0.2em;
     }}
     .methodology-content {{
       padding-top: 0.5rem;
@@ -3805,19 +4083,20 @@ def generate_html(results: list[dict], failed_names: list[str],
     .methodology-disclaimer {{
       font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;
       margin-bottom: 1rem; padding: 0.6rem 0.8rem;
-      background: rgba(27, 40, 56, 0.5); border-radius: 4px;
+      background: var(--bg-surface); border-radius: 0;
       border-left: 2px solid var(--accent);
     }}
     .methodology table {{
       width: 100%; border-collapse: collapse; font-size: 0.78rem;
     }}
     .methodology th {{
+      font-family: 'Space Grotesk', sans-serif;
       text-align: left; padding: 0.4rem 0.5rem;
-      border-bottom: 2px solid var(--border-active); color: var(--accent);
-      font-size: 0.68rem; text-transform: uppercase;
+      border-bottom: 1px solid var(--border); color: var(--accent);
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
     }}
     .methodology td {{
-      padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--bg-card);
+      padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(72,72,71,0.3);
     }}
     .meth-note {{ font-size: 0.72rem; color: var(--text-muted); }}
 
@@ -3834,26 +4113,33 @@ def generate_html(results: list[dict], failed_names: list[str],
       content: attr(data-tip);
       position: absolute; bottom: 120%; left: 50%;
       transform: translateX(-50%);
-      background: var(--bg-card); color: var(--text); border: 1px solid var(--border-active);
-      padding: 0.4rem 0.6rem; border-radius: 4px;
+      background: var(--bg-card); color: var(--text); border: 1px solid var(--border);
+      padding: 0.4rem 0.6rem; border-radius: 0;
       font-size: 0.7rem; white-space: normal; word-break: break-word;
       width: 220px; max-width: 220px; z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
     }}
 
     /* Exec prose paragraph */
     .exec-prose {{
-      color: var(--text-muted); font-size: 0.88rem; line-height: 1.65;
-      margin-top: 0.8rem; padding: 0.6rem 0.8rem;
-      background: rgba(27, 40, 56, 0.4); border-radius: 4px;
-      border-left: 2px solid var(--accent); font-style: italic;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.7;
+      margin-top: 0.5rem;
+      margin-bottom: 0.8rem;
+      padding: 0;
+      background: none;
+      border-left: none;
+      border-radius: 0;
+      font-style: normal;
     }}
 
     /* Data caveat info box */
     .data-caveat {{
       display: flex; align-items: flex-start; gap: 0.6rem;
       background: var(--bg-surface); border: 1px solid var(--border);
-      border-radius: 6px; padding: 0.7rem 1rem;
+      border-radius: 0; padding: 0.7rem 1rem;
       margin-bottom: 1.5rem;
     }}
     .caveat-icon {{ font-size: 1rem; flex-shrink: 0; line-height: 1.4; }}
@@ -3867,245 +4153,23 @@ def generate_html(results: list[dict], failed_names: list[str],
       color: var(--text-muted); font-size: 0.72rem; font-style: italic;
       margin-top: 0.15rem; padding: 0.2rem 0.4rem;
       background: rgba(251, 191, 36, 0.06);
-      border-left: 2px solid var(--amber); border-radius: 0 3px 3px 0;
+      border-left: 2px solid var(--amber); border-radius: 0;
+    }}
+
+    /* Event annotation */
+    .event-annotation {{
+      color: var(--text-muted); font-size: 0.72rem; font-style: italic;
+      margin-top: 0.15rem;
     }}
 
     .footer {{
       color: var(--text-dim); font-size: 0.78rem;
-      border-top: 1px solid var(--bg-card); padding-top: 1rem; line-height: 1.6;
+      border-top: 1px solid var(--border); padding-top: 1rem; line-height: 1.6;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.02em;
     }}
-
-    @media (max-width: 1199px) {{
-      .card-body-2col {{ grid-template-columns: 1fr; }}
-      .community-inner {{ grid-template-columns: 1fr; }}
-      .card-section {{ border-right: none; border-bottom: 1px solid var(--border-active); }}
-      .card-section:last-child {{ border-bottom: none; }}
-      /* Hide genre column at tablet to prevent overflow */
-      .ranking-table th:nth-child(3),
-      .ranking-table td:nth-child(3) {{ display: none; }}
-    }}
-
-    /* ── Mobile-first responsive ── */
-    @media (max-width: 767px) {{
-      body {{ padding: 0.8rem; }}
-      h1 {{ font-size: 1.4rem; }}
-      .subtitle {{ font-size: 0.82rem; margin-bottom: 1rem; }}
-      .site-nav {{ margin: -0.8rem -0.8rem 1.2rem -0.8rem; padding: 0.5rem 0.8rem; }}
-
-      /* Executive Summary */
-      .exec-summary {{ padding: 0.7rem 0.8rem; margin-bottom: 1.2rem; }}
-      .exec-summary h2 {{ font-size: 0.9rem; margin-bottom: 0.4rem; }}
-      .exec-summary li {{ font-size: 0.8rem; line-height: 1.5; margin-bottom: 0.25rem; }}
-
-      /* WNL — compact stacked columns */
-      .wnl-table {{ grid-template-columns: 1fr; gap: 0.3rem; margin-top: 0.6rem; padding-top: 0.6rem; }}
-      .wnl-header {{ font-size: 0.68rem; padding-bottom: 0.2rem; margin-bottom: 0.15rem; }}
-      .wnl-col table {{ margin-bottom: 0; }}
-      .wnl-col table tr {{ display: flex; align-items: baseline; }}
-      .wnl-col table tr:hover {{ background: none; }}
-      .wnl-col table td {{
-        padding: 0.15rem 0.4rem !important; font-size: 0.78rem !important;
-        border-bottom: none;
-      }}
-      .wnl-col table td:first-child {{ flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
-      .wnl-col table td:nth-child(2) {{ flex-shrink: 0; text-align: right; }}
-      .wnl-col table td:nth-child(3) {{ flex-shrink: 0; min-width: 55px; text-align: right; }}
-
-      /* Market chart */
-      .aggregate-chart {{ margin-top: 0.6rem; padding-top: 0.5rem; }}
-      .aggregate-label {{ font-size: 0.68rem; }}
-
-      /* Genre filter pills — horizontal scroll with fade hint */
-      .genre-filters {{
-        flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
-        gap: 0.35rem; padding-bottom: 0.8rem;
-        scrollbar-width: none;
-        position: relative;
-        -webkit-mask-image: linear-gradient(to right, black 80%, transparent);
-        mask-image: linear-gradient(to right, black 80%, transparent);
-      }}
-      .genre-filters.scrolled {{
-        -webkit-mask-image: none;
-        mask-image: none;
-      }}
-      .genre-filters::-webkit-scrollbar {{ display: none; }}
-      .genre-filter-btn {{
-        flex-shrink: 0; font-size: 0.72rem; padding: 0.3rem 0.6rem;
-      }}
-      .genre-scroll-hint {{
-        display: block;
-        font-size: 0.65rem; color: var(--text-dim);
-        text-align: right; margin-top: -0.4rem; margin-bottom: 0.3rem;
-      }}
-
-      /* ── Ranking table → labeled card layout ── */
-      .ranking-table thead {{ display: none; }}
-      .ranking-table tbody tr {{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.2rem 0.6rem;
-        padding: 0.8rem 0.6rem;
-        margin-bottom: 0.5rem;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        background: var(--bg-card);
-      }}
-      .ranking-table tbody tr:hover {{ background: var(--bg-card-hover); }}
-      .ranking-table tbody td {{
-        padding: 0; border: none; text-align: left !important;
-      }}
-      /* Rank + Genre badge row */
-      .ranking-table tbody td.rank {{
-        grid-column: 1 / -1; grid-row: 1;
-        font-size: 0.75rem; color: var(--text-muted);
-        display: flex; align-items: center; gap: 0.4rem;
-      }}
-      /* Game name */
-      .ranking-table tbody td.game {{
-        grid-column: 1 / -1; grid-row: 2;
-        white-space: normal; font-size: 1.05rem; font-weight: 600;
-        padding-bottom: 0.35rem;
-        border-bottom: 1px solid var(--border);
-        margin-bottom: 0.2rem;
-      }}
-      /* Genre badge — right side of rank row (col 3) */
-      .ranking-table tbody tr > td:nth-child(3) {{
-        grid-column: 1 / -1; grid-row: 1;
-        display: flex; justify-content: flex-end; align-items: center;
-      }}
-      /* Hide sentiment dot & annotation icon on mobile cards */
-      .ranking-table tbody .sent-inline {{ display: none; }}
-      .ranking-table tbody .annot-icon {{ display: none; }}
-      /* Stats: 2-column grid with labels */
-      .ranking-table tbody td.num {{ font-size: 0.85rem; }}
-      /* 24h Peak (col 4) */
-      .ranking-table tbody tr > td:nth-child(4) {{
-        grid-column: 1; grid-row: 3;
-      }}
-      .ranking-table tbody tr > td:nth-child(4)::before {{
-        content: "24h Peak  "; display: block;
-        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
-        text-transform: uppercase; letter-spacing: 0.03em;
-      }}
-      /* Est. Total (col 5) */
-      .ranking-table tbody tr > td:nth-child(5) {{
-        grid-column: 2; grid-row: 3;
-      }}
-      .ranking-table tbody tr > td:nth-child(5)::before {{
-        content: "Est. Total  "; display: block;
-        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
-        text-transform: uppercase; letter-spacing: 0.03em;
-      }}
-      /* Trend (col 6) */
-      .ranking-table tbody td.trend {{
-        grid-column: 1; grid-row: 4;
-        text-align: left !important; font-size: 0.85rem;
-        width: auto; padding-top: 0.15rem;
-      }}
-      .ranking-table tbody td.trend::before {{
-        content: "Trend (WoW)  "; display: block;
-        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
-        text-transform: uppercase; letter-spacing: 0.03em;
-      }}
-      /* All-Time Peak (col 7) */
-      .ranking-table tbody tr > td:nth-child(7) {{
-        grid-column: 2; grid-row: 4;
-        padding-top: 0.15rem;
-      }}
-      .ranking-table tbody tr > td:nth-child(7)::before {{
-        content: "All-Time Peak  "; display: block;
-        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
-        text-transform: uppercase; letter-spacing: 0.03em;
-      }}
-      /* % of Peak (col 8) */
-      .ranking-table tbody td.pct-cell {{
-        grid-column: 1 / -1; grid-row: 5;
-        width: auto; display: flex; align-items: center; gap: 0.4rem;
-        padding-top: 0.3rem;
-        border-top: 1px solid var(--border);
-        margin-top: 0.2rem;
-      }}
-      .ranking-table tbody td.pct-cell::before {{
-        content: "% of Peak"; flex-shrink: 0;
-        font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
-        text-transform: uppercase; letter-spacing: 0.03em;
-      }}
-      .ranking-table .pct-cell .bar-bg {{
-        width: 50px; flex-shrink: 0;
-      }}
-      .ranking-table .pct-cell span {{ font-size: 0.8rem; }}
-      /* Status (col 9) */
-      .ranking-table tbody td.status-cell {{
-        grid-column: 2; grid-row: 4;
-        display: flex; align-items: flex-start; justify-content: flex-end;
-        padding-top: 0.15rem;
-      }}
-      /* Genre rollup mobile */
-      .genre-rollup table {{ font-size: 0.72rem; }}
-      .genre-rollup th, .genre-rollup td {{ padding: 0.25rem 0.4rem; }}
-      /* Methodology mobile */
-      .methodology table {{ font-size: 0.7rem; }}
-      .methodology th, .methodology td {{ padding: 0.25rem 0.3rem; }}
-      .meth-note {{ font-size: 0.6rem; }}
-      /* Failed rows */
-      .ranking-table tbody tr.failed {{
-        display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.6rem;
-      }}
-
-      /* Section title */
-      .section-title {{ font-size: 1.1rem; }}
-
-      /* Detail cards */
-      .card {{ margin-bottom: 1rem; }}
-      .card-header {{ padding: 0.6rem 0.8rem; }}
-      .card-header-left h3 {{ font-size: 0.95rem; }}
-      .card-section {{ padding: 0.6rem 0.8rem; }}
-
-      /* Calendar */
-      .cal-entry {{
-        flex-wrap: wrap; gap: 0.3rem; padding: 0.4rem 0.5rem;
-      }}
-      .cal-game {{ min-width: 0; max-width: none; font-size: 0.75rem; }}
-      .cal-desc {{ font-size: 0.72rem; width: 100%; }}
-
-      /* Footer */
-      .footer {{ font-size: 0.7rem; }}
-
-      /* Insights */
-      .insights li {{ font-size: 0.82rem; }}
-
-      /* Generic table overflow — catches any table not already styled responsively */
-      .genre-rollup table {{ display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }}
-      .genre-rollup th, .genre-rollup td {{ font-size: 0.78rem; padding: 0.3rem 0.5rem; }}
-    }}
-
-    /* ── Dual-width: editorial sections narrower for readability ── */
-    .editorial-width {{
-      max-width: 740px;
-      margin-left: auto;
-      margin-right: auto;
-    }}
-
-    /* ── Active/pressed states ── */
-    button:active, .genre-filter-btn:active {{
-      transform: scale(0.96);
-    }}
-    a.game-link:active {{
-      transform: scale(0.99);
-      color: var(--accent);
-    }}
-    .exec-share-btn:active, .share-fab:active {{
-      transform: scale(0.94);
-    }}
-    .nav-back:active {{
-      transform: scale(0.97);
-    }}
-    .sd-newsletter-btn:active, .newsletter-btn:active {{
-      transform: scale(0.96);
-    }}
-    .share-btn:active {{
-      transform: scale(0.94);
-    }}
+    .footer a {{ color: var(--text-muted); text-decoration: none; }}
+    .footer a:hover {{ color: var(--accent); }}
 
     /* ── Publication Masthead ── */
     .masthead {{
@@ -4118,24 +4182,38 @@ def generate_html(results: list[dict], failed_names: list[str],
       align-items: flex-start;
       margin-bottom: 0.75rem;
     }}
+    .masthead-label {{
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }}
     .masthead-title {{
-      font-size: 2rem;
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 2.2rem;
+      font-style: italic;
       color: var(--text);
       margin-bottom: 0.15rem;
       letter-spacing: -0.5px;
     }}
     .masthead-title span {{
       color: var(--accent);
+      text-shadow: 0 0 20px rgba(0,255,65,0.3);
     }}
     .masthead-sub {{
+      font-family: 'Space Grotesk', sans-serif;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }}
     .masthead-meta {{
       text-align: right;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.72rem;
       color: var(--text-dim);
+      letter-spacing: 0.05em;
     }}
     .masthead-issue {{
       display: block;
@@ -4145,6 +4223,8 @@ def generate_html(results: list[dict], failed_names: list[str],
     .masthead-date {{
       display: block;
       margin-top: 0.15rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }}
     .masthead-nav {{
       display: flex;
@@ -4153,13 +4233,17 @@ def generate_html(results: list[dict], failed_names: list[str],
       margin-top: 0.75rem;
     }}
     .masthead-tab {{
+      font-family: 'Space Grotesk', sans-serif;
       padding: 0.55rem 1rem;
-      font-size: 0.78rem;
+      font-size: 10px;
       color: var(--text-muted);
       text-decoration: none;
       border-bottom: 2px solid transparent;
       transition: color 0.15s, border-color 0.15s;
       white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 500;
     }}
     .masthead-tab:hover {{
       color: var(--text);
@@ -4182,11 +4266,12 @@ def generate_html(results: list[dict], failed_names: list[str],
       align-items: center;
       gap: 0.4rem;
       padding: 0.25rem 0.7rem;
-      border-radius: 100px;
+      border-radius: 0;
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
     }}
     .pulse-dot {{
       width: 6px;
@@ -4194,6 +4279,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       border-radius: 50%;
       background: var(--green);
       animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 6px rgba(0,255,65,0.4);
     }}
     @keyframes pulse {{
       0%, 100% {{ opacity: 1; }}
@@ -4203,35 +4289,13 @@ def generate_html(results: list[dict], failed_names: list[str],
       color: var(--green);
       font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.15em;
     }}
     .freshness-sep {{
       color: var(--text-dim);
     }}
     .freshness-time {{
       color: var(--text-dim);
-    }}
-
-    /* ── Diamond bullet ── */
-    .diamond {{
-      color: var(--accent);
-      margin-right: 0.3rem;
-      font-size: 0.8em;
-    }}
-
-    /* ── Exec prose: lede sentence styling ── */
-    .exec-prose {{
-      color: var(--text);
-      font-size: 1rem;
-      font-weight: 500;
-      line-height: 1.7;
-      margin-top: 0.5rem;
-      margin-bottom: 0.8rem;
-      padding: 0;
-      background: none;
-      border-left: none;
-      border-radius: 0;
-      font-style: normal;
     }}
 
     /* ── Share Card ── */
@@ -4241,15 +4305,16 @@ def generate_html(results: list[dict], failed_names: list[str],
       justify-content: space-between;
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 0;
       padding: 1rem 1.2rem;
       margin-top: 1.5rem;
     }}
     .share-preview-title {{
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.78rem;
       font-weight: 500;
       color: var(--text);
+      letter-spacing: 0.05em;
     }}
     .share-preview-desc {{
       font-size: 0.72rem;
@@ -4257,28 +4322,33 @@ def generate_html(results: list[dict], failed_names: list[str],
       margin-top: 0.15rem;
     }}
     .share-preview-url {{
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.65rem;
       color: var(--text-dim);
       margin-top: 0.1rem;
+      letter-spacing: 0.05em;
     }}
     .share-btn {{
+      font-family: 'Space Grotesk', sans-serif;
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
       padding: 0.4rem 0.8rem;
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: 0;
       color: var(--text-muted);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       text-decoration: none;
       transition: all 0.15s;
       white-space: nowrap;
       flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }}
     .share-btn:hover {{
-      color: var(--text);
-      border-color: var(--border-active);
+      color: var(--bg);
+      border-color: var(--accent);
+      background: var(--accent);
     }}
 
     /* ── Top Mover Callouts ── */
@@ -4291,48 +4361,296 @@ def generate_html(results: list[dict], failed_names: list[str],
     .mover-card {{
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 0;
       padding: 1.2rem 1.4rem;
     }}
     .mover-up {{
-      border-left: 3px solid var(--green);
+      border-left: 4px solid var(--green);
     }}
     .mover-down {{
-      border-left: 3px solid var(--red);
+      border-left: 4px solid var(--red);
     }}
     .mover-label {{
-      font-size: 0.65rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.2em;
       color: var(--text-dim);
       margin-bottom: 0.35rem;
+      font-weight: 500;
     }}
     .mover-game {{
-      font-family: 'DM Serif Display', Georgia, serif;
+      font-family: 'Newsreader', Georgia, serif;
       font-size: 1.15rem;
+      font-style: italic;
       color: var(--text);
       margin-bottom: 0.25rem;
     }}
     .mover-up .mover-value {{
       color: var(--green);
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 500;
       font-size: 0.9rem;
     }}
     .mover-down .mover-value {{
       color: var(--red);
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 500;
       font-size: 0.9rem;
     }}
     .mover-detail {{
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 0.72rem;
       color: var(--text-muted);
       margin-top: 0.2rem;
     }}
+    .mover-catalyst {{
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }}
 
+    /* Scanning line gradient on nav */
+    .site-nav::after {{
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.4;
+    }}
+
+    /* Phosphor text glow on accent elements */
+    .masthead-title span,
+    .freshness-label {{
+      text-shadow: 0 0 20px rgba(0,255,65,0.3);
+    }}
+
+    /* Insights section */
+    .insights {{
+      background: var(--bg-card);
+      padding: 1rem 1.2rem; border-radius: 0; margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+    }}
+    .insights h2 {{
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; margin-bottom: 0.5rem;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      font-weight: 500;
+    }}
+    .insights li {{
+      margin-bottom: 0.3rem; margin-left: 1rem;
+      color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;
+    }}
+
+    @media (max-width: 1199px) {{
+      .card-body-2col {{ grid-template-columns: 1fr; }}
+      .community-inner {{ grid-template-columns: 1fr; }}
+      .card-section {{ border-right: none; border-bottom: 1px solid var(--border); }}
+      .card-section:last-child {{ border-bottom: none; }}
+      /* Hide sparkline + platform columns at tablet */
+      .ranking-table th:nth-child(6),
+      .ranking-table td:nth-child(6),
+      .ranking-table th:nth-child(10),
+      .ranking-table td:nth-child(10) {{ display: none; }}
+    }}
+
+    /* ── Mobile-first responsive ── */
     @media (max-width: 767px) {{
+      body {{ padding: 0.8rem; }}
+      h1 {{ font-size: 1.4rem; }}
+      .subtitle {{ font-size: 0.82rem; margin-bottom: 1rem; }}
+      .site-nav {{ margin: -0.8rem -0.8rem 1.2rem -0.8rem; padding: 0.5rem 0.8rem; }}
+
+      /* Executive Summary */
+      .exec-summary {{ padding: 0.7rem 0.8rem; margin-bottom: 1.2rem; }}
+      .exec-summary h2 {{ font-size: 0.9rem; margin-bottom: 0.4rem; }}
+      .exec-takeaway {{ font-size: 0.8rem; line-height: 1.5; margin-bottom: 0.25rem; }}
+
+      /* WNL compact stacked */
+      .wnl-table {{ grid-template-columns: 1fr; gap: 0.3rem; margin-top: 0.6rem; padding-top: 0.6rem; }}
+      .wnl-header {{ font-size: 9px; padding-top: 0.2rem; padding-bottom: 0.15rem; margin-bottom: 0.15rem; }}
+      .wnl-col table {{ margin-bottom: 0; }}
+      .wnl-col table tr {{ display: flex; align-items: baseline; }}
+      .wnl-col table tr:hover {{ background: none; }}
+      .wnl-col table td {{
+        padding: 0.15rem 0.4rem !important; font-size: 0.78rem !important;
+        border-bottom: none;
+      }}
+      .wnl-col table td:first-child {{ flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+      .wnl-col table td:nth-child(2) {{ flex-shrink: 0; text-align: right; }}
+      .wnl-col table td:nth-child(3) {{ flex-shrink: 0; min-width: 55px; text-align: right; }}
+
+      /* Market chart */
+      .aggregate-chart {{ margin-top: 0.6rem; padding-top: 0.5rem; }}
+      .aggregate-label {{ font-size: 9px; }}
+
+      /* Genre filter pills — horizontal scroll */
+      .genre-filters {{
+        flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+        gap: 0.35rem; padding-bottom: 0.8rem;
+        scrollbar-width: none;
+        position: relative;
+        -webkit-mask-image: linear-gradient(to right, black 80%, transparent);
+        mask-image: linear-gradient(to right, black 80%, transparent);
+      }}
+      .genre-filters.scrolled {{
+        -webkit-mask-image: none;
+        mask-image: none;
+      }}
+      .genre-filters::-webkit-scrollbar {{ display: none; }}
+      .genre-filter-btn {{
+        flex-shrink: 0; font-size: 0.68rem; padding: 0.3rem 0.6rem;
+      }}
+      .genre-scroll-hint {{
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.65rem; color: var(--text-dim);
+        text-align: right; margin-top: -0.4rem; margin-bottom: 0.3rem;
+      }}
+
+      /* ── Ranking table mobile card layout ── */
+      .ranking-table thead {{ display: none; }}
+      .ranking-table tbody tr {{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.2rem 0.6rem;
+        padding: 0.8rem 0.6rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0;
+        background: var(--bg-card);
+      }}
+      .ranking-table tbody tr:hover {{ background: var(--bg-card-hover); }}
+      .ranking-table tbody td {{
+        padding: 0; border: none; text-align: left !important;
+      }}
+      /* Rank */
+      .ranking-table tbody td.rank {{
+        grid-column: 1 / -1; grid-row: 1;
+        font-size: 0.75rem; color: var(--text-muted);
+        display: flex; align-items: center; gap: 0.4rem;
+      }}
+      /* Game name */
+      .ranking-table tbody td.game {{
+        grid-column: 1 / -1; grid-row: 2;
+        white-space: normal; font-size: 1.05rem; font-weight: 600;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 0.2rem;
+      }}
+      /* Hide sentiment dot and annotation icon on mobile */
+      .ranking-table tbody .sent-inline {{ display: none; }}
+      .ranking-table tbody .annot-icon {{ display: none; }}
+      /* Hide sparkline + platform on mobile */
+      /* Stats: 2-column grid with labels */
+      .ranking-table tbody td.num {{ font-size: 0.85rem; }}
+      /* Steam CCU (col 3) */
+      .ranking-table tbody tr > td:nth-child(3) {{
+        grid-column: 1; grid-row: 3;
+      }}
+      .ranking-table tbody tr > td:nth-child(3)::before {{
+        content: "24H PEAK  "; display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }}
+      /* Est. Total (col 4) */
+      .ranking-table tbody tr > td:nth-child(4) {{
+        grid-column: 2; grid-row: 3;
+      }}
+      .ranking-table tbody tr > td:nth-child(4)::before {{
+        content: "EST. TOTAL  "; display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }}
+      /* Trend (col 5) */
+      .ranking-table tbody td.trend {{
+        grid-column: 1; grid-row: 4;
+        text-align: left !important; font-size: 0.85rem;
+        width: auto; padding-top: 0.15rem;
+      }}
+      .ranking-table tbody td.trend::before {{
+        content: "TREND (WOW)  "; display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }}
+      /* All-Time Peak (col 6) */
+      .ranking-table tbody tr > td:nth-child(6) {{
+        grid-column: 2; grid-row: 4;
+        padding-top: 0.15rem;
+      }}
+      .ranking-table tbody tr > td:nth-child(6)::before {{
+        content: "ALL-TIME PEAK  "; display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }}
+      /* % of Peak (col 8) */
+      .ranking-table tbody td.pct-cell {{
+        grid-column: 1 / -1; grid-row: 5;
+        width: auto; display: flex; align-items: center; gap: 0.4rem;
+        padding-top: 0.3rem;
+        border-top: 1px solid var(--border);
+        margin-top: 0.2rem;
+      }}
+      .ranking-table tbody td.pct-cell::before {{
+        content: "% OF PEAK"; flex-shrink: 0;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }}
+      .ranking-table .pct-cell .bar-bg {{
+        width: 50px; flex-shrink: 0;
+      }}
+      .ranking-table .pct-cell span {{ font-size: 0.8rem; }}
+      /* Genre rollup mobile */
+      .genre-rollup table {{ font-size: 0.72rem; }}
+      .genre-rollup th, .genre-rollup td {{ padding: 0.25rem 0.4rem; }}
+      /* Methodology mobile */
+      .methodology table {{ font-size: 0.7rem; }}
+      .methodology th, .methodology td {{ padding: 0.25rem 0.3rem; }}
+      .meth-note {{ font-size: 0.6rem; }}
+      /* Failed rows */
+      .ranking-table tbody tr.failed {{
+        display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.6rem;
+      }}
+
+      /* Section title */
+      .section-title {{ font-size: 1.1rem; }}
+
+      /* Detail cards */
+      .card {{ margin-bottom: 1rem; }}
+      .card-header {{ padding: 0.6rem 0.8rem; }}
+      .card-header h3 {{ font-size: 0.95rem; }}
+      .card-section {{ padding: 0.6rem 0.8rem; }}
+      .takeaway-grid {{ grid-template-columns: 1fr 1fr; }}
+      .dev-flags {{ padding: 0.4rem 0.8rem; gap: 0.4rem; }}
+
+      /* Calendar */
+      .cal-entry {{
+        flex-wrap: wrap; gap: 0.3rem; padding: 0.4rem 0.5rem;
+      }}
+      .cal-game {{ min-width: 0; max-width: none; font-size: 0.75rem; }}
+      .cal-desc {{ font-size: 0.72rem; width: 100%; }}
+
+      /* Footer */
+      .footer {{ font-size: 0.7rem; }}
+
+      /* Insights */
+      .insights li {{ font-size: 0.82rem; }}
+
+      /* Table overflow */
+      .genre-rollup table {{ display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }}
+      .genre-rollup th, .genre-rollup td {{ font-size: 0.78rem; padding: 0.3rem 0.5rem; }}
+
+      /* Masthead mobile */
       .masthead-top {{
         flex-direction: column;
         gap: 0.5rem;
@@ -4359,45 +4677,90 @@ def generate_html(results: list[dict], failed_names: list[str],
         gap: 0.75rem;
         align-items: flex-start;
       }}
+      .twitch-stats {{ gap: 0.8rem; }}
     }}
+
+    /* ── Dual-width: editorial sections narrower ── */
+    .editorial-width {{
+      max-width: 740px;
+      margin-left: auto;
+      margin-right: auto;
+    }}
+
+    /* ── Active/pressed states ── */
+    button:active, .genre-filter-btn:active {{
+      transform: scale(0.96);
+    }}
+    a.game-link:active {{
+      transform: scale(0.99);
+      color: var(--accent);
+    }}
+    .share-btn:active {{
+      transform: scale(0.94);
+    }}
+    .nav-back:active {{
+      transform: scale(0.97);
+    }}
+    .back-to-top:active {{
+      transform: scale(0.94);
+    }}
+
+    /* Material Symbols for trend icons */
+    .material-symbols-outlined {{
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      vertical-align: middle;
+    }}
+
+    /* Scanning line on card hover */
+    .card {{ position: relative; }}
+    .card::before {{
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }}
+    .card:hover::before {{ opacity: 0.5; }}
   </style>
 </head>
 <body>
-  <a href="#exec-summary" style="position:absolute;left:-9999px;top:0;padding:8px 16px;background:var(--accent);color:#fff;z-index:9999;font-size:0.9rem;text-decoration:none;" onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Skip to Executive Summary</a>
+  <a href="#exec-summary" style="position:absolute;left:-9999px;top:0;padding:8px 16px;background:var(--accent);color:#0e0e0e;z-index:9999;font-size:0.9rem;text-decoration:none;" onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Skip to Executive Summary</a>
   <nav class="site-nav">
-    <a href="index.html" class="nav-back">&#8592; All Digests</a>
-    <a href="index.html" class="nav-logo">Shooter<span>Digest</span></a>
+    <a href="index.html" class="nav-back">&#8592; ALL DIGESTS</a>
+    <a href="index.html" class="nav-logo">SHOOTER<span>DIGEST</span></a>
   </nav>
   <div class="editorial-width">
   <header class="masthead">
     <div class="masthead-top">
       <div class="masthead-brand">
-        <h1 class="masthead-title">Shooter<span>Digest</span></h1>
-        <p class="masthead-sub">Weekly intelligence for competitive shooter games</p>
+        <div class="masthead-label">// INTELLIGENCE_REPORT</div>
+        <h1 class="masthead-title">SHOOTER <span>DIGEST</span></h1>
+        <p class="masthead-sub">WEEK OF {short_date.upper()}</p>
       </div>
       <div class="masthead-meta">
-        <span class="masthead-issue">Issue #{issue_number}</span>
-        <span class="masthead-date">Week of {short_date}</span>
+        <span class="masthead-issue">ISSUE #{issue_number}</span>
+        <span class="masthead-date">{date_str.upper()}</span>
       </div>
     </div>
     <div class="data-freshness">
       <span class="pulse-dot"></span>
-      <span class="freshness-label">Live Data</span>
+      <span class="freshness-label">LIVE DATA</span>
       <span class="freshness-sep">&middot;</span>
-      <span class="freshness-time">Updated {date_str}</span>
+      <span class="freshness-time">{timestamp}</span>
     </div>
     <nav class="masthead-nav">
-      <a href="#exec-summary" class="masthead-tab active">Summary</a>
-      <a href="#ranking-section" class="masthead-tab">Rankings</a>
-      <a href="#game-details" class="masthead-tab">Game Details</a>
-      <a href="#calendar" class="masthead-tab">Calendar</a>
-      <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="masthead-tab masthead-share">Share on X &#8599;</a>
+      <a href="#exec-summary" class="masthead-tab active">SUMMARY</a>
+      <a href="#ranking-section" class="masthead-tab">RANKINGS</a>
+      <a href="#game-details" class="masthead-tab">GAME DETAILS</a>
+      <a href="#calendar" class="masthead-tab">CALENDAR</a>
+      <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="masthead-tab masthead-share">SHARE ON X &#8599;</a>
     </nav>
   </header>
 
 {exec_html}
-
-{mover_html}
 
 {DATA_CAVEAT_HTML}
   </div>
@@ -4405,18 +4768,17 @@ def generate_html(results: list[dict], failed_names: list[str],
 {genre_tabs_html}
 
   <div id="ranking-section"></div>
+  <div class="section-label" style="margin-bottom:0.5rem">// INTELLIGENCE_GRID</div>
   <table class="ranking-table">
     <thead>
       <tr>
         <th data-sort="num" data-col="0">Rank</th>
         <th data-sort="str" data-col="1">Game</th>
-        <th data-sort="str" data-col="2">Genre</th>
-        <th data-sort="num" data-col="3" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
-        <th data-sort="num" data-col="4" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak &divide; Steam share. Click for methodology.">\u24d8</a></th>
-        <th data-sort="num" data-col="5" title="Week-over-Week trend (hover for MoM)">Trend<br><small>(WoW)</small></th>
-        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
-        <th data-sort="num" data-col="7">% of Peak</th>
-        <th data-sort="str" data-col="8">Status</th>
+        <th data-sort="num" data-col="2" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="3" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak \u00f7 Steam share. Click for methodology.">\u24d8</a></th>
+        <th data-sort="num" data-col="4" title="Week-over-Week trend (hover for MoM)">Trend<br><small>(WoW)</small></th>
+        <th data-sort="num" data-col="5" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
+        <th data-sort="num" data-col="6">% of Peak</th>
       </tr>
     </thead>
     <tbody>
@@ -4428,7 +4790,7 @@ def generate_html(results: list[dict], failed_names: list[str],
   <div class="editorial-width">
 {_build_insights_html(results)}
 
-  <h2 class="section-title" id="game-details">Game Details</h2>
+  <h2 class="section-title" id="game-details">// Game Details</h2>
 {cards_html}
 
 {generate_emerging_html(emerging_results) if emerging_results else ""}
@@ -4441,14 +4803,16 @@ def generate_html(results: list[dict], failed_names: list[str],
   </div>
 
   <div class="editorial-width footer">
-    Generated: {timestamp}<br>
-    Data: SteamCharts, Steam News API, Reddit, Google News<br>
-    <small>
-      <strong>Color key:</strong>
+    DATA_LAST_SYNC: {timestamp} &nbsp;|&nbsp; POWERED BY SHOOTERDIGEST // v2.4.0<br>
+    <a href="https://store.steampowered.com/charts" target="_blank">SteamCharts</a> &middot;
+    <a href="https://partner.steamgames.com/doc/webapi/ISteamNews" target="_blank">Steam News API</a> &middot;
+    <a href="https://www.reddit.com" target="_blank">Reddit</a> &middot;
+    <a href="https://news.google.com" target="_blank">Google News</a><br>
+    <small style="color:var(--text-dim);font-size:0.68rem">
       White = raw Steam data &nbsp;|&nbsp;
-      <span style="color:#6366F1">Blue</span> = estimated total across all platforms (current) &nbsp;|&nbsp;
-      <span style="color:#F59E0B">Gold</span> = estimated total across all platforms (all-time)<br>
-      Est. Total = Steam peak &divide; Steam share. Trend = month-over-month from SteamCharts.<br>
+      <span style="color:var(--green)">Green</span> = estimated total across all platforms (current) &nbsp;|&nbsp;
+      <span style="color:var(--amber)">Gold</span> = estimated total across all platforms (all-time)<br>
+      Est. Total = Steam peak \u00f7 Steam share. Trend = week-over-week from SteamCharts.<br>
       Platform splits from EA, Krafton, NetEase earnings, Alinea Analytics, and community trackers. Extrapolated where official data unavailable.
     </small>
   </div>
@@ -4535,13 +4899,14 @@ def generate_html(results: list[dict], failed_names: list[str],
   }})();
 
   </script>
-  <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">↑ Top</a>
-  <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-fab" aria-label="Share on X">
-    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">\u2191 TOP</a>
+  <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-fab" aria-label="Share on X" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:0;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;z-index:50;text-decoration:none;">
+    <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--text)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
   </a>
 </body>
 </html>
 """
+
 
 
 # ---------------------------------------------------------------------------

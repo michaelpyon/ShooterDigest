@@ -51,6 +51,18 @@ def _scraper_components() -> dict:
     return _SCRAPER_COMPONENTS
 
 
+def _minify_css(css: str) -> str:
+    """Minify CSS by removing comments and collapsing whitespace."""
+    # Remove /* ... */ comments
+    css = re.sub(r'/\*.*?\*/', '', css, flags=re.DOTALL)
+    # Collapse whitespace around : ; { } , > ~ +
+    css = re.sub(r'\s*([:{};,>~+])\s*', r'\1', css)
+    # Collapse multiple spaces/newlines to single space
+    css = re.sub(r'\s+', ' ', css)
+    # Remove leading/trailing whitespace
+    return css.strip()
+
+
 # ---------------------------------------------------------------------------
 # Formatting helpers
 # ---------------------------------------------------------------------------
@@ -3330,7 +3342,7 @@ def generate_html(results: list[dict], failed_names: list[str],
     </div>
 """
 
-    return f"""<!DOCTYPE html>
+    _html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -3349,8 +3361,10 @@ def generate_html(results: list[dict], failed_names: list[str],
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>\U0001f3af</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Space+Grotesk:wght@300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Space+Grotesk:wght@300..700&family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Space+Grotesk:wght@300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"></noscript>
   <title>Shooter Digest - {date_str}</title>
   <style>
     :root {{
@@ -4906,6 +4920,9 @@ def generate_html(results: list[dict], failed_names: list[str],
 </body>
 </html>
 """
+    # Minify inline CSS blocks to reduce page size
+    _html = re.sub(r'<style>(.*?)</style>', lambda m: f'<style>{_minify_css(m.group(1))}</style>', _html, flags=re.DOTALL)
+    return _html
 
 
 
@@ -5449,7 +5466,7 @@ def generate_index(docs_dir: str) -> str:
             f'<span class="arrow">&#8594;</span></a></li>\n'
         )
 
-    return f"""<!DOCTYPE html>
+    _html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -5468,7 +5485,8 @@ def generate_index(docs_dir: str) -> str:
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
   <title>ShooterDigest &mdash; Archive</title>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -5519,6 +5537,8 @@ def generate_index(docs_dir: str) -> str:
 </body>
 </html>
 """
+    _html = re.sub(r'<style>(.*?)</style>', lambda m: f'<style>{_minify_css(m.group(1))}</style>', _html, flags=re.DOTALL)
+    return _html
 
 # ---------------------------------------------------------------------------
 # Main

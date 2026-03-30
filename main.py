@@ -8,6 +8,7 @@ import shutil
 import html as html_mod
 import logging
 import calendar as cal_mod
+import urllib.parse
 from datetime import datetime
 
 logging.basicConfig(level=logging.WARNING, format="%(message)s")
@@ -17,6 +18,9 @@ DELAY_BETWEEN_REQUESTS = 2  # seconds
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 DOCS_DIR = os.path.join(BASE_DIR, "docs")
+SITE_URL = os.environ.get("SITE_URL", "https://shooter.michaelpyon.com").rstrip("/")
+TWITTER_SITE_HANDLE = os.environ.get("TWITTER_SITE_HANDLE", "@michaelpyon")
+TWITTER_CREATOR_HANDLE = os.environ.get("TWITTER_CREATOR_HANDLE", TWITTER_SITE_HANDLE)
 _SCRAPER_COMPONENTS = None
 
 
@@ -137,6 +141,41 @@ def _sanitize_text(text: str) -> str:
     # Collapse excessive newlines
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
+
+
+def _strip_html_tags(text: str) -> str:
+    """Remove HTML tags so HTML-formatted strings can be reused in plaintext output."""
+    if not text:
+        return ""
+    return re.sub(r"<[^>]+>", "", text)
+
+
+def _resolve_report_datetime(report_date: str | None) -> datetime:
+    """Parse a YYYY-MM-DD report date, falling back to the current local time."""
+    if report_date:
+        try:
+            return datetime.strptime(report_date, "%Y-%m-%d")
+        except ValueError:
+            pass
+    return datetime.now()
+
+
+def _format_generated_timestamp(generated_at: str | None, fallback_dt: datetime, *, markdown: bool = False) -> str:
+    """Format a stored snapshot timestamp for HTML/Markdown output."""
+    if generated_at:
+        try:
+            parsed = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
+            return parsed.strftime("%Y-%m-%d %H:%M:%S UTC")
+        except ValueError:
+            return generated_at
+    fmt = "%Y-%m-%d %H:%M:%S UTC" if markdown else "%Y-%m-%d %H:%M:%S"
+    return fallback_dt.strftime(fmt)
+
+
+def _share_on_x_url() -> str:
+    text = urllib.parse.quote("ShooterDigest — This week's competitive FPS intelligence briefing is live.")
+    url = urllib.parse.quote(SITE_URL, safe="")
+    return f"https://twitter.com/intent/tweet?text={text}&url={url}"
 
 
 # ---------------------------------------------------------------------------
@@ -466,7 +505,12 @@ _SPARKLINE_COLORS = {
 }
 
 
-def _generate_sparkline_svg(avg_trend: list[dict], trend_css: str) -> str:
+def _generate_sparkline_svg(
+    avg_trend: list[dict],
+    trend_css: str,
+    *,
+    reference_date: datetime | None = None,
+) -> str:
     """Generate an inline SVG sparkline chart for monthly player trends.
 
     Args:
@@ -512,11 +556,12 @@ def _generate_sparkline_svg(avg_trend: list[dict], trend_css: str) -> str:
 
     # Month labels
     labels_svg = ""
+    report_dt = reference_date or datetime.now()
     for i, (month_text, _) in enumerate(points):
         x = coords[i][0]
         # Shorten month label
         if month_text == "Last 30 Days":
-            label = datetime.now().strftime("%b")
+            label = report_dt.strftime("%b")
         else:
             try:
                 dt = datetime.strptime(month_text, "%B %Y")
@@ -625,7 +670,11 @@ def _categorize_post(title: str, flair: str, score: int = 0) -> str:
     return "OTHER"
 
 
-def _generate_aggregate_sparkline(results: list[dict]) -> str:
+def _generate_aggregate_sparkline(
+    results: list[dict],
+    *,
+    reference_date: datetime | None = None,
+) -> str:
     """Generate a larger SVG sparkline showing total market trend.
 
     Sums average player counts across all games for each month in the overlapping range.
@@ -692,13 +741,14 @@ def _generate_aggregate_sparkline(results: list[dict]) -> str:
     # Month labels (show every other to avoid crowding)
     labels_svg = ""
     step = max(1, n // 6)  # show ~6 labels max
+    report_dt = reference_date or datetime.now()
     for i, m in enumerate(month_sums):
         if i % step != 0 and i != n - 1:
             continue
         x = coords[i][0]
         month_text = m["month"]
         if month_text == "Last 30 Days":
-            label = datetime.now().strftime("%b")
+            label = report_dt.strftime("%b")
         else:
             try:
                 dt = datetime.strptime(month_text, "%B %Y")
@@ -2147,7 +2197,7 @@ def _extract_future_dates(text: str, current_year: int) -> list[tuple[str, datet
     return results
 
 
-def _build_release_calendar(results: list[dict]) -> dict:
+def _build_release_calendar(results: list[dict], *, reference_date: datetime | None = None) -> dict:
     """Build a curated, forward-looking release calendar.
 
     Returns dict with keys:
@@ -2158,7 +2208,7 @@ def _build_release_calendar(results: list[dict]) -> dict:
 
     Each entry: {"game", "type", "date_str", "date_dt", "desc", "url", "estimated"}
     """
-    now = datetime.now()
+    now = reference_date or datetime.now()
     today = now.replace(hour=0, minute=0, second=0, microsecond=0)
     week_ago = today - __import__('datetime').timedelta(days=7)
     two_weeks_ahead = today + __import__('datetime').timedelta(days=14)
@@ -2478,7 +2528,7 @@ def _render_cal_entry_html(e: dict) -> str:
       </div>'''
 
 
-def _render_calendar_html(cal_data: dict) -> str:
+def _render_calendar_html(cal_data: dict, *, reference_date: datetime | None = None) -> str:
     """Render the curated release calendar: This Week / Coming Up / Future Months."""
     this_week = cal_data.get("this_week", [])
     coming_up = cal_data.get("coming_up", [])
@@ -2503,7 +2553,8 @@ def _render_calendar_html(cal_data: dict) -> str:
     </div>\n'''
 
     # --- TODAY divider ---
-    today_str = datetime.now().strftime("%b %d")
+    report_dt = reference_date or datetime.now()
+    today_str = report_dt.strftime("%b %d")
     today_divider = f'''    <div class="cal-today-divider">
       <span>TODAY — {today_str}</span>
     </div>\n'''
@@ -2830,11 +2881,14 @@ def generate_exec_prose(data: list[dict]) -> str:
 def generate_html(results: list[dict], failed_names: list[str],
                   overall_takeaways: list[str],
                   emerging_results: list[dict] | None = None,
-                  radar_results: list[dict] | None = None) -> str:
-    today = datetime.now()
+                  radar_results: list[dict] | None = None,
+                  report_date: str | None = None,
+                  generated_at: str | None = None) -> str:
+    today = _resolve_report_datetime(report_date)
     date_str = today.strftime("%B %d, %Y")
     short_date = today.strftime("%b %d")
-    timestamp = today.strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = _format_generated_timestamp(generated_at, today)
+    share_on_x_url = _share_on_x_url()
     # Issue number: weeks since first digest (2024-09-01)
     _epoch = datetime(2024, 9, 1)
     issue_number = max(1, (today - _epoch).days // 7)
@@ -2857,15 +2911,15 @@ def generate_html(results: list[dict], failed_names: list[str],
         num = f"{idx + 1:02d}"
         exec_items += f'      <div class="exec-takeaway"><span class="exec-num">{num}</span><span class="exec-takeaway-text">{t}</span></div>\n'
     exec_prose_html = generate_exec_prose(results)
-    aggregate_chart = _generate_aggregate_sparkline(results)
+    aggregate_chart = _generate_aggregate_sparkline(results, reference_date=today)
     wnl = _generate_winners_neutrals_losers(results)
 
     # Build winners / neutrals / losers mini-table
-    def _wnl_rows(items, color, arrow_class, max_rows=3):
+    def _wnl_rows(items, color, arrow_class, max_rows=None):
         if not items:
             return f'<tr><td colspan="3" style="color:var(--text-dim);font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr>'
         rows = ""
-        for g in items[:max_rows]:
+        for g in (items[:max_rows] if max_rows else items):
             t = g["trend_pct"]
             t_str = f'{t:+.1f}%' if t is not None else "\u2014"
             rows += (
@@ -3054,7 +3108,8 @@ def generate_html(results: list[dict], failed_names: list[str],
           </td>
           <td class="num steam-ccu" data-value="{r['peak_24h']}">{_fmt(r['peak_24h'])}</td>
           <td class="num est-total" data-value="{r.get('est_total_24h', r['peak_24h'])}">{est_total}</td>
-          <td class="trend {trend_display_css}" data-value="{trend_sort_val}"{mom_tip}{trend_title}>{trend_cell}{annotation_icon}</td>
+          <td class="trend {trend_display_css}" data-value="{trend_sort_val}"{trend_title}>{trend_cell}{annotation_icon}</td>
+          <td class="trend {r['trend_css']}" style="text-align:center;font-size:0.82rem" data-value="{trend_val}">{r['trend_arrow']} {trend_str if trend_str else '—'}</td>
           <td class="num alltime" data-value="{r.get('est_total_all', r['peak_all'])}">{est_all_time}</td>
           <td class="pct-cell" data-value="{r['pct_all']:.2f}">
             <div class="bar-bg"><div class="bar" style="width:{bar_w}%"></div></div>
@@ -3068,6 +3123,7 @@ def generate_html(results: list[dict], failed_names: list[str],
           <td class="game">{_esc(name)}</td>
           <td class="num">-</td><td class="num">-</td>
           <td class="trend neutral">-</td>
+          <td class="trend neutral" style="text-align:center">-</td>
           <td class="num">-</td><td class="pct-cell">-</td>
         </tr>\n"""
 
@@ -3075,7 +3131,11 @@ def generate_html(results: list[dict], failed_names: list[str],
     cards_html = ""
     for r in results:
         # SVG sparkline chart
-        sparkline = _generate_sparkline_svg(r.get("avg_trend", []), r.get("trend_css", "neutral"))
+        sparkline = _generate_sparkline_svg(
+            r.get("avg_trend", []),
+            r.get("trend_css", "neutral"),
+            reference_date=today,
+        )
 
         # News items with AI-extracted summary + sentiment dot + clickable links
         news_html = ""
@@ -3336,16 +3396,16 @@ def generate_html(results: list[dict], failed_names: list[str],
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://shooter.michaelpyon.com" />
+  <meta property="og:url" content="{SITE_URL}" />
   <meta property="og:title" content="Shooter Digest \u2014 Weekly Competitive Shooter Intelligence" />
   <meta property="og:description" content="SteamDB shows you the numbers. ShooterDigest tells you what they mean. Weekly analysis of the PC competitive FPS market." />
-  <meta property="og:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta property="og:image" content="{SITE_URL}/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Shooter Digest \u2014 Weekly Shooter Intelligence" />
   <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
-  <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
-  <meta name="twitter:site" content="@michaelpyon" />
-  <meta name="twitter:creator" content="@michaelpyon" />
+  <meta name="twitter:image" content="{SITE_URL}/og.png" />
+  <meta name="twitter:site" content="{TWITTER_SITE_HANDLE}" />
+  <meta name="twitter:creator" content="{TWITTER_CREATOR_HANDLE}" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>\U0001f3af</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -4756,7 +4816,7 @@ def generate_html(results: list[dict], failed_names: list[str],
       <a href="#ranking-section" class="masthead-tab">RANKINGS</a>
       <a href="#game-details" class="masthead-tab">GAME DETAILS</a>
       <a href="#calendar" class="masthead-tab">CALENDAR</a>
-      <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="masthead-tab masthead-share">SHARE ON X &#8599;</a>
+      <a href="{share_on_x_url}" target="_blank" rel="noopener" class="masthead-tab masthead-share">SHARE ON X &#8599;</a>
     </nav>
   </header>
 
@@ -4776,9 +4836,10 @@ def generate_html(results: list[dict], failed_names: list[str],
         <th data-sort="str" data-col="1">Game</th>
         <th data-sort="num" data-col="2" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
         <th data-sort="num" data-col="3" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak \u00f7 Steam share. Click for methodology.">\u24d8</a></th>
-        <th data-sort="num" data-col="4" title="Week-over-Week trend (hover for MoM)">Trend<br><small>(WoW)</small></th>
-        <th data-sort="num" data-col="5" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
-        <th data-sort="num" data-col="6">% of Peak</th>
+        <th data-sort="num" data-col="4" title="Week-over-Week change in 24h peak players">Trend<br><small>(WoW)</small></th>
+        <th data-sort="num" data-col="5" title="Month-over-Month trend in average concurrent players">MoM<br><small>(Trend)</small></th>
+        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
+        <th data-sort="num" data-col="7">% of Peak</th>
       </tr>
     </thead>
     <tbody>
@@ -4797,7 +4858,7 @@ def generate_html(results: list[dict], failed_names: list[str],
 
 {generate_radar_html(radar_results) if radar_results else ""}
 
-{_render_calendar_html(_build_release_calendar(results))}
+{_render_calendar_html(_build_release_calendar(results, reference_date=today), reference_date=today)}
 
 {methodology_html}
   </div>
@@ -4900,7 +4961,7 @@ def generate_html(results: list[dict], failed_names: list[str],
 
   </script>
   <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">\u2191 TOP</a>
-  <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-fab" aria-label="Share on X" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:0;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;z-index:50;text-decoration:none;">
+  <a href="{share_on_x_url}" target="_blank" rel="noopener" class="share-fab" aria-label="Share on X" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:0;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;z-index:50;text-decoration:none;">
     <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--text)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
   </a>
 </body>
@@ -5134,10 +5195,12 @@ def _build_insights_html(results: list[dict]) -> str:
 # ---------------------------------------------------------------------------
 
 def generate_markdown(results: list[dict], failed_names: list[str],
-                      overall_takeaways: list[str]) -> str:
-    today = datetime.now()
+                      overall_takeaways: list[str],
+                      report_date: str | None = None,
+                      generated_at: str | None = None) -> str:
+    today = _resolve_report_datetime(report_date)
     date_str = today.strftime("%B %d, %Y")
-    timestamp = today.strftime("%Y-%m-%d %H:%M:%S UTC")
+    timestamp = _format_generated_timestamp(generated_at, today, markdown=True)
 
     lines = [
         f"# Shooter Digest - Week of {date_str}",
@@ -5146,7 +5209,7 @@ def generate_markdown(results: list[dict], failed_names: list[str],
         "",
     ]
     for t in overall_takeaways:
-        lines.append(f"- {_sanitize_text(t)}")
+        lines.append(f"- {_sanitize_text(_strip_html_tags(t))}")
     lines += ["", "---", ""]
 
     # Winners / Neutrals / Losers
@@ -5270,7 +5333,7 @@ def generate_markdown(results: list[dict], failed_names: list[str],
             for m in r["avg_trend"]:
                 month_label = m.get("month", "")
                 if month_label == "Last 30 Days":
-                    month_label = datetime.now().strftime("%b") + " (30d)"
+                    month_label = today.strftime("%b") + " (30d)"
                 else:
                     try:
                         dt = datetime.strptime(month_label, "%B %Y")
@@ -5339,7 +5402,7 @@ def generate_markdown(results: list[dict], failed_names: list[str],
             lines.append("")
 
     # Release & Patch Calendar (curated, forward-looking)
-    cal_data = _build_release_calendar(results)
+    cal_data = _build_release_calendar(results, reference_date=today)
     lines += ["---", ""]
     lines.append("## Release & Patch Calendar")
     lines.append("")
@@ -5363,7 +5426,7 @@ def generate_markdown(results: list[dict], failed_names: list[str],
         return md
 
     lines += _md_cal_table(cal_data.get("this_week", []), "This Week")
-    lines.append(f"*— TODAY ({datetime.now().strftime('%b %d')}) —*")
+    lines.append(f"*— TODAY ({today.strftime('%b %d')}) —*")
     lines.append("")
     lines += _md_cal_table(cal_data.get("coming_up", []), "Coming Up (Next 2 Weeks)")
 
@@ -5396,20 +5459,24 @@ def generate_index(docs_dir: str) -> str:
 
     def _parse_movers(html):
         gainer_name, gainer_pct, loser_name, loser_pct = None, None, None, None
-        m = _re.search(r'Biggest mover:\s*([^<\n]+?)\s+at\s+([+-][\d.]+)%\s+month', html)
-        if m:
-            gainer_name = m.group(1).strip()
+        patterns = (
+            ("gainer", r'Biggest mover:\s*([^<\n]+?)\s+at\s+([+-][\d.]+)%\s+month'),
+            ("gainer", r'Biggest mover:\s*([^<\n]+?)\s+([+-][\d.]+)%\s+MoM'),
+            ("loser", r'Steepest decline:\s*([^<\n]+?)\s+at\s+([+-][\d.]+)%\s+month'),
+            ("loser", r'Steepest decline:\s*([^<\n]+?)\s+([+-][\d.]+)%\s+MoM'),
+        )
+        for kind, pattern in patterns:
+            m = _re.search(pattern, html)
+            if not m:
+                continue
             try:
-                gainer_pct = float(m.group(2))
+                pct_val = float(m.group(2))
             except Exception:
-                pass
-        m = _re.search(r'Steepest decline:\s*([^<\n]+?)\s+at\s+([+-][\d.]+)%\s+month', html)
-        if m:
-            loser_name = m.group(1).strip()
-            try:
-                loser_pct = float(m.group(2))
-            except Exception:
-                pass
+                continue
+            if kind == "gainer" and gainer_name is None:
+                gainer_name, gainer_pct = m.group(1).strip(), pct_val
+            if kind == "loser" and loser_name is None:
+                loser_name, loser_pct = m.group(1).strip(), pct_val
         return gainer_name, gainer_pct, loser_name, loser_pct
 
     # Discover digest files
@@ -5455,16 +5522,16 @@ def generate_index(docs_dir: str) -> str:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://shooter.michaelpyon.com" />
+  <meta property="og:url" content="{SITE_URL}" />
   <meta property="og:title" content="ShooterDigest — Weekly Competitive Shooter Intelligence" />
   <meta property="og:description" content="SteamDB shows you the numbers. ShooterDigest tells you what they mean. Weekly analysis of the PC competitive FPS market." />
-  <meta property="og:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta property="og:image" content="{SITE_URL}/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ShooterDigest — Weekly Shooter Intelligence" />
   <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
-  <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
-  <meta name="twitter:site" content="@michaelpyon" />
-  <meta name="twitter:creator" content="@michaelpyon" />
+  <meta name="twitter:image" content="{SITE_URL}/og.png" />
+  <meta name="twitter:site" content="{TWITTER_SITE_HANDLE}" />
+  <meta name="twitter:creator" content="{TWITTER_CREATOR_HANDLE}" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -5541,7 +5608,7 @@ def collect_pipeline_snapshot(
 
     print()
     print("  Shooter Digest - Fetching player data + context...")
-    print("  (This takes about 3-4 minutes for 15 titles)")
+    print(f"  (This takes about 3-4 minutes for {len(games)} titles)")
     print()
 
     results = scrape_all()
@@ -5637,7 +5704,7 @@ def collect_pipeline_snapshot(
     emerging_results = []
     if include_emerging:
         print()
-        print("  Scraping Emerging Titles (6 watchlist games)...")
+        print(f"  Scraping Emerging Titles ({len(emerging_games)} watchlist games)...")
         print("  (Adds ~3-4 minutes)")
         try:
             emerging_raw = scrape_emerging()
@@ -5711,6 +5778,7 @@ def render_snapshot(
     os.makedirs(docs_dir, exist_ok=True)
 
     date_str = snapshot.get("date") or datetime.now().strftime("%Y-%m-%d")
+    generated_at = snapshot.get("generated_at")
     results = snapshot.get("results", [])
     failed_names = snapshot.get("failed_names", [])
     overall_takeaways = snapshot.get("overall_takeaways", [])
@@ -5719,7 +5787,15 @@ def render_snapshot(
 
     md_path = os.path.join(out_dir, f"digest_{date_str}.md")
     with open(md_path, "w", encoding="utf-8") as f:
-        f.write(generate_markdown(results, failed_names, overall_takeaways))
+        f.write(
+            generate_markdown(
+                results,
+                failed_names,
+                overall_takeaways,
+                report_date=date_str,
+                generated_at=generated_at,
+            )
+        )
 
     html_path = os.path.join(out_dir, f"digest_{date_str}.html")
     with open(html_path, "w", encoding="utf-8") as f:
@@ -5730,6 +5806,8 @@ def render_snapshot(
                 overall_takeaways,
                 emerging_results=emerging_results,
                 radar_results=radar_results,
+                report_date=date_str,
+                generated_at=generated_at,
             )
         )
 

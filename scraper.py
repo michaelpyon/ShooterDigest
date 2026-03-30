@@ -10,11 +10,13 @@ import cloudscraper
 from bs4 import BeautifulSoup
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
 
 from source_cache import cached_get
 
 logger = logging.getLogger(__name__)
+
+TRANSIENT_HTTP_STATUS_CODES = {408, 429, 500, 502, 503, 504}
 
 # cloudscraper session — handles Cloudflare JS challenges automatically.
 # Used for SteamCharts requests; regular requests used for Steam API / Reddit / RSS.
@@ -24,7 +26,9 @@ _scraper = cloudscraper.create_scraper(
 
 
 @retry(
-    retry=retry_if_exception_type(requests.exceptions.RequestException),
+    retry=retry_if_exception(
+        lambda exc: _should_retry_request(exc)
+    ),
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=2, max=10),
     reraise=True,
@@ -54,6 +58,24 @@ def _steamcharts_get(url: str, timeout: int = 15) -> requests.Response:
     )
 
 
+def _should_retry_request(exc: BaseException) -> bool:
+    """Retry only on transient network failures and retryable HTTP statuses."""
+    if isinstance(exc, (requests.exceptions.Timeout, requests.exceptions.ConnectionError)):
+        return True
+    if isinstance(exc, requests.exceptions.HTTPError):
+        response = exc.response
+        return bool(response and response.status_code in TRANSIENT_HTTP_STATUS_CODES)
+    return isinstance(exc, requests.exceptions.RequestException)
+
+
+@retry(
+    retry=retry_if_exception(
+        lambda exc: _should_retry_request(exc)
+    ),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=2, max=10),
+    reraise=True,
+)
 def _network_steamcharts_get(url: str, timeout: int = 15) -> requests.Response:
     """Network-only HTTP GET via cloudscraper for SteamCharts."""
     resp = _scraper.get(url, timeout=timeout)
@@ -212,6 +234,9 @@ def _clean_bbcode(text: str) -> str:
     """Strip BBCode / Steam markup tags and return plain text."""
     if not text:
         return ""
+    # Protect literal [REDACTED] placeholders before BBCode stripping
+    REDACTED_PLACEHOLDER = "__REDACTED_PLACEHOLDER__"
+    text = text.replace("[REDACTED]", REDACTED_PLACEHOLDER)
     # [url=X]text[/url] -> text
     text = re.sub(r"\[url=[^\]]*\](.*?)\[/url\]", r"\1", text, flags=re.S)
     # [img]...[/img] -> remove entirely
@@ -230,6 +255,8 @@ def _clean_bbcode(text: str) -> str:
     # Steam-specific placeholders: {STEAM_CLAN_IMAGE}, etc.
     text = re.sub(r"\{STEAM_CLAN_IMAGE\}[^\s]*", "", text)
     text = re.sub(r"\{[A-Z_]+\}", "", text)
+    # Restore protected [REDACTED] placeholders
+    text = text.replace(REDACTED_PLACEHOLDER, "[REDACTED]")
     # Decode HTML entities
     text = _clean_html_entities(text)
     # Fix lone backslashes before text (BBCode section separator artifacts)

@@ -58,7 +58,7 @@ export function ChangeIndicator({
 }) {
   if (change == null) {
     return (
-      <span className={`mono text-[#64748b] text-xs ${className}`}>--</span>
+      <span className={`mono text-[#6b7280] text-xs ${className}`}>--</span>
     );
   }
 

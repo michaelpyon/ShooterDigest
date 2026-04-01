@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-[#0a0a0a]">
-        <nav className="border-b border-[#1e293b] bg-[#0a0a0a] sticky top-0 z-50">
+        <nav className="border-b border-[#1f2937] bg-[#0a0a0a] sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14">
               <div className="flex items-center gap-8">

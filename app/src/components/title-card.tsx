@@ -24,12 +24,12 @@ export function TitleCard({ data }: TitleCardProps) {
   return (
     <Link
       href={`/title/${data.slug}`}
-      className="block bg-[#161616] border border-[#1e293b] rounded-lg p-4 hover:bg-[#1a1a1a] hover:border-[#334155] transition-all"
+      className="block bg-[#111111] border border-[#1f2937] rounded-lg p-4 hover:bg-[#1a1a1a] hover:border-[#334155] transition-all"
     >
       <div className="flex items-start justify-between gap-4">
         {/* Left: rank + info */}
         <div className="flex items-start gap-3 min-w-0 flex-1">
-          <span className="mono text-[#64748b] text-sm font-medium w-6 text-right shrink-0 pt-0.5">
+          <span className="mono text-[#6b7280] text-sm font-medium w-6 text-right shrink-0 pt-0.5">
             {data.rank}
           </span>
           <div className="min-w-0">
@@ -44,7 +44,7 @@ export function TitleCard({ data }: TitleCardProps) {
               )}
             </div>
             <div className="flex items-center gap-3 mt-1">
-              <span className="text-[#64748b] text-xs">{data.genre}</span>
+              <span className="text-[#6b7280] text-xs">{data.genre}</span>
               {data.currentPlayers != null && (
                 <span className="mono text-[#94a3b8] text-xs">
                   {formatNumber(data.currentPlayers)} players
@@ -57,7 +57,7 @@ export function TitleCard({ data }: TitleCardProps) {
                       ? "text-[#22c55e]"
                       : data.sentimentScore <= -0.05
                         ? "text-[#ef4444]"
-                        : "text-[#64748b]"
+                        : "text-[#6b7280]"
                   }`}
                 >
                   {data.sentimentScore >= 0.05

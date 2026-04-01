@@ -102,7 +102,7 @@ export default function ComparePage() {
         <h1 className="text-2xl font-bold text-[#e2e8f0] tracking-tight">
           Compare Titles
         </h1>
-        <p className="text-[#64748b] text-sm mt-1">
+        <p className="text-[#6b7280] text-sm mt-1">
           Select 2-6 titles to overlay their health score trends.
         </p>
       </div>
@@ -114,7 +114,7 @@ export default function ComparePage() {
             Select titles ({selected.length}/6)
           </span>
           <div className="flex items-center gap-2">
-            <span className="text-[#64748b] text-xs">Period:</span>
+            <span className="text-[#6b7280] text-xs">Period:</span>
             {[30, 90, 180].map((d) => (
               <button
                 key={d}
@@ -122,7 +122,7 @@ export default function ComparePage() {
                 className={`text-xs px-2 py-1 rounded transition-colors ${
                   days === d
                     ? "bg-[#3b82f6] text-white"
-                    : "text-[#64748b] hover:text-[#94a3b8] bg-[#161616]"
+                    : "text-[#6b7280] hover:text-[#94a3b8] bg-[#111111]"
                 }`}
               >
                 {d}d
@@ -142,7 +142,7 @@ export default function ComparePage() {
                 className={`text-xs px-3 py-1.5 rounded-md border transition-all ${
                   isSelected
                     ? "border-[#3b82f6] bg-[#3b82f6]/10 text-[#e2e8f0]"
-                    : "border-[#1e293b] bg-[#161616] text-[#94a3b8] hover:border-[#334155] hover:text-[#e2e8f0]"
+                    : "border-[#1f2937] bg-[#111111] text-[#94a3b8] hover:border-[#334155] hover:text-[#e2e8f0]"
                 }`}
               >
                 {isSelected && (
@@ -165,23 +165,23 @@ export default function ComparePage() {
 
       {/* Comparison chart */}
       {selected.length < 2 && (
-        <div className="text-center py-16 border border-[#1e293b] rounded-lg bg-[#161616]">
-          <p className="text-[#64748b] text-sm">
+        <div className="text-center py-16 border border-[#1f2937] rounded-lg bg-[#111111]">
+          <p className="text-[#6b7280] text-sm">
             Select at least 2 titles to compare.
           </p>
         </div>
       )}
 
       {loading && selected.length >= 2 && (
-        <div className="text-center py-16 border border-[#1e293b] rounded-lg bg-[#161616]">
-          <p className="text-[#64748b] text-sm">Loading comparison data...</p>
+        <div className="text-center py-16 border border-[#1f2937] rounded-lg bg-[#111111]">
+          <p className="text-[#6b7280] text-sm">Loading comparison data...</p>
         </div>
       )}
 
       {!loading && compareData.length >= 2 && (
         <div className="space-y-6">
           {/* Overlay chart using SVG */}
-          <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-6">
+          <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-6">
             <h2 className="text-[#e2e8f0] font-semibold text-sm mb-4">
               Health Score Trends
             </h2>
@@ -192,7 +192,7 @@ export default function ComparePage() {
                 colors={CHART_COLORS}
               />
             ) : (
-              <p className="text-[#64748b] text-sm text-center py-8">
+              <p className="text-[#6b7280] text-sm text-center py-8">
                 Not enough historical data for comparison yet. Data builds over
                 weekly pipeline runs.
               </p>
@@ -207,7 +207,7 @@ export default function ComparePage() {
               return (
                 <div
                   key={title.slug}
-                  className="bg-[#161616] border border-[#1e293b] rounded-lg p-4"
+                  className="bg-[#111111] border border-[#1f2937] rounded-lg p-4"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span
@@ -240,7 +240,7 @@ export default function ComparePage() {
                     )}
                   </div>
                   {latest && (
-                    <div className="mt-2 text-[#64748b] text-xs space-y-0.5">
+                    <div className="mt-2 text-[#6b7280] text-xs space-y-0.5">
                       {latest.playerCountAvg != null && (
                         <p>
                           Players: {latest.playerCountAvg.toLocaleString()}
@@ -331,7 +331,7 @@ function ComparisonChart({
             y1={yPos(val)}
             x2={width - padding.right}
             y2={yPos(val)}
-            stroke="#1e293b"
+            stroke="#1f2937"
             strokeWidth="0.5"
           />
           <text

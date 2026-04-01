@@ -37,11 +37,11 @@ export default function MethodologyPage() {
           </h2>
 
           <div className="space-y-4">
-            <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-4">
+            <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-4">
               <h3 className="text-[#e2e8f0] font-medium text-sm mb-1">
                 Steam Web API (Player Count)
               </h3>
-              <p className="text-[#64748b] text-xs">Weight: 50%</p>
+              <p className="text-[#6b7280] text-xs">Weight: 50%</p>
               <p className="mt-2">
                 Current concurrent player count from Steam&apos;s
                 ISteamUserStats/GetNumberOfCurrentPlayers endpoint. Compared
@@ -51,11 +51,11 @@ export default function MethodologyPage() {
               </p>
             </div>
 
-            <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-4">
+            <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-4">
               <h3 className="text-[#e2e8f0] font-medium text-sm mb-1">
                 Reddit Activity
               </h3>
-              <p className="text-[#64748b] text-xs">Weight: 30%</p>
+              <p className="text-[#6b7280] text-xs">Weight: 30%</p>
               <p className="mt-2">
                 Post volume (top 25 posts over the past week) and hot post count
                 from each title&apos;s subreddit via the Reddit API. Volume is
@@ -67,11 +67,11 @@ export default function MethodologyPage() {
               </p>
             </div>
 
-            <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-4">
+            <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-4">
               <h3 className="text-[#e2e8f0] font-medium text-sm mb-1">
                 Google News RSS (News Coverage)
               </h3>
-              <p className="text-[#64748b] text-xs">Weight: 20%</p>
+              <p className="text-[#6b7280] text-xs">Weight: 20%</p>
               <p className="mt-2">
                 Article count from Google News RSS search. Filtered for gaming
                 relevance (non-gaming articles like sports are excluded).
@@ -88,28 +88,28 @@ export default function MethodologyPage() {
             Score Composition
           </h2>
 
-          <div className="bg-[#161616] border border-[#1e293b] rounded-lg overflow-hidden">
+          <div className="bg-[#111111] border border-[#1f2937] rounded-lg overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1e293b]">
-                  <th className="text-left p-3 text-[#64748b] text-xs uppercase tracking-wider font-medium">
+                <tr className="border-b border-[#1f2937]">
+                  <th className="text-left p-3 text-[#6b7280] text-xs uppercase tracking-wider font-medium">
                     Source
                   </th>
-                  <th className="text-right p-3 text-[#64748b] text-xs uppercase tracking-wider font-medium">
+                  <th className="text-right p-3 text-[#6b7280] text-xs uppercase tracking-wider font-medium">
                     Full Data
                   </th>
-                  <th className="text-right p-3 text-[#64748b] text-xs uppercase tracking-wider font-medium">
+                  <th className="text-right p-3 text-[#6b7280] text-xs uppercase tracking-wider font-medium">
                     Limited Data
                   </th>
                 </tr>
               </thead>
               <tbody className="text-[#94a3b8]">
-                <tr className="border-b border-[#1e293b]/50">
+                <tr className="border-b border-[#1f2937]/50">
                   <td className="p-3">Player Count</td>
                   <td className="p-3 text-right mono">50%</td>
-                  <td className="p-3 text-right mono text-[#64748b]">N/A</td>
+                  <td className="p-3 text-right mono text-[#6b7280]">N/A</td>
                 </tr>
-                <tr className="border-b border-[#1e293b]/50">
+                <tr className="border-b border-[#1f2937]/50">
                   <td className="p-3">Reddit Activity</td>
                   <td className="p-3 text-right mono">30%</td>
                   <td className="p-3 text-right mono">60%</td>
@@ -184,7 +184,7 @@ export default function MethodologyPage() {
             ].map((tier) => (
               <div
                 key={tier.range}
-                className="flex items-start gap-3 bg-[#161616] border border-[#1e293b] rounded-lg p-3"
+                className="flex items-start gap-3 bg-[#111111] border border-[#1f2937] rounded-lg p-3"
               >
                 <span className={`mono text-sm font-bold ${tier.color} w-14`}>
                   {tier.range}
@@ -193,7 +193,7 @@ export default function MethodologyPage() {
                   <span className={`text-sm font-medium ${tier.color}`}>
                     {tier.label}
                   </span>
-                  <p className="text-[#64748b] text-xs mt-0.5">{tier.desc}</p>
+                  <p className="text-[#6b7280] text-xs mt-0.5">{tier.desc}</p>
                 </div>
               </div>
             ))}
@@ -244,20 +244,20 @@ export default function MethodologyPage() {
             ].map((title) => (
               <span
                 key={title}
-                className="text-[#94a3b8] text-xs bg-[#161616] border border-[#1e293b] rounded px-2.5 py-1.5"
+                className="text-[#94a3b8] text-xs bg-[#111111] border border-[#1f2937] rounded px-2.5 py-1.5"
               >
                 {title}
               </span>
             ))}
           </div>
-          <p className="text-[#64748b] text-xs mt-2">
+          <p className="text-[#6b7280] text-xs mt-2">
             * Limited Data: no Steam player count available.
           </p>
         </section>
 
         {/* Contact */}
-        <section className="border-t border-[#1e293b] pt-6">
-          <p className="text-[#64748b] text-xs">
+        <section className="border-t border-[#1f2937] pt-6">
+          <p className="text-[#6b7280] text-xs">
             Questions about the methodology? Reach out at{" "}
             <a
               href="mailto:michael@michaelpyon.com"

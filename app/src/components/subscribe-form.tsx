@@ -42,12 +42,12 @@ export function SubscribeForm() {
   }
 
   return (
-    <div className="border-t border-[#1e293b] mt-12 pt-8">
+    <div className="border-t border-[#1f2937] mt-12 pt-8">
       <div className="max-w-md mx-auto text-center">
         <h3 className="text-[#e2e8f0] font-semibold text-sm mb-1">
           Weekly Digest
         </h3>
-        <p className="text-[#64748b] text-xs mb-4">
+        <p className="text-[#6b7280] text-xs mb-4">
           Get the competitive FPS market report every Monday at 8 AM ET.
         </p>
 
@@ -61,7 +61,7 @@ export function SubscribeForm() {
             }}
             placeholder="you@example.com"
             required
-            className="flex-1 bg-[#111111] border border-[#1e293b] rounded-md px-3 py-2 text-sm text-[#e2e8f0] placeholder-[#64748b] focus:outline-none focus:border-[#3b82f6] transition-colors"
+            className="flex-1 bg-[#111111] border border-[#1f2937] rounded-md px-3 py-2 text-sm text-[#e2e8f0] placeholder-[#6b7280] focus:outline-none focus:border-[#3b82f6] transition-colors"
           />
           <button
             type="submit"

@@ -116,7 +116,7 @@ export default async function TitlePage({ params }: TitlePageProps) {
       <div className="mb-6">
         <Link
           href="/"
-          className="text-[#64748b] hover:text-[#94a3b8] text-sm transition-colors"
+          className="text-[#6b7280] hover:text-[#94a3b8] text-sm transition-colors"
         >
           Dashboard
         </Link>
@@ -137,7 +137,7 @@ export default async function TitlePage({ params }: TitlePageProps) {
               </span>
             )}
           </div>
-          <p className="text-[#64748b] text-sm mt-1">
+          <p className="text-[#6b7280] text-sm mt-1">
             {title.genreTags[0] ?? "FPS"}
             {title.launchDate &&
               ` | Launched ${title.launchDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })}`}
@@ -188,7 +188,7 @@ export default async function TitlePage({ params }: TitlePageProps) {
 
       {/* Trend */}
       {sparklineData.length >= 2 && (
-        <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-6 mb-8">
+        <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-6 mb-8">
           <h2 className="text-[#e2e8f0] font-semibold text-sm mb-4">
             Health Score Trend
           </h2>
@@ -217,7 +217,7 @@ export default async function TitlePage({ params }: TitlePageProps) {
 
       {/* Player Count History */}
       {playerHistory.length > 1 && (
-        <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-6 mb-8">
+        <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-6 mb-8">
           <h2 className="text-[#e2e8f0] font-semibold text-sm mb-4">
             Player Count History
           </h2>
@@ -246,7 +246,7 @@ export default async function TitlePage({ params }: TitlePageProps) {
 
       {/* Reddit Top Posts */}
       {topPosts.length > 0 && (
-        <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-6 mb-8">
+        <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-6 mb-8">
           <h2 className="text-[#e2e8f0] font-semibold text-sm mb-4">
             Top Reddit Posts This Week
           </h2>
@@ -257,12 +257,12 @@ export default async function TitlePage({ params }: TitlePageProps) {
                 href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-3 rounded-md bg-[#111111] hover:bg-[#1a1a1a] border border-[#1e293b] hover:border-[#334155] transition-all"
+                className="block p-3 rounded-md bg-[#111111] hover:bg-[#1a1a1a] border border-[#1f2937] hover:border-[#334155] transition-all"
               >
                 <p className="text-[#e2e8f0] text-sm line-clamp-2">
                   {post.title}
                 </p>
-                <div className="flex items-center gap-3 mt-1.5 text-[#64748b] text-xs">
+                <div className="flex items-center gap-3 mt-1.5 text-[#6b7280] text-xs">
                   <span className="mono">{formatNumber(post.score)} pts</span>
                   <span>{post.commentCount} comments</span>
                 </div>
@@ -274,7 +274,7 @@ export default async function TitlePage({ params }: TitlePageProps) {
 
       {/* News Headlines */}
       {topHeadlines.length > 0 && (
-        <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-6 mb-8">
+        <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-6 mb-8">
           <h2 className="text-[#e2e8f0] font-semibold text-sm mb-4">
             Recent News
           </h2>
@@ -285,12 +285,12 @@ export default async function TitlePage({ params }: TitlePageProps) {
                 href={headline.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-3 rounded-md bg-[#111111] hover:bg-[#1a1a1a] border border-[#1e293b] hover:border-[#334155] transition-all"
+                className="block p-3 rounded-md bg-[#111111] hover:bg-[#1a1a1a] border border-[#1f2937] hover:border-[#334155] transition-all"
               >
                 <p className="text-[#e2e8f0] text-sm line-clamp-2">
                   {headline.title}
                 </p>
-                <div className="flex items-center gap-3 mt-1.5 text-[#64748b] text-xs">
+                <div className="flex items-center gap-3 mt-1.5 text-[#6b7280] text-xs">
                   {headline.source && <span>{headline.source}</span>}
                   {headline.date && (
                     <span>
@@ -337,9 +337,9 @@ function ScoreCard({
   available?: boolean;
 }) {
   return (
-    <div className="bg-[#161616] border border-[#1e293b] rounded-lg p-4">
+    <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[#64748b] text-xs uppercase tracking-wider font-medium">
+        <span className="text-[#6b7280] text-xs uppercase tracking-wider font-medium">
           {label}
         </span>
         {!available && (
@@ -351,7 +351,7 @@ function ScoreCard({
       <div className="mono text-xl font-bold text-[#e2e8f0]">
         {score != null ? score.toFixed(1) : "--"}
       </div>
-      <p className="text-[#64748b] text-xs mt-1">{detail}</p>
+      <p className="text-[#6b7280] text-xs mt-1">{detail}</p>
       {sentiment != null && (
         <p
           className={`text-xs mt-1 ${
@@ -359,7 +359,7 @@ function ScoreCard({
               ? "text-[#22c55e]"
               : sentiment <= -0.05
                 ? "text-[#ef4444]"
-                : "text-[#64748b]"
+                : "text-[#6b7280]"
           }`}
         >
           Sentiment:{" "}

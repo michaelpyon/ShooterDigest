@@ -90,7 +90,7 @@ export default async function Dashboard() {
         <h1 className="text-2xl font-bold text-[#e2e8f0] tracking-tight">
           Competitive FPS Intelligence
         </h1>
-        <p className="text-[#64748b] text-sm mt-1">
+        <p className="text-[#6b7280] text-sm mt-1">
           Health scores, player trends, and community sentiment across the
           competitive shooter landscape.
         </p>
@@ -112,14 +112,14 @@ export default async function Dashboard() {
       {/* Column headers */}
       {cards.length > 0 && (
         <div className="flex items-center justify-between px-4 mb-2">
-          <span className="text-[#64748b] text-[10px] uppercase tracking-wider font-medium">
+          <span className="text-[#6b7280] text-[10px] uppercase tracking-wider font-medium">
             Title
           </span>
           <div className="flex items-center gap-4">
-            <span className="text-[#64748b] text-[10px] uppercase tracking-wider font-medium w-[72px] text-center">
+            <span className="text-[#6b7280] text-[10px] uppercase tracking-wider font-medium w-[72px] text-center">
               Trend
             </span>
-            <span className="text-[#64748b] text-[10px] uppercase tracking-wider font-medium w-16 text-right">
+            <span className="text-[#6b7280] text-[10px] uppercase tracking-wider font-medium w-16 text-right">
               Score
             </span>
           </div>
@@ -131,8 +131,8 @@ export default async function Dashboard() {
         {cards.length > 0 ? (
           cards.map((card) => <TitleCard key={card.slug} data={card} />)
         ) : (
-          <div className="text-center py-16 border border-[#1e293b] rounded-lg bg-[#161616]">
-            <p className="text-[#64748b] text-sm">
+          <div className="text-center py-16 border border-[#1f2937] rounded-lg bg-[#111111]">
+            <p className="text-[#6b7280] text-sm">
               No data yet. Run the pipeline to populate scores.
             </p>
             <p className="text-[#4b5563] text-xs mt-2 mono">
@@ -146,7 +146,7 @@ export default async function Dashboard() {
       <SubscribeForm />
 
       {/* Footer */}
-      <footer className="border-t border-[#1e293b] mt-8 pt-6 text-center">
+      <footer className="border-t border-[#1f2937] mt-8 pt-6 text-center">
         <p className="text-[#4b5563] text-xs">
           ShooterDigest. Competitive FPS market intelligence.
         </p>

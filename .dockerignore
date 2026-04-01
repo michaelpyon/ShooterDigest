@@ -1,6 +1,10 @@
 .git
 .gitignore
 *.md
+.env
+.env.*
 venv/
 __pycache__/
 .DS_Store
+docs/
+output/

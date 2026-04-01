@@ -71,7 +71,14 @@ def cached_get(
             return _build_response(url, row[0], row[1], row[2])
 
     # Cache miss — fetch from source (outside the lock)
-    response = fetcher()
+    try:
+        response = fetcher()
+    except requests.RequestException as exc:
+        status_code = 0
+        if isinstance(exc, requests.exceptions.HTTPError) and exc.response is not None:
+            status_code = exc.response.status_code
+        db.record_fetch_run(source, url, False, status_code, None)
+        raise
     body = response.text
     headers_json = json.dumps(dict(response.headers))
     content_hash = _content_hash(body)

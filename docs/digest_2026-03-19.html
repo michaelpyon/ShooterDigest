@@ -1,0 +1,2029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://shooter.michaelpyon.com" />
+  <meta property="og:title" content="Tactical Intel Digest — Weekly Competitive Shooter Intelligence" />
+  <meta property="og:description" content="SteamDB shows you the numbers. ShooterDigest tells you what they mean. Weekly analysis of the PC competitive FPS market." />
+  <meta property="og:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tactical Intel Digest — Weekly Shooter Intelligence" />
+  <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
+  <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta name="twitter:site" content="@michaelpyon" />
+  <meta name="twitter:creator" content="@michaelpyon" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Space+Grotesk:wght@300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <title>Tactical Intel Digest - March 19, 2026</title>
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --bg-surface: #131313;
+      --bg-card: #1a1a1a;
+      --bg-card-hover: #262626;
+      --border: #484847;
+      --border-active: rgba(0,255,65,0.2);
+      --text: #ffffff;
+      --text-muted: #adaaaa;
+      --text-dim: #484847;
+      --green: #00FF41;
+      --green-light: #9cff93;
+      --red: #ff7162;
+      --amber: #F59E0B;
+      --accent: #00FF41;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg); color: var(--text);
+      padding: 2rem; max-width: 1200px; margin: 0 auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1, h2, h3 { font-family: 'Newsreader', Georgia, serif; }
+
+    /* Focus-visible styles */
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    button:focus-visible, .genre-filter-btn:focus-visible {
+      box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); outline: none;
+    }
+    a:focus-visible {
+      outline: 2px solid var(--accent); outline-offset: 2px;
+    }
+
+    /* Section labels — universal */
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+    }
+
+    h1 { font-size: 1.8rem; margin-bottom: 0.2rem; }
+    .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .subtitle-date { color: var(--text-dim); font-size: 0.78rem; margin-bottom: 1.5rem; }
+
+    /* Sticky back-nav */
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(14, 14, 14, 0.96);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      margin: -2rem -2rem 1.5rem -2rem;
+      padding: 0.65rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-back {
+      font-size: 0.82rem; color: var(--text-muted); text-decoration: none;
+      transition: color 0.15s; display: flex; align-items: center; gap: 0.35rem;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.05em;
+    }
+    .nav-back:hover { color: var(--accent); }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+      text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    /* Executive Summary */
+    .exec-summary {
+      background: var(--bg-card);
+      padding: 1.5rem 1.5rem; border-radius: 0; margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+    }
+    .exec-summary h2 { color: var(--accent); font-size: 1rem; margin-bottom: 0.75rem; }
+    .exec-takeaways-list { margin-top: 1rem; }
+    .exec-takeaway {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      margin-bottom: 0.6rem; font-size: 0.9rem; line-height: 1.6;
+    }
+    .exec-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--accent); flex-shrink: 0;
+      min-width: 1.5rem;
+      opacity: 0.7;
+    }
+    .exec-takeaway-text {
+      color: var(--text);
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: 0.92rem;
+    }
+    .exec-takeaway-text a {
+      color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+      text-decoration-color: rgba(0,255,65,0.4);
+    }
+    .exec-takeaway-text a:hover { color: var(--text); text-decoration-color: var(--accent); }
+    .exec-link {
+      color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+      text-decoration-color: rgba(0,255,65,0.4);
+    }
+    .exec-link:hover { color: var(--text); text-decoration-color: var(--accent); }
+    .aggregate-chart {
+      margin-top: 1rem; padding-top: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+    .aggregate-label {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 0.3rem;
+    }
+    .wnl-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.2em; color: var(--text-dim);
+      margin-top: 1.25rem; padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .wnl-table {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    .wnl-col { min-width: 0; overflow: hidden; }
+    .wnl-col table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .wnl-header {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.2em; padding-top: 0.35rem; padding-bottom: 0.35rem; margin-bottom: 0.3rem;
+    }
+
+    /* Summary table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+    th {
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: left; padding: 0.6rem 0.7rem;
+      border-bottom: 1px solid var(--border); color: var(--accent);
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
+    }
+    th[data-sort] {
+      cursor: pointer; user-select: none; position: relative;
+    }
+    th[data-sort]:hover { color: var(--text); }
+    th[data-sort]::after {
+      content: '⇅'; opacity: 0.3; margin-left: 4px; font-size: 0.7rem;
+    }
+    th[data-sort].asc::after { content: '▲'; opacity: 0.8; }
+    th[data-sort].desc::after { content: '▼'; opacity: 0.8; }
+    td { padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(72,72,71,0.3); }
+    tr {
+      border-left: 2px solid transparent;
+      transition: background-color 0.15s ease, border-left-color 0.15s ease;
+    }
+    tr:hover {
+      background: var(--bg-card-hover);
+      border-left-color: var(--accent);
+    }
+    .rank {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-muted); font-weight: 500; width: 40px;
+      font-size: 1.1rem; font-style: italic;
+    }
+    tr:hover .rank { color: var(--accent); }
+    .game { font-weight: 600; color: var(--text); }
+    .game-link {
+      color: inherit; text-decoration: none;
+      border-bottom: 1px dotted var(--text-dim);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .game-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+    .game-meta {
+      display: flex; align-items: center; gap: 0.3rem;
+      margin-top: 0.2rem; flex-wrap: wrap;
+    }
+    .num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-variant-numeric: tabular-nums; text-align: right;
+    }
+    .est-total { color: var(--green); font-weight: 600; font-size: 1rem; }
+    .steam-ccu { color: var(--text); }
+    .alltime { color: var(--text-muted); }
+    .trend { text-align: center; font-weight: 600; white-space: nowrap; }
+    .trend.up { color: var(--green); }
+    .trend.down { color: var(--red); }
+    .trend.flat { color: var(--amber); }
+    .trend.neutral { color: var(--text-muted); }
+    .trend-icon {
+      font-size: 18px; vertical-align: middle; margin-right: 2px;
+    }
+    .trend-icon-up { color: var(--green); }
+    .trend-icon-down { color: var(--red); }
+    .trend-icon-flat { color: var(--amber); }
+    .pct-cell { width: 120px; }
+    .bar-bg {
+      background: var(--bg-surface); border-radius: 0; height: 6px;
+      margin-bottom: 2px; overflow: hidden;
+    }
+    .bar {
+      background: var(--accent);
+      height: 100%; border-radius: 0;
+    }
+    .pct-cell span { font-size: 0.8rem; color: var(--text-muted); font-family: 'Space Grotesk', sans-serif; }
+    .status-cell { text-align: center; }
+    .status-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; padding: 3px 8px; border-radius: 0;
+      white-space: nowrap; border: 1px solid;
+    }
+    .status-up {
+      color: #0e0e0e; background: #00FF41; border-color: #00FF41;
+    }
+    .status-up[data-label="GROWING"] {
+      color: #ffffff; background: #16A34A; border-color: #16A34A;
+    }
+    .status-down {
+      color: #ffffff; background: #ff7162; border-color: #ff7162;
+    }
+    .status-down[data-label="FADING"] {
+      color: #ffffff; background: #DC2626; border-color: #DC2626;
+    }
+    .status-flat { color: #0e0e0e; background: #F59E0B; border-color: #F59E0B; }
+    .status-launch { color: #0e0e0e; background: var(--amber); border-color: var(--amber); }
+    .failed td { color: var(--text-dim); font-style: italic; }
+
+    /* Sparkline bars (inline) */
+    .spark-bars {
+      display: inline-flex; align-items: flex-end; gap: 2px;
+      height: 20px; vertical-align: middle;
+    }
+    .spark-bar {
+      width: 4px; display: inline-block; border-radius: 0;
+    }
+    .sparkline-cell { text-align: center; }
+
+    /* Platform share */
+    .platform-share {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem; color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+    .platform-cell { text-align: center; }
+
+    /* Status legend */
+    .status-legend {
+      margin: 0.5rem 0 1rem 0;
+      padding: 0.6rem 0;
+    }
+    .status-legend-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--text-dim); margin-bottom: 0.4rem;
+    }
+    .status-legend-items {
+      display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+    }
+    .status-legend-item {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .sl-dot {
+      width: 8px; height: 8px; border-radius: 0; display: inline-block;
+    }
+
+    /* Genre filter tabs */
+    .genre-filters {
+      display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0;
+      padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+    }
+    .genre-filter-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 0.35rem 0.75rem; border-radius: 100px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-muted); font-size: 0.72rem; cursor: pointer;
+      font-weight: 500; transition: all 0.15s ease;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .genre-filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .genre-filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0e0e0e;
+      font-weight: 700;
+    }
+    .genre-filter-btn .filter-count {
+      font-size: 0.6rem; color: var(--text-dim); margin-left: 0.3rem;
+    }
+    .genre-filter-btn.active .filter-count { color: rgba(14,14,14,0.6); }
+
+    /* Source tags */
+    .source-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.6rem; padding: 1px 5px; border-radius: 0;
+      font-weight: 600; vertical-align: middle;
+      background: var(--bg-surface); color: var(--text-muted);
+    }
+    .sentiment-dot {
+      font-size: 0.65rem; vertical-align: middle; margin-right: 0.2rem;
+    }
+    .sentiment-legend {
+      display: flex; gap: 0.75rem; margin-bottom: 4px;
+      font-size: 0.72rem; color: var(--text-muted); text-align: left;
+    }
+    .sentiment-legend span { display: inline-flex; align-items: center; gap: 0.2rem; }
+
+    /* Category tags */
+    .cat-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem; padding: 1px 5px; border-radius: 0;
+      font-weight: 700; vertical-align: middle; margin-right: 0.3rem;
+      letter-spacing: 0.05em; display: inline-block;
+      text-transform: uppercase;
+    }
+
+    /* Clickable links */
+    .item-link {
+      color: var(--text); text-decoration: none;
+      border-bottom: 1px dotted var(--text-dim);
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .item-link:hover {
+      color: var(--accent); border-bottom-color: var(--accent);
+    }
+
+    /* News preview */
+    .news-preview {
+      color: var(--text-muted); font-size: 0.72rem; line-height: 1.35;
+      margin-top: 0.15rem; max-height: 2.7em; overflow: hidden;
+    }
+
+    /* Detail cards */
+    .section-title {
+      font-family: 'Newsreader', Georgia, serif;
+      color: var(--accent); font-size: 1.1rem; margin: 2rem 0 1rem;
+      border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;
+      font-style: italic;
+    }
+    .card {
+      background: var(--bg-card); border-radius: 0; margin-bottom: 1.2rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border);
+      scroll-margin-top: 60px;
+    }
+    .card:has(.trend-badge.up) { border-left-color: var(--green); }
+    .card:has(.trend-badge.down) { border-left-color: var(--red); }
+    .card:has(.trend-badge.flat) { border-left-color: var(--amber); }
+    .card:has(.trend-badge.neutral) { border-left-color: var(--text-muted); }
+
+    /* Sticky ranking table header */
+    .ranking-table thead th {
+      position: sticky; top: 44px;
+      background: var(--bg); z-index: 10;
+    }
+
+    /* Floating back-to-top */
+    .back-to-top {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--accent); border-radius: 0;
+      padding: 0.5rem 0.85rem; font-size: 0.82rem;
+      cursor: pointer; opacity: 0; transition: opacity 0.25s;
+      z-index: 200; text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { background: var(--accent); color: var(--bg); }
+
+    .card-header {
+      padding: 1.4rem 1.6rem 1rem; border-bottom: 1px solid var(--border);
+    }
+    .card-header h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      color: var(--text); font-size: 1.3rem; margin-bottom: 0.4rem;
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    }
+    .trend-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem; padding: 2px 8px; border-radius: 0; font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .trend-badge.up { background: rgba(0,255,65,0.15); color: var(--green); }
+    .trend-badge.down { background: rgba(255,113,98,0.15); color: var(--red); }
+    .trend-badge.flat { background: rgba(251,191,36,0.15); color: var(--amber); }
+    .trend-badge.neutral { background: rgba(143,152,160,0.15); color: var(--text-muted); }
+    .launch-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      display: inline-block; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid var(--accent);
+      border-radius: 0; padding: 1px 6px;
+    }
+    .card-stats { color: var(--text-muted); font-size: 0.82rem; }
+    .card-stats strong { color: var(--text); }
+    .card-trend { color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem; }
+
+    /* Dev communication flags */
+    .dev-flags {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      padding: 0.6rem 1.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .dev-flag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .dev-flag-dot {
+      width: 6px; height: 6px; border-radius: 50%; display: inline-block;
+    }
+
+    /* Takeaway — structured 4-part grid */
+    .card-takeaway {
+      padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--border);
+    }
+    .card-takeaway h4, .card-takeaway .section-label {
+      margin-bottom: 0.5rem;
+    }
+    .takeaway-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.6rem;
+    }
+    .takeaway-cell {
+      padding: 0.5rem 0.6rem;
+      background: var(--bg-surface);
+    }
+    .takeaway-cell .takeaway-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.15em;
+      display: block; margin-bottom: 0.3rem;
+    }
+    .takeaway-cell .takeaway-text {
+      color: var(--text); font-size: 0.82rem; line-height: 1.5;
+      display: block;
+    }
+    .takeaway-fallback {
+      color: var(--text); font-size: 0.85rem; line-height: 1.6;
+      font-style: italic; font-family: 'Newsreader', Georgia, serif;
+    }
+    .prev-takeaway {
+      color: var(--text-muted); font-size: 0.78rem; margin-top: 0.5rem;
+      padding-top: 0.4rem; border-top: 1px dashed var(--border); line-height: 1.5;
+      font-family: 'Newsreader', Georgia, serif;
+    }
+    .prev-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 700; color: var(--text-dim);
+      letter-spacing: 0.15em; margin-right: 0.4rem;
+    }
+
+    /* Card body: 2 columns */
+    .card-body-2col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }
+    .card-section { padding: 0.7rem 1rem; border-right: 1px solid var(--border); }
+    .card-section:last-child { border-right: none; }
+    .card-section h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.2em; margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+    .card-section .sub { color: var(--text-muted); font-size: 0.68rem; text-transform: none; }
+    .card-section ul { list-style: none; }
+    .card-section li {
+      color: var(--text-muted); font-size: 0.8rem; line-height: 1.45;
+      padding: 0.15rem 0;
+    }
+    .card-section li::before {
+      content: "\2022"; color: var(--accent); margin-right: 0.4rem;
+    }
+    .badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem; padding: 1px 5px; border-radius: 0;
+      font-weight: 600; vertical-align: middle;
+      letter-spacing: 0.05em;
+    }
+    .badge.patch { background: rgba(245,158,11,0.12); color: var(--amber); }
+
+    /* Genre badges */
+    .genre-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; padding: 2px 6px; border-radius: 0;
+      font-weight: 700; vertical-align: middle;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      border: 1px solid var(--border);
+    }
+
+    /* Twitch section */
+    .card-twitch {
+      padding: 0.7rem 1.6rem;
+      border-top: 1px solid var(--border);
+    }
+    .twitch-stats {
+      display: flex; flex-wrap: wrap; gap: 1.2rem; align-items: flex-start;
+    }
+    .twitch-stat {
+      display: flex; flex-direction: column; gap: 0.1rem;
+    }
+    .twitch-stat-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--text-dim);
+    }
+    .twitch-stat-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--text);
+    }
+    .twitch-top {
+      flex: 1;
+    }
+    .twitch-streamers {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+    }
+    .twitch-streamer {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem; color: var(--text-muted);
+      padding: 2px 6px; background: var(--bg-surface);
+      border: 1px solid var(--border);
+    }
+
+    /* Community pulse (collapsible) */
+    .card-community {
+      padding: 0; border-top: 1px solid var(--border);
+    }
+    .card-community details {
+      padding: 0;
+    }
+    .card-community summary {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      padding: 0.6rem 1rem; user-select: none;
+      font-weight: 500;
+    }
+    .card-community summary:hover {
+      background: rgba(0,255,65,0.03);
+    }
+    .card-community .sub { color: var(--text-muted); font-size: 0.68rem; text-transform: none; letter-spacing: 0; }
+    .community-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      padding: 0 1rem 0.7rem;
+    }
+    .community-inner h5 {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-muted); font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.15em; margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+    .community-inner ul { list-style: none; }
+    .community-inner li {
+      color: var(--text-muted); font-size: 0.78rem; line-height: 1.4;
+      padding: 0.1rem 0;
+    }
+    .community-inner li::before {
+      content: "\2022"; color: var(--text-dim); margin-right: 0.3rem;
+    }
+
+    /* Reddit comments */
+    .comments {
+      margin-left: 0.8rem; margin-top: 0.25rem; margin-bottom: 0.3rem;
+    }
+    .comments li::before { content: "\21B3"; color: var(--text-dim); margin-right: 0.3rem; }
+    .comments li { font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; }
+    .comment-author { color: var(--accent); font-size: 0.68rem; }
+
+    /* Sparkline chart */
+    .card-trend { margin-top: 0.3rem; }
+    .card-trend svg { max-width: 240px; height: 55px; }
+
+    /* Release Calendar */
+    .calendar-section { margin-top: 2rem; }
+    .cal-section { margin-bottom: 1rem; }
+    .cal-section-header {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.2em; margin-bottom: 0.4rem;
+      padding: 0.4rem 0.8rem; border-radius: 0;
+      font-weight: 500;
+    }
+    .cal-section-header.past {
+      color: var(--text-muted); background: var(--bg-surface); border-left: 3px solid var(--text-dim);
+    }
+    .cal-section-header.upcoming {
+      color: var(--green); background: rgba(0,255,65,0.05); border-left: 3px solid var(--green);
+    }
+    .cal-section-header.future {
+      color: var(--amber); background: var(--bg-card); border-left: 3px solid var(--amber);
+    }
+    .cal-count {
+      font-size: 0.65rem; color: var(--text-muted); font-weight: 400;
+      text-transform: none; letter-spacing: 0;
+    }
+    .cal-today-divider {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 0.4rem 0; margin: 0.3rem 0;
+    }
+    .cal-today-divider::before,
+    .cal-today-divider::after {
+      content: ""; flex: 1; height: 1px; background: var(--accent);
+    }
+    .cal-today-divider span {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.15em; white-space: nowrap;
+    }
+    .cal-entry {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      padding: 0.4rem 0.8rem; border-bottom: 1px solid rgba(72,72,71,0.3);
+    }
+    .cal-entry:hover { background: rgba(0,255,65,0.02); }
+    .cal-entry.estimated { opacity: 0.7; }
+    .cal-date {
+      font-family: 'Space Grotesk', sans-serif;
+      min-width: 50px; color: var(--text-muted); font-size: 0.75rem;
+      font-weight: 600; padding-top: 0.1rem;
+    }
+    .cal-game {
+      min-width: 130px; max-width: 130px; color: var(--text);
+      font-size: 0.8rem; font-weight: 600;
+    }
+    .calendar-type {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; padding: 1px 6px; border-radius: 0;
+      font-weight: 700; min-width: 70px; text-align: center;
+      display: inline-block; white-space: nowrap; flex-shrink: 0;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .calendar-type.season { background: rgba(0,255,65,0.08); color: var(--accent); }
+    .calendar-type.patch { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .calendar-type.event { background: rgba(0,255,65,0.08); color: var(--accent); }
+    .calendar-type.content { background: rgba(0,255,65,0.08); color: var(--green); }
+    .calendar-type.roadmap { background: rgba(0,255,65,0.08); color: var(--accent); }
+    .calendar-type.industry { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .calendar-type.newrelease { background: rgba(255,113,98,0.12); color: var(--red); font-weight: 800; }
+    .cal-desc {
+      color: var(--text-muted); font-size: 0.78rem; line-height: 1.5; flex: 1;
+      white-space: normal; word-wrap: break-word;
+    }
+    .est-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem; color: var(--text-muted); background: var(--bg-surface);
+      padding: 1px 4px; border-radius: 0; font-weight: 600;
+      vertical-align: middle; margin-left: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+    .cal-empty {
+      color: var(--text-dim); font-size: 0.78rem; font-style: italic;
+      padding: 0.4rem 0.8rem;
+    }
+
+    /* Lifecycle badge (#4) */
+    .lifecycle-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9px; padding: 1px 5px; border-radius: 0;
+      font-weight: 600; vertical-align: middle; margin-left: 0.3rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    /* Sentiment dot inline in game name */
+    .sent-inline {
+      font-size: 0.5rem; vertical-align: middle; margin-left: 0.25rem;
+      opacity: 0.8;
+    }
+
+    /* Inline sparkline (#6) */
+    .inline-spark { vertical-align: middle; margin-left: 0.4rem; }
+
+    /* Annotation info icon */
+    .annot-icon {
+      font-size: 0.7rem; color: var(--text-muted); cursor: help;
+      vertical-align: middle; margin-left: 0.2rem;
+      opacity: 0.6; transition: opacity 0.15s;
+    }
+    .annot-icon:hover { opacity: 1; color: var(--accent); }
+
+    /* Genre Rollup (#9) */
+    .genre-rollup {
+      margin-bottom: 2rem;
+    }
+    .genre-rollup h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; margin-bottom: 0.5rem;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      font-weight: 500;
+    }
+    .genre-rollup table {
+      width: 100%; border-collapse: collapse; font-size: 0.82rem;
+    }
+    .genre-rollup th {
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: left; padding: 0.4rem 0.6rem;
+      border-bottom: 1px solid var(--border); color: var(--accent);
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
+    }
+    .genre-rollup td {
+      padding: 0.35rem 0.6rem; border-bottom: 1px solid rgba(72,72,71,0.3);
+    }
+
+    /* Methodology (#7) */
+    .methodology {
+      margin-top: 2rem; margin-bottom: 1rem;
+    }
+    .methodology summary {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; font-weight: 500;
+      cursor: pointer; padding: 0.5rem 0;
+      text-transform: uppercase; letter-spacing: 0.2em;
+    }
+    .methodology-content {
+      padding-top: 0.5rem;
+    }
+    .methodology-disclaimer {
+      font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;
+      margin-bottom: 1rem; padding: 0.6rem 0.8rem;
+      background: var(--bg-surface); border-radius: 0;
+      border-left: 2px solid var(--accent);
+    }
+    .methodology table {
+      width: 100%; border-collapse: collapse; font-size: 0.78rem;
+    }
+    .methodology th {
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: left; padding: 0.4rem 0.5rem;
+      border-bottom: 1px solid var(--border); color: var(--accent);
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
+    }
+    .methodology td {
+      padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(72,72,71,0.3);
+    }
+    .meth-note { font-size: 0.72rem; color: var(--text-muted); }
+
+    /* Info tooltip (#2) */
+    .info-tip {
+      display: inline-block; cursor: help; position: relative;
+      font-size: 0.7rem; color: var(--text-muted); margin-left: 0.2rem;
+      text-decoration: none;
+    }
+    .info-tip:hover {
+      color: var(--accent);
+    }
+    .info-tip:hover::after {
+      content: attr(data-tip);
+      position: absolute; bottom: 120%; left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-card); color: var(--text); border: 1px solid var(--border);
+      padding: 0.4rem 0.6rem; border-radius: 0;
+      font-size: 0.7rem; white-space: normal; word-break: break-word;
+      width: 220px; max-width: 220px; z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    /* Exec prose paragraph */
+    .exec-prose {
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.7;
+      margin-top: 0.5rem;
+      margin-bottom: 0.8rem;
+      padding: 0;
+      background: none;
+      border-left: none;
+      border-radius: 0;
+      font-style: normal;
+    }
+
+    /* Data caveat info box */
+    .data-caveat {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: 0; padding: 0.7rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .caveat-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
+    .caveat-text {
+      color: var(--text-muted); font-size: 0.78rem; line-height: 1.55;
+    }
+    .caveat-text strong { color: var(--text-muted); }
+
+    /* Historical context annotation */
+    .historical-context {
+      color: var(--text-muted); font-size: 0.72rem; font-style: italic;
+      margin-top: 0.15rem; padding: 0.2rem 0.4rem;
+      background: rgba(251, 191, 36, 0.06);
+      border-left: 2px solid var(--amber); border-radius: 0;
+    }
+
+    /* Event annotation */
+    .event-annotation {
+      color: var(--text-muted); font-size: 0.72rem; font-style: italic;
+      margin-top: 0.15rem;
+    }
+
+    .footer {
+      color: var(--text-dim); font-size: 0.78rem;
+      border-top: 1px solid var(--border); padding-top: 1rem; line-height: 1.6;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.02em;
+    }
+    .footer a { color: var(--text-muted); text-decoration: none; }
+    .footer a:hover { color: var(--accent); }
+
+    /* ── Publication Masthead ── */
+    .masthead {
+      margin-bottom: 2rem;
+      padding-bottom: 0;
+    }
+    .masthead-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    .masthead-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }
+    .masthead-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 2.2rem;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+      letter-spacing: -0.5px;
+    }
+    .masthead-title span {
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(0,255,65,0.3);
+    }
+    .masthead-sub {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .masthead-meta {
+      text-align: right;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+    .masthead-issue {
+      display: block;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .masthead-date {
+      display: block;
+      margin-top: 0.15rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .masthead-nav {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-top: 0.75rem;
+    }
+    .masthead-tab {
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 0.55rem 1rem;
+      font-size: 10px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 500;
+    }
+    .masthead-tab:hover {
+      color: var(--text);
+    }
+    .masthead-tab.active {
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }
+    .masthead-share {
+      margin-left: auto;
+      color: var(--text-dim);
+    }
+    .masthead-share:hover {
+      color: var(--text-muted);
+    }
+
+    /* ── Data Freshness Indicator ── */
+    .data-freshness {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 6px rgba(0,255,65,0.4);
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .freshness-label {
+      color: var(--green);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+    .freshness-sep {
+      color: var(--text-dim);
+    }
+    .freshness-time {
+      color: var(--text-dim);
+    }
+
+    /* ── Share Card ── */
+    .share-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 1rem 1.2rem;
+      margin-top: 1.5rem;
+    }
+    .share-preview-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 0.05em;
+    }
+    .share-preview-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+    .share-preview-url {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-top: 0.1rem;
+      letter-spacing: 0.05em;
+    }
+    .share-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 0;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      text-decoration: none;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .share-btn:hover {
+      color: var(--bg);
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    /* ── Top Mover Callouts ── */
+    .mover-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin: 2rem 0;
+    }
+    .mover-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 1.2rem 1.4rem;
+    }
+    .mover-up {
+      border-left: 4px solid var(--green);
+    }
+    .mover-down {
+      border-left: 4px solid var(--red);
+    }
+    .mover-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.35rem;
+      font-weight: 500;
+    }
+    .mover-game {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .mover-up .mover-value {
+      color: var(--green);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .mover-down .mover-value {
+      color: var(--red);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .mover-detail {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+    .mover-catalyst {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }
+
+    /* Scanning line gradient on nav */
+    .site-nav::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.4;
+    }
+
+    /* Phosphor text glow on accent elements */
+    .masthead-title span,
+    .freshness-label {
+      text-shadow: 0 0 20px rgba(0,255,65,0.3);
+    }
+
+    /* Insights section */
+    .insights {
+      background: var(--bg-card);
+      padding: 1rem 1.2rem; border-radius: 0; margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+    }
+    .insights h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--accent); font-size: 10px; margin-bottom: 0.5rem;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      font-weight: 500;
+    }
+    .insights li {
+      margin-bottom: 0.3rem; margin-left: 1rem;
+      color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;
+    }
+
+    @media (max-width: 1199px) {
+      .card-body-2col { grid-template-columns: 1fr; }
+      .community-inner { grid-template-columns: 1fr; }
+      .card-section { border-right: none; border-bottom: 1px solid var(--border); }
+      .card-section:last-child { border-bottom: none; }
+      /* Hide sparkline + platform columns at tablet */
+      .ranking-table th:nth-child(6),
+      .ranking-table td:nth-child(6),
+      .ranking-table th:nth-child(10),
+      .ranking-table td:nth-child(10) { display: none; }
+    }
+
+    /* ── Mobile-first responsive ── */
+    @media (max-width: 767px) {
+      body { padding: 0.8rem; }
+      h1 { font-size: 1.4rem; }
+      .subtitle { font-size: 0.82rem; margin-bottom: 1rem; }
+      .site-nav { margin: -0.8rem -0.8rem 1.2rem -0.8rem; padding: 0.5rem 0.8rem; }
+
+      /* Executive Summary */
+      .exec-summary { padding: 0.7rem 0.8rem; margin-bottom: 1.2rem; }
+      .exec-summary h2 { font-size: 0.9rem; margin-bottom: 0.4rem; }
+      .exec-takeaway { font-size: 0.8rem; line-height: 1.5; margin-bottom: 0.25rem; }
+
+      /* WNL compact stacked */
+      .wnl-table { grid-template-columns: 1fr; gap: 0.3rem; margin-top: 0.6rem; padding-top: 0.6rem; }
+      .wnl-header { font-size: 9px; padding-top: 0.2rem; padding-bottom: 0.15rem; margin-bottom: 0.15rem; }
+      .wnl-col table { margin-bottom: 0; }
+      .wnl-col table tr { display: flex; align-items: baseline; }
+      .wnl-col table tr:hover { background: none; }
+      .wnl-col table td {
+        padding: 0.15rem 0.4rem !important; font-size: 0.78rem !important;
+        border-bottom: none;
+      }
+      .wnl-col table td:first-child { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .wnl-col table td:nth-child(2) { flex-shrink: 0; text-align: right; }
+      .wnl-col table td:nth-child(3) { flex-shrink: 0; min-width: 55px; text-align: right; }
+
+      /* Market chart */
+      .aggregate-chart { margin-top: 0.6rem; padding-top: 0.5rem; }
+      .aggregate-label { font-size: 9px; }
+
+      /* Genre filter pills — horizontal scroll */
+      .genre-filters {
+        flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+        gap: 0.35rem; padding-bottom: 0.8rem;
+        scrollbar-width: none;
+        position: relative;
+        -webkit-mask-image: linear-gradient(to right, black 80%, transparent);
+        mask-image: linear-gradient(to right, black 80%, transparent);
+      }
+      .genre-filters.scrolled {
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+      .genre-filters::-webkit-scrollbar { display: none; }
+      .genre-filter-btn {
+        flex-shrink: 0; font-size: 0.68rem; padding: 0.3rem 0.6rem;
+      }
+      .genre-scroll-hint {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.65rem; color: var(--text-dim);
+        text-align: right; margin-top: -0.4rem; margin-bottom: 0.3rem;
+      }
+
+      /* ── Ranking table mobile card layout ── */
+      .ranking-table thead { display: none; }
+      .ranking-table tbody tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.2rem 0.6rem;
+        padding: 0.8rem 0.6rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0;
+        background: var(--bg-card);
+      }
+      .ranking-table tbody tr:hover { background: var(--bg-card-hover); }
+      .ranking-table tbody td {
+        padding: 0; border: none; text-align: left !important;
+      }
+      /* Rank */
+      .ranking-table tbody td.rank {
+        grid-column: 1 / -1; grid-row: 1;
+        font-size: 0.75rem; color: var(--text-muted);
+        display: flex; align-items: center; gap: 0.4rem;
+      }
+      /* Game name */
+      .ranking-table tbody td.game {
+        grid-column: 1 / -1; grid-row: 2;
+        white-space: normal; font-size: 1.05rem; font-weight: 600;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 0.2rem;
+      }
+      /* Hide sentiment dot and annotation icon on mobile */
+      .ranking-table tbody .sent-inline { display: none; }
+      .ranking-table tbody .annot-icon { display: none; }
+      /* Hide sparkline + platform on mobile */
+      .ranking-table tbody td.sparkline-cell,
+      .ranking-table tbody td.platform-cell { display: none; }
+      /* Stats: 2-column grid with labels */
+      .ranking-table tbody td.num { font-size: 0.85rem; }
+      /* Steam CCU (col 3) */
+      .ranking-table tbody tr > td:nth-child(3) {
+        grid-column: 1; grid-row: 3;
+      }
+      .ranking-table tbody tr > td:nth-child(3)::before {
+        content: "24H PEAK  "; display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }
+      /* Est. Total (col 4) */
+      .ranking-table tbody tr > td:nth-child(4) {
+        grid-column: 2; grid-row: 3;
+      }
+      .ranking-table tbody tr > td:nth-child(4)::before {
+        content: "EST. TOTAL  "; display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }
+      /* Trend (col 5) */
+      .ranking-table tbody td.trend {
+        grid-column: 1; grid-row: 4;
+        text-align: left !important; font-size: 0.85rem;
+        width: auto; padding-top: 0.15rem;
+      }
+      .ranking-table tbody td.trend::before {
+        content: "TREND (WOW)  "; display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }
+      /* All-Time Peak (col 7) */
+      .ranking-table tbody tr > td:nth-child(7) {
+        grid-column: 2; grid-row: 4;
+        padding-top: 0.15rem;
+      }
+      .ranking-table tbody tr > td:nth-child(7)::before {
+        content: "ALL-TIME PEAK  "; display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }
+      /* % of Peak (col 8) */
+      .ranking-table tbody td.pct-cell {
+        grid-column: 1 / -1; grid-row: 5;
+        width: auto; display: flex; align-items: center; gap: 0.4rem;
+        padding-top: 0.3rem;
+        border-top: 1px solid var(--border);
+        margin-top: 0.2rem;
+      }
+      .ranking-table tbody td.pct-cell::before {
+        content: "% OF PEAK"; flex-shrink: 0;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 9px; color: var(--text-muted); font-weight: 400;
+        text-transform: uppercase; letter-spacing: 0.15em;
+      }
+      .ranking-table .pct-cell .bar-bg {
+        width: 50px; flex-shrink: 0;
+      }
+      .ranking-table .pct-cell span { font-size: 0.8rem; }
+      /* Status (col 9) */
+      .ranking-table tbody td.status-cell {
+        grid-column: 2; grid-row: 4;
+        display: flex; align-items: flex-start; justify-content: flex-end;
+        padding-top: 0.15rem;
+      }
+      /* Genre rollup mobile */
+      .genre-rollup table { font-size: 0.72rem; }
+      .genre-rollup th, .genre-rollup td { padding: 0.25rem 0.4rem; }
+      /* Methodology mobile */
+      .methodology table { font-size: 0.7rem; }
+      .methodology th, .methodology td { padding: 0.25rem 0.3rem; }
+      .meth-note { font-size: 0.6rem; }
+      /* Failed rows */
+      .ranking-table tbody tr.failed {
+        display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.6rem;
+      }
+
+      /* Section title */
+      .section-title { font-size: 1.1rem; }
+
+      /* Detail cards */
+      .card { margin-bottom: 1rem; }
+      .card-header { padding: 0.6rem 0.8rem; }
+      .card-header h3 { font-size: 0.95rem; }
+      .card-section { padding: 0.6rem 0.8rem; }
+      .takeaway-grid { grid-template-columns: 1fr 1fr; }
+      .dev-flags { padding: 0.4rem 0.8rem; gap: 0.4rem; }
+
+      /* Calendar */
+      .cal-entry {
+        flex-wrap: wrap; gap: 0.3rem; padding: 0.4rem 0.5rem;
+      }
+      .cal-game { min-width: 0; max-width: none; font-size: 0.75rem; }
+      .cal-desc { font-size: 0.72rem; width: 100%; }
+
+      /* Footer */
+      .footer { font-size: 0.7rem; }
+
+      /* Insights */
+      .insights li { font-size: 0.82rem; }
+
+      /* Table overflow */
+      .genre-rollup table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+      .genre-rollup th, .genre-rollup td { font-size: 0.78rem; padding: 0.3rem 0.5rem; }
+
+      /* Masthead mobile */
+      .masthead-top {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .masthead-meta {
+        text-align: left;
+      }
+      .masthead-title {
+        font-size: 1.6rem;
+      }
+      .masthead-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .masthead-nav::-webkit-scrollbar {
+        display: none;
+      }
+      .mover-cards {
+        grid-template-columns: 1fr;
+      }
+      .share-card {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      .twitch-stats { gap: 0.8rem; }
+    }
+
+    /* ── Dual-width: editorial sections narrower ── */
+    .editorial-width {
+      max-width: 740px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Active/pressed states ── */
+    button:active, .genre-filter-btn:active {
+      transform: scale(0.96);
+    }
+    a.game-link:active {
+      transform: scale(0.99);
+      color: var(--accent);
+    }
+    .share-btn:active {
+      transform: scale(0.94);
+    }
+    .nav-back:active {
+      transform: scale(0.97);
+    }
+    .back-to-top:active {
+      transform: scale(0.94);
+    }
+
+    /* Material Symbols for trend icons */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      vertical-align: middle;
+    }
+
+    /* Scanning line on card hover */
+    .card { position: relative; }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover::before { opacity: 0.5; }
+  </style>
+</head>
+<body>
+  <a href="#exec-summary" style="position:absolute;left:-9999px;top:0;padding:8px 16px;background:var(--accent);color:#0e0e0e;z-index:9999;font-size:0.9rem;text-decoration:none;" onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Skip to Executive Summary</a>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back">&#8592; ALL DIGESTS</a>
+    <a href="index.html" class="nav-logo">SHOOTER<span>DIGEST</span></a>
+  </nav>
+  <div class="editorial-width">
+  <header class="masthead">
+    <div class="masthead-top">
+      <div class="masthead-brand">
+        <div class="masthead-label">// INTELLIGENCE_REPORT</div>
+        <h1 class="masthead-title">TACTICAL INTEL <span>DIGEST</span></h1>
+        <p class="masthead-sub">WEEK OF MAR 19</p>
+      </div>
+      <div class="masthead-meta">
+        <span class="masthead-issue">ISSUE #80</span>
+        <span class="masthead-date">MARCH 19, 2026</span>
+      </div>
+    </div>
+    <div class="data-freshness">
+      <span class="pulse-dot"></span>
+      <span class="freshness-label">LIVE DATA</span>
+      <span class="freshness-sep">&middot;</span>
+      <span class="freshness-time">2026-03-19 15:18:36</span>
+    </div>
+    <nav class="masthead-nav">
+      <a href="#exec-summary" class="masthead-tab active">SUMMARY</a>
+      <a href="#ranking-section" class="masthead-tab">RANKINGS</a>
+      <a href="#game-details" class="masthead-tab">GAME DETAILS</a>
+      <a href="#calendar" class="masthead-tab">CALENDAR</a>
+      <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="masthead-tab masthead-share">SHARE ON X &#8599;</a>
+    </nav>
+  </header>
+
+  <div class="exec-summary" id="exec-summary">
+    <div class="section-label">// EXECUTIVE_TAKEAWAYS</div>
+    
+    <div class="exec-takeaways-list">
+      <div class="exec-takeaway"><span class="exec-num">01</span><span class="exec-takeaway-text">Insufficient trend data for market analysis.</span></div>
+    </div>
+    <div class="wnl-label">// MONTH_OVER_MONTH_STEAM_CONCURRENT_TREND</div>
+    <div class="wnl-table">
+      <div class="wnl-col">
+        <div class="wnl-header" style="color:#00FF41;border-top:2px solid #00FF41">WINNERS_DELTA (0)</div>
+        <table><tr><td colspan="3" style="color:var(--text-dim);font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr></table>
+      </div>
+      <div class="wnl-col">
+        <div class="wnl-header" style="color:#F59E0B;border-top:2px solid #F59E0B">NEUTRALS_STABLE (0)</div>
+        <table><tr><td colspan="3" style="color:var(--text-dim);font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr></table>
+      </div>
+      <div class="wnl-col">
+        <div class="wnl-header" style="color:#ff7162;border-top:2px solid #ff7162">LOSERS_DECAY (0)</div>
+        <table><tr><td colspan="3" style="color:var(--text-dim);font-style:italic;padding:0.25rem 0.5rem;font-size:0.8rem">None</td></tr></table>
+      </div>
+    </div>
+    
+    <div class="share-card">
+      <div class="share-preview">
+        <div class="share-preview-title">TACTICAL INTEL DIGEST // Week of Mar 19</div>
+        <div class="share-preview-desc">Steam concurrents, trends, and analysis for 0 competitive shooters.</div>
+        <div class="share-preview-url">shooter.pyon.dev</div>
+      </div>
+      <a href="https://twitter.com/intent/tweet?text=This%20week%27s%20competitive%20shooter%20intelligence%20briefing%20is%20out.%20Steam%20concurrents%2C%20trends%2C%20and%20analysis.%0A%0A&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-btn" aria-label="Share on X">
+        <svg viewBox="0 0 24 24" width="14" height="14" style="fill:currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Share on X
+      </a>
+    </div>
+  </div>
+
+
+
+  <p class="data-caveat-inline"><em>Steam concurrent players only. Console/MAU titles (Valorant, Fortnite, Overwatch 2) tracked separately.</em></p>
+  </div>
+
+  <div class="genre-filters">
+    <button class="genre-filter-btn active" data-genre="All">All <span class="filter-count">0</span></button>
+  </div>
+  <span class="genre-scroll-hint" id="genre-scroll-hint">scroll →</span>
+  <div class="status-legend">
+    <div class="status-legend-label">// CLASSIFICATION_BASED_ON_WOW_DELTA</div>
+    <div class="status-legend-items">
+      <span class="status-legend-item"><span class="sl-dot" style="background:#00FF41"></span>SURGING</span>
+      <span class="status-legend-item"><span class="sl-dot" style="background:#16A34A"></span>GROWING</span>
+      <span class="status-legend-item"><span class="sl-dot" style="background:#F59E0B"></span>STABLE</span>
+      <span class="status-legend-item"><span class="sl-dot" style="background:#ff7162"></span>SLIDING</span>
+      <span class="status-legend-item"><span class="sl-dot" style="background:#DC2626"></span>FADING</span>
+    </div>
+  </div>
+
+  <div id="ranking-section"></div>
+  <div class="section-label" style="margin-bottom:0.5rem">// INTELLIGENCE_GRID</div>
+  <table class="ranking-table">
+    <thead>
+      <tr>
+        <th data-sort="num" data-col="0">Rank</th>
+        <th data-sort="str" data-col="1">Game</th>
+        <th data-sort="num" data-col="2" style="text-align:right">24h Peak<br><small>(Steam)</small></th>
+        <th data-sort="num" data-col="3" style="text-align:right">Est. Total<br><small>(All Plat.)</small> <a href="#methodology" class="info-tip" data-tip="Steam 24h peak ÷ Steam share. Click for methodology.">ⓘ</a></th>
+        <th data-sort="num" data-col="4" title="Week-over-Week trend (hover for MoM)">Trend<br><small>(WoW)</small></th>
+        <th>Sparkline</th>
+        <th data-sort="num" data-col="6" style="text-align:right">All-Time Peak<br><small>(Est. All Plat.)</small></th>
+        <th data-sort="num" data-col="7">% of Peak</th>
+        <th data-sort="str" data-col="8">Status</th>
+        <th>Platform</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Counter-Strike 2</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Apex Legends</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Marvel Rivals</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Marathon</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Delta Force</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Arc Raiders</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Battlefield 6</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Call of Duty</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Halo Infinite</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Overwatch</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Rainbow Six Siege</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">PUBG: BATTLEGROUNDS</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">The Finals</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Destiny 2</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Team Fortress 2</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+        <tr class="failed">
+          <td class="rank">-</td>
+          <td class="game">Halo: MCC</td>
+          <td class="num">-</td><td class="num">-</td>
+          <td class="trend neutral">-</td>
+          <td class="sparkline-cell">-</td>
+          <td class="num">-</td><td class="pct-cell">-</td>
+          <td class="status-cell">-</td>
+          <td class="platform-cell">-</td>
+        </tr>
+    </tbody>
+  </table>
+
+  <div class="genre-rollup">
+    <h3>Genre Rollup</h3>
+    <table>
+      <thead><tr>
+        <th>Genre</th>
+        <th style="text-align:right">Combined Est. Daily Players</th>
+        <th style="text-align:center" title="Month-over-Month trend in average concurrent players">MoM Trend</th>
+        <th>Dominant Title</th>
+        <th style="text-align:center"># Titles</th>
+      </tr></thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="editorial-width">
+
+
+  <h2 class="section-title" id="game-details">// Game Details</h2>
+
+
+
+
+  <div class="radar-section" style="margin-top:2rem">
+    <h2 class="section-title" style="color:#38bdf8;border-bottom-color:#38bdf8">&#x1F4E1; On Our Radar</h2>
+    <p style="color:#808088;font-size:0.85rem;margin-bottom:1rem">Algorithm-surfaced titles showing growth signals this week. Candidates for our emerging watchlist.</p>
+
+    <table style="width:100%;border-collapse:collapse;margin-bottom:0.5rem">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Game</th>
+          <th style="text-align:left;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Developer</th>
+          <th style="text-align:right;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Steam CCU</th>
+          <th style="text-align:center;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Signal Strength</th>
+          <th style="text-align:left;padding:0.4rem 0.6rem;border-bottom:2px solid #1e3a4a;color:#38bdf8;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.04em">Why It Surfaced</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#F0F0F2;font-size:0.83rem">Supremacy 1914: World War 1</td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.8rem">Bytro Labs GmbH</td>
+        <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">334</td>
+        <td style="padding:0.4rem 0.6rem;text-align:center">
+          <span style="color:#22C55E;font-weight:700;font-size:0.8rem">Strong</span>
+          <div style="color:#44444C;font-size:0.68rem;margin-top:2px">6.1x recent vs. lifetime avg</div>
+        </td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.75rem">Elevated recent playtime vs. lifetime average; 75% positive reviews (3,873 total)</td>
+      </tr>
+      <tr>
+        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#F0F0F2;font-size:0.83rem">Super Animal Royale</td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.8rem">Pixile</td>
+        <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">364</td>
+        <td style="padding:0.4rem 0.6rem;text-align:center">
+          <span style="color:#22C55E;font-weight:700;font-size:0.8rem">Strong</span>
+          <div style="color:#44444C;font-size:0.68rem;margin-top:2px">4.9x recent vs. lifetime avg</div>
+        </td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.75rem">Elevated recent playtime vs. lifetime average; 94% positive reviews (42,367 total)</td>
+      </tr>
+      <tr>
+        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#F0F0F2;font-size:0.83rem">Splitgate: Arena Warfare</td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.8rem">1047 Games</td>
+        <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">185</td>
+        <td style="padding:0.4rem 0.6rem;text-align:center">
+          <span style="color:#22C55E;font-weight:700;font-size:0.8rem">Strong</span>
+          <div style="color:#44444C;font-size:0.68rem;margin-top:2px">4.1x recent vs. lifetime avg</div>
+        </td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.75rem">Elevated recent playtime vs. lifetime average; 92% positive reviews (111,740 total)</td>
+      </tr>
+      <tr>
+        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#F0F0F2;font-size:0.83rem">Black Squad</td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.8rem">VALOFE, NS STUDIO</td>
+        <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">212</td>
+        <td style="padding:0.4rem 0.6rem;text-align:center">
+          <span style="color:#22C55E;font-weight:700;font-size:0.8rem">Strong</span>
+          <div style="color:#44444C;font-size:0.68rem;margin-top:2px">3.9x recent vs. lifetime avg</div>
+        </td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.75rem">Elevated recent playtime vs. lifetime average; 76% positive reviews (81,714 total)</td>
+      </tr>
+      <tr>
+        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#F0F0F2;font-size:0.83rem">Quake Champions</td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.8rem">id Software</td>
+        <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">203</td>
+        <td style="padding:0.4rem 0.6rem;text-align:center">
+          <span style="color:#22C55E;font-weight:700;font-size:0.8rem">Strong</span>
+          <div style="color:#44444C;font-size:0.68rem;margin-top:2px">3.6x recent vs. lifetime avg</div>
+        </td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.75rem">Elevated recent playtime vs. lifetime average; 74% positive reviews (38,365 total)</td>
+      </tr>
+      <tr>
+        <td style="padding:0.4rem 0.6rem;font-weight:600;color:#F0F0F2;font-size:0.83rem">Two Point Campus</td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.8rem">Two Point Studios</td>
+        <td style="padding:0.4rem 0.6rem;text-align:right;font-variant-numeric:tabular-nums;font-size:0.82rem">191</td>
+        <td style="padding:0.4rem 0.6rem;text-align:center">
+          <span style="color:#F59E0B;font-weight:700;font-size:0.8rem">Moderate</span>
+          <div style="color:#44444C;font-size:0.68rem;margin-top:2px">1.1x recent vs. lifetime avg</div>
+        </td>
+        <td style="padding:0.4rem 0.6rem;color:#808088;font-size:0.75rem">87% positive reviews (6,534 total)</td>
+      </tr>
+      </tbody>
+    </table>
+    <p style="color:#44444C;font-size:0.72rem;font-style:italic;margin-top:0.5rem">These surface automatically from SteamSpy tag data. No editorial curation.</p>
+  </div>
+
+  <div class="calendar-section" id="calendar">
+    <h2 class="section-title">Release &amp; Patch Calendar</h2>
+    <div class="cal-section">
+      <h3 class="cal-section-header past">This Week</h3>
+      <div class="cal-entry">
+        <span class="cal-date">Mar 12</span>
+        <span class="cal-game">John Carpenter&#x27;s Toxic Commando</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Co-op zombie FPS. Saber Interactive. PC/PS5/Xbox.</span>
+      </div>
+      <div class="cal-entry">
+        <span class="cal-date">Mar 19</span>
+        <span class="cal-game">Mouse: P.I. for Hire</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Noir-themed retro FPS. PC/PS5/Switch/Xbox.</span>
+      </div>
+    </div>
+
+    <div class="cal-today-divider">
+      <span>TODAY — Mar 19</span>
+    </div>
+
+    <div class="cal-section">
+      <h3 class="cal-section-header upcoming">Coming Up (Next 2 Weeks)</h3>
+      <div class="cal-empty">No confirmed events in the next 2 weeks.</div>
+    </div>
+
+    <div class="cal-section">
+      <h3 class="cal-section-header future">April 2026</h3>
+      <div class="cal-empty">No tracked events yet — check back as announcements come in.</div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">May 2026</h3>
+      <div class="cal-entry">
+        <span class="cal-date">May 27</span>
+        <span class="cal-game">007 First Light</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">IO Interactive (Hitman devs) James Bond origin story. Third-person action-shooter. PC/PS5/Xbox/Switch 2.</span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">June 2026 <span class="cal-count">3 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Jun</span>
+        <span class="cal-game">Warhammer 40K: Boltgun 2</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Retro-style FPS sequel. Auroch Digital. PC/PS5/Xbox. Targeting 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Jun</span>
+        <span class="cal-game">Halo: Campaign Evolved</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Full remake of Halo: Combat Evolved, rebuilt from the ground up. PC/PS5/Xbox. Targeting Summer 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+      <div class="cal-entry estimated">
+        <span class="cal-date">Jun</span>
+        <span class="cal-game">Industry</span>
+        <span class="calendar-type industry">Industry</span>
+        <span class="cal-desc">Summer Game Fest window — expect major shooter reveals and announcements <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">July 2026 <span class="cal-count">1 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">Jul</span>
+        <span class="cal-game">Industry</span>
+        <span class="calendar-type industry">Industry</span>
+        <span class="cal-desc">Summer Game Fest window — expect major shooter reveals and announcements <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">August 2026</h3>
+      <div class="cal-empty">No tracked events yet — check back as announcements come in.</div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">September 2026 <span class="cal-count">1 confirmed, 2 estimated</span></h3>
+      <div class="cal-entry">
+        <span class="cal-date">Sep 08</span>
+        <span class="cal-game">Halloween: The Game</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Horror shooter based on the film franchise. PC/PS5/Xbox.</span>
+      </div>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Sep</span>
+        <span class="cal-game">Hell Let Loose: Vietnam</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">50v50 multiplayer set in Vietnam. Sequel to Hell Let Loose. PC/PS5/Xbox. Targeting 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Sep</span>
+        <span class="cal-game">Borderlands 4</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Looter-shooter FPS sequel. Gearbox Software. Multi-platform. Targeting 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">October 2026 <span class="cal-count">1 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Oct</span>
+        <span class="cal-game">Turok Origins</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">FPS franchise revival/reboot. PC/PS5/Switch 2/Xbox. Targeting Fall 2026. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">November 2026 <span class="cal-count">1 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Nov</span>
+        <span class="cal-game">Gears of War: E-Day</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">Prequel to the original Gears of War. The Coalition + People Can Fly. PC/Xbox. TBA per IGN. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">December 2026 <span class="cal-count">1 estimated</span></h3>
+      <div class="cal-entry estimated">
+        <span class="cal-date">~Dec</span>
+        <span class="cal-game">Judas</span>
+        <span class="calendar-type newrelease">New Release</span>
+        <span class="cal-desc">FPS from Ken Levine (BioShock creator). Ghost Story Games. PC/PS5/Xbox. TBA per IGN. <span class="est-tag">ESTIMATED</span></span>
+      </div>
+    </div>
+    <div class="cal-section">
+      <h3 class="cal-section-header future">January 2027</h3>
+      <div class="cal-empty">No tracked events yet — check back as announcements come in.</div>
+    </div>
+  </div>
+
+  <div class="methodology" id="methodology">
+    <details>
+      <summary>Methodology &mdash; Platform Multipliers &amp; Data Sources</summary>
+      <div class="methodology-content">
+        <p class="methodology-disclaimer">Steam share % represents our estimate of what fraction of total cross-platform players are captured by Steam concurrent data. Sources vary by game: some are derived from publisher earnings disclosures, others are modeled from platform mix ratios. These are estimates, not validated first-party data. Treat all-platform figures as directional.</p>
+        <table>
+          <thead><tr>
+            <th>Game</th>
+            <th style="text-align:right">Steam 24h Peak</th>
+            <th style="text-align:center">Multiplier</th>
+            <th style="text-align:right">Est. All Platforms</th>
+            <th>Source / Notes</th>
+          </tr></thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+  </div>
+
+  <div class="editorial-width footer">
+    DATA_LAST_SYNC: 2026-03-19 15:18:36 &nbsp;|&nbsp; POWERED BY SHOOTERDIGEST // v2.4.0<br>
+    <a href="https://store.steampowered.com/charts" target="_blank">SteamCharts</a> &middot;
+    <a href="https://partner.steamgames.com/doc/webapi/ISteamNews" target="_blank">Steam News API</a> &middot;
+    <a href="https://www.reddit.com" target="_blank">Reddit</a> &middot;
+    <a href="https://news.google.com" target="_blank">Google News</a><br>
+    <small style="color:var(--text-dim);font-size:0.68rem">
+      White = raw Steam data &nbsp;|&nbsp;
+      <span style="color:var(--green)">Green</span> = estimated total across all platforms (current) &nbsp;|&nbsp;
+      <span style="color:var(--amber)">Gold</span> = estimated total across all platforms (all-time)<br>
+      Est. Total = Steam peak ÷ Steam share. Trend = week-over-week from SteamCharts.<br>
+      Platform splits from EA, Krafton, NetEase earnings, Alinea Analytics, and community trackers. Extrapolated where official data unavailable.
+    </small>
+  </div>
+
+  <script>
+  // Genre filter tabs
+  document.querySelectorAll('.genre-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      document.querySelectorAll('.genre-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const genre = btn.dataset.genre;
+
+      // Filter table rows
+      document.querySelectorAll('table tbody tr[data-genre]').forEach(row => {
+        row.style.display = (genre === 'All' || row.dataset.genre === genre) ? '' : 'none';
+      });
+
+      // Filter cards
+      document.querySelectorAll('.card[data-genre]').forEach(card => {
+        card.style.display = (genre === 'All' || card.dataset.genre === genre) ? '' : 'none';
+      });
+    });
+  });
+
+  // Sortable table columns
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const table = th.closest('table');
+      const tbody = table.querySelector('tbody');
+      const col = parseInt(th.dataset.col);
+      const type = th.dataset.sort;
+      const isAsc = th.classList.contains('asc');
+      const dir = isAsc ? -1 : 1;
+
+      // Update header classes
+      table.querySelectorAll('th[data-sort]').forEach(h => h.classList.remove('asc', 'desc'));
+      th.classList.add(isAsc ? 'desc' : 'asc');
+
+      // Get sortable rows (skip failed rows)
+      const rows = Array.from(tbody.querySelectorAll('tr[data-genre]'));
+
+      rows.sort((a, b) => {
+        const cellA = a.children[col];
+        const cellB = b.children[col];
+
+        if (type === 'num') {
+          const vA = parseFloat(cellA.dataset.value || '0');
+          const vB = parseFloat(cellB.dataset.value || '0');
+          return (vA - vB) * dir;
+        } else {
+          const vA = cellA.textContent.trim().toLowerCase();
+          const vB = cellB.textContent.trim().toLowerCase();
+          return vA.localeCompare(vB) * dir;
+        }
+      });
+
+      rows.forEach(row => tbody.appendChild(row));
+    });
+  });
+
+  // Back-to-top button
+  const btt = document.getElementById('back-to-top');
+  if (btt) {
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > 600);
+    });
+  }
+
+  // Genre filter scroll hint (mobile)
+  (function() {
+    const filters = document.querySelector('.genre-filters');
+    const hint = document.getElementById('genre-scroll-hint');
+    if (!filters || !hint) return;
+    // Hide hint on desktop
+    if (window.innerWidth > 600) { hint.style.display = 'none'; return; }
+    filters.addEventListener('scroll', function() {
+      if (filters.scrollLeft > 20) {
+        filters.classList.add('scrolled');
+        hint.style.display = 'none';
+      }
+    }, { passive: true });
+  })();
+
+  </script>
+  <a id="back-to-top" href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ TOP</a>
+  <a href="https://twitter.com/intent/tweet?text=ShooterDigest%20%E2%80%94%20This%20week%27s%20competitive%20FPS%20intelligence%20briefing%20is%20live.&url=https%3A%2F%2Fshooter.michaelpyon.com" target="_blank" rel="noopener" class="share-fab" aria-label="Share on X" style="position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:0;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;z-index:50;text-decoration:none;">
+    <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:var(--text)"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  </a>
+</body>
+</html>

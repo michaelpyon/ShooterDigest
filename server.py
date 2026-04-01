@@ -11,6 +11,9 @@ PORT = int(os.environ.get("PORT", 8080))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 NEIGHBORHOODS_FILE = os.path.join(BASE_DIR, "nyc-neighborhoods.html")
 NYCGUY_FILE = os.path.join(BASE_DIR, "nycguy.html")
+SITE_URL = os.environ.get("SITE_URL", "https://shooter.michaelpyon.com").rstrip("/")
+TWITTER_SITE_HANDLE = os.environ.get("TWITTER_SITE_HANDLE", "@michaelpyon")
+TWITTER_CREATOR_HANDLE = os.environ.get("TWITTER_CREATOR_HANDLE", TWITTER_SITE_HANDLE)
 
 # ---------------------------------------------------------------------------
 # Newsletter signup component
@@ -143,18 +146,18 @@ function sdSubscribe(e) {
 """.replace("NEWSLETTER_SUBSCRIBE_EMAIL", NEWSLETTER_SUBSCRIBE_EMAIL)
 
 
-OG_META_HTML = """
+OG_META_HTML = f"""
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://shooter.michaelpyon.com" />
+  <meta property="og:url" content="{SITE_URL}" />
   <meta property="og:title" content="ShooterDigest — Weekly Competitive Shooter Intelligence" />
   <meta property="og:description" content="SteamDB shows you the numbers. ShooterDigest tells you what they mean. Weekly analysis of the PC competitive FPS market." />
-  <meta property="og:image" content="https://shooter.michaelpyon.com/og.png" />
+  <meta property="og:image" content="{SITE_URL}/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ShooterDigest — Weekly Shooter Intelligence" />
   <meta name="twitter:description" content="Weekly analysis of the PC competitive FPS market. Data, not hot takes." />
-  <meta name="twitter:image" content="https://shooter.michaelpyon.com/og.png" />
-  <meta name="twitter:site" content="@michaelpyon" />
-  <meta name="twitter:creator" content="@michaelpyon" />
+  <meta name="twitter:image" content="{SITE_URL}/og.png" />
+  <meta name="twitter:site" content="{TWITTER_SITE_HANDLE}" />
+  <meta name="twitter:creator" content="{TWITTER_CREATOR_HANDLE}" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 """
 
@@ -272,8 +275,9 @@ class DigestHandler(SimpleHTTPRequestHandler):
                 self.wfile.write(data)
                 return
 
-        # Fallback for any other static files
-        super().do_GET()
+        # Only a small allowlist of assets should be exposed from the server.
+        self.send_response(404)
+        self.end_headers()
 
     # ------------------------------------------------------------------
     # Helpers

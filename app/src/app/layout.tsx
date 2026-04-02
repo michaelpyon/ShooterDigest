@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "ShooterDigest | Competitive FPS Market Intelligence",
@@ -18,28 +25,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="min-h-screen bg-[#0a0a0a]">
-        <nav className="border-b border-[#1f2937] bg-[#0a0a0a] sticky top-0 z-50">
+    <html lang="en" className={`dark ${inter.variable}`}>
+      <body className="min-h-screen bg-bg font-sans">
+        <nav className="border-b border-border bg-bg sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
                 <a
                   href="/"
-                  className="text-[#e2e8f0] font-bold text-lg tracking-tight"
+                  className="text-text font-bold text-lg tracking-tight"
                 >
                   ShooterDigest
                 </a>
                 <div className="hidden sm:flex items-center gap-6">
                   <a
                     href="/compare"
-                    className="text-[#94a3b8] hover:text-[#e2e8f0] text-sm transition-colors"
+                    className="text-text-muted hover:text-text text-sm transition-colors"
                   >
                     Compare
                   </a>
                   <a
                     href="/methodology"
-                    className="text-[#94a3b8] hover:text-[#e2e8f0] text-sm transition-colors"
+                    className="text-text-muted hover:text-text text-sm transition-colors"
                   >
                     Methodology
                   </a>
@@ -48,7 +55,7 @@ export default function RootLayout({
               <div className="flex items-center gap-4">
                 <a
                   href="/api/rss"
-                  className="text-[#64748b] hover:text-[#94a3b8] text-xs transition-colors"
+                  className="text-text-subtle hover:text-text-muted text-xs transition-colors"
                   title="RSS Feed"
                 >
                   RSS

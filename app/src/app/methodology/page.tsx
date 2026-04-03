@@ -7,14 +7,14 @@ export const metadata = {
 export default function MethodologyPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl font-bold text-[#e2e8f0] tracking-tight mb-6">
+      <h1 className="text-2xl font-black text-text tracking-tight mb-6">
         Methodology
       </h1>
 
-      <div className="space-y-8 text-[#94a3b8] text-sm leading-relaxed">
+      <div className="space-y-8 text-text-muted text-sm leading-relaxed">
         {/* Overview */}
         <section>
-          <h2 className="text-[#e2e8f0] font-semibold text-base mb-3">
+          <h2 className="text-text font-semibold text-base mb-3">
             Overview
           </h2>
           <p>
@@ -32,16 +32,16 @@ export default function MethodologyPage() {
 
         {/* Data Sources */}
         <section>
-          <h2 className="text-[#e2e8f0] font-semibold text-base mb-3">
+          <h2 className="text-text font-semibold text-base mb-3">
             Data Sources
           </h2>
 
           <div className="space-y-4">
-            <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-4">
-              <h3 className="text-[#e2e8f0] font-medium text-sm mb-1">
+            <div className="bg-surface border border-border rounded-lg p-4">
+              <h3 className="text-text font-medium text-sm mb-1">
                 Steam Web API (Player Count)
               </h3>
-              <p className="text-[#6b7280] text-xs">Weight: 50%</p>
+              <p className="text-text-subtle text-xs">Weight: 50%</p>
               <p className="mt-2">
                 Current concurrent player count from Steam&apos;s
                 ISteamUserStats/GetNumberOfCurrentPlayers endpoint. Compared
@@ -51,11 +51,11 @@ export default function MethodologyPage() {
               </p>
             </div>
 
-            <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-4">
-              <h3 className="text-[#e2e8f0] font-medium text-sm mb-1">
+            <div className="bg-surface border border-border rounded-lg p-4">
+              <h3 className="text-text font-medium text-sm mb-1">
                 Reddit Activity
               </h3>
-              <p className="text-[#6b7280] text-xs">Weight: 30%</p>
+              <p className="text-text-subtle text-xs">Weight: 30%</p>
               <p className="mt-2">
                 Post volume (top 25 posts over the past week) and hot post count
                 from each title&apos;s subreddit via the Reddit API. Volume is
@@ -67,11 +67,11 @@ export default function MethodologyPage() {
               </p>
             </div>
 
-            <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-4">
-              <h3 className="text-[#e2e8f0] font-medium text-sm mb-1">
+            <div className="bg-surface border border-border rounded-lg p-4">
+              <h3 className="text-text font-medium text-sm mb-1">
                 Google News RSS (News Coverage)
               </h3>
-              <p className="text-[#6b7280] text-xs">Weight: 20%</p>
+              <p className="text-text-subtle text-xs">Weight: 20%</p>
               <p className="mt-2">
                 Article count from Google News RSS search. Filtered for gaming
                 relevance (non-gaming articles like sports are excluded).
@@ -84,32 +84,32 @@ export default function MethodologyPage() {
 
         {/* Score Composition */}
         <section>
-          <h2 className="text-[#e2e8f0] font-semibold text-base mb-3">
+          <h2 className="text-text font-semibold text-base mb-3">
             Score Composition
           </h2>
 
-          <div className="bg-[#111111] border border-[#1f2937] rounded-lg overflow-hidden">
+          <div className="bg-surface border border-border rounded-lg overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1f2937]">
-                  <th className="text-left p-3 text-[#6b7280] text-xs uppercase tracking-wider font-medium">
+                <tr className="border-b border-border">
+                  <th className="text-left p-3 text-text-subtle text-xs uppercase tracking-widest font-medium">
                     Source
                   </th>
-                  <th className="text-right p-3 text-[#6b7280] text-xs uppercase tracking-wider font-medium">
+                  <th className="text-right p-3 text-text-subtle text-xs uppercase tracking-widest font-medium">
                     Full Data
                   </th>
-                  <th className="text-right p-3 text-[#6b7280] text-xs uppercase tracking-wider font-medium">
+                  <th className="text-right p-3 text-text-subtle text-xs uppercase tracking-widest font-medium">
                     Limited Data
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-[#94a3b8]">
-                <tr className="border-b border-[#1f2937]/50">
+              <tbody className="text-text-muted">
+                <tr className="border-b border-border/50">
                   <td className="p-3">Player Count</td>
                   <td className="p-3 text-right mono">50%</td>
-                  <td className="p-3 text-right mono text-[#6b7280]">N/A</td>
+                  <td className="p-3 text-right mono text-text-subtle">N/A</td>
                 </tr>
-                <tr className="border-b border-[#1f2937]/50">
+                <tr className="border-b border-border/50">
                   <td className="p-3">Reddit Activity</td>
                   <td className="p-3 text-right mono">30%</td>
                   <td className="p-3 text-right mono">60%</td>
@@ -126,7 +126,7 @@ export default function MethodologyPage() {
 
         {/* Limited Data */}
         <section>
-          <h2 className="text-[#e2e8f0] font-semibold text-base mb-3">
+          <h2 className="text-text font-semibold text-base mb-3">
             Limited Data Titles
           </h2>
           <p>
@@ -146,7 +146,7 @@ export default function MethodologyPage() {
 
         {/* Score Interpretation */}
         <section>
-          <h2 className="text-[#e2e8f0] font-semibold text-base mb-3">
+          <h2 className="text-text font-semibold text-base mb-3">
             Score Ranges
           </h2>
           <div className="space-y-2">
@@ -154,19 +154,19 @@ export default function MethodologyPage() {
               {
                 range: "80-100",
                 label: "Thriving",
-                color: "text-[#22c55e]",
+                color: "text-secondary",
                 desc: "Above-average player counts, active community, strong news coverage.",
               },
               {
                 range: "60-79",
                 label: "Healthy",
-                color: "text-[#3b82f6]",
+                color: "text-accent",
                 desc: "Solid engagement across most signals. Stable or growing.",
               },
               {
                 range: "40-59",
                 label: "Neutral",
-                color: "text-[#f59e0b]",
+                color: "text-warning",
                 desc: "At or near historical baseline. No strong trend either way.",
               },
               {
@@ -178,13 +178,13 @@ export default function MethodologyPage() {
               {
                 range: "0-19",
                 label: "Critical",
-                color: "text-[#ef4444]",
+                color: "text-tertiary",
                 desc: "Significantly below baseline across multiple signals.",
               },
             ].map((tier) => (
               <div
                 key={tier.range}
-                className="flex items-start gap-3 bg-[#111111] border border-[#1f2937] rounded-lg p-3"
+                className="flex items-start gap-3 bg-surface border border-border rounded-lg p-3"
               >
                 <span className={`mono text-sm font-bold ${tier.color} w-14`}>
                   {tier.range}
@@ -193,7 +193,7 @@ export default function MethodologyPage() {
                   <span className={`text-sm font-medium ${tier.color}`}>
                     {tier.label}
                   </span>
-                  <p className="text-[#6b7280] text-xs mt-0.5">{tier.desc}</p>
+                  <p className="text-text-subtle text-xs mt-0.5">{tier.desc}</p>
                 </div>
               </div>
             ))}
@@ -202,7 +202,7 @@ export default function MethodologyPage() {
 
         {/* Pipeline */}
         <section>
-          <h2 className="text-[#e2e8f0] font-semibold text-base mb-3">
+          <h2 className="text-text font-semibold text-base mb-3">
             Update Schedule
           </h2>
           <p>
@@ -219,7 +219,7 @@ export default function MethodologyPage() {
 
         {/* Tracked titles */}
         <section>
-          <h2 className="text-[#e2e8f0] font-semibold text-base mb-3">
+          <h2 className="text-text font-semibold text-base mb-3">
             Tracked Titles
           </h2>
           <p>
@@ -244,24 +244,24 @@ export default function MethodologyPage() {
             ].map((title) => (
               <span
                 key={title}
-                className="text-[#94a3b8] text-xs bg-[#111111] border border-[#1f2937] rounded px-2.5 py-1.5"
+                className="text-text-muted text-xs bg-surface border border-border rounded px-2.5 py-1.5"
               >
                 {title}
               </span>
             ))}
           </div>
-          <p className="text-[#6b7280] text-xs mt-2">
+          <p className="text-text-subtle text-xs mt-2">
             * Limited Data: no Steam player count available.
           </p>
         </section>
 
         {/* Contact */}
-        <section className="border-t border-[#1f2937] pt-6">
-          <p className="text-[#6b7280] text-xs">
+        <section className="border-t border-border pt-6">
+          <p className="text-text-subtle text-xs">
             Questions about the methodology? Reach out at{" "}
             <a
               href="mailto:michael@michaelpyon.com"
-              className="text-[#3b82f6] hover:underline"
+              className="text-accent hover:underline"
             >
               michael@michaelpyon.com
             </a>

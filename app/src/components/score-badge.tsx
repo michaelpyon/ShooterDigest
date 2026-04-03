@@ -14,19 +14,19 @@ interface ScoreBadgeProps {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) return "text-[#22c55e]";
-  if (score >= 60) return "text-[#3b82f6]";
-  if (score >= 40) return "text-[#f59e0b]";
+  if (score >= 80) return "text-secondary";
+  if (score >= 60) return "text-accent";
+  if (score >= 40) return "text-warning";
   if (score >= 20) return "text-[#f97316]";
-  return "text-[#ef4444]";
+  return "text-tertiary";
 }
 
 function getScoreBg(score: number): string {
-  if (score >= 80) return "bg-[#22c55e]/10";
-  if (score >= 60) return "bg-[#3b82f6]/10";
-  if (score >= 40) return "bg-[#f59e0b]/10";
+  if (score >= 80) return "bg-secondary/10";
+  if (score >= 60) return "bg-accent/10";
+  if (score >= 40) return "bg-warning/10";
   if (score >= 20) return "bg-[#f97316]/10";
-  return "bg-[#ef4444]/10";
+  return "bg-tertiary/10";
 }
 
 const sizes = {
@@ -42,7 +42,7 @@ export function ScoreBadge({
 }: ScoreBadgeProps) {
   return (
     <span
-      className={`mono font-bold rounded ${getScoreColor(score)} ${getScoreBg(score)} ${sizes[size]} ${className}`}
+      className={`mono font-bold ${getScoreColor(score)} ${getScoreBg(score)} ${sizes[size]} ${className}`}
     >
       {score.toFixed(1)}
     </span>
@@ -58,12 +58,12 @@ export function ChangeIndicator({
 }) {
   if (change == null) {
     return (
-      <span className={`mono text-[#6b7280] text-xs ${className}`}>--</span>
+      <span className={`mono text-text-subtle text-xs ${className}`}>--</span>
     );
   }
 
   const isPositive = change >= 0;
-  const color = isPositive ? "text-[#22c55e]" : "text-[#ef4444]";
+  const color = isPositive ? "text-secondary" : "text-tertiary";
   const arrow = isPositive ? "\u25B2" : "\u25BC";
   const sign = isPositive ? "+" : "";
 

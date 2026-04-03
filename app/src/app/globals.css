@@ -13,11 +13,20 @@
   --color-secondary: #4ae176;
   --color-secondary-hover: #00b954;
   --color-tertiary: #ffb3ad;
+  --color-warning: #f59e0b;
   --color-border: rgba(255, 255, 255, 0.08);
   --color-border-hover: rgba(255, 255, 255, 0.14);
   --color-error: #ffb4ab;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --radius-sm: 0px;
+  --radius: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
 }
 
 :root {

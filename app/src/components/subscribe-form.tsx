@@ -42,12 +42,12 @@ export function SubscribeForm() {
   }
 
   return (
-    <div className="border-t border-[#1f2937] mt-12 pt-8">
+    <div className="border-t border-border mt-12 pt-8">
       <div className="max-w-md mx-auto text-center">
-        <h3 className="text-[#e2e8f0] font-semibold text-sm mb-1">
+        <h3 className="text-text font-semibold text-sm mb-1">
           Weekly Digest
         </h3>
-        <p className="text-[#6b7280] text-xs mb-4">
+        <p className="text-text-subtle text-xs mb-4">
           Get the competitive FPS market report every Monday at 8 AM ET.
         </p>
 
@@ -61,12 +61,12 @@ export function SubscribeForm() {
             }}
             placeholder="you@example.com"
             required
-            className="flex-1 bg-[#111111] border border-[#1f2937] rounded-md px-3 py-2 text-sm text-[#e2e8f0] placeholder-[#6b7280] focus:outline-none focus:border-[#3b82f6] transition-colors"
+            className="flex-1 bg-surface border border-border px-3 py-2 text-sm text-text placeholder-text-subtle focus:outline-none focus:border-accent transition-colors"
           />
           <button
             type="submit"
             disabled={status === "loading"}
-            className="bg-[#3b82f6] hover:bg-[#2563eb] text-white text-sm font-medium px-4 py-2 rounded-md transition-colors disabled:opacity-50"
+            className="bg-accent hover:bg-accent-hover text-bg text-sm font-medium px-4 py-2 transition-colors disabled:opacity-50"
           >
             {status === "loading" ? "..." : "Subscribe"}
           </button>
@@ -76,10 +76,10 @@ export function SubscribeForm() {
           <p
             className={`text-xs mt-2 ${
               status === "success"
-                ? "text-[#22c55e]"
+                ? "text-secondary"
                 : status === "exists"
-                  ? "text-[#f59e0b]"
-                  : "text-[#ef4444]"
+                  ? "text-warning"
+                  : "text-tertiary"
             }`}
           >
             {message}

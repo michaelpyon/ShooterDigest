@@ -29,7 +29,7 @@ export function Sparkline({
 
   // Determine color from trend direction
   const trend = data[data.length - 1] - data[0];
-  const lineColor = color ?? (trend >= 0 ? "#22c55e" : "#ef4444");
+  const lineColor = color ?? (trend >= 0 ? "#4ae176" : "#ffb3ad");
 
   const padding = 2;
   const chartWidth = width - padding * 2;

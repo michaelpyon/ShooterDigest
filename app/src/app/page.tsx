@@ -87,15 +87,15 @@ export default async function Dashboard() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#e2e8f0] tracking-tight">
+        <h1 className="text-2xl font-black text-text tracking-tight">
           Competitive FPS Intelligence
         </h1>
-        <p className="text-[#6b7280] text-sm mt-1">
+        <p className="text-text-subtle text-sm mt-1">
           Health scores, player trends, and community sentiment across the
           competitive shooter landscape.
         </p>
         {lastUpdated && (
-          <p className="text-[#4b5563] text-xs mt-2 mono">
+          <p className="text-text-subtle text-xs mt-2 mono">
             Last updated:{" "}
             {new Date(lastUpdated).toLocaleDateString("en-US", {
               weekday: "short",
@@ -112,14 +112,14 @@ export default async function Dashboard() {
       {/* Column headers */}
       {cards.length > 0 && (
         <div className="flex items-center justify-between px-4 mb-2">
-          <span className="text-[#6b7280] text-[10px] uppercase tracking-wider font-medium">
+          <span className="text-text-subtle text-[10px] uppercase tracking-widest font-medium">
             Title
           </span>
           <div className="flex items-center gap-4">
-            <span className="text-[#6b7280] text-[10px] uppercase tracking-wider font-medium w-[72px] text-center">
+            <span className="text-text-subtle text-[10px] uppercase tracking-widest font-medium w-[72px] text-center">
               Trend
             </span>
-            <span className="text-[#6b7280] text-[10px] uppercase tracking-wider font-medium w-16 text-right">
+            <span className="text-text-subtle text-[10px] uppercase tracking-widest font-medium w-16 text-right">
               Score
             </span>
           </div>
@@ -131,11 +131,11 @@ export default async function Dashboard() {
         {cards.length > 0 ? (
           cards.map((card) => <TitleCard key={card.slug} data={card} />)
         ) : (
-          <div className="text-center py-16 border border-[#1f2937] rounded-lg bg-[#111111]">
-            <p className="text-[#6b7280] text-sm">
+          <div className="text-center py-16 border border-border bg-surface">
+            <p className="text-text-subtle text-sm">
               No data yet. Run the pipeline to populate scores.
             </p>
-            <p className="text-[#4b5563] text-xs mt-2 mono">
+            <p className="text-text-subtle/60 text-xs mt-2 mono">
               npm run pipeline
             </p>
           </div>
@@ -146,11 +146,11 @@ export default async function Dashboard() {
       <SubscribeForm />
 
       {/* Footer */}
-      <footer className="border-t border-[#1f2937] mt-8 pt-6 text-center">
-        <p className="text-[#4b5563] text-xs">
+      <footer className="border-t border-border mt-8 pt-6 text-center">
+        <p className="text-text-subtle text-xs">
           ShooterDigest. Competitive FPS market intelligence.
         </p>
-        <p className="text-[#374151] text-xs mt-1">
+        <p className="text-text-subtle/50 text-xs mt-1">
           Data from Steam Web API, Reddit, and Google News.
         </p>
       </footer>

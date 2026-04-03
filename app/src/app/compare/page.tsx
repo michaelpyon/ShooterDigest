@@ -27,10 +27,10 @@ interface CompareData {
 }
 
 const CHART_COLORS = [
-  "#3b82f6",
-  "#22c55e",
+  "#adc6ff",
+  "#4ae176",
   "#f59e0b",
-  "#ef4444",
+  "#ffb3ad",
   "#a855f7",
   "#06b6d4",
 ];
@@ -99,10 +99,10 @@ export default function ComparePage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#e2e8f0] tracking-tight">
+        <h1 className="text-2xl font-black text-text tracking-tight">
           Compare Titles
         </h1>
-        <p className="text-[#6b7280] text-sm mt-1">
+        <p className="text-text-subtle text-sm mt-1">
           Select 2-6 titles to overlay their health score trends.
         </p>
       </div>
@@ -110,19 +110,19 @@ export default function ComparePage() {
       {/* Title selection */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[#94a3b8] text-xs uppercase tracking-wider font-medium">
+          <span className="text-text-muted text-xs uppercase tracking-widest font-medium">
             Select titles ({selected.length}/6)
           </span>
           <div className="flex items-center gap-2">
-            <span className="text-[#6b7280] text-xs">Period:</span>
+            <span className="text-text-subtle text-xs">Period:</span>
             {[30, 90, 180].map((d) => (
               <button
                 key={d}
                 onClick={() => setDays(d)}
-                className={`text-xs px-2 py-1 rounded transition-colors ${
+                className={`text-xs px-2 py-1 transition-colors ${
                   days === d
-                    ? "bg-[#3b82f6] text-white"
-                    : "text-[#6b7280] hover:text-[#94a3b8] bg-[#111111]"
+                    ? "bg-accent text-bg"
+                    : "text-text-subtle hover:text-text-muted bg-surface"
                 }`}
               >
                 {d}d
@@ -139,23 +139,23 @@ export default function ComparePage() {
               <button
                 key={t.slug}
                 onClick={() => toggleTitle(t.slug)}
-                className={`text-xs px-3 py-1.5 rounded-md border transition-all ${
+                className={`text-xs px-3 py-1.5 border transition-all ${
                   isSelected
-                    ? "border-[#3b82f6] bg-[#3b82f6]/10 text-[#e2e8f0]"
-                    : "border-[#1f2937] bg-[#111111] text-[#94a3b8] hover:border-[#334155] hover:text-[#e2e8f0]"
+                    ? "border-accent bg-accent/10 text-text"
+                    : "border-border bg-surface text-text-muted hover:border-border-hover hover:text-text"
                 }`}
               >
                 {isSelected && (
                   <span
                     className="inline-block w-2 h-2 rounded-full mr-1.5"
                     style={{
-                      backgroundColor: CHART_COLORS[colorIdx] ?? "#3b82f6",
+                      backgroundColor: CHART_COLORS[colorIdx] ?? "#adc6ff",
                     }}
                   />
                 )}
                 {t.name}
                 {!t.hasSteamData && (
-                  <span className="text-[#f59e0b] ml-1">*</span>
+                  <span className="text-warning ml-1">*</span>
                 )}
               </button>
             );
@@ -165,24 +165,24 @@ export default function ComparePage() {
 
       {/* Comparison chart */}
       {selected.length < 2 && (
-        <div className="text-center py-16 border border-[#1f2937] rounded-lg bg-[#111111]">
-          <p className="text-[#6b7280] text-sm">
+        <div className="text-center py-16 border border-border bg-surface">
+          <p className="text-text-subtle text-sm">
             Select at least 2 titles to compare.
           </p>
         </div>
       )}
 
       {loading && selected.length >= 2 && (
-        <div className="text-center py-16 border border-[#1f2937] rounded-lg bg-[#111111]">
-          <p className="text-[#6b7280] text-sm">Loading comparison data...</p>
+        <div className="text-center py-16 border border-border bg-surface">
+          <p className="text-text-subtle text-sm">Loading comparison data...</p>
         </div>
       )}
 
       {!loading && compareData.length >= 2 && (
         <div className="space-y-6">
           {/* Overlay chart using SVG */}
-          <div className="bg-[#111111] border border-[#1f2937] rounded-lg p-6">
-            <h2 className="text-[#e2e8f0] font-semibold text-sm mb-4">
+          <div className="bg-surface border border-border p-6">
+            <h2 className="text-text font-semibold text-sm mb-4">
               Health Score Trends
             </h2>
             {allWeeks.length >= 2 ? (
@@ -192,7 +192,7 @@ export default function ComparePage() {
                 colors={CHART_COLORS}
               />
             ) : (
-              <p className="text-[#6b7280] text-sm text-center py-8">
+              <p className="text-text-subtle text-sm text-center py-8">
                 Not enough historical data for comparison yet. Data builds over
                 weekly pipeline runs.
               </p>
@@ -207,20 +207,20 @@ export default function ComparePage() {
               return (
                 <div
                   key={title.slug}
-                  className="bg-[#111111] border border-[#1f2937] rounded-lg p-4"
+                  className="bg-surface border border-border p-4"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span
                       className="w-3 h-3 rounded-full shrink-0"
                       style={{
-                        backgroundColor: CHART_COLORS[i] ?? "#3b82f6",
+                        backgroundColor: CHART_COLORS[i] ?? "#adc6ff",
                       }}
                     />
-                    <h3 className="text-[#e2e8f0] font-semibold text-sm truncate">
+                    <h3 className="text-text font-semibold text-sm truncate">
                       {title.name}
                     </h3>
                     {!title.hasSteamData && (
-                      <span className="text-[10px] font-medium text-[#f59e0b] bg-[#f59e0b]/10 px-1.5 py-0.5 rounded shrink-0">
+                      <span className="text-[10px] font-medium text-warning bg-warning/10 px-1.5 py-0.5 shrink-0">
                         Limited
                       </span>
                     )}
@@ -240,7 +240,7 @@ export default function ComparePage() {
                     )}
                   </div>
                   {latest && (
-                    <div className="mt-2 text-[#6b7280] text-xs space-y-0.5">
+                    <div className="mt-2 text-text-subtle text-xs space-y-0.5">
                       {latest.playerCountAvg != null && (
                         <p>
                           Players: {latest.playerCountAvg.toLocaleString()}
@@ -262,7 +262,7 @@ export default function ComparePage() {
       )}
 
       {/* Legend footnote */}
-      <p className="text-[#4b5563] text-xs mt-6">
+      <p className="text-text-subtle text-xs mt-6">
         * Limited Data: title lacks Steam player count. Score uses Reddit (60%)
         + News (40%) only.
       </p>
@@ -331,13 +331,13 @@ function ComparisonChart({
             y1={yPos(val)}
             x2={width - padding.right}
             y2={yPos(val)}
-            stroke="#1f2937"
+            stroke="rgba(255,255,255,0.08)"
             strokeWidth="0.5"
           />
           <text
             x={padding.left - 6}
             y={yPos(val) + 3}
-            fill="#4b5563"
+            fill="#8c909f"
             fontSize="9"
             textAnchor="end"
             fontFamily="monospace"
@@ -353,7 +353,7 @@ function ComparisonChart({
           key={week}
           x={xPos(week)}
           y={height - 5}
-          fill="#4b5563"
+          fill="#8c909f"
           fontSize="9"
           textAnchor="middle"
           fontFamily="monospace"
@@ -373,7 +373,7 @@ function ComparisonChart({
             key={series.slug}
             points={points}
             fill="none"
-            stroke={colors[i] ?? "#3b82f6"}
+            stroke={colors[i] ?? "#adc6ff"}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -391,7 +391,7 @@ function ComparisonChart({
             cx={xPos(last.weekOf)}
             cy={yPos(last.compositeScore)}
             r="3"
-            fill={colors[i] ?? "#3b82f6"}
+            fill={colors[i] ?? "#adc6ff"}
           />
         );
       })}

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ShooterDigest | Tactical Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "outline": "#8c909f",
+                        "on-primary": "#002e6a",
+                        "on-surface-variant": "#c2c6d6",
+                        "background": "#131313",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "on-tertiary": "#68000a",
+                        "primary": "#adc6ff",
+                        "inverse-on-surface": "#313030",
+                        "surface-variant": "#353534",
+                        "on-error": "#690005",
+                        "primary-fixed": "#d8e2ff",
+                        "on-primary-fixed-variant": "#004395",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#adc6ff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-tertiary-fixed": "#410004",
+                        "on-error-container": "#ffdad6",
+                        "tertiary": "#ffb3ad",
+                        "surface": "#131313",
+                        "on-primary-container": "#00285d",
+                        "on-secondary": "#003915",
+                        "on-primary-fixed": "#001a42",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#004119",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed": "#002109",
+                        "on-surface": "#e5e2e1",
+                        "surface-container": "#201f1f",
+                        "on-background": "#e5e2e1",
+                        "tertiary-container": "#ff5451",
+                        "primary-fixed-dim": "#adc6ff",
+                        "secondary": "#4ae176",
+                        "surface-container-highest": "#353534",
+                        "secondary-fixed": "#6bff8f",
+                        "on-secondary-fixed-variant": "#005321",
+                        "surface-dim": "#131313",
+                        "outline-variant": "#424754",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-container-low": "#1c1b1b",
+                        "inverse-primary": "#005ac2",
+                        "primary-container": "#4d8eff",
+                        "secondary-fixed-dim": "#4ae176",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-bright": "#3a3939",
+                        "on-tertiary-container": "#5c0008",
+                        "secondary-container": "#00b954"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0rem", "lg": "0rem", "xl": "0rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #e5e2e1; }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation -->
+<header class="flex justify-between items-center px-6 h-14 w-full bg-[#131313] fixed top-0 z-50">
+<div class="text-xl font-black tracking-tighter text-[#adc6ff] uppercase">
+            ShooterDigest
+        </div>
+<nav class="hidden md:flex items-center gap-8 font-['Inter'] tabular-nums tracking-tight uppercase font-semibold text-xs h-full">
+<a class="text-[#adc6ff] border-b-2 border-[#adc6ff] pb-1 h-full flex items-center" href="#">Market Overview</a>
+<a class="text-gray-500 hover:text-gray-300 transition-colors h-full flex items-center" href="#">Competitive Data</a>
+<a class="text-gray-500 hover:text-gray-300 transition-colors h-full flex items-center" href="#">Sentiment Analysis</a>
+<a class="text-gray-500 hover:text-gray-300 transition-colors h-full flex items-center" href="#">News Feed</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-primary text-on-primary px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider hover:opacity-90 transition-opacity">
+                Compare Titles
+            </button>
+<div class="flex gap-3 text-gray-500">
+<span class="material-symbols-outlined cursor-pointer hover:text-white transition-colors">calendar_today</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-white transition-colors">account_circle</span>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-20 px-6 max-w-[1400px] mx-auto">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-surface-container-high pb-4 gap-4">
+<div>
+<h1 class="text-4xl font-black tracking-tighter uppercase text-primary leading-none mb-2">Live Ecosystem Index</h1>
+<p class="text-[10px] uppercase tracking-widest text-outline">Market Pulse: Real-time aggregated health scores across major FPS titles</p>
+</div>
+<div class="flex gap-2">
+<div class="bg-surface-container-low px-4 py-2 border-l-4 border-secondary">
+<span class="block text-[8px] uppercase text-outline">Market Cap (Agg)</span>
+<span class="text-lg font-bold tabular-nums">$14.2B <span class="text-secondary text-xs">+1.2%</span></span>
+</div>
+<div class="bg-surface-container-low px-4 py-2 border-l-4 border-tertiary">
+<span class="block text-[8px] uppercase text-outline">Volatility Index</span>
+<span class="text-lg font-bold tabular-nums">18.4 <span class="text-tertiary text-xs">+4.5%</span></span>
+</div>
+</div>
+</div>
+<!-- Title Ranking Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px bg-surface-container-high border border-surface-container-high">
+<!-- Card Template (Repeated 12 times with data variations) -->
+<script>
+                const games = [
+                    { name: 'Counter-Strike 2', score: 94, trend: 'up', player: '1.2M', sentiment: 82, news: 75, logo: 'image-cs2' },
+                    { name: 'Valorant', score: 89, trend: 'up', player: '850K', sentiment: 78, news: 92, logo: 'image-valorant' },
+                    { name: 'Apex Legends', score: 72, trend: 'down', player: '420K', sentiment: 45, news: 68, logo: 'image-apex' },
+                    { name: 'Overwatch 2', score: 64, trend: 'down', player: '210K', sentiment: 38, news: 55, logo: 'image-ow2' },
+                    { name: 'Call of Duty: WZ', score: 81, trend: 'up', player: '560K', sentiment: 62, news: 88, logo: 'image-cod' },
+                    { name: 'Rainbow Six Siege', score: 78, trend: 'up', player: '180K', sentiment: 71, news: 42, logo: 'image-r6' },
+                    { name: 'Fortnite (Zero)', score: 91, trend: 'up', player: '1.8M', sentiment: 85, news: 98, logo: 'image-fortnite' },
+                    { name: 'The Finals', score: 58, trend: 'down', player: '45K', sentiment: 52, news: 31, logo: 'image-finals' },
+                    { name: 'Team Fortress 2', score: 75, trend: 'up', player: '95K', sentiment: 88, news: 12, logo: 'image-tf2' },
+                    { name: 'Destiny 2', score: 61, trend: 'down', player: '72K', sentiment: 31, news: 48, logo: 'image-destiny' },
+                    { name: 'Hunt: Showdown', score: 84, trend: 'up', player: '38K', sentiment: 92, news: 28, logo: 'image-hunt' },
+                    { name: 'Escape from Tarkov', score: 69, trend: 'down', player: '120K', sentiment: 22, news: 74, logo: 'image-eft' }
+                ];
+
+                document.write(games.map((game, index) => `
+                    <div class="bg-surface-container-low p-5 hover:bg-surface-container hover:shadow-2xl transition-all group cursor-pointer">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-surface-container-highest flex items-center justify-center border border-outline-variant/20">
+                                    <img src="https://api.dicebear.com/7.x/initials/svg?seed=${game.name}" class="w-8 h-8 opacity-80" data-alt="Minimalist geometric abstract logo for ${game.name} on dark slate background">
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-outline font-bold tabular-nums tracking-widest uppercase">RANK #${index + 1}</span>
+                                    <h3 class="text-sm font-bold uppercase tracking-tight text-white group-hover:text-primary transition-colors">${game.name}</h3>
+                                </div>
+                            </div>
+                            <div class="${game.trend === 'up' ? 'bg-secondary/10 text-secondary' : 'bg-tertiary/10 text-tertiary'} px-2 py-1 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm font-bold">${game.trend === 'up' ? 'trending_up' : 'trending_down'}</span>
+                                <span class="text-[10px] font-black tracking-tighter">${game.score}</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-end mb-1">
+                                    <span class="text-[9px] uppercase font-semibold text-outline">Player Concurrency</span>
+                                    <span class="text-xs font-bold tabular-nums">${game.player}</span>
+                                </div>
+                                <div class="h-8 flex items-end gap-0.5">
+                                    ${Array.from({length: 24}).map(() => `
+                                        <div class="bg-primary/20 w-full" style="height: ${Math.floor(Math.random() * 80) + 20}%"></div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 pt-2 border-t border-outline-variant/10">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-[8px] uppercase text-outline">Reddit Sentiment</span>
+                                        <span class="text-[9px] font-bold tabular-nums">${game.sentiment}%</span>
+                                    </div>
+                                    <div class="w-full h-1 bg-surface-container-highest">
+                                        <div class="h-full bg-secondary" style="width: ${game.sentiment}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-[8px] uppercase text-outline">News Vol</span>
+                                        <span class="text-[9px] font-bold tabular-nums">${game.news}%</span>
+                                    </div>
+                                    <div class="w-full h-1 bg-surface-container-highest">
+                                        <div class="h-full bg-primary" style="width: ${game.news}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join(''));
+            </script>
+</div>
+<!-- Subscription Section -->
+<section class="mt-20 border border-surface-container-high bg-surface-container-lowest p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+<div class="max-w-md">
+<h2 class="text-2xl font-black uppercase tracking-tight text-white mb-2">Weekly Market Intel</h2>
+<p class="text-xs text-outline leading-relaxed uppercase tracking-wider">Join 12,000+ industry analysts receiving the Monday morning digest on player migration patterns, sentiment shifts, and title longevity projections.</p>
+</div>
+<form class="w-full md:w-auto flex flex-col sm:flex-row gap-0">
+<input class="bg-[#131313] border border-surface-container-high text-xs font-bold p-3 w-full sm:w-72 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all uppercase placeholder:text-gray-700" placeholder="ANALYST@FIRM.COM" type="email"/>
+<button class="bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest px-8 py-3 hover:bg-white transition-colors border border-primary">
+                    Subscribe
+                </button>
+</form>
+</section>
+<!-- Methodology Link -->
+<div class="mt-8 flex justify-center">
+<a class="text-[10px] font-bold uppercase tracking-[0.2em] text-outline hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                View Calculation Methodology &amp; Data Sources
+            </a>
+</div>
+</main>
+<!-- Floating Action: Compare Mode -->
+<div class="fixed bottom-8 right-8 z-40 group">
+<button class="bg-secondary text-on-secondary px-6 py-4 flex items-center gap-3 shadow-xl hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-weight="fill">compare_arrows</span>
+<span class="text-[11px] font-black uppercase tracking-widest">Toggle Compare Mode</span>
+<div class="bg-on-secondary text-secondary text-[8px] px-1 font-bold">ALPHA</div>
+</button>
+</div>
+<!-- Footer -->
+<footer class="w-full py-8 px-6 flex flex-col md:flex-row justify-between items-center gap-4 bg-[#0e0e0e] border-t border-[#2a2a2a]">
+<div class="text-sm font-bold text-[#adc6ff] uppercase">ShooterDigest</div>
+<div class="flex gap-6 font-['Inter'] text-[10px] uppercase tracking-widest text-gray-500">
+<a class="hover:text-white transition-colors opacity-80 hover:opacity-100" href="#">Methodology</a>
+<a class="hover:text-white transition-colors opacity-80 hover:opacity-100" href="#">API Documentation</a>
+<a class="hover:text-white transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+</div>
+<div class="font-['Inter'] text-[10px] uppercase tracking-widest text-gray-500">
+            © 2024 ShooterDigest Intelligence Unit
+        </div>
+</footer>
+</body></html>

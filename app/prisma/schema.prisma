@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Title {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  steamAppId  Int?     @map("steam_app_id")
+  subreddit   String
+  genreTags   String[] @map("genre_tags")
+  launchDate  DateTime? @map("launch_date")
+  steamShare  Float    @default(1.0) @map("steam_share")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  playerData   PlayerData[]
+  redditData   RedditData[]
+  newsData     NewsData[]
+  scores       Score[]
+  snapshots    Snapshot[]
+
+  @@map("titles")
+}
+
+model PlayerData {
+  id             Int      @id @default(autoincrement())
+  titleId        Int      @map("title_id")
+  currentPlayers Int      @map("current_players")
+  peak24h        Int?     @map("peak_24h")
+  date           DateTime @default(now())
+
+  title Title @relation(fields: [titleId], references: [id])
+
+  @@index([titleId, date])
+  @@map("player_data")
+}
+
+model RedditData {
+  id             Int      @id @default(autoincrement())
+  titleId        Int      @map("title_id")
+  postVolume     Int      @map("post_volume")
+  hotCount       Int      @map("hot_count")
+  sentimentScore Float?   @map("sentiment_score")
+  topPostsJson   String   @map("top_posts_json") @db.Text
+  date           DateTime @default(now())
+
+  title Title @relation(fields: [titleId], references: [id])
+
+  @@index([titleId, date])
+  @@map("reddit_data")
+}
+
+model NewsData {
+  id               Int      @id @default(autoincrement())
+  titleId          Int      @map("title_id")
+  articleCount     Int      @map("article_count")
+  topHeadlinesJson String   @map("top_headlines_json") @db.Text
+  date             DateTime @default(now())
+
+  title Title @relation(fields: [titleId], references: [id])
+
+  @@index([titleId, date])
+  @@map("news_data")
+}
+
+model Score {
+  id             Int      @id @default(autoincrement())
+  titleId        Int      @map("title_id")
+  compositeScore Float    @map("composite_score")
+  playerScore    Float?   @map("player_score")
+  redditScore    Float?   @map("reddit_score")
+  newsScore      Float?   @map("news_score")
+  date           DateTime @default(now())
+
+  title Title @relation(fields: [titleId], references: [id])
+
+  @@index([titleId, date])
+  @@map("scores")
+}
+
+model Snapshot {
+  id              Int      @id @default(autoincrement())
+  titleId         Int      @map("title_id")
+  weekOf          DateTime @map("week_of")
+  compositeScore  Float    @map("composite_score")
+  playerCountAvg  Int?     @map("player_count_avg")
+  redditVolumeAvg Int?     @map("reddit_volume_avg")
+  newsCountAvg    Int?     @map("news_count_avg")
+
+  title Title @relation(fields: [titleId], references: [id])
+
+  @@unique([titleId, weekOf])
+  @@index([titleId, weekOf])
+  @@map("snapshots")
+}
+
+model Subscriber {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  status       String   @default("active")
+  subscribedAt DateTime @default(now()) @map("subscribed_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("subscribers")
+}
+
+model PipelineRun {
+  id          Int      @id @default(autoincrement())
+  status      String
+  startedAt   DateTime @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  errorLog    String?  @map("error_log") @db.Text
+
+  @@index([status, startedAt])
+  @@map("pipeline_runs")
+}
+
+model PipelineError {
+  id           Int      @id @default(autoincrement())
+  source       String
+  titleId      Int?     @map("title_id")
+  errorMessage String   @map("error_message") @db.Text
+  timestamp    DateTime @default(now())
+
+  @@index([source, timestamp])
+  @@map("pipeline_errors")
+}

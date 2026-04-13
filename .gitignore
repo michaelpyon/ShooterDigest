@@ -9,3 +9,14 @@ data/
 .env
 .env.local
 .env.*.local
+
+# Next.js / Node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Backup files
+*.bak
+*.bak2

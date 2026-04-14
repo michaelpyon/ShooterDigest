@@ -119,7 +119,7 @@ export default function ComparePage() {
               <button
                 key={d}
                 onClick={() => setDays(d)}
-                className={`text-xs px-2 py-1 transition-colors ${
+                className={`text-xs px-3 py-1 min-h-[44px] transition-colors ${
                   days === d
                     ? "bg-accent text-bg"
                     : "text-text-subtle hover:text-text-muted bg-surface"
@@ -139,7 +139,7 @@ export default function ComparePage() {
               <button
                 key={t.slug}
                 onClick={() => toggleTitle(t.slug)}
-                className={`text-xs px-3 py-1.5 border transition-all ${
+                className={`text-xs px-3 py-1.5 min-h-[44px] border transition-colors duration-150 ${
                   isSelected
                     ? "border-accent bg-accent/10 text-text"
                     : "border-border bg-surface text-text-muted hover:border-border-hover hover:text-text"

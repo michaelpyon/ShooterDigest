@@ -257,7 +257,7 @@ export default async function TitlePage({ params }: TitlePageProps) {
                 href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-3 rounded-md bg-surface hover:bg-surface-high border border-border hover:border-border-hover transition-all"
+                className="block p-3 rounded-md bg-surface hover:bg-surface-high border border-border hover:border-border-hover transition-colors duration-150"
               >
                 <p className="text-text text-sm line-clamp-2">
                   {post.title}
@@ -285,7 +285,7 @@ export default async function TitlePage({ params }: TitlePageProps) {
                 href={headline.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block p-3 rounded-md bg-surface hover:bg-surface-high border border-border hover:border-border-hover transition-all"
+                className="block p-3 rounded-md bg-surface hover:bg-surface-high border border-border hover:border-border-hover transition-colors duration-150"
               >
                 <p className="text-text text-sm line-clamp-2">
                   {headline.title}

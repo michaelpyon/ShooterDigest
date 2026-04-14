@@ -24,7 +24,7 @@ export function TitleCard({ data }: TitleCardProps) {
   return (
     <Link
       href={`/title/${data.slug}`}
-      className="block bg-surface border border-border p-4 hover:bg-surface-high hover:border-border-hover transition-all"
+      className="block bg-surface border border-border p-4 hover:bg-surface-high hover:border-border-hover transition-colors duration-150"
     >
       <div className="flex items-start justify-between gap-4">
         {/* Left: rank + info */}

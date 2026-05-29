@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     siteName: "ShooterDigest",
     images: [
       {
-        url: "/og.svg",
+        url: "/og.png",
         width: 1200,
         height: 630,
         alt: "ShooterDigest weekly competitive shooter intelligence",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ShooterDigest",
     description: "Weekly competitive shooter intelligence.",
-    images: ["/og.svg"],
+    images: ["/og.png"],
   },
 };
 

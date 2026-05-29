@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shooter-digest-app.vercel.app"),
+  metadataBase: new URL("https://shooter-digest.vercel.app"),
   title: "ShooterDigest | Competitive FPS Market Intelligence",
   description:
     "Weekly competitive FPS market intelligence. Player counts, community sentiment, and news coverage for every major shooter.",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "ShooterDigest",
     description: "Weekly competitive shooter intelligence.",
     type: "website",
-    url: "https://shooter-digest-app.vercel.app",
+    url: "https://shooter-digest.vercel.app",
     siteName: "ShooterDigest",
     images: [
       {

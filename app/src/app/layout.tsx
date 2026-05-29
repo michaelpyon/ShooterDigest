@@ -9,13 +9,30 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://shooter-digest-app.vercel.app"),
   title: "ShooterDigest | Competitive FPS Market Intelligence",
   description:
     "Weekly competitive FPS market intelligence. Player counts, community sentiment, and news coverage for every major shooter.",
   openGraph: {
     title: "ShooterDigest",
-    description: "Competitive FPS market intelligence dashboard.",
+    description: "Weekly competitive shooter intelligence.",
     type: "website",
+    url: "https://shooter-digest-app.vercel.app",
+    siteName: "ShooterDigest",
+    images: [
+      {
+        url: "/og.svg",
+        width: 1200,
+        height: 630,
+        alt: "ShooterDigest weekly competitive shooter intelligence",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ShooterDigest",
+    description: "Weekly competitive shooter intelligence.",
+    images: ["/og.svg"],
   },
 };
 

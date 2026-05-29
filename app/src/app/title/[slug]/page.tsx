@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { ScoreBadge, ChangeIndicator } from "@/components/score-badge";
 import { Sparkline } from "@/components/sparkline";
 import { formatNumber } from "@/lib/utils";
+import { getSampleTitle, type SampleTitle } from "@/lib/sample-data";
 import Link from "next/link";
 
 export const revalidate = 3600;
@@ -52,6 +53,11 @@ export default async function TitlePage({ params }: TitlePageProps) {
   }
 
   if (!title) {
+    // No live data: render the sample briefing for this title if one exists.
+    const sample = getSampleTitle(slug);
+    if (sample) {
+      return <SampleTitlePage title={sample} />;
+    }
     notFound();
   }
 
@@ -370,6 +376,196 @@ function ScoreCard({
               : "Neutral"}{" "}
           ({sentiment.toFixed(2)})
         </p>
+      )}
+    </div>
+  );
+}
+
+function SampleTitlePage({ title }: { title: SampleTitle }) {
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Breadcrumb */}
+      <div className="mb-6">
+        <Link
+          href="/"
+          className="text-text-subtle hover:text-text text-sm transition-colors"
+        >
+          Dashboard
+        </Link>
+        <span className="text-border-hover mx-2">/</span>
+        <span className="text-text-muted text-sm">{title.name}</span>
+      </div>
+
+      {/* Header */}
+      <div className="flex items-start justify-between mb-2">
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-black text-text tracking-tight">
+              {title.name}
+            </h1>
+            {!title.hasSteamData && (
+              <span className="text-xs font-medium text-warning bg-warning/10 px-2 py-1 rounded">
+                Limited Data
+              </span>
+            )}
+          </div>
+          <p className="text-text-subtle text-sm mt-1">
+            {title.genre} | Launched {title.launchedLabel}
+          </p>
+        </div>
+        <div className="text-right">
+          <ScoreBadge score={title.compositeScore} size="lg" />
+          <div className="mt-2">
+            <ChangeIndicator change={title.change} />
+          </div>
+        </div>
+      </div>
+      <p className="text-text-subtle/60 text-xs mb-8">
+        Sample briefing. Live data refreshes every Monday once the pipeline
+        runs.
+      </p>
+
+      {/* Summary */}
+      <div className="bg-surface border border-border rounded-lg p-6 mb-8">
+        <h2 className="text-text font-semibold text-sm mb-2">This Week</h2>
+        <p className="text-text-muted text-sm leading-relaxed">
+          {title.summary}
+        </p>
+      </div>
+
+      {/* Score Breakdown */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <ScoreCard
+          label="Player Count"
+          score={title.playerScore}
+          detail={
+            title.currentPlayers != null
+              ? `${formatNumber(title.currentPlayers)} current`
+              : "Not available on Steam"
+          }
+          available={title.hasSteamData}
+        />
+        <ScoreCard
+          label="Reddit Activity"
+          score={title.redditScore}
+          detail={`${title.postVolume} posts, ${title.hotCount} hot`}
+          sentiment={title.sentimentScore}
+        />
+        <ScoreCard
+          label="News Coverage"
+          score={title.newsScore}
+          detail={`${title.articleCount} articles this week`}
+        />
+      </div>
+
+      {/* Trend */}
+      {title.sparklineData.length >= 2 && (
+        <div className="bg-surface border border-border rounded-lg p-6 mb-8">
+          <h2 className="text-text font-semibold text-sm mb-4">
+            Health Score Trend
+          </h2>
+          <Sparkline
+            data={title.sparklineData}
+            width={680}
+            height={100}
+            className="w-full"
+          />
+        </div>
+      )}
+
+      {/* Player Count History */}
+      {title.playerHistory.length > 1 && (
+        <div className="bg-surface border border-border rounded-lg p-6 mb-8">
+          <h2 className="text-text font-semibold text-sm mb-4">
+            Player Count History
+          </h2>
+          <div className="overflow-x-auto">
+            <div className="flex items-end gap-1 h-24 min-w-[300px]">
+              {title.playerHistory.map((players, i) => {
+                const max = Math.max(...title.playerHistory);
+                const height = max > 0 ? (players / max) * 100 : 0;
+                return (
+                  <div
+                    key={i}
+                    className="flex-1 bg-accent/40 hover:bg-accent/60 rounded-t transition-colors"
+                    style={{ height: `${height}%`, minWidth: "8px" }}
+                    title={`${formatNumber(players)} players`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reddit Top Posts */}
+      {title.topPosts.length > 0 && (
+        <div className="bg-surface border border-border rounded-lg p-6 mb-8">
+          <h2 className="text-text font-semibold text-sm mb-4">
+            Top Reddit Posts This Week
+          </h2>
+          <div className="space-y-3">
+            {title.topPosts.map((post, i) => (
+              <a
+                key={i}
+                href={post.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-3 rounded-md bg-surface hover:bg-surface-high border border-border hover:border-border-hover transition-colors duration-150"
+              >
+                <p className="text-text text-sm line-clamp-2">{post.title}</p>
+                <div className="flex items-center gap-3 mt-1.5 text-text-subtle text-xs">
+                  <span className="mono">{formatNumber(post.score)} pts</span>
+                  <span>{post.commentCount} comments</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* News Headlines */}
+      {title.topHeadlines.length > 0 && (
+        <div className="bg-surface border border-border rounded-lg p-6 mb-8">
+          <h2 className="text-text font-semibold text-sm mb-4">Recent News</h2>
+          <div className="space-y-3">
+            {title.topHeadlines.map((headline, i) => (
+              <a
+                key={i}
+                href={headline.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-3 rounded-md bg-surface hover:bg-surface-high border border-border hover:border-border-hover transition-colors duration-150"
+              >
+                <p className="text-text text-sm line-clamp-2">
+                  {headline.title}
+                </p>
+                <div className="flex items-center gap-3 mt-1.5 text-text-subtle text-xs">
+                  <span>{headline.source}</span>
+                  <span>
+                    {new Date(headline.date).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Limited Data Notice */}
+      {!title.hasSteamData && (
+        <div className="bg-warning/5 border border-warning/20 rounded-lg p-4 mb-8">
+          <p className="text-warning text-sm font-medium">Limited Data</p>
+          <p className="text-text-muted text-xs mt-1">
+            {title.name} doesn&apos;t have Steam player count data. The health
+            score is calculated from Reddit activity (60%) and news coverage
+            (40%) only. Comparisons with full-data titles should be weighted
+            accordingly.
+          </p>
+        </div>
       )}
     </div>
   );

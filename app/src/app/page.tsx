@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { TitleCard, type TitleCardData } from "@/components/title-card";
 import { SubscribeForm } from "@/components/subscribe-form";
+import { getSampleCards, SAMPLE_LAST_UPDATED } from "@/lib/sample-data";
 
 export const revalidate = 3600; // Revalidate every hour
 
@@ -80,7 +81,15 @@ export default async function Dashboard() {
       getLastUpdated(),
     ]);
   } catch {
-    // DB not connected yet, show empty state
+    // DB not connected yet, fall back to the sample digest below
+  }
+
+  // No live data: show a sample briefing so visitors see a populated digest
+  // instead of an empty state. Replaced automatically once the pipeline runs.
+  const isSample = cards.length === 0;
+  if (isSample) {
+    cards = getSampleCards();
+    lastUpdated = SAMPLE_LAST_UPDATED;
   }
 
   return (
@@ -96,15 +105,18 @@ export default async function Dashboard() {
         </p>
         {lastUpdated && (
           <p className="text-text-subtle text-xs mt-2 mono">
-            Last updated:{" "}
+            {isSample ? "Sample briefing" : "Last updated"}:{" "}
             {new Date(lastUpdated).toLocaleDateString("en-US", {
               weekday: "short",
               month: "short",
               day: "numeric",
-              hour: "numeric",
-              minute: "2-digit",
-              timeZoneName: "short",
             })}
+          </p>
+        )}
+        {isSample && (
+          <p className="text-text-subtle/60 text-xs mt-1">
+            Showing a sample of last week&apos;s briefing. Live data refreshes
+            every Monday once the pipeline runs.
           </p>
         )}
       </div>

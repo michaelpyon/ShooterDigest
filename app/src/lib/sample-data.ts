@@ -94,13 +94,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topHeadlines: [
       {
         title: "Counter-Strike 2 spring operation adds new missions and skins",
-        url: "https://example.com/cs2-operation",
+        url: "https://news.google.com/search?q=Counter-Strike+2+operation",
         source: "Dexerto",
         date: "2026-05-22",
       },
       {
         title: "Valve ships major anti-cheat update for Counter-Strike 2",
-        url: "https://example.com/cs2-anticheat",
+        url: "https://news.google.com/search?q=Counter-Strike+2+anti-cheat+update",
         source: "PC Gamer",
         date: "2026-05-20",
       },
@@ -143,13 +143,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topHeadlines: [
       {
         title: "Valorant reveals new duelist agent ahead of Masters",
-        url: "https://example.com/valorant-agent",
+        url: "https://news.google.com/search?q=Valorant+agent+Masters",
         source: "Dot Esports",
         date: "2026-05-24",
       },
       {
         title: "Valorant Masters breaks concurrent viewer record",
-        url: "https://example.com/valorant-masters",
+        url: "https://news.google.com/search?q=Valorant+Masters+viewership",
         source: "The Esports Observer",
         date: "2026-05-21",
       },
@@ -195,13 +195,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topHeadlines: [
       {
         title: "Marvel Rivals season 4 adds 2 new heroes and a map",
-        url: "https://example.com/rivals-season4",
+        url: "https://news.google.com/search?q=Marvel+Rivals+season+4",
         source: "IGN",
         date: "2026-05-23",
       },
       {
         title: "Marvel Rivals tops 40 million registered players",
-        url: "https://example.com/rivals-milestone",
+        url: "https://news.google.com/search?q=Marvel+Rivals+player+milestone",
         source: "GamesRadar",
         date: "2026-05-19",
       },
@@ -247,13 +247,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topHeadlines: [
       {
         title: "Apex Legends reveals new legend for upcoming season",
-        url: "https://example.com/apex-legend",
+        url: "https://news.google.com/search?q=Apex+Legends+new+legend",
         source: "Eurogamer",
         date: "2026-05-22",
       },
       {
         title: "Respawn responds to backlash over Apex battle pass",
-        url: "https://example.com/apex-battlepass",
+        url: "https://news.google.com/search?q=Apex+Legends+battle+pass",
         source: "Kotaku",
         date: "2026-05-20",
       },
@@ -299,13 +299,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topHeadlines: [
       {
         title: "The Finals adds new destructible map in latest update",
-        url: "https://example.com/finals-map",
+        url: "https://news.google.com/search?q=The+Finals+new+map+update",
         source: "PCGamesN",
         date: "2026-05-23",
       },
       {
         title: "Embark teases competitive overhaul for The Finals",
-        url: "https://example.com/finals-comp",
+        url: "https://news.google.com/search?q=The+Finals+competitive+update",
         source: "VG247",
         date: "2026-05-18",
       },
@@ -348,13 +348,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topHeadlines: [
       {
         title: "Overwatch 2 midseason patch reworks two tank heroes",
-        url: "https://example.com/ow2-patch",
+        url: "https://news.google.com/search?q=Overwatch+2+midseason+patch",
         source: "Polygon",
         date: "2026-05-21",
       },
       {
         title: "Blizzard teases next Overwatch 2 hero for summer season",
-        url: "https://example.com/ow2-hero",
+        url: "https://news.google.com/search?q=Overwatch+2+new+hero",
         source: "GameSpot",
         date: "2026-05-17",
       },

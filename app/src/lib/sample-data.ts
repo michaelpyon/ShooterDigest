@@ -74,19 +74,19 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topPosts: [
       {
         title: "The new VAC update actually banned a cheater in my last match",
-        url: "https://reddit.com/r/GlobalOffensive",
+        url: "https://www.reddit.com/r/GlobalOffensive/search/?q=VAC+update+banned+cheater&sort=top",
         score: 18420,
         commentCount: 1240,
       },
       {
         title: "Spring operation missions ranked from best to worst",
-        url: "https://reddit.com/r/GlobalOffensive",
+        url: "https://www.reddit.com/r/GlobalOffensive/search/?q=spring+operation+missions+ranked&sort=top",
         score: 9310,
         commentCount: 612,
       },
       {
         title: "Inferno banana smoke lineup that still works after the patch",
-        url: "https://reddit.com/r/GlobalOffensive",
+        url: "https://www.reddit.com/r/GlobalOffensive/search/?q=Inferno+banana+smoke+lineup&sort=top",
         score: 7180,
         commentCount: 288,
       },
@@ -129,13 +129,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topPosts: [
       {
         title: "New duelist abilities breakdown, this kit looks strong",
-        url: "https://reddit.com/r/VALORANT",
+        url: "https://www.reddit.com/r/VALORANT/search/?q=new+duelist+abilities+kit&sort=top",
         score: 21030,
         commentCount: 1860,
       },
       {
         title: "Episode act rank reset hit harder than expected this time",
-        url: "https://reddit.com/r/VALORANT",
+        url: "https://www.reddit.com/r/VALORANT/search/?q=episode+act+rank+reset&sort=top",
         score: 8740,
         commentCount: 940,
       },
@@ -181,13 +181,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topPosts: [
       {
         title: "Season 4 hero reveal trailer is genuinely incredible",
-        url: "https://reddit.com/r/marvelrivals",
+        url: "https://www.reddit.com/r/marvelrivals/search/?q=season+4+hero+reveal+trailer&sort=top",
         score: 24600,
         commentCount: 2110,
       },
       {
         title: "Ranked rework finally fixed the duo queue problem",
-        url: "https://reddit.com/r/marvelrivals",
+        url: "https://www.reddit.com/r/marvelrivals/search/?q=ranked+rework+duo+queue&sort=top",
         score: 11240,
         commentCount: 770,
       },
@@ -233,13 +233,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topPosts: [
       {
         title: "The battle pass changes are the final straw for a lot of us",
-        url: "https://reddit.com/r/apexlegends",
+        url: "https://www.reddit.com/r/apexlegends/search/?q=battle+pass+changes&sort=top",
         score: 31200,
         commentCount: 4380,
       },
       {
         title: "New legend kit looks fun but matchmaking is still rough",
-        url: "https://reddit.com/r/apexlegends",
+        url: "https://www.reddit.com/r/apexlegends/search/?q=new+legend+kit+matchmaking&sort=top",
         score: 6420,
         commentCount: 530,
       },
@@ -285,13 +285,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topPosts: [
       {
         title: "New map is the best destructible arena yet, hands down",
-        url: "https://reddit.com/r/thefinals",
+        url: "https://www.reddit.com/r/thefinals/search/?q=new+map+destructible+arena&sort=top",
         score: 8920,
         commentCount: 410,
       },
       {
         title: "Ranked split rewards are actually worth grinding this season",
-        url: "https://reddit.com/r/thefinals",
+        url: "https://www.reddit.com/r/thefinals/search/?q=ranked+split+rewards&sort=top",
         score: 4150,
         commentCount: 220,
       },
@@ -334,13 +334,13 @@ export const SAMPLE_TITLES: SampleTitle[] = [
     topPosts: [
       {
         title: "Midseason balance patch notes are a step in the right direction",
-        url: "https://reddit.com/r/Overwatch",
+        url: "https://www.reddit.com/r/Overwatch/search/?q=midseason+balance+patch&sort=top",
         score: 7640,
         commentCount: 690,
       },
       {
         title: "The perk system is growing on me, change my mind",
-        url: "https://reddit.com/r/Overwatch",
+        url: "https://www.reddit.com/r/Overwatch/search/?q=perk+system&sort=top",
         score: 5120,
         commentCount: 880,
       },

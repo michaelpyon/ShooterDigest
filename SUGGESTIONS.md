@@ -36,15 +36,22 @@ The ideal evangelist is a competitive FPS player who frequents r/competitivefps 
 
 ---
 
+## Shipped wave 2
+
+- Added "(sample)" qualifier to "Recent News" and "Top Reddit Posts This Week" section headings in SampleTitlePage so users see the label before clicking.
+- Replaced all 12 Reddit post URLs in sample-data.ts: changed subreddit root links to per-title search URLs (`reddit.com/r/<sub>/search/?q=<topic>&sort=top`) so clicking a sample post title surfaces related real posts.
+
+---
+
 ## Prioritized Plan
 
 ### Quick wins (S effort, build-verifiable, deploy to see)
 
 1. **[DONE] Fix sample news headline dead links** (app/src/lib/sample-data.ts). Replace 12 `example.com` URLs with Google News search URLs. Live fix: clicking a sample headline now reaches relevant real coverage instead of a 404. S effort, committed this pass.
 
-2. **Add "Sample" label to the Recent News section heading on title pages** (app/src/app/title/[slug]/page.tsx, SampleTitlePage component). Currently the heading just says "Recent News" with no qualifier. A small "(sample)" suffix next to the section heading would prevent the "why does this link not work" reaction even before the user clicks. Change: `Recent News (sample)` when rendering SampleTitlePage. S effort, deploy-needed to verify.
+2. **[DONE wave 2] Add "(sample)" label to the Recent News and Top Reddit Posts section headings on title pages** (app/src/app/title/[slug]/page.tsx, SampleTitlePage component). Added a muted "(sample)" suffix to both section headings so the visitor sees the qualifier before clicking, preventing the "why does this link go somewhere unexpected" reaction.
 
-3. **Sample Reddit post URLs: use actual post URL format or clearly label them** (app/src/lib/sample-data.ts). The post links go to subreddit roots, not specific posts. Could replace with `https://reddit.com/r/<sub>/search/?q=<encoded title>` so clicking finds related posts. S effort.
+3. **[DONE wave 2] Sample Reddit post URLs: replaced subreddit root links with search URLs** (app/src/lib/sample-data.ts). All 12 Reddit post URLs now point to `reddit.com/r/<sub>/search/?q=<encoded title>&sort=top` so clicking a sample post title finds related real posts on the topic instead of dropping the user at the generic subreddit homepage.
 
 4. **Update SAMPLE_LAST_UPDATED to match or be close to actual deploy date** (app/src/lib/sample-data.ts). Currently hardcoded `2026-05-26T13:00:00.000Z`. If this date gets stale over time (e.g. by September it says "May 26") it signals neglect to the evangelist. S effort: could be set at build time or updated on each significant deploy.
 

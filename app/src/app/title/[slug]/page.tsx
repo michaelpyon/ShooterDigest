@@ -502,7 +502,8 @@ function SampleTitlePage({ title }: { title: SampleTitle }) {
       {title.topPosts.length > 0 && (
         <div className="bg-surface border border-border rounded-lg p-6 mb-8">
           <h2 className="text-text font-semibold text-sm mb-4">
-            Top Reddit Posts This Week
+            Top Reddit Posts This Week{" "}
+            <span className="text-text-subtle/60 font-normal">(sample)</span>
           </h2>
           <div className="space-y-3">
             {title.topPosts.map((post, i) => (
@@ -527,7 +528,10 @@ function SampleTitlePage({ title }: { title: SampleTitle }) {
       {/* News Headlines */}
       {title.topHeadlines.length > 0 && (
         <div className="bg-surface border border-border rounded-lg p-6 mb-8">
-          <h2 className="text-text font-semibold text-sm mb-4">Recent News</h2>
+          <h2 className="text-text font-semibold text-sm mb-4">
+            Recent News{" "}
+            <span className="text-text-subtle/60 font-normal">(sample)</span>
+          </h2>
           <div className="space-y-3">
             {title.topHeadlines.map((headline, i) => (
               <a

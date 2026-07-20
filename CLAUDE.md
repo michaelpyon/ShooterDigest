@@ -42,6 +42,11 @@ python server.py        # serves on port 8080
 
 Hosted on Railway. Docker build runs `main.py` to generate the digest statically, then serves it. The digest is baked in at deploy time — it doesn't regenerate dynamically. To get a fresh digest, trigger a redeploy.
 
+## Voice rules (Michael, 2026-07-20)
+
+- **No canned editorial lessons in digest copy.** Never generate sentences like "this is a great example of why games with active content pipelines..." — no generic moralizing about content cadence, player attention as a fixed resource, or "structural" takeaways that could apply any week. Every sentence must carry data specific to this week (names, numbers, deltas, dated events). If a sentence would read the same in any week's digest, cut it.
+- This applies to `generate_exec_prose()` templates, `EVENT_ANNOTATIONS`, and any future LLM-generated copy. See PERSONA.md — the reader wants receipts, not analysis-flavored filler.
+
 ## Architecture notes
 
 - Steam player counts are the authoritative source; other sources add context

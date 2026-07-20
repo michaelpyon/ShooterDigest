@@ -350,7 +350,7 @@ HISTORICAL_CONTEXT = {
 EVENT_ANNOTATIONS = {
     "Overwatch": "Loverwatch event + OWCS S2 kickoff + sub-role passives patch drove the recent spike.",
     "Arc Raiders": "Post-launch decay following launch window. Second Expedition season may stabilize floor.",
-    "Delta Force": "RED DAY event + Season Morphosis live — content cadence driving growth.",
+    "Delta Force": "RED DAY event + Season Morphosis live.",
     "Battlefield 6": "Season 2 launched recently but struggling to retain new players.",
     "Destiny 2": "Structural decline continues post-Marathon launch. Player base contracting into core audience.",
     "Marathon": "Launch week (March 5, 2026). Bungie's first new IP since Destiny. Extraction shooter — watch retention curve closely after launch window closes.",
@@ -2809,8 +2809,7 @@ def generate_exec_prose(data: list[dict]) -> str:
         )
         if catalyst:
             sentences.append(
-                f"{gainer['name']} is the story this week, up {gainer['trend_pct']:+.0f}% MoM on the back of {catalyst}. "
-                f"It's a clean example of what active content does to concurrent player counts."
+                f"{gainer['name']} is the story this week, up {gainer['trend_pct']:+.0f}% MoM on the back of {catalyst}."
             )
         else:
             sentences.append(
@@ -2837,22 +2836,25 @@ def generate_exec_prose(data: list[dict]) -> str:
 
     # Sentence 2: the structural "why"
     if loser["trend_pct"] < -15:
-        sentences.append(
-            f"{loser['name']} at {loser['trend_pct']:+.1f}% is the clearest signal: "
-            f"titles without active content pipelines are losing players to the handful of games still shipping regularly."
-        )
+        loser_line = f"{loser['name']} is down to {_fmt(loser['peak_24h'])} Steam concurrent players"
+        if loser.get("pct_all") is not None:
+            loser_line += f", {loser['pct_all']:.0f}% of its all-time peak"
+        sentences.append(loser_line + ".")
     elif len(losers) >= 4:
-        declining_names = ", ".join(r["name"] for r in sorted(losers, key=lambda r: r["trend_pct"])[:3])
+        declining_names = ", ".join(
+            f"{r['name']} ({r['trend_pct']:+.0f}%)" for r in sorted(losers, key=lambda r: r["trend_pct"])[:3]
+        )
         sentences.append(
-            f"The breadth of decline ({declining_names}) points to a structural problem: "
-            f"studios that launched strong but haven't maintained content cadence are paying for it in retention."
+            f"Steepest declines: {declining_names}."
         )
     elif gainer["trend_pct"] > 5:
         dev = gainer.get("dev_comms", {})
         if dev.get("has_new_season") or dev.get("has_new_content"):
+            season = dev.get("season_name") or dev.get("new_content_details")
             sentences.append(
-                f"Content cadence is the consistent differentiator: {gainer['name']}'s growth tracks directly "
-                f"to active developer engagement, a pattern that holds across every growth spike in this dataset."
+                f"{gainer['name']}'s growth lines up with {season}."
+                if season else
+                f"{gainer['name']}'s growth lines up with its latest content drop."
             )
         elif len(gainers) >= 2:
             second = gainers[1]
@@ -2863,7 +2865,7 @@ def generate_exec_prose(data: list[dict]) -> str:
     elif len(gainers) == 0 and len(losers) > 0:
         sentences.append(
             f"No titles showing meaningful growth this week. "
-            f"Player attention is a fixed resource and right now it's consolidating into fewer titles."
+            f"{top_game['name']} holds the top spot at {_fmt(top_game['peak_24h'])} Steam concurrent players."
         )
 
     # Sentence 3: forward-looking (only if concrete)
@@ -2875,8 +2877,7 @@ def generate_exec_prose(data: list[dict]) -> str:
         )
     elif len(sentences) < 3 and len(losers) > len(gainers) + 2:
         sentences.append(
-            "Without a content catalyst, the contraction trend probably continues. "
-            "The titles holding steady are those with active developer engagement."
+            "No content drops are signaled across the tracked titles before the next digest."
         )
 
     if not sentences:
